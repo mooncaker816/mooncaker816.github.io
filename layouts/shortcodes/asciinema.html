@@ -1,3 +1,0 @@
-{{ $src := printf "%s%s%s" "https://asciinema.org/a/" (.Get 0) ".js"}}
-{{ $id := printf "%s%s" "asciicast-" (.Get 0) }}
-<script type="text/javascript" src="{{ $src }}" id="{{ $id }}" async></script>
