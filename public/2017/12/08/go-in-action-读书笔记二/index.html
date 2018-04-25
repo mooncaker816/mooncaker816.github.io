@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="数组和切片
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/">
+  <meta property="og:title" content="Go In Action 读书笔记（二） | Mooncaker816">
+  <meta property="og:description" content="数组和切片
+
+">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2017-12-08T17:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2017-12-08T17:00:00&#43;00:00">
+  
+
+  
+
+  
+
+  <title>Go In Action 读书笔记（二） | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Go In Action 读书笔记（二）</h1>
+
+    
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+    <time datetime="2017-12-08 17:00:00 &#43;0000 UTC" itemprop="datePublished dateModified">
+      Dec 8, 2017
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    4 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">Golang</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Go%20In%20Action%20%e8%af%bb%e4%b9%a6%e7%ac%94%e8%ae%b0%ef%bc%88%e4%ba%8c%ef%bc%89&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f08%2fgo-in-action-%25E8%25AF%25BB%25E4%25B9%25A6%25E7%25AC%2594%25E8%25AE%25B0%25E4%25BA%258C%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f08%2fgo-in-action-%25E8%25AF%25BB%25E4%25B9%25A6%25E7%25AC%2594%25E8%25AE%25B0%25E4%25BA%258C%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f08%2fgo-in-action-%25E8%25AF%25BB%25E4%25B9%25A6%25E7%25AC%2594%25E8%25AE%25B0%25E4%25BA%258C%2f&amp;title=Go%20In%20Action%20%e8%af%bb%e4%b9%a6%e7%ac%94%e8%ae%b0%ef%bc%88%e4%ba%8c%ef%bc%89"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f08%2fgo-in-action-%25E8%25AF%25BB%25E4%25B9%25A6%25E7%25AC%2594%25E8%25AE%25B0%25E4%25BA%258C%2f&amp;title=Go%20In%20Action%20%e8%af%bb%e4%b9%a6%e7%ac%94%e8%ae%b0%ef%bc%88%e4%ba%8c%ef%bc%89"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Go%20In%20Action%20%e8%af%bb%e4%b9%a6%e7%ac%94%e8%ae%b0%ef%bc%88%e4%ba%8c%ef%bc%89&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f08%2fgo-in-action-%25E8%25AF%25BB%25E4%25B9%25A6%25E7%25AC%2594%25E8%25AE%25B0%25E4%25BA%258C%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      <h1 id="数组和切片">数组和切片</h1>
+
+<p></p>
+
+<h2 id="数组">数组</h2>
+
+<ul>
+<li>Go中数组是一个长度固定的数据类型，用于存储一段具有相同的类型的元素的连续块。</li>
+<li>由于元素类型相同，又是连续分配，是一种高效的数据结构</li>
+<li>声明&amp;初始化
+<code>go
+// 声明一个包含 5 个元素的整型数组,此时该数组元素为对应的零值
+var array [5]int
+</code>
+<code>go
+// 字面量声明初始化
+// 声明一个包含 5 个元素的整型数组
+// 用具体值初始化每个元素
+array := [5]int{10, 20, 30, 40, 50}
+</code></li>
+</ul>
+
+<pre><code class="language-go">  // 声明一个整型数组
+  // 用具体值初始化每个元素
+  // 容量由初始化值的数量决定
+  array := [...]int{10, 20, 30, 40, 50}
+</code></pre>
+
+<pre><code class="language-go">  // 声明一个有 5 个元素的数组
+  // 用具体值初始化索引为 1 和 2 的元素
+  // 其余元素保持零值
+  array := [5]int{1: 10, 2: 20}
+</code></pre>
+
+<ul>
+<li><p>数组赋值给另一个数组时，必须确保长度和元素类型都相同才可行</p></li>
+
+<li><p>多维数组可以按维度赋值</p></li>
+
+<li><p>Go的数组和C相同，索引从0开始</p></li>
+
+<li><p>给指针数组赋值时，需注意元素是否已经分配内存，若没分配会引发panic</p></li>
+</ul>
+
+<pre><code class="language-go">  // 声明一个有 5 个元素的指针数组，1,3两个元素分配了内存，其他均为nil
+  array := [5]*int{1:new(int),3:new(int)}
+  // 若要对0元素赋值，需先分配内存
+  array[0] = new(int)
+  *array[0] = 1
+  // 下标为1的元素可以直接赋值
+  *array[1] = 2
+</code></pre>
+
+<ul>
+<li>函数之间直接传递数组为值拷贝，函数体内对该数组的修改不会影响原始数组</li>
+<li>函数之间传递数组的指针，也是值传递，只不过这个值是指向该数组的地址，所以函数体内对该数组的修改会影响原始数组</li>
+
+<li><p>区分指针数组和数组的指针</p>
+
+<pre><code class="language-go">//指针数组，元素为指针
+var array [5]*int
+//数组的指针，是一个地址，指向数组的指针
+func f(a *[5]int)
+</code></pre>
+
+<h2 id="切片">切片</h2></li>
+
+<li><p>切片可以理解为动态的数组，其底层为数组</p></li>
+
+<li><p>切片的三要素：指向底层数组的指针，长度，容量，容量&gt;=长度</p></li>
+
+<li><p>声明&amp;初始化</p></li>
+</ul>
+
+<pre><code class="language-go">  //创建一个字符串切片
+  //其长度和容量都是5
+  slice := make([]string, 5)
+</code></pre>
+
+<pre><code class="language-go">  //创建一个整型切片
+  //其长度为3，容量为5   
+  slice := make([]int, 3, 5)
+</code></pre>
+
+<pre><code class="language-go">  //字面量定义切片
+  slice := []string{&quot;Red&quot;, &quot;Blue&quot;, &quot;Green&quot;, &quot;Yellow&quot;, &quot;Pink&quot;}
+  slice := []int{10, 20, 30}
+</code></pre>
+
+<pre><code class="language-go">  //创建字符串切片
+  //使用空字符串初始化第100个元素
+  slice := []string{99: &quot;&quot;}
+</code></pre>
+
+<ul>
+<li>nil和空切片</li>
+</ul>
+
+<pre><code class="language-go">  //创建 nil 整型切片
+  //三要素：指针为nil，长度和容量均为0
+  var slice []int
+</code></pre>
+
+<pre><code class="language-go">  // 使用 make 创建空的整型切片
+  slice := make([]int, 0)
+  // 使用切片字面量创建空的整型切片 
+  slice := []int{}
+  //三要素：指针不为空，长度和容量均为0，但是底层数组包含0个元素，实际也未分配内存
+</code></pre>
+
+<ul>
+<li>赋值</li>
+</ul>
+
+<pre><code class="language-go">  //原始切片，长度为5，容量为5
+  slice := []int{1,2,3,4,5}
+  //包含两个元素2,3，长度为2，容量为4
+  newSlice := slice[1:3]
+  //通用公式,slice容量为k
+  //newSlice容量为k-i
+  //newSlice长度为j-i
+  newSlice := slice[i:j]
+  //还有一种用来控制新切片的容量，范围[i,j),容量k-i，k小于原始容量
+  newSlice := slice[i:j:k]
+</code></pre>
+
+<ul>
+<li>修改切片，由于实际修改的是底层数组，所以对所有引用该底层数组的切片都有影响</li>
+</ul>
+
+<pre><code class="language-go">    slice := []int{1,2,3,4,5}
+    newSlice := slice[1:3]
+    newSlice[1] = 9
+    //newSlice的元素为，2，9
+    //slice的元素为，1，2，9，4，5
+</code></pre>
+
+<ul>
+<li><p>切片只能访问到其长度内的元素。试图访问超出其长度的元素将会导致语言运行时异常，如上述newSlice[3]。与切片的容量相关联的元素只能用于增长切片。在使用这部分元素前，必须将其合并到切片的长度里</p></li>
+
+<li><p>append</p>
+
+<ol>
+<li><p>若切片容量有余，则返回切片仅增加长度，容量不变，即相当于修改底层数组所对应的元素，会影响所有相关切片</p></li>
+
+<li><p>若切片容量已满，则会新建一个底层数组（小于1000时，容量翻倍），返回的切片以该数组为底层数组，修改该数组对应的元素，不会影响原底层数组对应的其他切片</p></li>
+
+<li><p>append可以增加单个元素，也可以增加多个元素，还可以增加slice</p></li>
+</ol>
+
+<pre><code class="language-go"> slice := []int{1,2,3,4,5}
+ newSlice1 := append(slice,6)
+ newSlice2 := append(slice,6,7,8)
+ newSlice3 := append(slice,newSlice1,newSlice2)
+</code></pre></li>
+
+<li><p>切片迭代</p>
+
+<ol>
+<li>for range</li>
+</ol>
+
+<pre><code class="language-go"> for i,v := range slice{
+   fmt.Printf(&quot;Index: %d Value: %d Address: %X\n&quot;, i, v, &amp;slice[i])
+ }
+</code></pre>
+
+<p>i 为元素索引，<strong>v为元素的一个副本</strong></p>
+
+<ol>
+<li>for 循环</li>
+</ol>
+
+<pre><code class="language-go"> for i := 2; i &lt; len(slice); i++ {
+    fmt.Printf(&quot;Index: %d Value: %d\n&quot;, i, slice[i])
+ }
+</code></pre>
+
+<ol>
+<li>可以用占位符忽略返回值</li>
+</ol></li>
+
+<li><p>内置函数 len，cap</p></li>
+</ul>
+
+<p>len(slice) - 切片的长度</p>
+
+<p>cap(slice) - 切片的容量</p>
+
+<ul>
+<li>切片的传递</li>
+</ul>
+
+<p>切片是一个由三个字段构成的结构体，每个字段各占8个字节，所以在函数间传递 24 字节的数据会非常快速、简单。这也就是说传递的是一个副本切片，共用同一底层函数。</p>
+
+<ul>
+<li>切片与切片不能直接用<code>==</code>比较，唯一能与切片比较的是nil</li>
+</ul>
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/go-in-action/">Go In Action</a>
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/go-array/">Go array</a>
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/go-slice/">Go slice</a>
+  
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>相关</h3>
+      <ul>
+        
+        <li><a href="/2017/09/25/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/">Go In Action 读书笔记（一）</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+    <div class="article-widget">
+      <div class="post-nav">
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">下一页</div>
+    <a href="https://mooncaker816.github.io/2017/12/12/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%89/" rel="next">Go In Action 读书笔记（三）</a>
+  </div>
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">上一页</div>
+    <a href="https://mooncaker816.github.io/2017/09/25/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/" rel="prev">Go In Action 读书笔记（一）</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="//mooncaker816.disqus.com/count.js" async></script>
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    <script src="/js/wordart.min.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+
+  </body>
+</html>
+
