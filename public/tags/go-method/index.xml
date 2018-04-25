@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go method on Mooncaker816</title>
+    <link>https://mooncaker816.github.io/tags/go-method/</link>
+    <description>Recent content in Go method on Mooncaker816</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Thu, 14 Dec 2017 09:39:07 +0000</lastBuildDate>
+    
+	<atom:link href="https://mooncaker816.github.io/tags/go-method/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go In Action 读书笔记（四）</title>
+      <link>https://mooncaker816.github.io/2017/12/14/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E5%9B%9B/</link>
+      <pubDate>Thu, 14 Dec 2017 09:39:07 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2017/12/14/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E5%9B%9B/</guid>
+      <description>&lt;h3 id=&#34;用户类型&#34;&gt;用户类型&lt;/h3&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
