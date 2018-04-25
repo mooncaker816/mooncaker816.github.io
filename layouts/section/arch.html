@@ -1,0 +1,31 @@
+{{ partial "header.html" . }}
+{{ partial "navbar.html" . }}
+
+{{ partial "header_image.html" . }}
+
+<div class="universal-wrapper">
+
+  <h1>{{ .Title | default (i18n "posts") }}</h1>
+
+  {{ with .Content }}
+  <div class="article-style" itemprop="articleBody">{{ . }}</div>
+  {{ end }}
+  {{ $posts := where (where $.Site.RegularPages "Type" "post") ".Params.notonhomepage" nil }}
+
+  {{ $paginator := .Paginate ($posts.GroupByDate "Jan 2006") .Params.count }}
+  {{ range $paginator.PageGroups }}
+  <h3>{{ .Key }}</h3>
+  <ul>
+    {{ range (where .Pages "Type" "post") }}
+        <li>
+            {{ .PublishDate.Format "02 Jan" }}
+            - 
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </li>
+    {{ end }}
+</ul>
+  {{ end }}
+  {{ partial "pagination" . }}
+</div>
+{{ partial "footer_container.html" . }}
+{{ partial "footer.html" . }}
