@@ -265,6 +265,45 @@ Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The r
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,23 +416,24 @@ Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The r
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-9-1">Ex 9.1</h3>
+                <h3 id=96b5c207d78278cf254de010472c6de6>Ex 9.1</h3>
 
 <p>Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The result should indicate whether the transaction succeeded or failed due to insufﬁcient funds. The message sent to the monitor goroutine must contain both the amount to withdraw and a new channel over which the monitor goroutine can send the boolean result back to Withdraw.</p>
 
 <p></p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 package bank_test
 
 import (
-	&quot;fmt&quot;
-	&quot;testing&quot;
+	"fmt"
+	"testing"
 
-	&quot;The_Go_Programming_Language_Exercises/CH9/ex9.1&quot;
+	"The_Go_Programming_Language_Exercises/CH9/ex9.1"
 )
 
 func TestBank(t *testing.T) {
@@ -402,37 +442,37 @@ func TestBank(t *testing.T) {
 	// Alice
 	go func() {
 		bank.Deposit(200)
-		fmt.Println(&quot;=&quot;, bank.Balance())
-		done &lt;- struct{}{}
+		fmt.Println("=", bank.Balance())
+		done <- struct{}{}
 	}()
 
 	// Bob
 	go func() {
 		bank.Deposit(100)
-		done &lt;- struct{}{}
+		done <- struct{}{}
 	}()
 
 	go func() {
 		fmt.Println(bank.Withdraw(500))
-		done &lt;- struct{}{}
+		done <- struct{}{}
 	}()
 
 	// Wait for both transactions.
-	&lt;-done
-	&lt;-done
-	&lt;-done
+	<-done
+	<-done
+	<-done
 
 	if got, want := bank.Balance(), 300; got != want {
-		t.Errorf(&quot;Balance = %d, want %d&quot;, got, want)
+		t.Errorf("Balance = %d, want %d", got, want)
 	}
 }
 </code></pre>
 
-<h3 id="ex-9-2">Ex 9.2</h3>
+<h3 id=72b21cbb5f0402aa664477a9aefaabf3>Ex 9.2</h3>
 
 <p>Rewrite the PopCount example from Section 2.6.2 so that it initializes the l table using sync.Once the ﬁrst time it is needed. (Realistically, the cost of synchronization would be prohibitive for a small and highly optimized function like PopCount.)</p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 45.
@@ -441,7 +481,7 @@ func TestBank(t *testing.T) {
 //!+
 package popcount
 
-import &quot;sync&quot;
+import "sync"
 
 // pc[i] is the population count of i.
 var pc [256]byte
@@ -449,26 +489,26 @@ var loadpcOnce sync.Once
 
 //func init() {
 //	for i := range pc {
-//		pc[i] = pc[i/2] + byte(i&amp;1)
+//		pc[i] = pc[i/2] + byte(i&1)
 //	}
 //}
 
 // PopCount returns the population count (number of set bits) of x.
 func PopCount(x uint64) int {
 	loadpcOnce.Do(loadpc)
-	return int(pc[byte(x&gt;&gt;(0*8))] +
-		pc[byte(x&gt;&gt;(1*8))] +
-		pc[byte(x&gt;&gt;(2*8))] +
-		pc[byte(x&gt;&gt;(3*8))] +
-		pc[byte(x&gt;&gt;(4*8))] +
-		pc[byte(x&gt;&gt;(5*8))] +
-		pc[byte(x&gt;&gt;(6*8))] +
-		pc[byte(x&gt;&gt;(7*8))])
+	return int(pc[byte(x>>(0*8))] +
+		pc[byte(x>>(1*8))] +
+		pc[byte(x>>(2*8))] +
+		pc[byte(x>>(3*8))] +
+		pc[byte(x>>(4*8))] +
+		pc[byte(x>>(5*8))] +
+		pc[byte(x>>(6*8))] +
+		pc[byte(x>>(7*8))])
 }
 
 func loadpc() {
 	for i := range pc {
-		pc[i] = pc[i/2] + byte(i&amp;1)
+		pc[i] = pc[i/2] + byte(i&1)
 	}
 }
 
@@ -476,11 +516,11 @@ func loadpc() {
 
 </code></pre>
 
-<h3 id="ex-9-3">Ex 9.3</h3>
+<h3 id=5e4063ff75cbd9e0f94ffa1ebf875108>Ex 9.3</h3>
 
 <p>Extend the Func type and the (*Memo).Get method so that callers may provide an optional done channel through which they can cancel the operation (§8.9). The results of a cancelled Func call should not be cached.</p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 278.
@@ -491,8 +531,8 @@ func loadpc() {
 // This implementation uses a monitor goroutine.
 package memo
 
-import &quot;errors&quot;
-import &quot;time&quot;
+import "errors"
+import "time"
 
 //!+Func
 
@@ -517,22 +557,22 @@ type entry struct {
 // A request is a message requesting that the Func be applied to key.
 type request struct {
 	key      string
-	response chan&lt;- result // the client wants a single result
+	response chan<- result // the client wants a single result
 }
 
 type Memo struct{ requests chan request }
 
 // New returns a memoization of f.  Clients must subsequently call Close.
 func New(f Func) *Memo {
-	memo := &amp;Memo{requests: make(chan request)}
+	memo := &Memo{requests: make(chan request)}
 	go memo.server(f)
 	return memo
 }
 
 func (memo *Memo) Get(key string) (interface{}, error) {
 	response := make(chan result)
-	memo.requests &lt;- request{key, response}
-	res := &lt;-response
+	memo.requests <- request{key, response}
+	res := <-response
 	return res.value, res.err
 }
 
@@ -552,7 +592,7 @@ func (memo *Memo) server(f Func) {
 	}()
 	cancelled := func() bool {
 		select {
-		case &lt;-done:
+		case <-done:
 			return true
 		default:
 			return false
@@ -567,7 +607,7 @@ func (memo *Memo) server(f Func) {
 		e := cache[req.key]
 		if e == nil {
 			// This is the first request for this key.
-			e = &amp;entry{ready: make(chan struct{})}
+			e = &entry{ready: make(chan struct{})}
 			cache[req.key] = e
 			go e.call(f, req.key) // call f(key)
 			if cancelled() {
@@ -585,13 +625,13 @@ func (e *entry) call(f Func, key string) {
 	close(e.ready)
 }
 
-func (e *entry) deliver(response chan&lt;- result, done &lt;-chan struct{}) {
+func (e *entry) deliver(response chan<- result, done <-chan struct{}) {
 	// Wait for the ready condition.
 	select {
-	case &lt;-e.ready:
-		response &lt;- e.res
-	case &lt;-done:
-		response &lt;- result{nil, errors.New(&quot;request cancelled&quot;)}
+	case <-e.ready:
+		response <- e.res
+	case <-done:
+		response <- result{nil, errors.New("request cancelled")}
 	}
 }
 </code></pre>
@@ -709,17 +749,19 @@ func (e *entry) deliver(response chan&lt;- result, done &lt;-chan struct{}) {
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-9-1">Ex 9.1</a>
+        <a href="#96b5c207d78278cf254de010472c6de6">Ex 9.1</a>
 
       
     
       
       
 
+      
       
       
       
@@ -737,7 +779,7 @@ func (e *entry) deliver(response chan&lt;- result, done &lt;-chan struct{}) {
         
 
         <li>
-          <a href="#ex-9-2">Ex 9.2</a>
+          <a href="#72b21cbb5f0402aa664477a9aefaabf3">Ex 9.2</a>
 
         
 
@@ -746,6 +788,7 @@ func (e *entry) deliver(response chan&lt;- result, done &lt;-chan struct{}) {
       
       
 
+      
       
       
       
@@ -763,7 +806,7 @@ func (e *entry) deliver(response chan&lt;- result, done &lt;-chan struct{}) {
         
 
         <li>
-          <a href="#ex-9-3">Ex 9.3</a>
+          <a href="#5e4063ff75cbd9e0f94ffa1ebf875108">Ex 9.3</a>
 
         
           

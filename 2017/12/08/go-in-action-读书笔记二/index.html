@@ -261,6 +261,45 @@
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -373,17 +412,18 @@
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h1 id="数组和切片">数组和切片</h1>
+                <h1 id=75bbab845abd100f93c33f8c332c65c4>数组和切片</h1>
 
 <p></p>
 
-<h2 id="数组">数组</h2>
+<h2 id=0e67d4b0e351b00f4bea9840aa6b99d7>数组</h2>
 
 <ul>
 <li>Go中数组是一个长度固定的数据类型，用于存储一段具有相同的类型的元素的连续块。</li>
 <li>由于元素类型相同，又是连续分配，是一种高效的数据结构</li>
-<li>声明&amp;初始化
+<li>声明&初始化
 <code>go
 // 声明一个包含 5 个元素的整型数组,此时该数组元素为对应的零值
 var array [5]int
@@ -439,13 +479,13 @@ var array [5]*int
 func f(a *[5]int)
 </code></pre>
 
-<h2 id="切片">切片</h2></li>
+<h2 id=261b8a9f3ccf7091a82ce230546f20b8>切片</h2></li>
 
 <li><p>切片可以理解为动态的数组，其底层为数组</p></li>
 
-<li><p>切片的三要素：指向底层数组的指针，长度，容量，容量&gt;=长度</p></li>
+<li><p>切片的三要素：指向底层数组的指针，长度，容量，容量>=长度</p></li>
 
-<li><p>声明&amp;初始化</p></li>
+<li><p>声明&初始化</p></li>
 </ul>
 
 <pre><code class="language-go">  //创建一个字符串切片
@@ -459,13 +499,13 @@ func f(a *[5]int)
 </code></pre>
 
 <pre><code class="language-go">  //字面量定义切片
-  slice := []string{&quot;Red&quot;, &quot;Blue&quot;, &quot;Green&quot;, &quot;Yellow&quot;, &quot;Pink&quot;}
+  slice := []string{"Red", "Blue", "Green", "Yellow", "Pink"}
   slice := []int{10, 20, 30}
 </code></pre>
 
 <pre><code class="language-go">  //创建字符串切片
   //使用空字符串初始化第100个元素
-  slice := []string{99: &quot;&quot;}
+  slice := []string{99: ""}
 </code></pre>
 
 <ul>
@@ -537,7 +577,7 @@ func f(a *[5]int)
 </ol>
 
 <pre><code class="language-go"> for i,v := range slice{
-   fmt.Printf(&quot;Index: %d Value: %d Address: %X\n&quot;, i, v, &amp;slice[i])
+   fmt.Printf("Index: %d Value: %d Address: %X\n", i, v, &slice[i])
  }
 </code></pre>
 
@@ -547,8 +587,8 @@ func f(a *[5]int)
 <li>for 循环</li>
 </ol>
 
-<pre><code class="language-go"> for i := 2; i &lt; len(slice); i++ {
-    fmt.Printf(&quot;Index: %d Value: %d\n&quot;, i, slice[i])
+<pre><code class="language-go"> for i := 2; i < len(slice); i++ {
+    fmt.Printf("Index: %d Value: %d\n", i, slice[i])
  }
 </code></pre>
 
@@ -678,17 +718,19 @@ func f(a *[5]int)
       
       
       
+      
 
       
 
       <li>
-        <a href="#%e6%95%b0%e7%bb%84%e5%92%8c%e5%88%87%e7%89%87">数组和切片</a>
+        <a href="#75bbab845abd100f93c33f8c332c65c4">数组和切片</a>
 
       
     
       
       
 
+      
       
       
       
@@ -708,7 +750,7 @@ func f(a *[5]int)
         
 
         <li>
-          <a href="#%e6%95%b0%e7%bb%84">数组</a>
+          <a href="#0e67d4b0e351b00f4bea9840aa6b99d7">数组</a>
 
         
 
@@ -717,6 +759,7 @@ func f(a *[5]int)
       
       
 
+      
       
       
       
@@ -734,7 +777,7 @@ func f(a *[5]int)
         
 
         <li>
-          <a href="#%e5%88%87%e7%89%87">切片</a>
+          <a href="#261b8a9f3ccf7091a82ce230546f20b8">切片</a>
 
         
           

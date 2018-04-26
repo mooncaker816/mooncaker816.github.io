@@ -265,6 +265,55 @@ Write a non-recursive version of comma, using bytes.Buffer instead of str concat
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,8 +426,9 @@ Write a non-recursive version of comma, using bytes.Buffer instead of str concat
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-3-10">Ex 3.10</h3>
+                <h3 id=6406a7a6b92dd5ecd2afaaceece6c948>Ex 3.10</h3>
 
 <p>Write a non-recursive version of comma, using bytes.Buffer instead of str concatenation.</p>
 
@@ -387,22 +437,22 @@ Write a non-recursive version of comma, using bytes.Buffer instead of str concat
 <pre><code class="language-go">package main
 
 import (
-	&quot;bytes&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;os&quot;
+	"bytes"
+	"fmt"
+	"log"
+	"os"
 )
 
 func main() {
 	for _, v := range os.Args[1:] {
 		s := []byte(v)
 		var buf bytes.Buffer
-		for i, j := len(s)-1, 0; i &gt;= 0; i-- {
+		for i, j := len(s)-1, 0; i >= 0; i-- {
 			err := buf.WriteByte(s[i])
 			if err != nil {
-				log.Fatal(&quot;write buf failed&quot;)
+				log.Fatal("write buf failed")
 			}
-			if j++; j != len(s) &amp;&amp; j%3 == 0 {
+			if j++; j != len(s) && j%3 == 0 {
 				err = buf.WriteByte(',')
 			}
 		}
@@ -413,7 +463,7 @@ func main() {
 
 func Reverse(s string) string {
 	r := []rune(s)
-	for i, j := len(r)-1, 0; i &gt; j; i, j = i-1, j+1 {
+	for i, j := len(r)-1, 0; i > j; i, j = i-1, j+1 {
 		r[i], r[j] = r[j], r[i]
 	}
 	return string(r)
@@ -428,17 +478,17 @@ func Reverse(s string) string {
 333
 </code></pre>
 
-<h3 id="ex-3-11">Ex 3.11</h3>
+<h3 id=a48632a37d2c8e04eaedcdaaefaaa963>Ex 3.11</h3>
 
 <p>Enhance comma so that it deals correctly with ﬂoating-point numbers and an optional sign.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;bytes&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;os&quot;
+	"bytes"
+	"fmt"
+	"log"
+	"os"
 )
 
 func main() {
@@ -449,23 +499,23 @@ func main() {
 			sign = string(v[0])
 			v = v[1:]
 		}
-		chars := bytes.SplitAfterN([]byte(v), []byte(&quot;.&quot;), 2)
+		chars := bytes.SplitAfterN([]byte(v), []byte("."), 2)
 		for ix, pc := range chars {
 			if ix == 0 {
 				if pc[len(pc)-1] == '.' {
 					pc = pc[:len(pc)-1]
 					err := lbuf.WriteByte('.')
 					if err != nil {
-						log.Fatal(&quot;write '.' in buf failed&quot;)
+						log.Fatal("write '.' in buf failed")
 					}
 				}
-				if len(pc) &gt; 0 {
-					for i, j := len(pc)-1, 0; i &gt;= 0; i-- {
+				if len(pc) > 0 {
+					for i, j := len(pc)-1, 0; i >= 0; i-- {
 						err := lbuf.WriteByte(pc[i])
 						if err != nil {
-							log.Fatal(&quot;write int part in buf failed&quot;)
+							log.Fatal("write int part in buf failed")
 						}
-						if j++; j != len(pc) &amp;&amp; j%3 == 0 {
+						if j++; j != len(pc) && j%3 == 0 {
 							err = lbuf.WriteByte(',')
 						}
 					}
@@ -473,19 +523,19 @@ func main() {
 				}
 			}
 			if ix == 1 {
-				if len(pc) &gt; 0 {
-					for i, j := 0, 0; i &lt; len(pc); i++ {
+				if len(pc) > 0 {
+					for i, j := 0, 0; i < len(pc); i++ {
 						err := rbuf.WriteByte(pc[i])
 						if err != nil {
-							log.Fatal(&quot;write float part in buf failed&quot;)
+							log.Fatal("write float part in buf failed")
 						}
-						if j++; j != len(pc) &amp;&amp; j%3 == 0 {
+						if j++; j != len(pc) && j%3 == 0 {
 							err = rbuf.WriteByte(',')
 						}
 					}
 					rstr = rbuf.String()
 				} else {
-					rstr = &quot;0&quot;
+					rstr = "0"
 				}
 			}
 		}
@@ -495,7 +545,7 @@ func main() {
 
 func Reverse(s string) string {
 	r := []rune(s)
-	for i, j := len(r)-1, 0; i &gt; j; i, j = i-1, j+1 {
+	for i, j := len(r)-1, 0; i > j; i, j = i-1, j+1 {
 		r[i], r[j] = r[j], r[i]
 	}
 	return string(r)
@@ -511,16 +561,16 @@ func Reverse(s string) string {
 454,545.345,354,456
 </code></pre>
 
-<h3 id="ex-3-12">Ex 3.12</h3>
+<h3 id=3af2bde555b656e051672e8e548fdca9>Ex 3.12</h3>
 
 <p>Write a function that reports whether two strings are anagrams of each other, that is, they contain the same letters in a different order.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;os&quot;
-	&quot;sort&quot;
+	"fmt"
+	"os"
+	"sort"
 )
 
 func main() {
@@ -537,16 +587,16 @@ func main() {
 	sort.Strings(ss1)
 	sort.Strings(ss2)
 	if len(ss1) != len(ss2) {
-		fmt.Println(&quot;they are NOT anagrams strings&quot;)
+		fmt.Println("they are NOT anagrams strings")
 		return
 	}
-	for i := 0; i &lt; len(ss1); i++ {
+	for i := 0; i < len(ss1); i++ {
 		if ss1[i] != ss2[i] {
-			fmt.Println(&quot;they are NOT anagrams strings&quot;)
+			fmt.Println("they are NOT anagrams strings")
 			return
 		}
 	}
-	fmt.Println(&quot;they are anagrams strings&quot;)
+	fmt.Println("they are anagrams strings")
 }
 </code></pre>
 
@@ -560,18 +610,18 @@ $ go run anagrams.go abcde dbcaf
 they are NOT anagrams strings
 </code></pre>
 
-<h3 id="ex-3-13">Ex 3.13</h3>
+<h3 id=d099743252d4aa321b54051cf5d866f0>Ex 3.13</h3>
 
 <p>Write const declarations for KB, MB, up through YB as compactly as you can.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
+	"fmt"
 )
 
 const (
-	_   = int64(1) &lt;&lt; (10 * iota)
+	_   = int64(1) << (10 * iota)
 	KiB // 1024        2e1
 	MiB // 1048576     2e20
 	GiB // 1073741824  2e30
@@ -702,17 +752,19 @@ func main() {
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-3-10">Ex 3.10</a>
+        <a href="#6406a7a6b92dd5ecd2afaaceece6c948">Ex 3.10</a>
 
       
     
       
       
 
+      
       
       
       
@@ -730,7 +782,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-3-11">Ex 3.11</a>
+          <a href="#a48632a37d2c8e04eaedcdaaefaaa963">Ex 3.11</a>
 
         
 
@@ -739,6 +791,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -756,7 +809,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-3-12">Ex 3.12</a>
+          <a href="#3af2bde555b656e051672e8e548fdca9">Ex 3.12</a>
 
         
 
@@ -765,6 +818,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -782,7 +836,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-3-13">Ex 3.13</a>
+          <a href="#d099743252d4aa321b54051cf5d866f0">Ex 3.13</a>
 
         
           

@@ -265,6 +265,45 @@ Add types, constants, and functions to tempconv for processing temperatures in t
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,8 +416,9 @@ Add types, constants, and functions to tempconv for processing temperatures in t
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-2-1">Ex 2.1</h3>
+                <h3 id=de42a2f2c79deb667ea5a353d3d088ed>Ex 2.1</h3>
 
 <p>Add types, constants, and functions to tempconv for processing temperatures in the Kelvin scale, where zero Kelvin is −273.15°C and a difference of 1K has the same magnitude as 1°C.</p>
 
@@ -386,7 +426,7 @@ Add types, constants, and functions to tempconv for processing temperatures in t
 
 <pre><code class="language-go">package tempconv
 
-import &quot;fmt&quot;
+import "fmt"
 
 type Celsius float64
 type Fahrenheit float64
@@ -398,9 +438,9 @@ const (
 	BoilingC      Celsius = 100
 )
 
-func (c Celsius) String() string    { return fmt.Sprintf(&quot;%g°C&quot;, c) }
-func (f Fahrenheit) String() string { return fmt.Sprintf(&quot;%g°F&quot;, f) }
-func (k Kelvin) String() string     { return fmt.Sprintf(&quot;%g°K&quot;, k) }
+func (c Celsius) String() string    { return fmt.Sprintf("%g°C", c) }
+func (f Fahrenheit) String() string { return fmt.Sprintf("%g°F", f) }
+func (k Kelvin) String() string     { return fmt.Sprintf("%g°K", k) }
 
 </code></pre>
 
@@ -429,8 +469,8 @@ func KToF(k Kelvin) Fahrenheit { return Fahrenheit((k-273.15)*9/5 + 32) }
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;The_Go_Programming_Language_Exercises/CH2/ex2.1/tempconv&quot;
+	"fmt"
+	"The_Go_Programming_Language_Exercises/CH2/ex2.1/tempconv"
 )
 
 func main() {
@@ -447,29 +487,29 @@ func main() {
 31.73000000000004°F
 </code></pre>
 
-<h3 id="ex-2-2">Ex 2.2</h3>
+<h3 id=2b7d2c1638516379cbf38858ccbc9e48>Ex 2.2</h3>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;os&quot;
-	&quot;strconv&quot;
-	&quot;strings&quot;
+	"bufio"
+	"fmt"
+	"io"
+	"os"
+	"strconv"
+	"strings"
 
-	&quot;The_Go_Programming_Language_Exercises/CH2/ex2.2/unitconv&quot;
+	"The_Go_Programming_Language_Exercises/CH2/ex2.2/unitconv"
 )
 
 func main() {
 	var s []string
-	if len(os.Args) &gt; 1 {
+	if len(os.Args) > 1 {
 		s = os.Args[1:]
 	} else {
-		input, err := os.Open(&quot;a&quot;)
+		input, err := os.Open("a")
 		if err != nil {
-			fmt.Println(&quot;happend a error when opening&quot;, err)
+			fmt.Println("happend a error when opening", err)
 		}
 		defer input.Close()
 		buf := bufio.NewReader(input)
@@ -481,7 +521,7 @@ func main() {
 				if err == io.EOF {
 					break
 				}
-				fmt.Fprintf(os.Stderr, &quot;reading error %v\n&quot;, err)
+				fmt.Fprintf(os.Stderr, "reading error %v\n", err)
 				os.Exit(1)
 			}
 		}
@@ -489,7 +529,7 @@ func main() {
 	for _, arg := range s {
 		t, err := strconv.ParseFloat(arg, 64)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;invalid input: %v\n&quot;, err)
+			fmt.Fprintf(os.Stderr, "invalid input: %v\n", err)
 			os.Exit(1)
 		}
 		f := unitconv.Fahrenheit(t)
@@ -498,9 +538,9 @@ func main() {
 		kg := unitconv.Kilograms(t)
 		fe := unitconv.Feet(t)
 		m := unitconv.Meter(t)
-		fmt.Printf(&quot;%s = %s, %s = %s\n&quot;, f, unitconv.FToC(f), c, unitconv.CToF(c))
-		fmt.Printf(&quot;%s = %s, %s = %s\n&quot;, p, unitconv.PToKg(p), kg, unitconv.KgToP(kg))
-		fmt.Printf(&quot;%s = %s, %s = %s\n&quot;, fe, unitconv.FeToM(fe), m, unitconv.MToFe(m))
+		fmt.Printf("%s = %s, %s = %s\n", f, unitconv.FToC(f), c, unitconv.CToF(c))
+		fmt.Printf("%s = %s, %s = %s\n", p, unitconv.PToKg(p), kg, unitconv.KgToP(kg))
+		fmt.Printf("%s = %s, %s = %s\n", fe, unitconv.FeToM(fe), m, unitconv.MToFe(m))
 	}
 }
 </code></pre>
@@ -537,27 +577,27 @@ $ ./ex2.2 11 22 33 44.5
 44.5 feets = 13.563600000000001 meters, 44.5 meters = 145.996935 feets
 </code></pre>
 
-<h3 id="ex-2-3-2-4-2-5">Ex 2.3 2.4 2.5</h3>
+<h3 id=03bffcf36d7a5acfe99819063162581f>Ex 2.3 2.4 2.5</h3>
 
 <p>Rewrite PopCount to use a loop instead of a single expression. Compare the performance of the two versions. (Section 11.4 shows how to compare the performance of different implementations systematically.)</p>
 
 <p>Write a version of PopCount that counts bits by shifting its argument through 64 bit positions, testing the rightmost bit each time. Compare its performance to the tablelookup version.</p>
 
-<p>The expression x&amp;(x-1) clears the rightmost non-zero bit of x. Write a version of PopCount that counts bits by using this fact, and assess its performance.</p>
+<p>The expression x&(x-1) clears the rightmost non-zero bit of x. Write a version of PopCount that counts bits by using this fact, and assess its performance.</p>
 
 <pre><code class="language-go">package popcount_test
 
 import (
-	&quot;fmt&quot;
-	&quot;io/ioutil&quot;
-	&quot;testing&quot;
+	"fmt"
+	"io/ioutil"
+	"testing"
 )
 
 func init() {
 	for i := range pc {
-		pc[i] = pc[i/2] + byte(i&amp;1)
+		pc[i] = pc[i/2] + byte(i&1)
 	}
-	for i := 0; i &lt; 256; i++ {
+	for i := 0; i < 256; i++ {
 		n[i] = i
 	}
 }
@@ -565,14 +605,14 @@ func init() {
 var pc [256]byte
 var n = make([]int, 256)
 
-//通过v&amp;(v-1)，将v对应的二进制中最右的非零位置零，直到v=0为止，此时置零的次数即为popcount的值
+//通过v&(v-1)，将v对应的二进制中最右的非零位置零，直到v=0为止，此时置零的次数即为popcount的值
 func BenchmarkPopCount1(b *testing.B) {
-	for i := 0; i &lt; b.N; i++ {
+	for i := 0; i < b.N; i++ {
 		for _, v := range n {
 			var count int
 			for v != 0 {
 				count++
-				v &amp;= v - 1
+				v &= v - 1
 			}
 			fmt.Fprintln(ioutil.Discard, count)
 			//fmt.Fprintln(os.Stdout, count)
@@ -582,16 +622,16 @@ func BenchmarkPopCount1(b *testing.B) {
 
 //把64位平均分为8份，每份对应一个字节，读出该字节的数值，去预先准备好的单字节(8位)所能存储的所有数值对应的popcount的表中查询出每份的popcount，再相加8份的popcount
 func BenchmarkPopCount2(b *testing.B) {
-	for i := 0; i &lt; b.N; i++ {
+	for i := 0; i < b.N; i++ {
 		for _, x := range n {
-			count := int(pc[byte(x&gt;&gt;(0*8))] +
-				pc[byte(x&gt;&gt;(1*8))] +
-				pc[byte(x&gt;&gt;(2*8))] +
-				pc[byte(x&gt;&gt;(3*8))] +
-				pc[byte(x&gt;&gt;(4*8))] +
-				pc[byte(x&gt;&gt;(5*8))] +
-				pc[byte(x&gt;&gt;(6*8))] +
-				pc[byte(x&gt;&gt;(7*8))])
+			count := int(pc[byte(x>>(0*8))] +
+				pc[byte(x>>(1*8))] +
+				pc[byte(x>>(2*8))] +
+				pc[byte(x>>(3*8))] +
+				pc[byte(x>>(4*8))] +
+				pc[byte(x>>(5*8))] +
+				pc[byte(x>>(6*8))] +
+				pc[byte(x>>(7*8))])
 			fmt.Fprintln(ioutil.Discard, count)
 			//fmt.Fprintln(os.Stdout, count)
 		}
@@ -600,11 +640,11 @@ func BenchmarkPopCount2(b *testing.B) {
 
 //从最右开始一位一位检查是否为1
 func BenchmarkPopCount3(b *testing.B) {
-	for i := 0; i &lt; b.N; i++ {
+	for i := 0; i < b.N; i++ {
 		for _, v := range n {
 			var count int
-			for ; v != 0; v &gt;&gt;= 1 {
-				count += v &amp; 1
+			for ; v != 0; v >>= 1 {
+				count += v & 1
 			}
 			fmt.Fprintln(ioutil.Discard, count)
 			//fmt.Fprintln(os.Stdout, count)
@@ -613,7 +653,7 @@ func BenchmarkPopCount3(b *testing.B) {
 }
 </code></pre>
 
-<pre><code class="language-bash">$ go test -v -run=&quot;none&quot; -bench=. -benchtime=&quot;3s&quot; -benchmem
+<pre><code class="language-bash">$ go test -v -run="none" -bench=. -benchtime="3s" -benchmem
 BenchmarkPopCount1-4   	  200000	     23154 ns/op	    2048 B/op	     256 allocs/op
 BenchmarkPopCount2-4   	  200000	     21941 ns/op	    2048 B/op	     256 allocs/op
 BenchmarkPopCount3-4   	  200000	     24450 ns/op	    2048 B/op	     256 allocs/op
@@ -621,9 +661,9 @@ PASS
 ok  	The_Go_Programming_Language_Exercises/CH2/ex2.3	14.646s
 </code></pre>
 
-<p><strong>n&amp;(n-1) ：将n的二进制最右边的非零位置零</strong></p>
+<p><strong>n&(n-1) ：将n的二进制最右边的非零位置零</strong></p>
 
-<p>平均来说，此3种方法中查表最快，n&amp;(n-1)居中，一位一位数最慢</p>
+<p>平均来说，此3种方法中查表最快，n&(n-1)居中，一位一位数最慢</p>
               </div>
 
               
@@ -726,17 +766,19 @@ ok  	The_Go_Programming_Language_Exercises/CH2/ex2.3	14.646s
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-2-1">Ex 2.1</a>
+        <a href="#de42a2f2c79deb667ea5a353d3d088ed">Ex 2.1</a>
 
       
     
       
       
 
+      
       
       
       
@@ -754,7 +796,7 @@ ok  	The_Go_Programming_Language_Exercises/CH2/ex2.3	14.646s
         
 
         <li>
-          <a href="#ex-2-2">Ex 2.2</a>
+          <a href="#2b7d2c1638516379cbf38858ccbc9e48">Ex 2.2</a>
 
         
 
@@ -763,6 +805,7 @@ ok  	The_Go_Programming_Language_Exercises/CH2/ex2.3	14.646s
       
       
 
+      
       
       
       
@@ -780,7 +823,7 @@ ok  	The_Go_Programming_Language_Exercises/CH2/ex2.3	14.646s
         
 
         <li>
-          <a href="#ex-2-3-2-4-2-5">Ex 2.3 2.4 2.5</a>
+          <a href="#03bffcf36d7a5acfe99819063162581f">Ex 2.3 2.4 2.5</a>
 
         
           

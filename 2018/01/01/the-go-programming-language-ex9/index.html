@@ -265,6 +265,45 @@ Modify clock2 to accept a port number, and write a program, clockwall, that acts
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,23 +416,24 @@ Modify clock2 to accept a port number, and write a program, clockwall, that acts
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-8-1">Ex 8.1</h3>
+                <h3 id=8a4f504e848f8c8006a64e59661537ef>Ex 8.1</h3>
 
 <p>Modify clock2 to accept a port number, and write a program, clockwall, that acts as a client of several clock servers at once, reading the times from each one and displaying the results in a table, akin to the wall of clocks seen in some business ofﬁces. If you have access to geographically distributed computers, run instances remotely ; otherwise run local instances on different ports with fake time zones.</p>
 
 <p></p>
 
-<p>$ TZ=US/Eastern ./clock2 -port 8010 &amp; $ TZ=Asia/Tokyo ./clock2 -port 8020 &amp; $ TZ=Europe/London ./clock2 -port 8030 &amp; $ clockwall NewYork=localhost:8010 London=localhost:8020 Tokyo=localhost:8030</p>
+<p>$ TZ=US/Eastern ./clock2 -port 8010 & $ TZ=Asia/Tokyo ./clock2 -port 8020 & $ TZ=Europe/London ./clock2 -port 8030 & $ clockwall NewYork=localhost:8010 London=localhost:8020 Tokyo=localhost:8030</p>
 
 <pre><code class="language-go">//clockwall
 package main
 
 import (
-	&quot;html/template&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;net/http&quot;
+	"html/template"
+	"log"
+	"net"
+	"net/http"
 )
 
 type City struct {
@@ -405,33 +445,33 @@ type City struct {
 type cities []City
 
 const templ = `
-&lt;h1&gt;current times:&lt;/h1&gt;
-&lt;table&gt;
-&lt;tr style='text-align: left'&gt;
-  &lt;th&gt;City&lt;/th&gt;
-  &lt;th&gt;Time&lt;/th&gt;
-&lt;/tr&gt;
+<h1>current times:</h1>
+<table>
+<tr style='text-align: left'>
+  <th>City</th>
+  <th>Time</th>
+</tr>
 {{range . }}
-&lt;tr&gt;
-  &lt;td&gt;{{.Name}}&lt;/td&gt;
-  &lt;td&gt;{{.Time}}&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td>{{.Name}}</td>
+  <td>{{.Time}}</td>
+</tr>
 {{end}}
-&lt;/table&gt;
+</table>
 `
 
-var report = template.Must(template.New(&quot;result&quot;).
+var report = template.Must(template.New("result").
 	Parse(templ))
 var cs = cities{
-	{&quot;NewYork&quot;, &quot;localhost:8010&quot;, &quot;&quot;},
-	{&quot;Tokyo&quot;, &quot;localhost:8020&quot;, &quot;&quot;},
-	{&quot;London&quot;, &quot;localhost:8030&quot;, &quot;&quot;},
+	{"NewYork", "localhost:8010", ""},
+	{"Tokyo", "localhost:8020", ""},
+	{"London", "localhost:8030", ""},
 }
 
 func main() {
 	for i := range cs {
 		go func(c *City) {
-			conn, err := net.Dial(&quot;tcp&quot;, c.Addr)
+			conn, err := net.Dial("tcp", c.Addr)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -441,10 +481,10 @@ func main() {
 				n, _ := conn.Read(buf)
 				c.Time = string(buf[:n])
 			}
-		}(&amp;cs[i])
+		}(&cs[i])
 	}
-	http.HandleFunc(&quot;/gettime&quot;, cs.gettime)
-	log.Fatal(http.ListenAndServe(&quot;localhost:8000&quot;, nil))
+	http.HandleFunc("/gettime", cs.gettime)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
 func (cs cities) gettime(w http.ResponseWriter, req *http.Request) {
@@ -458,17 +498,17 @@ func (cs cities) gettime(w http.ResponseWriter, req *http.Request) {
 package main
 
 import (
-	&quot;flag&quot;
-	&quot;io&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;time&quot;
+	"flag"
+	"io"
+	"log"
+	"net"
+	"time"
 )
 
 func handleConn(c net.Conn) {
 	defer c.Close()
 	for {
-		_, err := io.WriteString(c, time.Now().Format(&quot;15:04:05\n&quot;))
+		_, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
 		if err != nil {
 			return // e.g., client disconnected
 		}
@@ -477,10 +517,10 @@ func handleConn(c net.Conn) {
 }
 
 func main() {
-	port := flag.String(&quot;port&quot;, &quot;8000&quot;, &quot;port num&quot;)
+	port := flag.String("port", "8000", "port num")
 	flag.Parse()
-	address := &quot;localhost:&quot; + *port
-	listener, err := net.Listen(&quot;tcp&quot;, address)
+	address := "localhost:" + *port
+	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -498,44 +538,44 @@ func main() {
 </code></pre>
 
 <pre><code class="language-bash">//启动服务器
-TZ=US/Eastern    ./clock -port 8010 &amp;
-TZ=Asia/Tokyo    ./clock -port 8020 &amp;
+TZ=US/Eastern    ./clock -port 8010 &
+TZ=Asia/Tokyo    ./clock -port 8020 &
 TZ=Europe/London ./clock -port 8030
 </code></pre>
 
 <p><img src="http://oumnldfwl.bkt.clouddn.com/clockwall.png?imageView2/0/h/200" alt="" /></p>
 
-<h3 id="ex-8-3">Ex 8.3</h3>
+<h3 id=e9cddd55c968bcf844858d7ab10b6b97>Ex 8.3</h3>
 
 <p>In netcat3, the interface value conn has the concrete type *net.TCPConn, which represents a TCP connection. A TCP connection consists of two halves that may be closed independently using its CloseRead and CloseWrite methods. Modify the main goroutine of netcat3 to close only the write half of the connection so that the program will continue to print the ﬁnal echoes from the reverb1 server even after the standard input has been closed. (Doing this for the reverb2 server is harder; see Exercise 8.4.)</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;io&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;os&quot;
+	"io"
+	"log"
+	"net"
+	"os"
 )
 
 //!+
 func main() {
-	conn, err := net.Dial(&quot;tcp&quot;, &quot;localhost:8000&quot;)
+	conn, err := net.Dial("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
 	done := make(chan struct{})
 	go func() {
 		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println(&quot;done&quot;)
-		done &lt;- struct{}{} // signal the main goroutine
+		log.Println("done")
+		done <- struct{}{} // signal the main goroutine
 	}()
 	mustCopy(conn, os.Stdin)
 	//conn.Close()
 	if conn, ok := conn.(*net.TCPConn); ok {
 		conn.CloseWrite()
 	}
-	&lt;-done // wait for background goroutine to finish
+	<-done // wait for background goroutine to finish
 }
 
 //!-
@@ -547,7 +587,7 @@ func mustCopy(dst io.Writer, src io.Reader) {
 }
 </code></pre>
 
-<h3 id="ex-8-4">Ex 8.4</h3>
+<h3 id=6605bafbcd4c7755166928f74ea81740>Ex 8.4</h3>
 
 <p>Modify the reverb2 server to use a sync.WaitGroup per connection to count the number of active echo goroutines. When it falls to zero, close the write half of the TCP connection as described in Exercise 8.3. Verify that your modiﬁed netcat3 client from that exercise waits for the ﬁnal echoes of multiple concurrent shouts, even after the standard input has been closed.</p>
 
@@ -555,10 +595,10 @@ func mustCopy(dst io.Writer, src io.Reader) {
 package main
 
 import (
-	&quot;io&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;os&quot;
+	"io"
+	"log"
+	"net"
+	"os"
 )
 
 func init() {
@@ -567,28 +607,28 @@ func init() {
 
 //!+
 func main() {
-	f, err := os.Open(&quot;a&quot;)
+	f, err := os.Open("a")
 	defer f.Close()
-	conn, err := net.Dial(&quot;tcp&quot;, &quot;localhost:8000&quot;)
+	conn, err := net.Dial("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
 	done := make(chan struct{})
 	go func() {
 		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println(&quot;done&quot;)
-		done &lt;- struct{}{} // signal the main goroutine
+		log.Println("done")
+		done <- struct{}{} // signal the main goroutine
 	}()
 	mustCopy(conn, f)
 	//conn.Close()
-	log.Printf(&quot;local in server: %#v\n&quot;, conn.LocalAddr())
-	log.Printf(&quot;remote in server: %#v\n&quot;, conn.RemoteAddr())
+	log.Printf("local in server: %#v\n", conn.LocalAddr())
+	log.Printf("remote in server: %#v\n", conn.RemoteAddr())
 	err = conn.(*net.TCPConn).CloseWrite() //经实验：必须要关，否则无法通知服务端输入已结束（但不应该是服务端根据EOF来判断吗？）
-	log.Println(&quot;write finished in client: &quot;, err)
-	&lt;-done // wait for background goroutine to finish
-	log.Println(&quot;finish print&quot;)
+	log.Println("write finished in client: ", err)
+	<-done // wait for background goroutine to finish
+	log.Println("finish print")
 	//err = conn.(*net.TCPConn).CloseRead()
-	//log.Println(&quot;read finished in client: &quot;, err)
+	//log.Println("read finished in client: ", err)
 	err = conn.Close()
 	log.Println(err)
 }
@@ -603,7 +643,7 @@ func mustCopy(dst io.Writer, src io.Reader) {
 </code></pre>
 
 <pre><code class="language-go">//server
-// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 224.
@@ -612,13 +652,13 @@ func mustCopy(dst io.Writer, src io.Reader) {
 package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;strings&quot;
-	&quot;sync&quot;
-	&quot;time&quot;
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"strings"
+	"sync"
+	"time"
 )
 
 func init() {
@@ -626,11 +666,11 @@ func init() {
 }
 func echo(c net.Conn, shout string, delay time.Duration, wg *sync.WaitGroup) {
 	defer wg.Done()
-	fmt.Fprintln(c, &quot;\t&quot;, strings.ToUpper(shout))
+	fmt.Fprintln(c, "\t", strings.ToUpper(shout))
 	time.Sleep(delay)
-	fmt.Fprintln(c, &quot;\t&quot;, shout)
+	fmt.Fprintln(c, "\t", shout)
 	time.Sleep(delay)
-	fmt.Fprintln(c, &quot;\t&quot;, strings.ToLower(shout))
+	fmt.Fprintln(c, "\t", strings.ToLower(shout))
 }
 
 //!+
@@ -639,25 +679,25 @@ func handleConn(c net.Conn) {
 	var wg sync.WaitGroup
 	for input.Scan() {
 		wg.Add(1)
-		go echo(c, input.Text(), 1*time.Second, &amp;wg)
+		go echo(c, input.Text(), 1*time.Second, &wg)
 		fmt.Println(input.Text())
 	}
 	// NOTE: ignoring potential errors from input.Err()
 	//err := c.(*net.TCPConn).CloseRead()
-	//log.Println(&quot;read finished in server: &quot;, err)
-	log.Println(&quot;finish scan&quot;)
-	log.Printf(&quot;local in server: %#v\n&quot;, c.LocalAddr())
-	log.Printf(&quot;remote in server: %#v\n&quot;, c.RemoteAddr())
+	//log.Println("read finished in server: ", err)
+	log.Println("finish scan")
+	log.Printf("local in server: %#v\n", c.LocalAddr())
+	log.Printf("remote in server: %#v\n", c.RemoteAddr())
 	wg.Wait()
 	err := c.(*net.TCPConn).CloseWrite()
 	//err := c.Close()
-	log.Println(&quot;finished in server: &quot;, err)
+	log.Println("finished in server: ", err)
 }
 
 //!-
 
 func main() {
-	l, err := net.Listen(&quot;tcp&quot;, &quot;localhost:8000&quot;)
+	l, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -674,9 +714,9 @@ func main() {
 
 <pre><code class="language-bash">//client
 $ ./ex8.3
-2018/01/02 08:56:18.122881 local in server: &amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:59580, Zone:&quot;&quot;}
-2018/01/02 08:56:18.123015 remote in server: &amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:&quot;&quot;}
-2018/01/02 08:56:18.123035 write finished in client:  &lt;nil&gt;
+2018/01/02 08:56:18.122881 local in server: &net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:59580, Zone:""}
+2018/01/02 08:56:18.123015 remote in server: &net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:""}
+2018/01/02 08:56:18.123035 write finished in client:  <nil>
 	 A
 	 F
 	 B
@@ -700,7 +740,7 @@ $ ./ex8.3
 	 g
 2018/01/02 08:56:20.125582 done
 2018/01/02 08:56:20.125625 finish print
-2018/01/02 08:56:20.125699 &lt;nil&gt;
+2018/01/02 08:56:20.125699 <nil>
 </code></pre>
 
 <pre><code class="language-bash">//server
@@ -713,9 +753,9 @@ e
 f
 g
 2018/01/02 08:56:18.123125 finish scan
-2018/01/02 08:56:18.123409 local in server: &amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:&quot;&quot;}
-2018/01/02 08:56:18.123427 remote in server: &amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:59580, Zone:&quot;&quot;}
-2018/01/02 08:56:20.125383 finished in server:  &lt;nil&gt;
+2018/01/02 08:56:18.123409 local in server: &net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:""}
+2018/01/02 08:56:18.123427 remote in server: &net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:59580, Zone:""}
+2018/01/02 08:56:20.125383 finished in server:  <nil>
 </code></pre>
 
 <ul>
@@ -836,17 +876,19 @@ g
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-8-1">Ex 8.1</a>
+        <a href="#8a4f504e848f8c8006a64e59661537ef">Ex 8.1</a>
 
       
     
       
       
 
+      
       
       
       
@@ -864,7 +906,7 @@ g
         
 
         <li>
-          <a href="#ex-8-3">Ex 8.3</a>
+          <a href="#e9cddd55c968bcf844858d7ab10b6b97">Ex 8.3</a>
 
         
 
@@ -873,6 +915,7 @@ g
       
       
 
+      
       
       
       
@@ -890,7 +933,7 @@ g
         
 
         <li>
-          <a href="#ex-8-4">Ex 8.4</a>
+          <a href="#6605bafbcd4c7755166928f74ea81740">Ex 8.4</a>
 
         
           

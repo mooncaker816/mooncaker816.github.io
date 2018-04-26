@@ -265,6 +265,95 @@ Change the findlinks program to traverse the n.FirstChild linked list using recu
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,8 +466,9 @@ Change the findlinks program to traverse the n.FirstChild linked list using recu
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-5-1">Ex 5.1</h3>
+                <h3 id=5d4f448d3bc7c564e8759c2df6cd77b4>Ex 5.1</h3>
 
 <p>Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.</p>
 
@@ -387,16 +477,16 @@ Change the findlinks program to traverse the n.FirstChild linked list using recu
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;os&quot;
+	"fmt"
+	"os"
 
-	&quot;golang.org/x/net/html&quot;
+	"golang.org/x/net/html"
 )
 
 func main() {
 	doc, err := html.Parse(os.Stdin)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, &quot;findlinks1: %v\n&quot;, err)
+		fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
 		os.Exit(1)
 	}
 	for _, link := range visit(nil, doc) {
@@ -410,9 +500,9 @@ func visit(links []string, n *html.Node) []string {
 	if n == nil {
 		return links
 	} else {
-		if n.Type == html.ElementNode &amp;&amp; n.Data == &quot;a&quot; {
+		if n.Type == html.ElementNode && n.Data == "a" {
 			for _, a := range n.Attr {
-				if a.Key == &quot;href&quot; {
+				if a.Key == "href" {
 					links = append(links, a.Val)
 				}
 			}
@@ -431,24 +521,24 @@ javascript:;
 javascript:;
 /
 javascript:;
-https://passport.baidu.com/v2/?login&amp;tpl=mn&amp;u=http%3A%2F%2Fwww.baidu.com%2F
+https://passport.baidu.com/v2/?login&tpl=mn&u=http%3A%2F%2Fwww.baidu.com%2F
 http://news.baidu.com
 http://www.hao123.com
 http://map.baidu.com
 http://v.baidu.com
 http://tieba.baidu.com
 http://xueshu.baidu.com
-https://passport.baidu.com/v2/?login&amp;tpl=mn&amp;u=http%3A%2F%2Fwww.baidu.com%2F
+https://passport.baidu.com/v2/?login&tpl=mn&u=http%3A%2F%2Fwww.baidu.com%2F
 http://www.baidu.com/gaoji/preferences.html
 http://www.baidu.com/more/
-http://news.baidu.com/ns?cl=2&amp;rn=20&amp;tn=news&amp;word=
-http://tieba.baidu.com/f?kw=&amp;fr=wwwt
-http://zhidao.baidu.com/q?ct=17&amp;pn=0&amp;tn=ikaslist&amp;rn=10&amp;word=&amp;fr=wwwt
-http://music.baidu.com/search?fr=ps&amp;ie=utf-8&amp;key=
-http://image.baidu.com/search/index?tn=baiduimage&amp;ps=1&amp;ct=201326592&amp;lm=-1&amp;cl=2&amp;nc=1&amp;ie=utf-8&amp;word=
-http://v.baidu.com/v?ct=301989888&amp;rn=20&amp;pn=0&amp;db=0&amp;s=25&amp;ie=utf-8&amp;word=
-http://map.baidu.com/m?word=&amp;fr=ps01000
-http://wenku.baidu.com/search?word=&amp;lm=0&amp;od=0&amp;ie=utf-8
+http://news.baidu.com/ns?cl=2&rn=20&tn=news&word=
+http://tieba.baidu.com/f?kw=&fr=wwwt
+http://zhidao.baidu.com/q?ct=17&pn=0&tn=ikaslist&rn=10&word=&fr=wwwt
+http://music.baidu.com/search?fr=ps&ie=utf-8&key=
+http://image.baidu.com/search/index?tn=baiduimage&ps=1&ct=201326592&lm=-1&cl=2&nc=1&ie=utf-8&word=
+http://v.baidu.com/v?ct=301989888&rn=20&pn=0&db=0&s=25&ie=utf-8&word=
+http://map.baidu.com/m?word=&fr=ps01000
+http://wenku.baidu.com/search?word=&lm=0&od=0&ie=utf-8
 //www.baidu.com/more/
 //www.baidu.com/cache/sethelp/help.html
 http://home.baidu.com
@@ -459,28 +549,28 @@ http://jianyi.baidu.com/
 http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11000002000001
 </code></pre>
 
-<h3 id="ex-5-2">Ex 5.2</h3>
+<h3 id=202d68ab80de10987575e2288f96830a>Ex 5.2</h3>
 
 <p>Write a function to populate a mapping from element names—p, div, span, and so on—to the number of elements with that name in an HTML document tree.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;os&quot;
+	"fmt"
+	"os"
 
-	&quot;golang.org/x/net/html&quot;
+	"golang.org/x/net/html"
 )
 
 func main() {
 	doc, err := html.Parse(os.Stdin)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, &quot;findlinks1: %v\n&quot;, err)
+		fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
 		os.Exit(1)
 	}
 	m := make(map[string]int)
 	for k, v := range check(m, doc) {
-		fmt.Printf(&quot;%s:%d\n&quot;, k, v)
+		fmt.Printf("%s:%d\n", k, v)
 	}
 }
 
@@ -523,28 +613,28 @@ input:14
 b:2
 </code></pre>
 
-<h3 id="ex-5-5">Ex 5.5</h3>
+<h3 id=b8de52455800b7f4f1863ccca5b9fb38>Ex 5.5</h3>
 
 <p>Implement countWordsAndImages. (See Exercise 4.9 for word-splitting.)</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;net/http&quot;
-	&quot;strings&quot;
+	"bufio"
+	"fmt"
+	"net/http"
+	"strings"
 
-	&quot;golang.org/x/net/html&quot;
+	"golang.org/x/net/html"
 )
 
 func main() {
-	url := &quot;http://www.baidu.com&quot;
+	url := "http://www.baidu.com"
 	w, i, err := CountWordsAndImages(url)
 	if err != nil {
-		fmt.Println(&quot;CountWordsAndImages error: &quot;, err)
+		fmt.Println("CountWordsAndImages error: ", err)
 	}
-	fmt.Printf(&quot;words = %d,images = %d\n&quot;, w, i)
+	fmt.Printf("words = %d,images = %d\n", w, i)
 }
 
 func CountWordsAndImages(url string) (words, images int, err error) {
@@ -555,7 +645,7 @@ func CountWordsAndImages(url string) (words, images int, err error) {
 	doc, err := html.Parse(resp.Body)
 	resp.Body.Close()
 	if err != nil {
-		err = fmt.Errorf(&quot;parsing HTML: %s&quot;, err)
+		err = fmt.Errorf("parsing HTML: %s", err)
 		return
 	}
 	words, images = countWordsAndImages(doc)
@@ -567,7 +657,7 @@ func countWordsAndImages(n *html.Node) (words, images int) {
 		return
 	} else {
 		if n.Type == html.ElementNode {
-			if n.Data == &quot;img&quot; {
+			if n.Data == "img" {
 				images++
 			}
 		} else if n.Type == html.TextNode {
@@ -592,16 +682,16 @@ func countWordsAndImages(n *html.Node) (words, images int) {
 words = 2805,images = 2
 </code></pre>
 
-<h3 id="ex-5-6">Ex 5.6</h3>
+<h3 id=e36f5ce40249e49caa277056f727f48e>Ex 5.6</h3>
 
 <p>Modify the corner function in gopl.io/ch3/surface (§3.2) to use named results and a bare return statement.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;math&quot;
-	&quot;os&quot;
+	"fmt"
+	"math"
+	"os"
 )
 
 const (
@@ -616,26 +706,26 @@ const (
 var sin30, cos30 = math.Sin(angle), math.Cos(angle) // sin(30°), cos(30°)
 
 func main() {
-	//fmt.Printf(&quot;&lt;svg xmlns='http://www.w3.org/2000/svg' &quot;+
-	f, err := os.Create(&quot;test.svg&quot;)
+	//fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
+	f, err := os.Create("test.svg")
 	if err != nil {
-		fmt.Println(&quot;create file error &quot;, err)
+		fmt.Println("create file error ", err)
 		return
 	}
-	fmt.Fprintf(f, &quot;&lt;svg xmlns='http://www.w3.org/2000/svg' &quot;+
-		&quot;style='stroke: grey; fill: white; stroke-width: 0.7' &quot;+
-		&quot;width='%d' height='%d'&gt;&quot;, width, height)
-	for i := 0; i &lt; cells; i++ {
-		for j := 0; j &lt; cells; j++ {
+	fmt.Fprintf(f, "<svg xmlns='http://www.w3.org/2000/svg' "+
+		"style='stroke: grey; fill: white; stroke-width: 0.7' "+
+		"width='%d' height='%d'>", width, height)
+	for i := 0; i < cells; i++ {
+		for j := 0; j < cells; j++ {
 			ax, ay := corner(i+1, j)
 			bx, by := corner(i, j)
 			cx, cy := corner(i, j+1)
 			dx, dy := corner(i+1, j+1)
-			fmt.Fprintf(f, &quot;&lt;polygon points='%g,%g %g,%g %g,%g %g,%g'/&gt;\n&quot;,
+			fmt.Fprintf(f, "<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
 				ax, ay, bx, by, cx, cy, dx, dy)
 		}
 	}
-	fmt.Fprintln(f, &quot;&lt;/svg&gt;&quot;)
+	fmt.Fprintln(f, "</svg>")
 }
 
 func corner(i, j int) (sx, sy float64) {
@@ -658,18 +748,18 @@ func f(x, y float64) float64 {
 }
 </code></pre>
 
-<h3 id="ex-5-7">Ex 5.7</h3>
+<h3 id=1a36a06e20cc4d5220e6cb7926df1edc>Ex 5.7</h3>
 
 <p>Develop startElement and endElement into a general HTML pre Print comment nodes, text nodes, and the attributes of each element (<a href='...'>). Use short forms like <img/> instead of <img></img> when an element has no children. Write a test to ensure that the output can be parsed successfully. (See Chapter 11.)</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
+	"fmt"
+	"net/http"
+	"os"
 
-	&quot;golang.org/x/net/html&quot;
+	"golang.org/x/net/html"
 )
 
 func main() {
@@ -715,12 +805,12 @@ func startElement(n *html.Node) {
 		if n.DataAtom != 0 { //去除无法识别标签的节点，如空白的textnode等
 			var attr string
 			for _, v := range n.Attr {
-				attr += &quot; &quot; + v.Key + &quot;='&quot; + v.Val + &quot;'&quot;
+				attr += " " + v.Key + "='" + v.Val + "'"
 			}
 			if n.FirstChild == nil {
-				fmt.Printf(&quot;%*s&lt;%s/&gt;\n&quot;, depth*2, &quot;&quot;, n.Data)
+				fmt.Printf("%*s<%s/>\n", depth*2, "", n.Data)
 			} else {
-				fmt.Printf(&quot;%*s&lt;%s%s&gt;\n&quot;, depth*2, &quot;&quot;, n.Data, attr)
+				fmt.Printf("%*s<%s%s>\n", depth*2, "", n.Data, attr)
 			}
 			depth++
 		}
@@ -733,7 +823,7 @@ func endElement(n *html.Node) {
 		if n.DataAtom != 0 {
 			depth--
 			if n.FirstChild != nil {
-				fmt.Printf(&quot;%*s&lt;/%s&gt;\n&quot;, depth*2, &quot;&quot;, n.Data)
+				fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
 			}
 		}
 	}
@@ -741,149 +831,149 @@ func endElement(n *html.Node) {
 </code></pre>
 
 <pre><code class="language-bash">$ ./ex5.7 http://gopl.io
-&lt;html xmlns='http://www.w3.org/1999/xhtml'&gt;
-  &lt;head&gt;
-    &lt;meta/&gt;
-    &lt;title&gt;
-    &lt;/title&gt;
-    &lt;script&gt;
-    &lt;/script&gt;
-    &lt;link/&gt;
-    &lt;style&gt;
-    &lt;/style&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;table&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;
-          &lt;td&gt;
-            &lt;a href='http://www.informit.com/store/go-programming-language-9780134190440'&gt;
-              &lt;img/&gt;
-            &lt;/a&gt;
-            &lt;br/&gt;
-            &lt;div style='text-align: center'&gt;
-              &lt;a href='http://www.amazon.com/dp/0134190440'&gt;
-                &lt;img/&gt;
-              &lt;/a&gt;
-              &lt;a href='http://www.informit.com/store/go-programming-language-9780134190440'&gt;
-                &lt;img/&gt;
-              &lt;/a&gt;
-              &lt;a href='http://www.barnesandnoble.com/w/1121601944'&gt;
-                &lt;img/&gt;
-              &lt;/a&gt;
-            &lt;/div&gt;
-            &lt;br/&gt;
-          &lt;/td&gt;
-          &lt;td width='500'&gt;
-            &lt;h1 class='center'&gt;
-            &lt;/h1&gt;
-            &lt;p class='biblio center'&gt;
-              &lt;br/&gt;
-              &lt;br/&gt;
-              &lt;br/&gt;
-              &lt;tt&gt;
-              &lt;/tt&gt;
-              &lt;tt&gt;
-              &lt;/tt&gt;
-              &lt;tt&gt;
-              &lt;/tt&gt;
-            &lt;/p&gt;
-            &lt;div id='toc'&gt;
-              &lt;table&gt;
-                &lt;tbody&gt;
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      &lt;h1&gt;
-                        &lt;a href='ch1.pdf'&gt;
-                        &lt;/a&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                        &lt;a href='ch1.pdf'&gt;
-                        &lt;/a&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                        &lt;a href='ch1.pdf'&gt;
-                        &lt;/a&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                    &lt;/td&gt;
-                    &lt;td&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                      &lt;/h1&gt;
-                      &lt;h1&gt;
-                        &lt;a href='ch1.pdf'&gt;
-                        &lt;/a&gt;
-                      &lt;/h1&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  &lt;tr&gt;
-                    &lt;td colspan='2'&gt;
-                      &lt;h1&gt;
-                        &lt;a href='https://github.com/adonovan/gopl.io/'&gt;
-                        &lt;/a&gt;
-                        &lt;a href='reviews.html'&gt;
-                        &lt;/a&gt;
-                        &lt;a href='translations.html'&gt;
-                        &lt;/a&gt;
-                        &lt;a href='errata.html'&gt;
-                        &lt;/a&gt;
-                      &lt;/h1&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                &lt;/tbody&gt;
-              &lt;/table&gt;
-            &lt;/div&gt;
-            &lt;p class='bio'&gt;
-              &lt;a href='http://golang.org/s/oracle-user-manual'&gt;
-                &lt;code&gt;
-                &lt;/code&gt;
-              &lt;/a&gt;
-              &lt;a href='http://golang.org/lib/godoc/analysis/help.html'&gt;
-                &lt;code&gt;
-                &lt;/code&gt;
-              &lt;/a&gt;
-              &lt;a href='https://github.com/golang/tools/blob/master/refactor/eg/eg.go'&gt;
-                &lt;code&gt;
-                &lt;/code&gt;
-              &lt;/a&gt;
-              &lt;a href='https://github.com/golang/tools/blob/master/refactor/rename/rename.go'&gt;
-                &lt;code&gt;
-                &lt;/code&gt;
-              &lt;/a&gt;
-            &lt;/p&gt;
-            &lt;p class='bio'&gt;
-              &lt;a href='http://www.amazon.com/dp/0131103628?tracking_id=disfordig-20'&gt;
-              &lt;/a&gt;
-              &lt;a href='http://www.amazon.com/dp/020161586X?tracking_id=disfordig-20'&gt;
-              &lt;/a&gt;
-            &lt;/p&gt;
-          &lt;/td&gt;
-        &lt;/tr&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <meta/>
+    <title>
+    </title>
+    <script>
+    </script>
+    <link/>
+    <style>
+    </style>
+  </head>
+  <body>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <a href='http://www.informit.com/store/go-programming-language-9780134190440'>
+              <img/>
+            </a>
+            <br/>
+            <div style='text-align: center'>
+              <a href='http://www.amazon.com/dp/0134190440'>
+                <img/>
+              </a>
+              <a href='http://www.informit.com/store/go-programming-language-9780134190440'>
+                <img/>
+              </a>
+              <a href='http://www.barnesandnoble.com/w/1121601944'>
+                <img/>
+              </a>
+            </div>
+            <br/>
+          </td>
+          <td width='500'>
+            <h1 class='center'>
+            </h1>
+            <p class='biblio center'>
+              <br/>
+              <br/>
+              <br/>
+              <tt>
+              </tt>
+              <tt>
+              </tt>
+              <tt>
+              </tt>
+            </p>
+            <div id='toc'>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                    </td>
+                    <td>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan='2'>
+                      <h1>
+                        <a href='https://github.com/adonovan/gopl.io/'>
+                        </a>
+                        <a href='reviews.html'>
+                        </a>
+                        <a href='translations.html'>
+                        </a>
+                        <a href='errata.html'>
+                        </a>
+                      </h1>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class='bio'>
+              <a href='http://golang.org/s/oracle-user-manual'>
+                <code>
+                </code>
+              </a>
+              <a href='http://golang.org/lib/godoc/analysis/help.html'>
+                <code>
+                </code>
+              </a>
+              <a href='https://github.com/golang/tools/blob/master/refactor/eg/eg.go'>
+                <code>
+                </code>
+              </a>
+              <a href='https://github.com/golang/tools/blob/master/refactor/rename/rename.go'>
+                <code>
+                </code>
+              </a>
+            </p>
+            <p class='bio'>
+              <a href='http://www.amazon.com/dp/0131103628?tracking_id=disfordig-20'>
+              </a>
+              <a href='http://www.amazon.com/dp/020161586X?tracking_id=disfordig-20'>
+              </a>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
 </code></pre>
 
 <ul>
@@ -894,11 +984,11 @@ func endElement(n *html.Node) {
 <p>// A Node consists of a NodeType and some Data (tag name for element nodes,
 // content for text) and are part of a tree of Nodes. Element nodes may also
 // have a Namespace and contain a slice of Attributes. Data is unescaped, so
-// that it looks like &ldquo;a&lt;b&rdquo; rather than &ldquo;a&lt;b&rdquo;. For element nodes, DataAtom
+// that it looks like “a<b” rather than “a<b”. For element nodes, DataAtom
 // is the atom for Data, or zero if Data is not a known tag name.</p>
 </blockquote>
 
-<h3 id="ex-5-8">Ex 5.8</h3>
+<h3 id=358ea48c58426603893c926b2eb4cf0a>Ex 5.8</h3>
 
 <p>Modify forEachNode so that the pre and post functions return a boolean re indicating whether to continue the traversal. Use it to write a function ElementByID with the following signature that ﬁnds the ﬁrst HTML element with the speciﬁed id attribute. The function should stop the traversal as soon as a match is found.</p>
 
@@ -907,17 +997,17 @@ func endElement(n *html.Node) {
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
+	"fmt"
+	"log"
+	"net/http"
+	"os"
 
-	&quot;golang.org/x/net/html&quot;
+	"golang.org/x/net/html"
 )
 
-var custID = &quot;css_index_result&quot;
+var custID = "css_index_result"
 
-//var custID = &quot;toc&quot;
+//var custID = "toc"
 
 func main() {
 	for _, url := range os.Args[1:] {
@@ -935,8 +1025,8 @@ func outline(url string) error {
 	if err != nil {
 		return err
 	}
-	//forEachNode(doc, &quot;&quot;, startElement, endElement)
-	fmt.Printf(&quot;%#v:\n&quot;, getElementByID(doc, custID))
+	//forEachNode(doc, "", startElement, endElement)
+	fmt.Printf("%#v:\n", getElementByID(doc, custID))
 	return nil
 }
 
@@ -947,7 +1037,7 @@ func forEachNode(n *html.Node, id string, pre, post func(n *html.Node, id string
 			rtn = n
 		}
 	}
-	for c := n.FirstChild; c != nil &amp;&amp; rtn == nil; c = c.NextSibling {
+	for c := n.FirstChild; c != nil && rtn == nil; c = c.NextSibling {
 		rtn = forEachNode(c, id, pre, post)
 	}
 	if post != nil {
@@ -967,19 +1057,19 @@ func startElement(n *html.Node, id string) bool {
 		if n.DataAtom != 0 { //去除无法识别标签的节点，如空白的textnode等
 			var attr string
 			for _, v := range n.Attr {
-				attr += &quot; &quot; + v.Key + &quot;='&quot; + v.Val + &quot;'&quot;
+				attr += " " + v.Key + "='" + v.Val + "'"
 			}
 			if n.FirstChild == nil {
-				fmt.Printf(&quot;%*s&lt;%s/&gt;\n&quot;, depth*2, &quot;&quot;, n.Data)
+				fmt.Printf("%*s<%s/>\n", depth*2, "", n.Data)
 			} else {
-				fmt.Printf(&quot;%*s&lt;%s%s&gt;\n&quot;, depth*2, &quot;&quot;, n.Data, attr)
+				fmt.Printf("%*s<%s%s>\n", depth*2, "", n.Data, attr)
 			}
 			depth++
 		}
 		if n.Type == html.ElementNode {
 			for _, v := range n.Attr {
-				if v.Key == &quot;id&quot; &amp;&amp; v.Val == id {
-					log.Printf(&quot;%#v\n&quot;, n)
+				if v.Key == "id" && v.Val == id {
+					log.Printf("%#v\n", n)
 					return false
 				}
 			}
@@ -994,7 +1084,7 @@ func endElement(n *html.Node, id string) bool {
 		if n.DataAtom != 0 {
 			depth--
 			if n.FirstChild != nil {
-				fmt.Printf(&quot;%*s&lt;/%s&gt;\n&quot;, depth*2, &quot;&quot;, n.Data)
+				fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
 			}
 		}
 	}
@@ -1007,42 +1097,42 @@ func getElementByID(doc *html.Node, id string) *html.Node {
 </code></pre>
 
 <pre><code class="language-bash">$ ./ex5.7 http://www.baidu.com
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;meta/&gt;
-    &lt;meta/&gt;
-    &lt;meta/&gt;
-    &lt;meta/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;link/&gt;
-    &lt;title&gt;
-    &lt;/title&gt;
-    &lt;style id='css_index' index='index' type='text/css'&gt;
-    &lt;/style&gt;
-    &lt;style data-for='debug'&gt;
-    &lt;/style&gt;
-    &lt;style data-for='result' id='css_index_result' type='text/css'&gt;
-2018/01/02 17:53:11 &amp;html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:&quot;style&quot;, Namespace:&quot;&quot;, Attr:[]html.Attribute{html.Attribute{Namespace:&quot;&quot;, Key:&quot;data-for&quot;, Val:&quot;result&quot;}, html.Attribute{Namespace:&quot;&quot;, Key:&quot;id&quot;, Val:&quot;css_index_result&quot;}, html.Attribute{Namespace:&quot;&quot;, Key:&quot;type&quot;, Val:&quot;text/css&quot;}}}
-    &lt;/style&gt;
-  &lt;/head&gt;
-&lt;/html&gt;
-&amp;html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:&quot;style&quot;, Namespace:&quot;&quot;, Attr:[]html.Attribute{html.Attribute{Namespace:&quot;&quot;, Key:&quot;data-for&quot;, Val:&quot;result&quot;}, html.Attribute{Namespace:&quot;&quot;, Key:&quot;id&quot;, Val:&quot;css_index_result&quot;}, html.Attribute{Namespace:&quot;&quot;, Key:&quot;type&quot;, Val:&quot;text/css&quot;}}}:
+<html>
+  <head>
+    <meta/>
+    <meta/>
+    <meta/>
+    <meta/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <title>
+    </title>
+    <style id='css_index' index='index' type='text/css'>
+    </style>
+    <style data-for='debug'>
+    </style>
+    <style data-for='result' id='css_index_result' type='text/css'>
+2018/01/02 17:53:11 &html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:"style", Namespace:"", Attr:[]html.Attribute{html.Attribute{Namespace:"", Key:"data-for", Val:"result"}, html.Attribute{Namespace:"", Key:"id", Val:"css_index_result"}, html.Attribute{Namespace:"", Key:"type", Val:"text/css"}}}
+    </style>
+  </head>
+</html>
+&html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:"style", Namespace:"", Attr:[]html.Attribute{html.Attribute{Namespace:"", Key:"data-for", Val:"result"}, html.Attribute{Namespace:"", Key:"id", Val:"css_index_result"}, html.Attribute{Namespace:"", Key:"type", Val:"text/css"}}}:
 </code></pre>
 
-<h3 id="ex-5-12">Ex 5.12</h3>
+<h3 id=7c957a8a3ddaf12792f283861b81b643>Ex 5.12</h3>
 
 <p>The startElement and endElement functions in gopl.io/ch5/outline2 (§5.5) share a global variable, depth. Turn them into anonymous functions that share a variable local to the outline function.</p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 133.
@@ -1051,11 +1141,11 @@ func getElementByID(doc *html.Node, id string) *html.Node {
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
+	"fmt"
+	"net/http"
+	"os"
 
-	&quot;golang.org/x/net/html&quot;
+	"golang.org/x/net/html"
 )
 
 func main() {
@@ -1078,7 +1168,7 @@ func outline(url string) error {
 	var depth int
 	startElement := func(n *html.Node) {
 		if n.Type == html.ElementNode {
-			fmt.Printf(&quot;%*s&lt;%s&gt;\n&quot;, depth*2, &quot;&quot;, n.Data)
+			fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
 			depth++
 		}
 	}
@@ -1086,7 +1176,7 @@ func outline(url string) error {
 	endElement := func(n *html.Node) {
 		if n.Type == html.ElementNode {
 			depth--
-			fmt.Printf(&quot;%*s&lt;/%s&gt;\n&quot;, depth*2, &quot;&quot;, n.Data)
+			fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
 		}
 	}
 	//!+call
@@ -1116,25 +1206,25 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 }
 </code></pre>
 
-<h3 id="ex-5-13">Ex 5.13</h3>
+<h3 id=52f9b3cd9b8bb8eebf7aef34e81f7c1a>Ex 5.13</h3>
 
 <p>Modify crawl to make local copies of the pages it ﬁnds, creating directories as necessary. Don’t make copies of pages that come from a different domain. For example, if the original page comes from golang.org, save all ﬁles from there, but exclude ones from vimeo.com.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;log&quot;
-	&quot;net/http&quot;
-	&quot;net/url&quot;
-	&quot;os&quot;
-	&quot;strconv&quot;
-	&quot;strings&quot;
-	&quot;time&quot;
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"net/url"
+	"os"
+	"strconv"
+	"strings"
+	"time"
 
-	&quot;golang.org/x/net/html&quot;
-	&quot;gopl.io/ch5/links&quot;
+	"golang.org/x/net/html"
+	"gopl.io/ch5/links"
 )
 
 // Extract makes an HTTP GET request to the specified URL, parses
@@ -1146,18 +1236,18 @@ func Extract(urlstr string) ([]string, error) {
 	}
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
-		return nil, fmt.Errorf(&quot;getting %s: %s&quot;, urlstr, resp.Status)
+		return nil, fmt.Errorf("getting %s: %s", urlstr, resp.Status)
 	}
 	doc, err := html.Parse(resp.Body)
 	resp.Body.Close()
 	if err != nil {
-		return nil, fmt.Errorf(&quot;parsing %s as HTML: %v&quot;, urlstr, err)
+		return nil, fmt.Errorf("parsing %s as HTML: %v", urlstr, err)
 	}
 	var links []string
 	visitNode := func(n *html.Node) {
-		if n.Type == html.ElementNode &amp;&amp; n.Data == &quot;a&quot; {
+		if n.Type == html.ElementNode && n.Data == "a" {
 			for _, a := range n.Attr {
-				if a.Key != &quot;href&quot; {
+				if a.Key != "href" {
 					continue
 				}
 				link, err := resp.Request.URL.Parse(a.Val)
@@ -1193,12 +1283,12 @@ func breadthFirst(f func(item string, host []string) []string, worklist []string
 	for i, v := range worklist {
 		u, err := url.Parse(v)
 		if err != nil {
-			fmt.Println(&quot;initial url parse failed&quot;)
+			fmt.Println("initial url parse failed")
 			return
 		}
 		host[i] = u.Host
 	}
-	for len(worklist) &gt; 0 {
+	for len(worklist) > 0 {
 		items := worklist
 		worklist = nil
 		for _, item := range items {
@@ -1226,7 +1316,7 @@ func crawl(urlstr string, sl []string) []string {
 func copycontent(s string, sl []string) {
 	u, err := url.Parse(s)
 	if err != nil {
-		fmt.Println(&quot;url parse failed&quot;)
+		fmt.Println("url parse failed")
 		return
 	}
 	for _, v := range sl {
@@ -1243,40 +1333,40 @@ func copycontent(s string, sl []string) {
 			//fmt.Println(path)
 			dir, _ := os.Getwd() //当前的目录
 			var filename, filepart, dirpart string
-			ns := strings.Count(u.Path, &quot;/&quot;)
-			if ns == 0 || ns == 1 &amp;&amp; len(u.Path) == 1 {
-				filepart = &quot;&quot;
-				filename = strconv.FormatInt(time.Now().Unix(), 10) + &quot;.html&quot;
-				dirpart = &quot;/&quot;
+			ns := strings.Count(u.Path, "/")
+			if ns == 0 || ns == 1 && len(u.Path) == 1 {
+				filepart = ""
+				filename = strconv.FormatInt(time.Now().Unix(), 10) + ".html"
+				dirpart = "/"
 			} else {
-				filepart = u.Path[strings.LastIndex(u.Path, &quot;/&quot;)+1:]
-				dirpart = u.Path[:strings.LastIndex(u.Path, &quot;/&quot;)+1]
-				if strings.Contains(filepart, &quot;.&quot;) {
+				filepart = u.Path[strings.LastIndex(u.Path, "/")+1:]
+				dirpart = u.Path[:strings.LastIndex(u.Path, "/")+1]
+				if strings.Contains(filepart, ".") {
 					filename = filepart
 				} else {
 					dirpart = u.Path
-					filename = strconv.FormatInt(time.Now().Unix(), 10) + &quot;.html&quot;
+					filename = strconv.FormatInt(time.Now().Unix(), 10) + ".html"
 				}
 			}
 
-			fullpath := dir + &quot;/&quot; + u.Host + dirpart
+			fullpath := dir + "/" + u.Host + dirpart
 			_, err = os.Stat(fullpath)
 			if err != nil {
 				err = os.MkdirAll(fullpath, os.ModePerm) //在当前目录下生成md目录
 				if err != nil {
-					fmt.Println(&quot;create folder failed! &quot;, fullpath, err)
+					fmt.Println("create folder failed! ", fullpath, err)
 					return
 				}
 			}
-			filename = dir + &quot;/&quot; + u.Host + dirpart + &quot;/&quot; + filename
+			filename = dir + "/" + u.Host + dirpart + "/" + filename
 			f, err := os.Create(filename)
 			if err != nil {
-				fmt.Println(&quot;create file error:&quot;, err, s)
+				fmt.Println("create file error:", err, s)
 				return
 			}
 			_, err = io.Copy(f, resp.Body)
 			if err != nil {
-				fmt.Println(&quot;failed in copy&quot;)
+				fmt.Println("failed in copy")
 				return
 			}
 			resp.Body.Close()
@@ -1401,17 +1491,19 @@ func main() {
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-5-1">Ex 5.1</a>
+        <a href="#5d4f448d3bc7c564e8759c2df6cd77b4">Ex 5.1</a>
 
       
     
       
       
 
+      
       
       
       
@@ -1429,7 +1521,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-2">Ex 5.2</a>
+          <a href="#202d68ab80de10987575e2288f96830a">Ex 5.2</a>
 
         
 
@@ -1438,6 +1530,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -1455,7 +1548,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-5">Ex 5.5</a>
+          <a href="#b8de52455800b7f4f1863ccca5b9fb38">Ex 5.5</a>
 
         
 
@@ -1464,6 +1557,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -1481,7 +1575,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-6">Ex 5.6</a>
+          <a href="#e36f5ce40249e49caa277056f727f48e">Ex 5.6</a>
 
         
 
@@ -1490,6 +1584,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -1507,7 +1602,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-7">Ex 5.7</a>
+          <a href="#1a36a06e20cc4d5220e6cb7926df1edc">Ex 5.7</a>
 
         
 
@@ -1516,6 +1611,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -1533,7 +1629,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-8">Ex 5.8</a>
+          <a href="#358ea48c58426603893c926b2eb4cf0a">Ex 5.8</a>
 
         
 
@@ -1542,6 +1638,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -1559,7 +1656,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-12">Ex 5.12</a>
+          <a href="#7c957a8a3ddaf12792f283861b81b643">Ex 5.12</a>
 
         
 
@@ -1568,6 +1665,7 @@ func main() {
       
       
 
+      
       
       
       
@@ -1585,7 +1683,7 @@ func main() {
         
 
         <li>
-          <a href="#ex-5-13">Ex 5.13</a>
+          <a href="#52f9b3cd9b8bb8eebf7aef34e81f7c1a">Ex 5.13</a>
 
         
           

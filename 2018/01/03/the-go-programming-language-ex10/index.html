@@ -265,6 +265,85 @@ Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,14 +456,15 @@ Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-8-6">Ex 8.6</h3>
+                <h3 id=30e3a363ad9cd8d2abb2c104c50386aa>Ex 8.6</h3>
 
 <p>Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3, then only URLs reachable by at most three links will be fetched.</p>
 
 <p></p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 241.
@@ -396,11 +476,11 @@ Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;os&quot;
+	"fmt"
+	"log"
+	"os"
 
-	&quot;gopl.io/ch5/links&quot;
+	"gopl.io/ch5/links"
 )
 
 //!+sema
@@ -409,10 +489,10 @@ import (
 var tokens = make(chan struct{}, 20)
 
 func crawl(url string, deepth int, f *os.File) work {
-	tokens &lt;- struct{}{} // acquire a token
+	tokens <- struct{}{} // acquire a token
 	list, err := links.Extract(url)
-	fmt.Fprintln(f, deepth, &quot; &quot;, url, &quot; &quot;, len(list))
-	&lt;-tokens // release the token
+	fmt.Fprintln(f, deepth, " ", url, " ", len(list))
+	<-tokens // release the token
 	deepth++
 	if err != nil {
 		log.Print(err)
@@ -432,17 +512,17 @@ const DEEPTH = 2
 func main() {
 	wkpool := make(chan work)
 	var n int // number of pending sends to worklist
-	f, _ := os.Create(&quot;stat&quot;)
+	f, _ := os.Create("stat")
 	defer f.Close()
 	// Start with the command-line arguments.
 	n++
-	go func() { wkpool &lt;- work{os.Args[1:], 0} }()
+	go func() { wkpool <- work{os.Args[1:], 0} }()
 
 	// Crawl the web concurrently.
 	seen := make(map[string]bool)
-	for ; n &gt; 0; n-- {
-		wk := &lt;-wkpool
-		if wk.workdeepth &gt; DEEPTH {
+	for ; n > 0; n-- {
+		wk := <-wkpool
+		if wk.workdeepth > DEEPTH {
 			continue
 		}
 		for _, link := range wk.worklist {
@@ -450,7 +530,7 @@ func main() {
 				seen[link] = true
 				n++
 				go func(link string, deepth int, f *os.File) {
-					wkpool &lt;- crawl(link, deepth, f)
+					wkpool <- crawl(link, deepth, f)
 				}(link, wk.workdeepth, f)
 			}
 		}
@@ -458,7 +538,7 @@ func main() {
 }
 </code></pre>
 
-<h3 id="ex-8-8">Ex 8.8</h3>
+<h3 id=31f6d613d71777184415d9402427d51f>Ex 8.8</h3>
 
 <p>Using a select statement, add a timeout to the echo server from Section 8.3 so that it disconnects any client that shouts nothing within 10 seconds.</p>
 
@@ -466,10 +546,10 @@ func main() {
 package main
 
 import (
-	&quot;io&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;os&quot;
+	"io"
+	"log"
+	"net"
+	"os"
 )
 
 func init() {
@@ -478,31 +558,31 @@ func init() {
 
 //!+
 func main() {
-	f, err := os.Open(&quot;a&quot;)
+	f, err := os.Open("a")
 	defer f.Close()
-	conn, err := net.Dial(&quot;tcp&quot;, &quot;localhost:8000&quot;)
+	conn, err := net.Dial("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(&quot;connected!&quot;)
+	log.Println("connected!")
 	done := make(chan struct{})
 	go func() {
 		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println(&quot;done&quot;)
-		done &lt;- struct{}{} // signal the main goroutine
+		log.Println("done")
+		done <- struct{}{} // signal the main goroutine
 	}()
 	go func() {
 		mustCopy(conn, os.Stdin)
 		//conn.Close()
 		err = conn.(*net.TCPConn).CloseWrite() //经实验：必须要关，否则无法通知服务端输入已结束（但不应该是服务端根据EOF来判断吗？）
-		log.Println(&quot;write finished in client: &quot;, err)
+		log.Println("write finished in client: ", err)
 	}()
-	&lt;-done // wait for background goroutine to finish
-	log.Printf(&quot;local in server: %#v\n&quot;, conn.LocalAddr())
-	log.Printf(&quot;remote in server: %#v\n&quot;, conn.RemoteAddr())
-	log.Println(&quot;finish print&quot;)
+	<-done // wait for background goroutine to finish
+	log.Printf("local in server: %#v\n", conn.LocalAddr())
+	log.Printf("remote in server: %#v\n", conn.RemoteAddr())
+	log.Println("finish print")
 	//err = conn.(*net.TCPConn).CloseRead()
-	//log.Println(&quot;read finished in client: &quot;, err)
+	//log.Println("read finished in client: ", err)
 	err = conn.Close()
 	log.Println(err)
 }
@@ -517,7 +597,7 @@ func mustCopy(dst io.Writer, src io.Reader) {
 </code></pre>
 
 <pre><code class="language-go">//server
-// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 224.
@@ -526,13 +606,13 @@ func mustCopy(dst io.Writer, src io.Reader) {
 package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;strings&quot;
-	&quot;sync&quot;
-	&quot;time&quot;
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"strings"
+	"sync"
+	"time"
 )
 
 func init() {
@@ -540,11 +620,11 @@ func init() {
 }
 func echo(c net.Conn, shout string, delay time.Duration, wg *sync.WaitGroup) {
 	defer wg.Done()
-	fmt.Fprintln(c, &quot;\t&quot;, strings.ToUpper(shout))
+	fmt.Fprintln(c, "\t", strings.ToUpper(shout))
 	time.Sleep(delay)
-	fmt.Fprintln(c, &quot;\t&quot;, shout)
+	fmt.Fprintln(c, "\t", shout)
 	time.Sleep(delay)
-	fmt.Fprintln(c, &quot;\t&quot;, strings.ToLower(shout))
+	fmt.Fprintln(c, "\t", strings.ToLower(shout))
 }
 
 //!+
@@ -554,10 +634,10 @@ func handleConn(c net.Conn) {
 		//for {
 		input := bufio.NewScanner(c)
 		for input.Scan() {
-			fmt.Println(&quot;getting: &quot;, input.Text())
-			msg &lt;- input.Text()
+			fmt.Println("getting: ", input.Text())
+			msg <- input.Text()
 		}
-		msg &lt;- &quot;eof&quot;
+		msg <- "eof"
 		//}
 	}(c)
 	ticker := time.NewTicker(5 * time.Second)
@@ -565,37 +645,37 @@ func handleConn(c net.Conn) {
 label1:
 	for {
 		select {
-		case &lt;-ticker.C:
+		case <-ticker.C:
 			ticker.Stop()
 			c.Close()
-			fmt.Println(&quot;connect closed!!&quot;)
+			fmt.Println("connect closed!!")
 			return
-		case s := &lt;-msg:
-			if s == &quot;eof&quot; {
+		case s := <-msg:
+			if s == "eof" {
 				break label1
 			}
 			ticker.Stop()
 			fmt.Println(s)
 			wg.Add(1)
-			go echo(c, s, 1*time.Second, &amp;wg)
+			go echo(c, s, 1*time.Second, &wg)
 		}
 	}
 	// NOTE: ignoring potential errors from input.Err()
 	//err := c.(*net.TCPConn).CloseRead()
-	//log.Println(&quot;read finished in server: &quot;, err)
-	log.Println(&quot;finish scan&quot;)
-	log.Printf(&quot;local in server: %#v\n&quot;, c.LocalAddr())
-	log.Printf(&quot;remote in server: %#v\n&quot;, c.RemoteAddr())
+	//log.Println("read finished in server: ", err)
+	log.Println("finish scan")
+	log.Printf("local in server: %#v\n", c.LocalAddr())
+	log.Printf("remote in server: %#v\n", c.RemoteAddr())
 	wg.Wait()
 	err := c.(*net.TCPConn).CloseWrite()
 	//err := c.Close()
-	log.Println(&quot;finished in server: &quot;, err)
+	log.Println("finished in server: ", err)
 }
 
 //!-
 
 func main() {
-	l, err := net.Listen(&quot;tcp&quot;, &quot;localhost:8000&quot;)
+	l, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -614,10 +694,10 @@ func main() {
 $ ./ex8.3
 2018/01/03 17:01:15.985187 connected!
 2018/01/03 17:01:20.989292 done
-2018/01/03 17:01:20.989515 local in server: &amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:49954, Zone:&quot;&quot;}
-2018/01/03 17:01:20.989576 remote in server: &amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:&quot;&quot;}
+2018/01/03 17:01:20.989515 local in server: &net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:49954, Zone:""}
+2018/01/03 17:01:20.989576 remote in server: &net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:""}
 2018/01/03 17:01:20.989596 finish print
-2018/01/03 17:01:20.989774 &lt;nil&gt;
+2018/01/03 17:01:20.989774 <nil>
 </code></pre>
 
 <pre><code class="language-bash">//server
@@ -625,9 +705,9 @@ $ ./ex8.3
 2018/01/03 17:01:20.989248 connect closed!! 127.0.0.1:8000 127.0.0.1:49954
 </code></pre>
 
-<h3 id="ex-8-9">Ex 8.9</h3>
+<h3 id=a94130f9334541dcd0dcb30c8468bab0>Ex 8.9</h3>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 250.
@@ -640,16 +720,16 @@ package main
 // to avoid opening too many files at once.
 
 import (
-	&quot;flag&quot;
-	&quot;io/ioutil&quot;
-	&quot;log&quot;
-	&quot;os&quot;
-	&quot;path/filepath&quot;
-	&quot;sync&quot;
-	&quot;time&quot;
+	"flag"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+	"sync"
+	"time"
 )
 
-var vFlag = flag.Bool(&quot;v&quot;, false, &quot;show verbose progress messages&quot;)
+var vFlag = flag.Bool("v", false, "show verbose progress messages")
 
 func init() {
 	log.SetFlags(log.Ldate | log.Lmicroseconds)
@@ -665,7 +745,7 @@ func main() {
 	// Determine the initial directories.
 	roots := flag.Args()
 	if len(roots) == 0 {
-		roots = []string{&quot;.&quot;}
+		roots = []string{"."}
 	}
 
 	//!+
@@ -673,7 +753,7 @@ func main() {
 	//fileSizes := make(chan int64)
 	var m sync.WaitGroup
 	for _, root := range roots {
-		var tick &lt;-chan time.Time
+		var tick <-chan time.Time
 		if *vFlag {
 			tick = time.Tick(100 * time.Millisecond)
 		}
@@ -681,25 +761,25 @@ func main() {
 		var n sync.WaitGroup
 		fileSizes = make(chan int64)
 		n.Add(1)
-		go walkDir(root, &amp;n, fileSizes)
+		go walkDir(root, &n, fileSizes)
 		go func() {
 			n.Wait()
 			close(fileSizes)
 		}()
 		m.Add(1)
-		go func(root string, tick &lt;-chan time.Time) {
+		go func(root string, tick <-chan time.Time) {
 			defer m.Done()
 			var nfiles, nbytes int64
 		loop:
 			for {
 				select {
-				case size, ok := &lt;-fileSizes:
+				case size, ok := <-fileSizes:
 					if !ok {
 						break loop // fileSizes was closed
 					}
 					nfiles++
 					nbytes += size
-				case &lt;-tick:
+				case <-tick:
 					printDiskUsage(root, nfiles, nbytes)
 				}
 			}
@@ -712,13 +792,13 @@ func main() {
 //!-
 
 func printDiskUsage(root string, nfiles, nbytes int64) {
-	log.Printf(&quot;%s: %d files  %.1f GB\n&quot;, root, nfiles, float64(nbytes)/1e9)
+	log.Printf("%s: %d files  %.1f GB\n", root, nfiles, float64(nbytes)/1e9)
 }
 
 // walkDir recursively walks the file tree rooted at dir
 // and sends the size of each found file on fileSizes.
 //!+walkDir
-func walkDir(dir string, n *sync.WaitGroup, fileSizes chan&lt;- int64) {
+func walkDir(dir string, n *sync.WaitGroup, fileSizes chan<- int64) {
 	defer n.Done()
 	for _, entry := range dirents(dir) {
 		if entry.IsDir() {
@@ -726,7 +806,7 @@ func walkDir(dir string, n *sync.WaitGroup, fileSizes chan&lt;- int64) {
 			subdir := filepath.Join(dir, entry.Name())
 			go walkDir(subdir, n, fileSizes)
 		} else {
-			fileSizes &lt;- entry.Size()
+			fileSizes <- entry.Size()
 		}
 	}
 }
@@ -739,14 +819,14 @@ var sema = make(chan struct{}, 20)
 
 // dirents returns the entries of directory dir.
 func dirents(dir string) []os.FileInfo {
-	sema &lt;- struct{}{}        // acquire token
-	defer func() { &lt;-sema }() // release token
+	sema <- struct{}{}        // acquire token
+	defer func() { <-sema }() // release token
 	// ...
 	//!-sema
 
 	entries, err := ioutil.ReadDir(dir)
 	if err != nil {
-		//fmt.Fprintf(os.Stderr, &quot;du: %v\n&quot;, err)
+		//fmt.Fprintf(os.Stderr, "du: %v\n", err)
 		return nil
 	}
 	return entries
@@ -766,27 +846,27 @@ func dirents(dir string) []os.FileInfo {
 2018/01/03 20:36:21.920744 /usr: 89008 files  3.9 GB
 </code></pre>
 
-<h3 id="ex-8-12">Ex 8.12</h3>
+<h3 id=5e3363f6c4023f8e19da204df8347105>Ex 8.12</h3>
 
 <p>Make the broadcaster announce the current set of clients to each new arrival. This requires that the clients set and the entering and leaving channels record the client name too.</p>
 
-<h3 id="ex-8-13">Ex 8.13</h3>
+<h3 id=df066bd116a7eb288e2b1cd3836b57c1>Ex 8.13</h3>
 
 <p>Make the chat server disconnect idle clients, such as those that have sent no messages in the last ﬁve minutes. Hint: calling conn.Close() in another goroutine unblocks active Read calls such as the one done by input.Scan().</p>
 
-<h3 id="ex-8-14">Ex 8.14</h3>
+<h3 id=bf2ff955f3153412f342ba39dcfc0394>Ex 8.14</h3>
 
 <p>Change the chat server’s network protocol so that each client provides its name on entering. Use that name instead of the network address when preﬁxing each message with its sender’s identity.</p>
 
 <p>只需要添加自定义协议，在压包解包的时候按协议进行就行，待做。。。</p>
 
-<h3 id="ex-8-15">Ex 8.15</h3>
+<h3 id=6ed7fc50904aa77b230b13e716071eaa>Ex 8.15</h3>
 
 <p>Failure of any client program to read data in a timely manner ultimately causes all clients to get stuck. Modify the broadcaster to skip a message rather than wait if a client writer is not ready to accept it. Alternatively, add buffering to each client’s outgoing message channel so that most messages are not dropped; the broadcaster should use a non-blocking send to this channel.</p>
 
 <p>将broadcaster中向各个客户端发送消息的部分写入go routine，并将客户端发送通道定义为缓存通道</p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 254.
@@ -796,15 +876,15 @@ func dirents(dir string) []os.FileInfo {
 package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;net&quot;
-	&quot;time&quot;
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"time"
 )
 
 //!+broadcaster
-type client chan&lt;- string // an outgoing message channel
+type client chan<- string // an outgoing message channel
 
 var (
 	entering = make(chan client)
@@ -816,17 +896,17 @@ func broadcaster() {
 	clients := make(map[client]bool) // all connected clients
 	for {
 		select {
-		case msg := &lt;-messages:
+		case msg := <-messages:
 			// Broadcast incoming message to all
 			// clients' outgoing message channels.
 			for cli := range clients {
-				cli &lt;- msg
+				cli <- msg
 			}
 
-		case cli := &lt;-entering:
+		case cli := <-entering:
 			clients[cli] = true
 
-		case cli := &lt;-leaving:
+		case cli := <-leaving:
 			delete(clients, cli)
 			close(cli)
 		}
@@ -838,7 +918,7 @@ func broadcaster() {
 //!+handleConn
 func handleConn(conn net.Conn) {
 	inittime := time.Now()
-	itimestr := &quot;[&quot; + inittime.Format(&quot;2006-01-02 15:04:05&quot;) + &quot;]&quot;
+	itimestr := "[" + inittime.Format("2006-01-02 15:04:05") + "]"
 	ch := make(chan string) // outgoing client messages
 	go clientWriter(conn, ch)
 	lastmsgtime := make(chan time.Time)
@@ -846,36 +926,36 @@ func handleConn(conn net.Conn) {
 	go func(t time.Time) {
 		for {
 			select {
-			case t = &lt;-lastmsgtime:
+			case t = <-lastmsgtime:
 			default:
 			}
 			if time.Now().After(t.Add(20 * time.Second)) {
-				ch &lt;- fmt.Sprintf(&quot;[%s] no msg in last 20 sec since %s, closing connect!&quot;, time.Now().Format(&quot;2006-01-02 15:04:05&quot;), t.Format(&quot;2006-01-02 15:04:05&quot;))
+				ch <- fmt.Sprintf("[%s] no msg in last 20 sec since %s, closing connect!", time.Now().Format("2006-01-02 15:04:05"), t.Format("2006-01-02 15:04:05"))
 				time.Sleep(1 * time.Second)
 				conn.Close()
-				//leaving &lt;- ch
-				//messages &lt;- who + &quot; has left&quot;
+				//leaving <- ch
+				//messages <- who + " has left"
 				break
 			}
 		}
 	}(inittime)
-	ch &lt;- itimestr + &quot; &quot; + &quot;You are &quot; + who
-	messages &lt;- itimestr + &quot; &quot; + who + &quot; has arrived&quot;
-	entering &lt;- ch
+	ch <- itimestr + " " + "You are " + who
+	messages <- itimestr + " " + who + " has arrived"
+	entering <- ch
 
 	input := bufio.NewScanner(conn)
 	for input.Scan() {
-		messages &lt;- &quot;[&quot; + time.Now().Format(&quot;2006-01-02 15:04:05&quot;) + &quot;]&quot; + &quot; &quot; + who + &quot;: &quot; + input.Text()
-		lastmsgtime &lt;- time.Now()
+		messages <- "[" + time.Now().Format("2006-01-02 15:04:05") + "]" + " " + who + ": " + input.Text()
+		lastmsgtime <- time.Now()
 	}
 	// NOTE: ignoring potential errors from input.Err()
 
-	leaving &lt;- ch
-	messages &lt;- &quot;[&quot; + time.Now().Format(&quot;2006-01-02 15:04:05&quot;) + &quot;]&quot; + &quot; &quot; + who + &quot; has left&quot;
+	leaving <- ch
+	messages <- "[" + time.Now().Format("2006-01-02 15:04:05") + "]" + " " + who + " has left"
 	conn.Close()
 }
 
-func clientWriter(conn net.Conn, ch &lt;-chan string) {
+func clientWriter(conn net.Conn, ch <-chan string) {
 	for msg := range ch {
 		fmt.Fprintln(conn, msg) // NOTE: ignoring network errors
 	}
@@ -885,7 +965,7 @@ func clientWriter(conn net.Conn, ch &lt;-chan string) {
 
 //!+main
 func main() {
-	listener, err := net.Listen(&quot;tcp&quot;, &quot;localhost:8000&quot;)
+	listener, err := net.Listen("tcp", "localhost:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -1046,17 +1126,19 @@ ththth
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-8-6">Ex 8.6</a>
+        <a href="#30e3a363ad9cd8d2abb2c104c50386aa">Ex 8.6</a>
 
       
     
       
       
 
+      
       
       
       
@@ -1074,7 +1156,7 @@ ththth
         
 
         <li>
-          <a href="#ex-8-8">Ex 8.8</a>
+          <a href="#31f6d613d71777184415d9402427d51f">Ex 8.8</a>
 
         
 
@@ -1083,6 +1165,7 @@ ththth
       
       
 
+      
       
       
       
@@ -1100,7 +1183,7 @@ ththth
         
 
         <li>
-          <a href="#ex-8-9">Ex 8.9</a>
+          <a href="#a94130f9334541dcd0dcb30c8468bab0">Ex 8.9</a>
 
         
 
@@ -1109,6 +1192,7 @@ ththth
       
       
 
+      
       
       
       
@@ -1126,7 +1210,7 @@ ththth
         
 
         <li>
-          <a href="#ex-8-12">Ex 8.12</a>
+          <a href="#5e3363f6c4023f8e19da204df8347105">Ex 8.12</a>
 
         
 
@@ -1135,6 +1219,7 @@ ththth
       
       
 
+      
       
       
       
@@ -1152,7 +1237,7 @@ ththth
         
 
         <li>
-          <a href="#ex-8-13">Ex 8.13</a>
+          <a href="#df066bd116a7eb288e2b1cd3836b57c1">Ex 8.13</a>
 
         
 
@@ -1161,6 +1246,7 @@ ththth
       
       
 
+      
       
       
       
@@ -1178,7 +1264,7 @@ ththth
         
 
         <li>
-          <a href="#ex-8-14">Ex 8.14</a>
+          <a href="#bf2ff955f3153412f342ba39dcfc0394">Ex 8.14</a>
 
         
 
@@ -1187,6 +1273,7 @@ ththth
       
       
 
+      
       
       
       
@@ -1204,7 +1291,7 @@ ththth
         
 
         <li>
-          <a href="#ex-8-15">Ex 8.15</a>
+          <a href="#6ed7fc50904aa77b230b13e716071eaa">Ex 8.15</a>
 
         
           

@@ -265,6 +265,55 @@ Using the ideas from ByteCounter, implement counters for words and for lines. Yo
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,8 +426,9 @@ Using the ideas from ByteCounter, implement counters for words and for lines. Yo
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-7-1">Ex 7.1</h3>
+                <h3 id=7147135e09766ff8e6a336f1e7146912>Ex 7.1</h3>
 
 <p>Using the ideas from ByteCounter, implement counters for words and for lines. You will ﬁnd bufio.ScanWords useful.</p>
 
@@ -387,30 +437,30 @@ Using the ideas from ByteCounter, implement counters for words and for lines. Yo
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;bytes&quot;
-	&quot;fmt&quot;
+	"bufio"
+	"bytes"
+	"fmt"
 )
 
 func main() {
 	var c ByteCounter
-	c.Write([]byte(&quot;hello&quot;))
-	fmt.Println(c) // &quot;5&quot;, = len(&quot;hello&quot;)
+	c.Write([]byte("hello"))
+	fmt.Println(c) // "5", = len("hello")
 	c = 0          // reset the counter
-	var name = &quot;Dolly&quot;
-	fmt.Fprintf(&amp;c, &quot;hello, %s&quot;, name)
-	fmt.Println(c) // &quot;12&quot;, = len(&quot;hello, Dolly&quot;)
+	var name = "Dolly"
+	fmt.Fprintf(&c, "hello, %s", name)
+	fmt.Println(c) // "12", = len("hello, Dolly")
 
 	var w WordCounter
-	w.Write([]byte(&quot;hello world, 世界&quot;))
+	w.Write([]byte("hello world, 世界"))
 	fmt.Println(w)
 	w = 0
-	var str = &quot;你 好&quot;
-	fmt.Fprintf(&amp;w, &quot;hello, %s&quot;, str)
+	var str = "你 好"
+	fmt.Fprintf(&w, "hello, %s", str)
 	fmt.Println(w)
 
 	var l LineCounter
-	l.Write([]byte(&quot;hello world, 世界\nabc\nosjoij\nwefw&quot;))
+	l.Write([]byte("hello world, 世界\nabc\nosjoij\nwefw"))
 	fmt.Println(l)
 }
 
@@ -456,7 +506,7 @@ func (l *LineCounter) Write(p []byte) (int, error) {
 4
 </code></pre>
 
-<h3 id="ex-7-2">Ex 7.2</h3>
+<h3 id=c804960ab54abd456ba178c6abb02571>Ex 7.2</h3>
 
 <p>Write a function CountingWriter with the signature below that, given an io.Writer, returns a new Writer that wraps the original, and a pointer to an int64 variable that at any moment contains the number of bytes written to the new Writer.</p>
 
@@ -465,9 +515,9 @@ func (l *LineCounter) Write(p []byte) (int, error) {
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;os&quot;
+	"fmt"
+	"io"
+	"os"
 )
 
 type byteCounter struct {
@@ -487,15 +537,15 @@ func (c *byteCounter) Write(p []byte) (int, error) {
 func CountingWriter(w io.Writer) (io.Writer, *int64) {
 	var b byteCounter
 	b.w = w
-	return &amp;b, &amp;b.n
+	return &b, &b.n
 }
 
 func main() {
 	w, n := CountingWriter(os.Stdout)
-	fmt.Fprintf(w, &quot;hello, word!\n&quot;)
-	fmt.Printf(&quot;writer count [%d]\n&quot;, *n)
-	fmt.Fprintf(w, &quot;1234567890\n&quot;)
-	fmt.Printf(&quot;writer count [%d]\n&quot;, *n)
+	fmt.Fprintf(w, "hello, word!\n")
+	fmt.Printf("writer count [%d]\n", *n)
+	fmt.Fprintf(w, "1234567890\n")
+	fmt.Printf("writer count [%d]\n", *n)
 }
 </code></pre>
 
@@ -506,90 +556,90 @@ writer count [13]
 writer count [24]
 </code></pre>
 
-<h3 id="ex-7-11">Ex 7.11</h3>
+<h3 id=63d9ee0b9e688be6c9ae748505c10237>Ex 7.11</h3>
 
-<p>Add additional handlers so that clients can create, read, update, and delete database entries. For example, a request of the form /update?item=socks&amp;price=6 will update the price of an item in the inventory and report an error if the item does not exist or if the price is invalid. (Warning: this change introduces concurrent variable updates.)</p>
+<p>Add additional handlers so that clients can create, read, update, and delete database entries. For example, a request of the form /update?item=socks&price=6 will update the price of an item in the inventory and report an error if the item does not exist or if the price is invalid. (Warning: this change introduces concurrent variable updates.)</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;net/http&quot;
-	&quot;strconv&quot;
-	&quot;sync&quot;
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+	"sync"
 )
 
 var mu sync.Mutex
 
 func main() {
-	db := database{&quot;shoes&quot;: 50, &quot;socks&quot;: 5}
-	http.HandleFunc(&quot;/list&quot;, db.list)
-	http.HandleFunc(&quot;/price&quot;, db.price)
-	http.HandleFunc(&quot;/update&quot;, db.update)
-	http.HandleFunc(&quot;/add&quot;, db.add)
-	http.HandleFunc(&quot;/delete&quot;, db.delete)
-	log.Fatal(http.ListenAndServe(&quot;localhost:8000&quot;, nil))
+	db := database{"shoes": 50, "socks": 5}
+	http.HandleFunc("/list", db.list)
+	http.HandleFunc("/price", db.price)
+	http.HandleFunc("/update", db.update)
+	http.HandleFunc("/add", db.add)
+	http.HandleFunc("/delete", db.delete)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
 type dollars float32
 
-func (d dollars) String() string { return fmt.Sprintf(&quot;$%.2f&quot;, d) }
+func (d dollars) String() string { return fmt.Sprintf("$%.2f", d) }
 
 type database map[string]dollars
 
 func (db database) list(w http.ResponseWriter, req *http.Request) {
 	for item, price := range db {
-		fmt.Fprintf(w, &quot;%s: %s\n&quot;, item, price)
+		fmt.Fprintf(w, "%s: %s\n", item, price)
 	}
 }
 
 func (db database) price(w http.ResponseWriter, req *http.Request) {
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if price, ok := db[item]; ok {
-		fmt.Fprintf(w, &quot;%s\n&quot;, price)
+		fmt.Fprintf(w, "%s\n", price)
 	} else {
 		w.WriteHeader(http.StatusNotFound) // 404
-		fmt.Fprintf(w, &quot;no such item: %q\n&quot;, item)
+		fmt.Fprintf(w, "no such item: %q\n", item)
 	}
 }
 
 func (db database) update(w http.ResponseWriter, req *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if _, ok := db[item]; ok {
-		newpricestr := req.URL.Query().Get(&quot;price&quot;)
+		newpricestr := req.URL.Query().Get("price")
 		newprice, err := strconv.ParseFloat(newpricestr, 32)
 		if err != nil {
-			w.Write([]byte(&quot;price invalid!&quot;))
+			w.Write([]byte("price invalid!"))
 		} else {
 			db[item] = dollars(float32(newprice))
-			w.Write([]byte(&quot;new price updated!\n\n&quot;))
+			w.Write([]byte("new price updated!\n\n"))
 			db.list(w, req)
 		}
 	} else {
-		fmt.Fprintf(w, &quot;no such item: %q\n&quot;, item)
+		fmt.Fprintf(w, "no such item: %q\n", item)
 	}
 }
 
 func (db database) add(w http.ResponseWriter, req *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if _, ok := db[item]; ok {
-		fmt.Fprintf(w, &quot;%s already exist!&quot;, item)
+		fmt.Fprintf(w, "%s already exist!", item)
 	} else {
-		newpricestr := req.URL.Query().Get(&quot;price&quot;)
-		if len(newpricestr) &lt;= 0 {
-			newpricestr = &quot;0&quot;
+		newpricestr := req.URL.Query().Get("price")
+		if len(newpricestr) <= 0 {
+			newpricestr = "0"
 		}
 		newprice, err := strconv.ParseFloat(newpricestr, 32)
 		if err != nil {
-			w.Write([]byte(&quot;price invalid!&quot;))
+			w.Write([]byte("price invalid!"))
 		} else {
 			db[item] = dollars(float32(newprice))
-			fmt.Fprintf(w, &quot;%s added!\n\n&quot;, item)
+			fmt.Fprintf(w, "%s added!\n\n", item)
 			db.list(w, req)
 		}
 	}
@@ -598,13 +648,13 @@ func (db database) add(w http.ResponseWriter, req *http.Request) {
 func (db database) delete(w http.ResponseWriter, req *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if _, ok := db[item]; ok {
 		delete(db, item)
-		fmt.Fprintf(w, &quot;%s deleted!\n\n&quot;, item)
+		fmt.Fprintf(w, "%s deleted!\n\n", item)
 		db.list(w, req)
 	} else {
-		fmt.Fprintf(w, &quot;%s not exist!&quot;, item)
+		fmt.Fprintf(w, "%s not exist!", item)
 	}
 }
 </code></pre>
@@ -617,55 +667,55 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
 
 <p><img src="http://oumnldfwl.bkt.clouddn.com/delete item.png?imageView2/0/h/200" alt="" /></p>
 
-<h3 id="ex-7-12">Ex 7.12</h3>
+<h3 id=70539b72640250dda4ab718561af4d10>Ex 7.12</h3>
 
 <p>Change the handler for /list to print its output as an HTML table, not text. You may ﬁnd the html/template package (§4.6) useful.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;html/template&quot;
-	&quot;log&quot;
-	&quot;net/http&quot;
-	&quot;strconv&quot;
-	&quot;sync&quot;
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+	"strconv"
+	"sync"
 )
 
 var mu sync.Mutex
 
 const templ = `
-&lt;h1&gt;current prices:&lt;/h1&gt;
-&lt;table&gt;
-&lt;tr style='text-align: left'&gt;
-  &lt;th&gt;Item&lt;/th&gt;
-  &lt;th&gt;Price&lt;/th&gt;
-&lt;/tr&gt;
+<h1>current prices:</h1>
+<table>
+<tr style='text-align: left'>
+  <th>Item</th>
+  <th>Price</th>
+</tr>
 {{range $key, $value := . }}
-&lt;tr&gt;
-  &lt;td&gt;{{$key}}&lt;/td&gt;
-  &lt;td&gt;{{$value}}&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td>{{$key}}</td>
+  <td>{{$value}}</td>
+</tr>
 {{end}}
-&lt;/table&gt;
+</table>
 `
 
-var report = template.Must(template.New(&quot;result&quot;).
+var report = template.Must(template.New("result").
 	Parse(templ))
 
 func main() {
-	db := database{&quot;shoes&quot;: 50, &quot;socks&quot;: 5}
-	http.HandleFunc(&quot;/list&quot;, db.list)
-	http.HandleFunc(&quot;/price&quot;, db.price)
-	http.HandleFunc(&quot;/update&quot;, db.update)
-	http.HandleFunc(&quot;/add&quot;, db.add)
-	http.HandleFunc(&quot;/delete&quot;, db.delete)
-	log.Fatal(http.ListenAndServe(&quot;localhost:8000&quot;, nil))
+	db := database{"shoes": 50, "socks": 5}
+	http.HandleFunc("/list", db.list)
+	http.HandleFunc("/price", db.price)
+	http.HandleFunc("/update", db.update)
+	http.HandleFunc("/add", db.add)
+	http.HandleFunc("/delete", db.delete)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
 type dollars float32
 
-func (d dollars) String() string { return fmt.Sprintf(&quot;$%.2f&quot;, d) }
+func (d dollars) String() string { return fmt.Sprintf("$%.2f", d) }
 
 type database map[string]dollars
 
@@ -676,51 +726,51 @@ func (db database) list(w http.ResponseWriter, req *http.Request) {
 }
 
 func (db database) price(w http.ResponseWriter, req *http.Request) {
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if price, ok := db[item]; ok {
-		fmt.Fprintf(w, &quot;%s\n&quot;, price)
+		fmt.Fprintf(w, "%s\n", price)
 	} else {
 		w.WriteHeader(http.StatusNotFound) // 404
-		fmt.Fprintf(w, &quot;no such item: %q\n&quot;, item)
+		fmt.Fprintf(w, "no such item: %q\n", item)
 	}
 }
 
 func (db database) update(w http.ResponseWriter, req *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if _, ok := db[item]; ok {
-		newpricestr := req.URL.Query().Get(&quot;price&quot;)
+		newpricestr := req.URL.Query().Get("price")
 		newprice, err := strconv.ParseFloat(newpricestr, 32)
 		if err != nil {
-			w.Write([]byte(&quot;price invalid!&quot;))
+			w.Write([]byte("price invalid!"))
 		} else {
 			db[item] = dollars(float32(newprice))
-			w.Write([]byte(&quot;new price updated!\n\n&quot;))
+			w.Write([]byte("new price updated!\n\n"))
 			db.list(w, req)
 		}
 	} else {
-		fmt.Fprintf(w, &quot;no such item: %q\n&quot;, item)
+		fmt.Fprintf(w, "no such item: %q\n", item)
 	}
 }
 
 func (db database) add(w http.ResponseWriter, req *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if _, ok := db[item]; ok {
-		fmt.Fprintf(w, &quot;%s already exist!&quot;, item)
+		fmt.Fprintf(w, "%s already exist!", item)
 	} else {
-		newpricestr := req.URL.Query().Get(&quot;price&quot;)
-		if len(newpricestr) &lt;= 0 {
-			newpricestr = &quot;0&quot;
+		newpricestr := req.URL.Query().Get("price")
+		if len(newpricestr) <= 0 {
+			newpricestr = "0"
 		}
 		newprice, err := strconv.ParseFloat(newpricestr, 32)
 		if err != nil {
-			w.Write([]byte(&quot;price invalid!&quot;))
+			w.Write([]byte("price invalid!"))
 		} else {
 			db[item] = dollars(float32(newprice))
-			fmt.Fprintf(w, &quot;%s added!\n\n&quot;, item)
+			fmt.Fprintf(w, "%s added!\n\n", item)
 			db.list(w, req)
 		}
 	}
@@ -729,13 +779,13 @@ func (db database) add(w http.ResponseWriter, req *http.Request) {
 func (db database) delete(w http.ResponseWriter, req *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	item := req.URL.Query().Get(&quot;item&quot;)
+	item := req.URL.Query().Get("item")
 	if _, ok := db[item]; ok {
 		delete(db, item)
-		fmt.Fprintf(w, &quot;%s deleted!\n\n&quot;, item)
+		fmt.Fprintf(w, "%s deleted!\n\n", item)
 		db.list(w, req)
 	} else {
-		fmt.Fprintf(w, &quot;%s not exist!&quot;, item)
+		fmt.Fprintf(w, "%s not exist!", item)
 	}
 }
 </code></pre>
@@ -853,17 +903,19 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-7-1">Ex 7.1</a>
+        <a href="#7147135e09766ff8e6a336f1e7146912">Ex 7.1</a>
 
       
     
       
       
 
+      
       
       
       
@@ -881,7 +933,7 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
         
 
         <li>
-          <a href="#ex-7-2">Ex 7.2</a>
+          <a href="#c804960ab54abd456ba178c6abb02571">Ex 7.2</a>
 
         
 
@@ -890,6 +942,7 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
       
       
 
+      
       
       
       
@@ -907,7 +960,7 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
         
 
         <li>
-          <a href="#ex-7-11">Ex 7.11</a>
+          <a href="#63d9ee0b9e688be6c9ae748505c10237">Ex 7.11</a>
 
         
 
@@ -916,6 +969,7 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
       
       
 
+      
       
       
       
@@ -933,7 +987,7 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
         
 
         <li>
-          <a href="#ex-7-12">Ex 7.12</a>
+          <a href="#70539b72640250dda4ab718561af4d10">Ex 7.12</a>
 
         
           

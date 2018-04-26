@@ -261,6 +261,125 @@
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -373,12 +492,13 @@
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h2 id="mkdir-make-directory-创建目录">mkdir - make directory 创建目录</h2>
+                <h2 id=4bb5bea50d7f5f10ed2cd323390125af>mkdir - make directory 创建目录</h2>
 
 <p></p>
 
-<h3 id="usage">Usage：</h3>
+<h3 id=9366282e11c151558bdfaab4a264aa1b>Usage：</h3>
 
 <pre><code class="language-bash">Usage: mkdir [OPTION]... DIRECTORY...
 Create the DIRECTORY(ies), if they do not already exist.
@@ -395,7 +515,7 @@ Mandatory arguments to long options are mandatory for short options too.
       --version  output version information and exit
 </code></pre>
 
-<h3 id="常用选项">常用选项：</h3>
+<h3 id=9bd861517ee3c1fc4625519fbbfe99ce>常用选项：</h3>
 
 <p>-m（mode）：按指定权限创建目录，若没有该选项则按 umask 的默认设置创建</p>
 
@@ -442,9 +562,9 @@ drwx--x--x 2 root root 4096 Apr 21 05:10 /tmp/mingle
 <script type="text/javascript" src="https://asciinema.org/a/IfLUdKAKL7a0b0p84Ye0ZgbGg.js" id="asciicast-IfLUdKAKL7a0b0p84Ye0ZgbGg" async></script>
 
 
-<h2 id="rmdir-remove-empty-directory-删除空目录">rmdir - remove empty directory 删除空目录</h2>
+<h2 id=56bc5df90ac21ecf6e5e79008b20b007>rmdir - remove empty directory 删除空目录</h2>
 
-<h3 id="usage-1">Usage：</h3>
+<h3 id=a46f921a465370b4de8c08d73905ad71>Usage：</h3>
 
 <pre><code class="language-bash">Usage: rmdir [OPTION]... DIRECTORY...
 Remove the DIRECTORY(ies), if they are empty.
@@ -459,7 +579,7 @@ Remove the DIRECTORY(ies), if they are empty.
       --version  output version information and exit
 </code></pre>
 
-<h3 id="常用选项-1">常用选项：</h3>
+<h3 id=1ba20627619def1c659cc2b241e2fb98>常用选项：</h3>
 
 <p>-p（parent）：递归删除空目录</p>
 
@@ -479,21 +599,21 @@ rmdir: failed to remove directory ‘/tmp’: Directory not empty
 <script type="text/javascript" src="https://asciinema.org/a/Cn6E7LzNtzxz21NeFaOUN0U3t.js" id="asciicast-Cn6E7LzNtzxz21NeFaOUN0U3t" async></script>
 
 
-<h2 id="pwd-print-working-directory-打印当前路径">pwd - print working directory 打印当前路径</h2>
+<h2 id=8e4e6d179b6da48b4ccee02b6f88b30b>pwd - print working directory 打印当前路径</h2>
 
-<h3 id="usage-2">Usage：</h3>
+<h3 id=485394d5937664018fa9652f3d9add36>Usage：</h3>
 
 <pre><code class="language-bash">pwd [-LP]
 </code></pre>
 
-<h3 id="常用选项-2">常用选项：</h3>
+<h3 id=7fc6ea3d0f12cf927355e755d708eee5>常用选项：</h3>
 
 <p>-L（link）：若为软链，则显示软链路径(默认)</p>
 
 <p>-P（）：若为软链，则显示为实际指向路径</p>
 
 <pre><code class="language-bash">[root@78063f0fe2e8 mail]# ls -ld /var/mail
-lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
+lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -> spool/mail
 [root@78063f0fe2e8 mail]# pwd
 /var/mail
 [root@78063f0fe2e8 mail]# pwd -P
@@ -507,18 +627,18 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
 <script type="text/javascript" src="https://asciinema.org/a/olfTBQ4qihCn5XdssoKBj9Mn9.js" id="asciicast-olfTBQ4qihCn5XdssoKBj9Mn9" async></script>
 
 
-<h2 id="cd-change-directory-切换当前路径">cd - change directory 切换当前路径</h2>
+<h2 id=c9d25d7f943de6ca6a14792e17902ea5>cd - change directory 切换当前路径</h2>
 
-<h3 id="常用目录">常用目录：</h3>
+<h3 id=ed251677bb8cc35f4e0573defceae75b>常用目录：</h3>
 
-<p>&rdquo;.&rdquo; ： 当前目录</p>
+<p>”.” ： 当前目录</p>
 
-<p>&rdquo;..&rdquo; ：上级目录</p>
+<p>”..” ：上级目录</p>
 
-<p>&rdquo;-&rdquo; ：前一个工作目录</p>
+<p>”-” ：前一个工作目录</p>
 
-<p>&ldquo;~&ldquo;,&rdquo; &ldquo; ：当前用户所在的主目录
-&ldquo;~account&rdquo; ：account 这个用户所在的主目录</p>
+<p>“~“,” “ ：当前用户所在的主目录
+“~account” ：account 这个用户所在的主目录</p>
 
 <pre><code class="language-bash">[root@78063f0fe2e8 mail]# cd
 [root@78063f0fe2e8 ~]#
@@ -639,17 +759,19 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
       
+      
 
       
 
       <li>
-        <a href="#mkdir-make-directory-%e5%88%9b%e5%bb%ba%e7%9b%ae%e5%bd%95">mkdir - make directory 创建目录</a>
+        <a href="#4bb5bea50d7f5f10ed2cd323390125af">mkdir - make directory 创建目录</a>
 
       
     
       
       
 
+      
       
       
       
@@ -669,7 +791,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#usage">Usage：</a>
+          <a href="#9366282e11c151558bdfaab4a264aa1b">Usage：</a>
 
         
 
@@ -678,6 +800,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -695,7 +818,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#%e5%b8%b8%e7%94%a8%e9%80%89%e9%a1%b9">常用选项：</a>
+          <a href="#9bd861517ee3c1fc4625519fbbfe99ce">常用选项：</a>
 
         
 
@@ -704,6 +827,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -723,7 +847,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#rmdir-remove-empty-directory-%e5%88%a0%e9%99%a4%e7%a9%ba%e7%9b%ae%e5%bd%95">rmdir - remove empty directory 删除空目录</a>
+          <a href="#56bc5df90ac21ecf6e5e79008b20b007">rmdir - remove empty directory 删除空目录</a>
 
         
 
@@ -732,6 +856,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -751,7 +876,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#usage-1">Usage：</a>
+          <a href="#a46f921a465370b4de8c08d73905ad71">Usage：</a>
 
         
 
@@ -760,6 +885,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -777,7 +903,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#%e5%b8%b8%e7%94%a8%e9%80%89%e9%a1%b9-1">常用选项：</a>
+          <a href="#1ba20627619def1c659cc2b241e2fb98">常用选项：</a>
 
         
 
@@ -786,6 +912,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -805,7 +932,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#pwd-print-working-directory-%e6%89%93%e5%8d%b0%e5%bd%93%e5%89%8d%e8%b7%af%e5%be%84">pwd - print working directory 打印当前路径</a>
+          <a href="#8e4e6d179b6da48b4ccee02b6f88b30b">pwd - print working directory 打印当前路径</a>
 
         
 
@@ -814,6 +941,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -833,7 +961,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#usage-2">Usage：</a>
+          <a href="#485394d5937664018fa9652f3d9add36">Usage：</a>
 
         
 
@@ -842,6 +970,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -859,7 +988,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#%e5%b8%b8%e7%94%a8%e9%80%89%e9%a1%b9-2">常用选项：</a>
+          <a href="#7fc6ea3d0f12cf927355e755d708eee5">常用选项：</a>
 
         
 
@@ -868,6 +997,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -887,7 +1017,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#cd-change-directory-%e5%88%87%e6%8d%a2%e5%bd%93%e5%89%8d%e8%b7%af%e5%be%84">cd - change directory 切换当前路径</a>
+          <a href="#c9d25d7f943de6ca6a14792e17902ea5">cd - change directory 切换当前路径</a>
 
         
 
@@ -896,6 +1026,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
       
       
 
+      
       
       
       
@@ -915,7 +1046,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&gt; spool/mail
         
 
         <li>
-          <a href="#%e5%b8%b8%e7%94%a8%e7%9b%ae%e5%bd%95">常用目录：</a>
+          <a href="#ed251677bb8cc35f4e0573defceae75b">常用目录：</a>
 
         
           

@@ -259,6 +259,13 @@
 </nav>
 
 
+
+
+
+
+
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -374,6 +381,7 @@
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
                 <p>这是使用Hugo创建的站点中的第一篇文章。
 </p>
@@ -381,20 +389,20 @@
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;os&quot;
-	&quot;strconv&quot;
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
 )
 
 func main() {
-	fmt.Printf(&quot;%b&quot;, 5)
+	fmt.Printf("%b", 5)
 	r := bufio.NewReader(os.Stdin)
 	f, _ := strconv.ParseFloat(readline(r), 64)
 	p1, _ := strconv.Atoi(readline(r))
 	p2, _ := strconv.Atoi(readline(r))
 	total := int(f * (1 + float64(p1+p2)/100))
-	fmt.Printf(&quot;The total meal cost is %d dollars.\n&quot;, total)
+	fmt.Printf("The total meal cost is %d dollars.\n", total)
 }
 
 func readline(r *bufio.Reader) (s string) {
@@ -412,17 +420,17 @@ func readline(r *bufio.Reader) (s string) {
 <pre><code class="language-bash">#!/bin/bash
 
 ###### CONFIG
-ACCEPTED_HOSTS=&quot;/root/.hag_accepted.conf&quot;
+ACCEPTED_HOSTS="/root/.hag_accepted.conf"
 BE_VERBOSE=false
 
-if [ &quot;$UID&quot; -ne 0 ]
+if [ "$UID" -ne 0 ]
 then
- echo &quot;Superuser rights required&quot;
+ echo "Superuser rights required"
  exit 2
 fi
 
 genApacheConf(){
- echo -e &quot;# Host ${HOME_DIR}$1/$2 :&quot;
+ echo -e "# Host ${HOME_DIR}$1/$2 :"
 }
 </code></pre>
               </div>

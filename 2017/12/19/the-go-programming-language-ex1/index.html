@@ -265,6 +265,135 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,8 +506,9 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-1-1">Ex 1.1</h3>
+                <h3 id=1ba3890b63009b929f82b47c8bc8ff22>Ex 1.1</h3>
 
 <p>Modify the echo program to also print os.Args[0], the name of the command that invoked it.</p>
 
@@ -388,16 +518,16 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;os&quot;
-	&quot;strings&quot;
+	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
-	fmt.Println(&quot;打印命令+所有参数&quot;)
-	fmt.Println(strings.Join(os.Args[:], &quot; &quot;))
-	fmt.Println(&quot;打印所有参数&quot;)
-	fmt.Println(strings.Join(os.Args[1:], &quot; &quot;))
+	fmt.Println("打印命令+所有参数")
+	fmt.Println(strings.Join(os.Args[:], " "))
+	fmt.Println("打印所有参数")
+	fmt.Println(strings.Join(os.Args[1:], " "))
 }
 </code></pre>
 
@@ -408,20 +538,20 @@ func main() {
 a b c d
 </code></pre>
 
-<h3 id="ex-1-2">Ex 1.2</h3>
+<h3 id=e6c78e85b93452a2571bad242c57a345>Ex 1.2</h3>
 
 <p>Modify the echo program to print the index and value of each of its arguments, one per line.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;fmt&quot;
-	&quot;os&quot;
+	"fmt"
+	"os"
 )
 
 func main() {
 	for i, v := range os.Args[1:] {
-		fmt.Printf(&quot;第%d个参数为：%s\n&quot;, i+1, v)
+		fmt.Printf("第%d个参数为：%s\n", i+1, v)
 	}
 }
 </code></pre>
@@ -433,7 +563,7 @@ func main() {
 第4个参数为：d
 </code></pre>
 
-<h3 id="ex-1-3">Ex 1.3</h3>
+<h3 id=7146e32973e614081d3acd38cfb7f8f1>Ex 1.3</h3>
 
 <p>Experiment to measure the difference in running time between our po inefﬁcient versions and the one that uses strings.Join. (Section 1.6 illustrates part of the time package, and Section 11.4 shows how to write benchmark tests for systematic performance evaluation.)</p>
 
@@ -441,35 +571,35 @@ func main() {
 package echo_test
 
 import (
-	&quot;strings&quot;
-	&quot;testing&quot;
+	"strings"
+	"testing"
 )
 
 func BenchmarkEcho1(b *testing.B) {
-	s1 := []string{&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;}
+	s1 := []string{"1", "2", "3", "4", "5"}
 	b.ResetTimer()
-	for i := 0; i &lt; b.N; i++ {
-		s, sep := &quot;&quot;, &quot;&quot;
+	for i := 0; i < b.N; i++ {
+		s, sep := "", ""
 		for _, arg := range s1 {
 			s += sep + arg
-			sep = &quot; &quot;
+			sep = " "
 		}
 		//fmt.Println(s)
 	}
 }
 
 func BenchmarkEcho2(b *testing.B) {
-	s2 := []string{&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;}
+	s2 := []string{"1", "2", "3", "4", "5"}
 	b.ResetTimer()
-	for i := 0; i &lt; b.N; i++ {
-		strings.Join(s2, &quot; &quot;)
-		//fmt.Println(strings.Join(s2, &quot; &quot;))
+	for i := 0; i < b.N; i++ {
+		strings.Join(s2, " ")
+		//fmt.Println(strings.Join(s2, " "))
 	}
 }
 
 </code></pre>
 
-<pre><code class="language-bash">$ go test -v -run=&quot;none&quot; -bench=. -benchtime=&quot;3s&quot; -benchmem
+<pre><code class="language-bash">$ go test -v -run="none" -bench=. -benchtime="3s" -benchmem
 BenchmarkEcho1-4   	30000000	       172 ns/op	      32 B/op	       4 allocs/op
 BenchmarkEcho2-4   	50000000	        86.2 ns/op	      32 B/op	       2 allocs/op
 PASS
@@ -478,16 +608,16 @@ ok  	The_Go_Programming_Language_Exercises/CH1/ex1.3	9.768s
 
 <p>由此可见，<code>strings.Join</code>比<code>s += sep + arg</code>高效</p>
 
-<h3 id="ex-1-4">Ex 1.4</h3>
+<h3 id=c8b97eb46c8360469c4bace10531b854>Ex 1.4</h3>
 
 <p>Modify dup2 to print the names of all ﬁles in which each duplicated line occurs</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;os&quot;
+	"bufio"
+	"fmt"
+	"os"
 )
 
 func main() {
@@ -496,23 +626,23 @@ func main() {
 	files := os.Args[1:]
 	//fmt.Println(os.Args[1:])
 	if len(files) == 0 {
-		countLines(os.Stdin, m[&quot;Stdin&quot;])
+		countLines(os.Stdin, m["Stdin"])
 	} else {
 		for _, arg := range files {
 			f, err := os.Open(arg)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, &quot;dup2: %v\n&quot;, err)
+				fmt.Fprintf(os.Stderr, "dup2: %v\n", err)
 				continue
 			}
-			m[arg] = map[string]int{&quot;&quot;: 0}
+			m[arg] = map[string]int{"": 0}
 			countLines(f, m[arg])
 			f.Close()
 		}
 	}
 	for filename, mv := range m {
 		for line, counts := range mv {
-			if counts &gt; 1 {
-				fmt.Printf(&quot;There are %d lines (\&quot;%s\&quot;) in file \&quot;%s\&quot;\n&quot;, counts, line, filename)
+			if counts > 1 {
+				fmt.Printf("There are %d lines (\"%s\") in file \"%s\"\n", counts, line, filename)
 			}
 		}
 	}
@@ -551,35 +681,35 @@ b5
 </code></pre>
 
 <pre><code class="language-bash">$ go run main.go a b
-There are 2 lines (&quot;a1&quot;) in file &quot;a&quot;
-There are 2 lines (&quot;a2&quot;) in file &quot;a&quot;
-There are 3 lines (&quot;b3&quot;) in file &quot;b&quot;
-There are 3 lines (&quot;b4&quot;) in file &quot;b&quot;
-There are 4 lines (&quot;b5&quot;) in file &quot;b&quot;
+There are 2 lines ("a1") in file "a"
+There are 2 lines ("a2") in file "a"
+There are 3 lines ("b3") in file "b"
+There are 3 lines ("b4") in file "b"
+There are 4 lines ("b5") in file "b"
 </code></pre>
 
-<h3 id="ex-1-5">Ex 1.5</h3>
+<h3 id=913b789e20fa2a72aab8fee4b125cdcb>Ex 1.5</h3>
 
 <p>Change the Lissajous program’s color palette to green on black, for a authenticity. To create the web color #RRGGBB, use color.RGBA{0xRR, 0xGG, 0xBB, 0xff}, where each pair of hexadecimal digits represents the intensity of the red, green, or blue component of the pixel.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;image&quot;
-	&quot;image/color&quot;
-	&quot;image/gif&quot;
-	&quot;io&quot;
-	&quot;math&quot;
-	&quot;math/rand&quot;
-	&quot;os&quot;
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"math"
+	"math/rand"
+	"os"
 )
 
 //!-main
 // Packages not needed by version in book.
 import (
-	&quot;log&quot;
-	&quot;net/http&quot;
-	&quot;time&quot;
+	"log"
+	"net/http"
+	"time"
 )
 
 //!+main
@@ -599,14 +729,14 @@ func main() {
 	// Thanks to Randall McPherson for pointing out the omission.
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	if len(os.Args) &gt; 1 &amp;&amp; os.Args[1] == &quot;web&quot; {
+	if len(os.Args) > 1 && os.Args[1] == "web" {
 		//!+http
 		handler := func(w http.ResponseWriter, r *http.Request) {
 			lissajous(w)
 		}
-		http.HandleFunc(&quot;/&quot;, handler)
+		http.HandleFunc("/", handler)
 		//!-http
-		log.Fatal(http.ListenAndServe(&quot;localhost:8000&quot;, nil))
+		log.Fatal(http.ListenAndServe("localhost:8000", nil))
 		return
 	}
 	//!+main
@@ -624,10 +754,10 @@ func lissajous(out io.Writer) {
 	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0 // phase difference
-	for i := 0; i &lt; nframes; i++ {
+	for i := 0; i < nframes; i++ {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
-		for t := 0.0; t &lt; cycles*2*math.Pi; t += res {
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
@@ -637,7 +767,7 @@ func lissajous(out io.Writer) {
 		anim.Delay = append(anim.Delay, delay)
 		anim.Image = append(anim.Image, img)
 	}
-	gif.EncodeAll(out, &amp;anim) // NOTE: ignoring encoding errors
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
 }
 
 //!-main
@@ -646,14 +776,14 @@ func lissajous(out io.Writer) {
 
 <p><img src="http://oumnldfwl.bkt.clouddn.com/out.gif" alt="替换为绿色" /></p>
 
-<h3 id="ex-1-6">Ex 1.6</h3>
+<h3 id=4d8c92c9475008c0b067076b83c8ac7a>Ex 1.6</h3>
 
 <p>Modify the Lissajous program to produce images in multiple colors by adding more values to palette and then displaying them by changing the third argument of SetColorIndex in some interesting way.</p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-// Run with &quot;web&quot; command-line argument for web server.
+// Run with "web" command-line argument for web server.
 // See page 13.
 //!+main
 
@@ -661,16 +791,16 @@ func lissajous(out io.Writer) {
 package main
 
 import (
-	&quot;image&quot;
-	&quot;image/color&quot;
-	&quot;image/gif&quot;
-	&quot;io&quot;
-	&quot;log&quot;
-	&quot;math&quot;
-	&quot;math/rand&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
-	&quot;time&quot;
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"log"
+	"math"
+	"math/rand"
+	"net/http"
+	"os"
+	"time"
 )
 
 //!-main
@@ -694,14 +824,14 @@ func main() {
 	// Thanks to Randall McPherson for pointing out the omission.
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	if len(os.Args) &gt; 1 &amp;&amp; os.Args[1] == &quot;web&quot; {
+	if len(os.Args) > 1 && os.Args[1] == "web" {
 		//!+http
 		handler := func(w http.ResponseWriter, r *http.Request) {
 			lissajous(w)
 		}
-		http.HandleFunc(&quot;/&quot;, handler)
+		http.HandleFunc("/", handler)
 		//!-http
-		log.Fatal(http.ListenAndServe(&quot;localhost:8000&quot;, nil))
+		log.Fatal(http.ListenAndServe("localhost:8000", nil))
 		return
 	}
 	//!+main
@@ -719,11 +849,11 @@ func lissajous(out io.Writer) {
 	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0 // phase difference
-	for i := 0; i &lt; nframes; i++ {
+	for i := 0; i < nframes; i++ {
 		colorIndex := uint8(i % 5)
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
-		for t := 0.0; t &lt; cycles*2*math.Pi; t += res {
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
@@ -733,7 +863,7 @@ func lissajous(out io.Writer) {
 		anim.Delay = append(anim.Delay, delay)
 		anim.Image = append(anim.Image, img)
 	}
-	gif.EncodeAll(out, &amp;anim) // NOTE: ignoring encoding errors
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
 }
 
 //!-main
@@ -742,7 +872,7 @@ func lissajous(out io.Writer) {
 
 <p><img src="http://oumnldfwl.bkt.clouddn.com/out2.gif" alt="多种颜色交替" /></p>
 
-<h3 id="ex-1-7">Ex 1.7</h3>
+<h3 id=8ae0d54816f01e56cc257387c237c28f>Ex 1.7</h3>
 
 <p>The function call io.Copy(dst, src) reads from src and writes to dst. Use it instead of ioutil.ReadAll to copy the response body to os.Stdout without requiring a buffer large enough to hold the entire stream. Be sure to check the error result of io.Copy.</p>
 
@@ -750,33 +880,33 @@ func lissajous(out io.Writer) {
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
+	"fmt"
+	"io"
+	"net/http"
+	"os"
 )
 
 func main() {
 	for _, url := range os.Args[1:] {
 		resp, err := http.Get(url)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;fetch: %v\n&quot;, err)
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
 		//b, err := ioutil.ReadAll(resp.Body)
 		_, err = io.Copy(os.Stdout, resp.Body)
 		resp.Body.Close()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;fetch: reading %s: %v\n&quot;, url, err)
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
 			os.Exit(1)
 		}
-		//fmt.Printf(&quot;%s&quot;, b)
+		//fmt.Printf("%s", b)
 	}
 }
 
 </code></pre>
 
-<h3 id="ex-1-8">Ex 1.8</h3>
+<h3 id=c38c671d2d76dbf5c7865b284a93d9e0>Ex 1.8</h3>
 
 <p>Modify fetch to add the preﬁx http:// to each argument URL if it is missing. You might want to use strings.HasPrefix.</p>
 
@@ -784,36 +914,36 @@ func main() {
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
-	&quot;strings&quot;
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
 )
 
 func main() {
 	for _, url := range os.Args[1:] {
-		if !strings.HasPrefix(url, &quot;http://&quot;) {
-			url = &quot;http://&quot; + url
+		if !strings.HasPrefix(url, "http://") {
+			url = "http://" + url
 		}
 		resp, err := http.Get(url)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;fetch: %v\n&quot;, err)
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
 		//b, err := ioutil.ReadAll(resp.Body)
 		_, err = io.Copy(os.Stdout, resp.Body)
 		resp.Body.Close()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;fetch: reading %s: %v\n&quot;, url, err)
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
 			os.Exit(1)
 		}
-		//fmt.Printf(&quot;%s&quot;, b)
+		//fmt.Printf("%s", b)
 	}
 }
 </code></pre>
 
-<h3 id="ex-1-9">Ex 1.9</h3>
+<h3 id=f63fb57f2305ea8a18789e937956ff79>Ex 1.9</h3>
 
 <p>Modify fetch to also print the HTTP status code, found in resp.Status.</p>
 
@@ -821,41 +951,41 @@ func main() {
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
-	&quot;strings&quot;
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
 )
 
 func main() {
 	for _, url := range os.Args[1:] {
-		if !strings.HasPrefix(url, &quot;http://&quot;) {
-			url = &quot;http://&quot; + url
+		if !strings.HasPrefix(url, "http://") {
+			url = "http://" + url
 		}
 		resp, err := http.Get(url)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;fetch: %v\n&quot;, err)
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
 		//b, err := ioutil.ReadAll(resp.Body)
 		_, err = io.Copy(os.Stdout, resp.Body)
-		fmt.Println(&quot;Status:&quot;, resp.Status)//Status: 200 OK
+		fmt.Println("Status:", resp.Status)//Status: 200 OK
 		resp.Body.Close()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;fetch: reading %s: %v\n&quot;, url, err)
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
 			os.Exit(1)
 		}
-		//fmt.Printf(&quot;%s&quot;, b)
+		//fmt.Printf("%s", b)
 	}
 }
 </code></pre>
 
-<h3 id="ex-1-10">Ex 1.10</h3>
+<h3 id=991812d57e9b856796b92a2a10b60769>Ex 1.10</h3>
 
 <p>Exercise 1.10: Find a web site that produces a large amount of data. Investigate caching by running fetchall twice in succession to see whether the reported time changes much. Do you get the same content each time? Modify fetchall to print its output to a ﬁle so it can be examined.</p>
 
-<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan &amp; Brian W. Kernighan.
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 // See page 17.
@@ -865,12 +995,12 @@ func main() {
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
-	&quot;strconv&quot;
-	&quot;time&quot;
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
 )
 
 func main() {
@@ -880,31 +1010,31 @@ func main() {
 		go fetch(strconv.FormatInt(int64(ix), 10), url, ch) // start a goroutine
 	}
 	for range os.Args[1:] {
-		fmt.Println(&lt;-ch) // receive from channel ch
+		fmt.Println(<-ch) // receive from channel ch
 	}
-	fmt.Printf(&quot;%.2fs elapsed\n&quot;, time.Since(start).Seconds())
+	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
 }
 
-func fetch(fileName, url string, ch chan&lt;- string) {
+func fetch(fileName, url string, ch chan<- string) {
 	start := time.Now()
 	resp, err := http.Get(url)
 	if err != nil {
-		ch &lt;- fmt.Sprint(err) // send to channel ch
+		ch <- fmt.Sprint(err) // send to channel ch
 		return
 	}
 	dst, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-		fmt.Println(&quot;happend a error when opening&quot;, err)
+		fmt.Println("happend a error when opening", err)
 	}
 	defer dst.Close()
 	nbytes, err := io.Copy(dst, resp.Body)
 	resp.Body.Close() // don't leak resources
 	if err != nil {
-		ch &lt;- fmt.Sprintf(&quot;while reading %s: %v&quot;, url, err)
+		ch <- fmt.Sprintf("while reading %s: %v", url, err)
 		return
 	}
 	secs := time.Since(start).Seconds()
-	ch &lt;- fmt.Sprintf(&quot;%.2fs  %7d  %s&quot;, secs, nbytes, url)
+	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
 }
 
 //!-
@@ -918,11 +1048,11 @@ func fetch(fileName, url string, ch chan&lt;- string) {
 0.51s elapsed
 </code></pre>
 
-<h3 id="ex-1-11">Ex 1.11</h3>
+<h3 id=65ebecaa1bfa9f3374bf08ad13db8a0a>Ex 1.11</h3>
 
 <p>TBC</p>
 
-<h3 id="ex-1-12">Ex 1.12</h3>
+<h3 id=25d67492c20d8494271509f3b97b8e84>Ex 1.12</h3>
 
 <p>TBC</p>
               </div>
@@ -1017,17 +1147,19 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-1-1">Ex 1.1</a>
+        <a href="#1ba3890b63009b929f82b47c8bc8ff22">Ex 1.1</a>
 
       
     
       
       
 
+      
       
       
       
@@ -1045,7 +1177,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-2">Ex 1.2</a>
+          <a href="#e6c78e85b93452a2571bad242c57a345">Ex 1.2</a>
 
         
 
@@ -1054,6 +1186,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1071,7 +1204,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-3">Ex 1.3</a>
+          <a href="#7146e32973e614081d3acd38cfb7f8f1">Ex 1.3</a>
 
         
 
@@ -1080,6 +1213,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1097,7 +1231,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-4">Ex 1.4</a>
+          <a href="#c8b97eb46c8360469c4bace10531b854">Ex 1.4</a>
 
         
 
@@ -1106,6 +1240,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1123,7 +1258,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-5">Ex 1.5</a>
+          <a href="#913b789e20fa2a72aab8fee4b125cdcb">Ex 1.5</a>
 
         
 
@@ -1132,6 +1267,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1149,7 +1285,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-6">Ex 1.6</a>
+          <a href="#4d8c92c9475008c0b067076b83c8ac7a">Ex 1.6</a>
 
         
 
@@ -1158,6 +1294,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1175,7 +1312,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-7">Ex 1.7</a>
+          <a href="#8ae0d54816f01e56cc257387c237c28f">Ex 1.7</a>
 
         
 
@@ -1184,6 +1321,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1201,7 +1339,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-8">Ex 1.8</a>
+          <a href="#c38c671d2d76dbf5c7865b284a93d9e0">Ex 1.8</a>
 
         
 
@@ -1210,6 +1348,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1227,7 +1366,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-9">Ex 1.9</a>
+          <a href="#f63fb57f2305ea8a18789e937956ff79">Ex 1.9</a>
 
         
 
@@ -1236,6 +1375,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1253,7 +1393,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-10">Ex 1.10</a>
+          <a href="#991812d57e9b856796b92a2a10b60769">Ex 1.10</a>
 
         
 
@@ -1262,6 +1402,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1279,7 +1420,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-11">Ex 1.11</a>
+          <a href="#65ebecaa1bfa9f3374bf08ad13db8a0a">Ex 1.11</a>
 
         
 
@@ -1288,6 +1429,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
       
       
 
+      
       
       
       
@@ -1305,7 +1447,7 @@ func fetch(fileName, url string, ch chan&lt;- string) {
         
 
         <li>
-          <a href="#ex-1-12">Ex 1.12</a>
+          <a href="#25d67492c20d8494271509f3b97b8e84">Ex 1.12</a>
 
         
           

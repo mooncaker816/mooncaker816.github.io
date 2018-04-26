@@ -261,6 +261,25 @@
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -373,8 +392,9 @@
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h1 id="映射">映射</h1>
+                <h1 id=9da188491dd34c4382a5b9f006194e41>映射</h1>
 
 <p></p>
 
@@ -394,7 +414,7 @@
   dict := make(map[string]int)
   // 创建一个映射，键和值的类型都是 string
   // 使用两个键值对初始化映射
-  dict := map[string]string{&quot;Red&quot;: &quot;#da1337&quot;, &quot;Orange&quot;: &quot;#e95a22&quot;}
+  dict := map[string]string{"Red": "#da1337", "Orange": "#e95a22"}
   // 空map
   dict := map[string]int{}
   // nil map，无法直接赋值，需先进行初始化分配空间
@@ -410,7 +430,7 @@
 <pre><code class="language-go">  // 创建一个空映射，用来存储颜色以及颜色对应的十六进制代码
   colors := map[string]string{}
   // 将 Red 的代码加入到映射
-  colors[&quot;Red&quot;] = &quot;#da1337&quot;
+  colors["Red"] = "#da1337"
 </code></pre>
 
 <ul>
@@ -418,7 +438,7 @@
 </ul>
 
 <pre><code class="language-go">  // 获取键 Blue 对应的值
-  value, exists := colors[&quot;Blue&quot;] 
+  value, exists := colors["Blue"] 
   // 这个键存在吗？ 
   if exists { 
     fmt.Println(value) 
@@ -431,7 +451,7 @@
 
 <pre><code class="language-go">  // 显示映射里的所有颜色(无序)
   for key, value := range colors { 
-    fmt.Printf(&quot;Key: %s Value: %s\n&quot;, key, value) 
+    fmt.Printf("Key: %s Value: %s\n", key, value) 
   }
   // 有序迭代
   s1 := []string
@@ -440,7 +460,7 @@
   }
   sort.Strings(s1)
   for _,v := range s1{
-    fmt.Printf(&quot;Key: %s Value: %s\n&quot;, v, colors[v])
+    fmt.Printf("Key: %s Value: %s\n", v, colors[v])
   }
 </code></pre>
 
@@ -449,7 +469,7 @@
 </ul>
 
 <pre><code class="language-go">  // 删除键为 Coral 的键值对 
-  delete(colors, &quot;Coral&quot;)
+  delete(colors, "Coral")
 </code></pre>
 
 <ul>
@@ -563,11 +583,12 @@
       
       
       
+      
 
       
 
       <li>
-        <a href="#%e6%98%a0%e5%b0%84">映射</a>
+        <a href="#9da188491dd34c4382a5b9f006194e41">映射</a>
 
       
     

@@ -265,6 +265,55 @@ Modify charcount to count letters, digits, and so on in their Unicode categories
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -377,8 +426,9 @@ Modify charcount to count letters, digits, and so on in their Unicode categories
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="ex-4-8">Ex 4.8</h3>
+                <h3 id=c276cff6cacdbbd0f83edd3778ab0197>Ex 4.8</h3>
 
 <p>Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.</p>
 
@@ -387,11 +437,11 @@ Modify charcount to count letters, digits, and so on in their Unicode categories
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;os&quot;
-	&quot;unicode&quot;
+	"bufio"
+	"fmt"
+	"io"
+	"os"
+	"unicode"
 )
 
 func main() {
@@ -405,10 +455,10 @@ func main() {
 			break
 		}
 		if err != nil {
-			fmt.Fprintf(os.Stderr, &quot;charcount: %v\n&quot;, err)
+			fmt.Fprintf(os.Stderr, "charcount: %v\n", err)
 			os.Exit(1)
 		}
-		if r == unicode.ReplacementChar &amp;&amp; n == 1 {
+		if r == unicode.ReplacementChar && n == 1 {
 			invalid++
 			continue
 		} else if unicode.IsLetter(r) {
@@ -422,14 +472,14 @@ func main() {
 			fmt.Println(r)
 		}
 	}
-	counts[&quot;invalid&quot;] = invalid
-	counts[&quot;letter&quot;] = letter
-	counts[&quot;digit&quot;] = digit
-	counts[&quot;mark&quot;] = mark
-	counts[&quot;other&quot;] = other
+	counts["invalid"] = invalid
+	counts["letter"] = letter
+	counts["digit"] = digit
+	counts["mark"] = mark
+	counts["other"] = other
 
 	for c, n := range counts {
-		fmt.Printf(&quot;%s\t:%d\n&quot;, c, n)
+		fmt.Printf("%s\t:%d\n", c, n)
 	}
 }
 </code></pre>
@@ -450,21 +500,21 @@ other	:2
 <li><strong>终端模拟EOF 为 ctrl + d</strong></li>
 </ul>
 
-<h3 id="ex-4-9">Ex 4.9</h3>
+<h3 id=072eddac215acd9db16dd0e96bba7445>Ex 4.9</h3>
 
 <p>Write a program wordfreq to report the frequency of each word in an input text ﬁle. Call input.Split(bufio.ScanWords) before the ﬁrst call to Scan to break the input into words instead of lines.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;strings&quot;
+	"bufio"
+	"fmt"
+	"strings"
 )
 
 func main() {
 	words := make(map[string]int)
-	input := &quot;foo  bar   baz foo 我们 foo 我们&quot;
+	input := "foo  bar   baz foo 我们 foo 我们"
 	scanner := bufio.NewScanner(strings.NewReader(input))
 	scanner.Split(bufio.ScanWords)
 	for scanner.Scan() {
@@ -472,7 +522,7 @@ func main() {
 		words[scanner.Text()]++
 	}
 	for k, v := range words {
-		fmt.Printf(&quot;%s : %d\n&quot;, k, v)
+		fmt.Printf("%s : %d\n", k, v)
 	}
 }
 </code></pre>
@@ -484,61 +534,61 @@ foo : 3
 bar : 1
 </code></pre>
 
-<h3 id="ex4-13">Ex4.13</h3>
+<h3 id=465ab1ce30e215bcd8196368d9d66f5d>Ex4.13</h3>
 
 <p>The JSON-based web service of the Open Movie Database lets you s <a href="https://omdbapi.com/" target="_blank">https://omdbapi.com/</a> for a movie by name and download its poster image. Write a tool poster that downloads the poster image for the movie named on the command line.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;encoding/json&quot;
-	&quot;fmt&quot;
-	&quot;io&quot;
-	&quot;net/http&quot;
-	&quot;os&quot;
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
 )
 
-const OmdbAPI = &quot;http://www.omdbapi.com/?i=tt3896198&amp;apikey=7b94e6bd&amp;t=&quot;
+const OmdbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=7b94e6bd&t="
 
 type Movie struct {
 	Title    string
 	Year     string
 	Poster   string
 	Response string
-	Errormsg string `json:&quot;Error,omitempty&quot;`
+	Errormsg string `json:"Error,omitempty"`
 }
 
 func main() {
-	for i := 1; i &lt; len(os.Args); i++ {
+	for i := 1; i < len(os.Args); i++ {
 		url := OmdbAPI + os.Args[i]
 		resp, err := http.Get(url)
 		if err != nil {
-			fmt.Println(&quot;http get error &quot;, err)
+			fmt.Println("http get error ", err)
 			return
 		}
 		defer resp.Body.Close()
 		var result Movie
-		err = json.NewDecoder(resp.Body).Decode(&amp;result)
+		err = json.NewDecoder(resp.Body).Decode(&result)
 		if err != nil {
-			fmt.Println(&quot;decode failed&quot;)
+			fmt.Println("decode failed")
 			return
 		}
-		fmt.Printf(&quot;%#v\n&quot;, result)
-		fmt.Printf(&quot;%v\n&quot;, result)
-		if result.Response == &quot;false&quot; {
+		fmt.Printf("%#v\n", result)
+		fmt.Printf("%v\n", result)
+		if result.Response == "false" {
 			fmt.Println(result.Errormsg)
 		} else {
-			fmt.Println(&quot;starting download poster&quot;)
-			result.Poster = &quot;https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=5a60b1a4cf8065386fe7ac41f6b4ca21/fd039245d688d43f4ee7a518781ed21b0ff43b89.jpg&quot;
+			fmt.Println("starting download poster")
+			result.Poster = "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=5a60b1a4cf8065386fe7ac41f6b4ca21/fd039245d688d43f4ee7a518781ed21b0ff43b89.jpg"
 			posterres, err := http.Get(result.Poster)
 			if err != nil {
-				fmt.Println(&quot;get poster url error, download failed&quot;, err)
+				fmt.Println("get poster url error, download failed", err)
 				return
 			} else {
-				filename := result.Title + &quot;.jpg&quot;
+				filename := result.Title + ".jpg"
 				f, err := os.Create(filename)
 				if err != nil {
-					fmt.Println(&quot;create file error&quot;)
+					fmt.Println("create file error")
 					return
 				}
 				io.Copy(f, posterres.Body)
@@ -549,102 +599,102 @@ func main() {
 </code></pre>
 
 <pre><code class="language-bash">$ ./ex4.13 triangle triangleeeee
-main.Movie{Title:&quot;Triangle&quot;, Year:&quot;2009&quot;, Poster:&quot;https://images-na.ssl-images-amazon.com/images/M/MV5BY2VlODI5ZmMtZDExYS00OWI4LWJiMWItZWZkZWRkNzlmZWI2XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg&quot;, Response:&quot;True&quot;, Errormsg:&quot;&quot;}
+main.Movie{Title:"Triangle", Year:"2009", Poster:"https://images-na.ssl-images-amazon.com/images/M/MV5BY2VlODI5ZmMtZDExYS00OWI4LWJiMWItZWZkZWRkNzlmZWI2XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg", Response:"True", Errormsg:""}
 {Triangle 2009 https://images-na.ssl-images-amazon.com/images/M/MV5BY2VlODI5ZmMtZDExYS00OWI4LWJiMWItZWZkZWRkNzlmZWI2XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg True }
 starting download poster
 download finished
-main.Movie{Title:&quot;&quot;, Year:&quot;&quot;, Poster:&quot;&quot;, Response:&quot;False&quot;, Errormsg:&quot;Movie not found!&quot;}
+main.Movie{Title:"", Year:"", Poster:"", Response:"False", Errormsg:"Movie not found!"}
 {   False Movie not found!}
 Movie not found!
 </code></pre>
 
 <p><img src="http://oumnldfwl.bkt.clouddn.com/ex4.13.png" alt="Triangle.jpg" /></p>
 
-<h3 id="ex-4-14">Ex 4.14</h3>
+<h3 id=b597f8e361db83e0b85d5c3dae61f0cd>Ex 4.14</h3>
 
 <p>Create a web server that queries GitHub once and then allows navigation of the list of bug reports, milestones, and users.</p>
 
 <pre><code class="language-go">package main
 
 import (
-	&quot;encoding/json&quot;
-	&quot;fmt&quot;
-	temp2 &quot;html/template&quot;
-	&quot;log&quot;
-	&quot;net/http&quot;
-	&quot;net/url&quot;
-	&quot;os&quot;
-	&quot;strings&quot;
-	temp1 &quot;text/template&quot;
-	&quot;time&quot;
+	"encoding/json"
+	"fmt"
+	temp2 "html/template"
+	"log"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+	temp1 "text/template"
+	"time"
 )
 
-const IssuesURL = &quot;https://api.github.com/search/issues&quot;
+const IssuesURL = "https://api.github.com/search/issues"
 
 //!+template
 const templ1 = `{{.TotalCount}} issues:
 {{range .Items}}----------------------------------------
 Number: {{.Number}}
 User:   {{.User.Login}}
-Title:  {{.Title | printf &quot;%.64s&quot;}}
+Title:  {{.Title | printf "%.64s"}}
 Age:    {{.CreatedAt | daysAgo}} days
 Milestone: {{.Milestone.Title}}
 {{end}}`
 const templ2 = `
-&lt;h1&gt;{{.TotalCount}} issues&lt;/h1&gt;
-&lt;table&gt;
-&lt;tr style='text-align: left'&gt;
-  &lt;th&gt;#&lt;/th&gt;
-  &lt;th&gt;State&lt;/th&gt;
-  &lt;th&gt;User&lt;/th&gt;
-  &lt;th&gt;Title&lt;/th&gt;
-  &lt;th&gt;Milestone&lt;/th&gt;
-&lt;/tr&gt;
+<h1>{{.TotalCount}} issues</h1>
+<table>
+<tr style='text-align: left'>
+  <th>#</th>
+  <th>State</th>
+  <th>User</th>
+  <th>Title</th>
+  <th>Milestone</th>
+</tr>
 {{range .Items}}
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='{{.HTMLURL}}'&gt;{{.Number}}&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;{{.State}}&lt;/td&gt;
-  &lt;td&gt;&lt;a href='{{.User.HTMLURL}}'&gt;{{.User.Login}}&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='{{.HTMLURL}}'&gt;{{.Title}}&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='{{.Milestone.HTMLURL}}'&gt;{{.Milestone.Title}}&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='{{.HTMLURL}}'>{{.Number}}</a></td>
+  <td>{{.State}}</td>
+  <td><a href='{{.User.HTMLURL}}'>{{.User.Login}}</a></td>
+  <td><a href='{{.HTMLURL}}'>{{.Title}}</a></td>
+  <td><a href='{{.Milestone.HTMLURL}}'>{{.Milestone.Title}}</a></td>
+</tr>
 {{end}}
-&lt;/table&gt;
+</table>
 `
 
 //!-template
 
 type IssuesSearchResult struct {
-	TotalCount int `json:&quot;total_count&quot;`
+	TotalCount int `json:"total_count"`
 	Items      []*Issue
 }
 
 type Issue struct {
 	Number    int
-	HTMLURL   string `json:&quot;html_url&quot;`
+	HTMLURL   string `json:"html_url"`
 	Title     string
 	State     string
 	User      *User
-	CreatedAt time.Time `json:&quot;created_at&quot;`
+	CreatedAt time.Time `json:"created_at"`
 	Body      string    // in Markdown format
 	Milestone *Milestone
 }
 
 type User struct {
 	Login   string
-	HTMLURL string `json:&quot;html_url&quot;`
+	HTMLURL string `json:"html_url"`
 }
 
 type Milestone struct {
 	Title   string
-	HTMLURL string `json:&quot;html_url&quot;`
+	HTMLURL string `json:"html_url"`
 }
 
-var report1 = temp1.Must(temp1.New(&quot;issuelist1&quot;).
-	Funcs(temp1.FuncMap{&quot;daysAgo&quot;: daysAgo}).
+var report1 = temp1.Must(temp1.New("issuelist1").
+	Funcs(temp1.FuncMap{"daysAgo": daysAgo}).
 	Parse(templ1))
-var report2 = temp2.Must(temp2.New(&quot;issuelist2&quot;).
-	Funcs(temp2.FuncMap{&quot;daysAgo&quot;: daysAgo}).
+var report2 = temp2.Must(temp2.New("issuelist2").
+	Funcs(temp2.FuncMap{"daysAgo": daysAgo}).
 	Parse(templ2))
 
 func main() {
@@ -652,11 +702,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	f1, err := os.Create(&quot;report.txt&quot;)
+	f1, err := os.Create("report.txt")
 	if err := report1.Execute(f1, result); err != nil {
 		log.Fatal(err)
 	}
-	f2, err := os.Create(&quot;report.html&quot;)
+	f2, err := os.Create("report.html")
 	if err := report2.Execute(f2, result); err != nil {
 		log.Fatal(err)
 	}
@@ -668,8 +718,8 @@ func daysAgo(t time.Time) int {
 
 // SearchIssues queries the GitHub issue tracker.
 func SearchIssues(terms []string) (*IssuesSearchResult, error) {
-	q := url.QueryEscape(strings.Join(terms, &quot; &quot;))
-	resp, err := http.Get(IssuesURL + &quot;?q=&quot; + q)
+	q := url.QueryEscape(strings.Join(terms, " "))
+	resp, err := http.Get(IssuesURL + "?q=" + q)
 	if err != nil {
 		return nil, err
 	}
@@ -677,15 +727,15 @@ func SearchIssues(terms []string) (*IssuesSearchResult, error) {
 	// (Chapter 5 presents 'defer', which makes this simpler.)
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
-		return nil, fmt.Errorf(&quot;search query failed: %s&quot;, resp.Status)
+		return nil, fmt.Errorf("search query failed: %s", resp.Status)
 	}
 	var result IssuesSearchResult
-	if err := json.NewDecoder(resp.Body).Decode(&amp;result); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()
 		return nil, err
 	}
 	resp.Body.Close()
-	return &amp;result, nil
+	return &result, nil
 }
 </code></pre>
 
@@ -875,257 +925,257 @@ Milestone: Go1.11
 
 <pre><code class="language-html">//report.html
 
-&lt;h1&gt;41 issues&lt;/h1&gt;
-&lt;table&gt;
-&lt;tr style='text-align: left'&gt;
-  &lt;th&gt;#&lt;/th&gt;
-  &lt;th&gt;State&lt;/th&gt;
-  &lt;th&gt;User&lt;/th&gt;
-  &lt;th&gt;Title&lt;/th&gt;
-  &lt;th&gt;Milestone&lt;/th&gt;
-&lt;/tr&gt;
+<h1>41 issues</h1>
+<table>
+<tr style='text-align: left'>
+  <th>#</th>
+  <th>State</th>
+  <th>User</th>
+  <th>Title</th>
+  <th>Milestone</th>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23188'&gt;23188&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/ianlancetaylor'&gt;ianlancetaylor&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23188'&gt;cmd/compile: incorrect order of evaluation according to spec&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23188'>23188</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/ianlancetaylor'>ianlancetaylor</a></td>
+  <td><a href='https://github.com/golang/go/issues/23188'>cmd/compile: incorrect order of evaluation according to spec</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23183'&gt;23183&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/terinjokes'&gt;terinjokes&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23183'&gt;net/http: muxer no longer redirects host patterns in go1.10&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23183'>23183</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/terinjokes'>terinjokes</a></td>
+  <td><a href='https://github.com/golang/go/issues/23183'>net/http: muxer no longer redirects host patterns in go1.10</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23181'&gt;23181&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/hirochachacha'&gt;hirochachacha&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23181'&gt;cmd/buildid: rewrite algorithm is broken&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23181'>23181</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/hirochachacha'>hirochachacha</a></td>
+  <td><a href='https://github.com/golang/go/issues/23181'>cmd/buildid: rewrite algorithm is broken</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23180'&gt;23180&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/aarzilli'&gt;aarzilli&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23180'&gt;cmd/go: go test -c does not apply specified gcflags to all packages&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23180'>23180</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/aarzilli'>aarzilli</a></td>
+  <td><a href='https://github.com/golang/go/issues/23180'>cmd/go: go test -c does not apply specified gcflags to all packages</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23166'&gt;23166&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/mvdan'&gt;mvdan&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23166'&gt;x/tools/go/ssa/interp: tests consistently failing on darwin&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23166'>23166</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/mvdan'>mvdan</a></td>
+  <td><a href='https://github.com/golang/go/issues/23166'>x/tools/go/ssa/interp: tests consistently failing on darwin</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23146'&gt;23146&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/bradfitz'&gt;bradfitz&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23146'&gt;cmd/vet: stderr spam during testing&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23146'>23146</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/bradfitz'>bradfitz</a></td>
+  <td><a href='https://github.com/golang/go/issues/23146'>cmd/vet: stderr spam during testing</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23122'&gt;23122&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23122'&gt;all: remove support for OS X 10.8 and 10.9&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23122'>23122</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/23122'>all: remove support for OS X 10.8 and 10.9</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23098'&gt;23098&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/mikioh'&gt;mikioh&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23098'&gt;runtime: loop over allp causes a nil pointer dereference crash&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23098'>23098</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/mikioh'>mikioh</a></td>
+  <td><a href='https://github.com/golang/go/issues/23098'>runtime: loop over allp causes a nil pointer dereference crash</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23037'&gt;23037&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/zolotov'&gt;zolotov&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23037'&gt;cmd/go: add JSON output for building package failures while running go test on directory with several packages&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23037'>23037</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/zolotov'>zolotov</a></td>
+  <td><a href='https://github.com/golang/go/issues/23037'>cmd/go: add JSON output for building package failures while running go test on directory with several packages</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23036'&gt;23036&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/zolotov'&gt;zolotov&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23036'&gt;cmd/test2json: filtering out testing service messages or mark them in a special way&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23036'>23036</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/zolotov'>zolotov</a></td>
+  <td><a href='https://github.com/golang/go/issues/23036'>cmd/test2json: filtering out testing service messages or mark them in a special way</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23011'&gt;23011&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/bradfitz'&gt;bradfitz&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23011'&gt;build: announce end of support for old macOS releases&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23011'>23011</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/bradfitz'>bradfitz</a></td>
+  <td><a href='https://github.com/golang/go/issues/23011'>build: announce end of support for old macOS releases</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23010'&gt;23010&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23010'&gt;net/http: ResponseWriter panics in WriteHeaders that were formerly ignored&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23010'>23010</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/23010'>net/http: ResponseWriter panics in WriteHeaders that were formerly ignored</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23009'&gt;23009&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/23009'&gt;net/http/httputil: ReverseProxy change conflicts with future ReverseProxy plans&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/23009'>23009</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/23009'>net/http/httputil: ReverseProxy change conflicts with future ReverseProxy plans</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22984'&gt;22984&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22984'&gt;cmd/go: test -json not cached&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22984'>22984</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/22984'>cmd/go: test -json not cached</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22924'&gt;22924&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/chipaca'&gt;chipaca&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22924'&gt;syscall: on linux 386 doesn&amp;#39;t support syscalls that don&amp;#39;t fail&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22924'>22924</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/chipaca'>chipaca</a></td>
+  <td><a href='https://github.com/golang/go/issues/22924'>syscall: on linux 386 doesn&#39;t support syscalls that don&#39;t fail</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22781'&gt;22781&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/pciet'&gt;pciet&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22781'&gt;runtime: fatal error: sweep increased allocation count, go1.9.x&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/63'&gt;Go1.9.3&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22781'>22781</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/pciet'>pciet</a></td>
+  <td><a href='https://github.com/golang/go/issues/22781'>runtime: fatal error: sweep increased allocation count, go1.9.x</a></td>
+  <td><a href='https://github.com/golang/go/milestone/63'>Go1.9.3</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22637'&gt;22637&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/ianlancetaylor'&gt;ianlancetaylor&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22637'&gt;crypto: examine and probably remove OpenSSL derived code&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22637'>22637</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/ianlancetaylor'>ianlancetaylor</a></td>
+  <td><a href='https://github.com/golang/go/issues/22637'>crypto: examine and probably remove OpenSSL derived code</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22487'&gt;22487&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/tklauser'&gt;tklauser&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22487'&gt;lib/time: update tzdata before 1.10 release&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22487'>22487</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/tklauser'>tklauser</a></td>
+  <td><a href='https://github.com/golang/go/issues/22487'>lib/time: update tzdata before 1.10 release</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22475'&gt;22475&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22475'&gt;cmd/go: include GOROOT in linkActionID hash&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22475'>22475</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/22475'>cmd/go: include GOROOT in linkActionID hash</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22472'&gt;22472&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22472'&gt;cmd/go: implement gccgo support for content-based staleness&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22472'>22472</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/22472'>cmd/go: implement gccgo support for content-based staleness</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22444'&gt;22444&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/griesemer'&gt;griesemer&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22444'&gt;cmd/compile: missing wrapper function for call of literal method expression&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22444'>22444</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/griesemer'>griesemer</a></td>
+  <td><a href='https://github.com/golang/go/issues/22444'>cmd/compile: missing wrapper function for call of literal method expression</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22429'&gt;22429&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/TheTincho'&gt;TheTincho&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22429'&gt;cmd/compile: invalid instruction error for FMOVD when compiling for 387&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/63'&gt;Go1.9.3&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22429'>22429</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/TheTincho'>TheTincho</a></td>
+  <td><a href='https://github.com/golang/go/issues/22429'>cmd/compile: invalid instruction error for FMOVD when compiling for 387</a></td>
+  <td><a href='https://github.com/golang/go/milestone/63'>Go1.9.3</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22349'&gt;22349&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/alexbrainman'&gt;alexbrainman&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22349'&gt;net: ipStackCapabilities.probe creates sockets that can escape into child process&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22349'>22349</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/alexbrainman'>alexbrainman</a></td>
+  <td><a href='https://github.com/golang/go/issues/22349'>net: ipStackCapabilities.probe creates sockets that can escape into child process</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22224'&gt;22224&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/siebenmann'&gt;siebenmann&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22224'&gt;cmd/go: build failure on amd64 Linux with an error in TestTwoGopathShlibsGccgo from CL 69831  onward&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22224'>22224</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/siebenmann'>siebenmann</a></td>
+  <td><a href='https://github.com/golang/go/issues/22224'>cmd/go: build failure on amd64 Linux with an error in TestTwoGopathShlibsGccgo from CL 69831  onward</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22204'&gt;22204&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/tmm1'&gt;tmm1&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22204'&gt;runtime: sigpanic during GC on android/arm64&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22204'>22204</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/tmm1'>tmm1</a></td>
+  <td><a href='https://github.com/golang/go/issues/22204'>runtime: sigpanic during GC on android/arm64</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22155'&gt;22155&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/rsc'&gt;rsc&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/22155'&gt;cmd/go: GOROOT override using linker -X flag is probably not right&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/22155'>22155</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/rsc'>rsc</a></td>
+  <td><a href='https://github.com/golang/go/issues/22155'>cmd/go: GOROOT override using linker -X flag is probably not right</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/21431'&gt;21431&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/josharian'&gt;josharian&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/21431'&gt;runtime: stack split at a bad time on mipsle&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/56'&gt;Go1.10&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/21431'>21431</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/josharian'>josharian</a></td>
+  <td><a href='https://github.com/golang/go/issues/21431'>runtime: stack split at a bad time on mipsle</a></td>
+  <td><a href='https://github.com/golang/go/milestone/56'>Go1.10</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/21282'&gt;21282&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/dsnet'&gt;dsnet&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/21282'&gt;cmd/compile: incorrect type assertions on conflicting package names&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/21282'>21282</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/dsnet'>dsnet</a></td>
+  <td><a href='https://github.com/golang/go/issues/21282'>cmd/compile: incorrect type assertions on conflicting package names</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/21221'&gt;21221&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/vibhavp'&gt;vibhavp&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/21221'&gt;cmd/compile: internal compiler error: constant type mismatch when comparing two unsafe.Pointer rvalues&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/21221'>21221</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/vibhavp'>vibhavp</a></td>
+  <td><a href='https://github.com/golang/go/issues/21221'>cmd/compile: internal compiler error: constant type mismatch when comparing two unsafe.Pointer rvalues</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;tr&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/20790'&gt;20790&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;open&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/mikioh'&gt;mikioh&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/issues/20790'&gt;net: DefaultResolver.Lookup{Host,IPAddr} and LookupHost fail to parse a literal IPv6 address w/ zone&lt;/a&gt;&lt;/td&gt;
-  &lt;td&gt;&lt;a href='https://github.com/golang/go/milestone/62'&gt;Go1.11&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
+<tr>
+  <td><a href='https://github.com/golang/go/issues/20790'>20790</a></td>
+  <td>open</td>
+  <td><a href='https://github.com/mikioh'>mikioh</a></td>
+  <td><a href='https://github.com/golang/go/issues/20790'>net: DefaultResolver.Lookup{Host,IPAddr} and LookupHost fail to parse a literal IPv6 address w/ zone</a></td>
+  <td><a href='https://github.com/golang/go/milestone/62'>Go1.11</a></td>
+</tr>
 
-&lt;/table&gt;
+</table>
 </code></pre>
 
 <p><img src="http://oumnldfwl.bkt.clouddn.com/ex4.14.png" alt="ex4.14 report.html" /></p>
@@ -1245,17 +1295,19 @@ Milestone: Go1.11
       
       
       
+      
 
       
 
       <li>
-        <a href="#ex-4-8">Ex 4.8</a>
+        <a href="#c276cff6cacdbbd0f83edd3778ab0197">Ex 4.8</a>
 
       
     
       
       
 
+      
       
       
       
@@ -1273,7 +1325,7 @@ Milestone: Go1.11
         
 
         <li>
-          <a href="#ex-4-9">Ex 4.9</a>
+          <a href="#072eddac215acd9db16dd0e96bba7445">Ex 4.9</a>
 
         
 
@@ -1282,6 +1334,7 @@ Milestone: Go1.11
       
       
 
+      
       
       
       
@@ -1299,7 +1352,7 @@ Milestone: Go1.11
         
 
         <li>
-          <a href="#ex4-13">Ex4.13</a>
+          <a href="#465ab1ce30e215bcd8196368d9d66f5d">Ex4.13</a>
 
         
 
@@ -1308,6 +1361,7 @@ Milestone: Go1.11
       
       
 
+      
       
       
       
@@ -1325,7 +1379,7 @@ Milestone: Go1.11
         
 
         <li>
-          <a href="#ex-4-14">Ex 4.14</a>
+          <a href="#b597f8e361db83e0b85d5c3dae61f0cd">Ex 4.14</a>
 
         
           

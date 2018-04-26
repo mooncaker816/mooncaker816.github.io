@@ -261,6 +261,45 @@
 </nav>
 
 
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
 <div class="container body-content tocpost">
   <div class="row">
 
@@ -373,8 +412,9 @@
 </div>
 
 
+
               <div class="article-style" itemprop="articleBody">
-                <h3 id="用户类型">用户类型</h3>
+                <h3 id=d340e9a6b9aa11a2303c75f880b24b8a>用户类型</h3>
 
 <p></p>
 
@@ -400,10 +440,10 @@
 <pre><code class="language-go">  //定义一个类型为user,初始值为零值的结构变量bill
   var bill user
   //定义一个类型为user,且有初始值的结构变量bill
-  bill := user{&quot;Lisa&quot;, &quot;lisa@email.com&quot;, 123, true}
+  bill := user{"Lisa", "lisa@email.com", 123, true}
   bill := user{
-    name :	&quot;Lisa&quot;,
-    email :	&quot;lisa@email.com&quot;,
+    name :	"Lisa",
+    email :	"lisa@email.com",
     ext :		123,
     privileged :	true,
   }
@@ -413,7 +453,7 @@
 <li><strong>别称和他的基础类型不能直接赋值，因为Go认为他们不是同一类型</strong></li>
 </ul>
 
-<h3 id="方法">方法</h3>
+<h3 id=ea340b9dda8b893ddf2d9176220aac32>方法</h3>
 
 <ul>
 <li>函数是没有接收者的，不属于任何用户类型或基本类型</li>
@@ -445,7 +485,7 @@
 
 <ol>
 <li>当调用者和接收者同类型时，正常调用</li>
-<li>当调用者为值，接收者为指针时，Go会自动取调用者的地址再调用方法，如(&amp;a).func</li>
+<li>当调用者为值，接收者为指针时，Go会自动取调用者的地址再调用方法，如(&a).func</li>
 <li>当调用者为指针，接收者为值时，Go会自动对调用者解引用再调用方法，如(*a).func</li>
 </ol>
 
@@ -458,33 +498,33 @@
   }
   // notify 使用值接收者实现了一个方法
   func (u user) notify(){
-    fmt.Printf(&quot;Sending User Email To %s&lt;%s&gt;\n&quot;,u.name,u.email)
+    fmt.Printf("Sending User Email To %s<%s>\n",u.name,u.email)
   }
   // changeEmail 使用指针接收者实现了一个方法
   func (u *user) changeEmail(email string) {
       u.email = email
   }
   //初始化user类型的值bill
-  bill := user{&quot;Bill&quot;, &quot;bill@email.com&quot;}
+  bill := user{"Bill", "bill@email.com"}
   //初始化指向user类型的指针lisa
-  lisa := &amp;user{&quot;Lisa&quot;, &quot;lisa@email.com&quot;}
+  lisa := &user{"Lisa", "lisa@email.com"}
   //值bill调用值为接收者的方法notify
-  bill.notify() //Sending User Email To Bill&lt;bill@email.com&gt;
+  bill.notify() //Sending User Email To Bill<bill@email.com>
   //值bill调用指针为接收者的方法changeEmail
-  bill.changeEmail(&quot;bill@newdomain.com&quot;) // success
-  bill.notify() //Sending User Email To Bill&lt;bill@newdomain.com&gt;
+  bill.changeEmail("bill@newdomain.com") // success
+  bill.notify() //Sending User Email To Bill<bill@newdomain.com>
   //指针lisa调用值为接收者的方法notify()
-  lisa.notify() //Sending User Email To Lisa&lt;lisa@email.com&gt;
+  lisa.notify() //Sending User Email To Lisa<lisa@email.com>
   //指针lisa调用指针为接收者的方法changeEmail
-  lisa.changeEmail(&quot;lisa@newdomain.com&quot;) // success
-  lisa.notify() //Sending User Email To Lisa&lt;lisa@newdomain.com&gt;
+  lisa.changeEmail("lisa@newdomain.com") // success
+  lisa.notify() //Sending User Email To Lisa<lisa@newdomain.com>
 </code></pre>
 
 <ul>
 <li>方法定义的接收者究竟应该是指针还是值，需按该方法的需求决定。</li>
 </ul>
 
-<h3 id="接口">接口</h3>
+<h3 id=54ea89b497ec3bb319c68844dfa3687f>接口</h3>
 
 <ul>
 <li><p>接口是一种抽象的类型，没有具体实现，是一组方法的集合</p></li>
@@ -569,7 +609,7 @@
       email 	string
   }
   func (u user) notify() {
-    fmt.Printf(&quot;Sending user email to %s&lt;%s&gt;\n&quot;,u.name,u.email)
+    fmt.Printf("Sending user email to %s<%s>\n",u.name,u.email)
   }
   //接收一个实现notifier接口的值
   func sendNotification(n notifier) {
@@ -577,10 +617,10 @@
   }
 
   func main() {
-    bill := user{&quot;Bill&quot;, &quot;bill@email.com&quot;}
-    lisa := user{&quot;Lisa&quot;, &quot;lisa@email.com&quot;}
-    sendNotification(bill)// Sending User Email To Bill&lt;bill@email.com&gt;
-    sendNotification(&amp;lisa)// Sending User Email To Lisa&lt;lisa@email.com&gt;
+    bill := user{"Bill", "bill@email.com"}
+    lisa := user{"Lisa", "lisa@email.com"}
+    sendNotification(bill)// Sending User Email To Bill<bill@email.com>
+    sendNotification(&lisa)// Sending User Email To Lisa<lisa@email.com>
   }
 </code></pre>
 
@@ -594,7 +634,7 @@
       email 	string
   }
   func (u *user) notify() {
-    fmt.Printf(&quot;Sending user email to %s&lt;%s&gt;\n&quot;,u.name,u.email)
+    fmt.Printf("Sending user email to %s<%s>\n",u.name,u.email)
   }
   //接收一个实现notifier接口的值
   func sendNotification(n notifier) {
@@ -602,10 +642,10 @@
   }
 
   func main() {
-    bill := user{&quot;Bill&quot;, &quot;bill@email.com&quot;}
-    lisa := user{&quot;Lisa&quot;, &quot;lisa@email.com&quot;}
+    bill := user{"Bill", "bill@email.com"}
+    lisa := user{"Lisa", "lisa@email.com"}
     sendNotification(bill)// ERROR
-    sendNotification(&amp;lisa)// Sending User Email To Lisa&lt;lisa@email.com&gt;
+    sendNotification(&lisa)// Sending User Email To Lisa<lisa@email.com>
   }
 </code></pre>
 
@@ -722,17 +762,19 @@
       
       
       
+      
 
       
 
       <li>
-        <a href="#%e7%94%a8%e6%88%b7%e7%b1%bb%e5%9e%8b">用户类型</a>
+        <a href="#d340e9a6b9aa11a2303c75f880b24b8a">用户类型</a>
 
       
     
       
       
 
+      
       
       
       
@@ -750,7 +792,7 @@
         
 
         <li>
-          <a href="#%e6%96%b9%e6%b3%95">方法</a>
+          <a href="#ea340b9dda8b893ddf2d9176220aac32">方法</a>
 
         
 
@@ -759,6 +801,7 @@
       
       
 
+      
       
       
       
@@ -776,7 +819,7 @@
         
 
         <li>
-          <a href="#%e6%8e%a5%e5%8f%a3">接口</a>
+          <a href="#54ea89b497ec3bb319c68844dfa3687f">接口</a>
 
         
           
