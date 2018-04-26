@@ -374,7 +374,7 @@
 
 
               <div class="article-style" itemprop="articleBody">
-                <h3 id="包">包</h3>
+                <h2 id="包">包</h2>
 
 <p></p>
 
@@ -403,9 +403,9 @@ import (
    &quot;fmt&quot;
    myfmt &quot;mylib/fmt&quot;
 )
-</code></pre>
+</code></pre></li>
 
-<p>当重命名名称为下划线时,导入的包只执行init初始化函数，如为数据库注册驱动</p></li>
+<li><p>当重命名名称为下划线时,导入的包只执行init初始化函数，如为数据库注册驱动</p></li>
 </ul>
 
 <pre><code class="language-go">  package main
@@ -413,7 +413,6 @@ import (
        &quot;database/sql&quot;
      _ &quot;github.com/goinaction/code/chapter3/dbdriver/postgres&quot; 
   )
-
   func main() {
    sql.Open(&quot;postgres&quot;, &quot;mydb&quot;)
   }
@@ -441,30 +440,34 @@ import (
               
               
 
-              <div class="body-footer">
-                  最近更新于 Sep 25, 2017
-              </div>
-
               
               <div class="article-widget">
                 <div class="post-nav">
-  
-  <div class="post-nav-item">
-    <div class="meta-nav">下一页</div>
-    <a href="https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/" rel="next">Go In Action 读书笔记（二）</a>
+  <div class="row">
+      
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/" rel="next">Go In Action 读书笔记（二）</a>
+        </div>
+      </div>
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2017/08/14/npm%E6%8D%A2%E6%BA%90/" rel="prev">npm换源</a>
+        </div>
+      </div>
+      
   </div>
-  
-  
-  <div class="post-nav-item">
-    <div class="meta-nav">上一页</div>
-    <a href="https://mooncaker816.github.io/2017/08/14/npm%E6%8D%A2%E6%BA%90/" rel="prev">npm换源</a>
-  </div>
-  
 </div>
 
               </div>
               
 
+              <div class="body-footer">
+                  最近更新于 Sep 25, 2017
+              </div>
+              
               
 <section id="comments">
   <div id="disqus_thread"></div>
@@ -544,7 +547,7 @@ import (
   <div class="container">
     <p class="powered-by">
 
-      &copy; 2018 &middot; 
+      &copy; 2018-Present &middot; 
 
       Powered by the
       <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
@@ -592,7 +595,8 @@ import (
 
     
     
-    <script id="dsq-count-scr" src="//mooncaker816.disqus.com/count.js" async></script>
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
     
 
     
