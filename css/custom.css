@@ -1,0 +1,242 @@
+/* Jumbotron styles. */
+
+.jumbotron p {
+  font-size: inherit !important;
+  margin-bottom: 0.8rem !important;
+}
+
+.btn-intro {
+  background-color: #03A9F4;
+  border-color: #00E5FF;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.btn-intro:hover,
+.btn-intro:active,
+.btn-intro:focus {
+  background-color: #0288D1;
+  color: #fff;
+}
+
+/* Make homepage section padding compact. */
+
+.home-section {
+  padding: 60px 0 60px 0;
+}
+
+/* Documentation styles. */
+
+/* Documentation: nav. */
+
+#tocpost-navbar,
+#tocpost-subnavbar {
+  font-size: 12px;
+  width: 175px;
+  margin-left: -15px;
+}
+
+#tocpost-navbar.affix,
+#tocpost-subnavbar.affix {
+  position: fixed;
+  top: 85px; /* Consider navbar height. */
+}
+
+#tocpost-navbar {
+  padding: 15px 0;
+  display: none;
+  font-size: 15.5px;
+}
+
+#tocpost-navbar ul {
+  list-style: none;
+  padding: 0;
+}
+
+#tocpost-subnavbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#tocpost-subnavbar h4 {
+  padding-left: 10px;
+}
+
+#tocpost-navbar li a {
+  border-left: 1px solid transparent;
+  display: block;
+  padding-left: 5px;
+}
+
+#tocpost-navbar ul li li a {
+  padding: 5px 25px;
+  position: relative;
+}
+
+#tocpost-navbar li > .area {
+  font-size: 1em;
+  font-weight: 400;
+}
+
+#tocpost-navbar a.area[aria-expanded='true'] {
+  border-color: #3f51b5;
+}
+
+#tocpost-navbar li a:hover,
+#tocpost-navbar li a:focus {
+  background: none;
+  color: #444;
+  text-decoration: none !important;
+  border-color: transparent;
+}
+
+#tocpost-navbar .panel {
+  margin-bottom: 0;
+  background-color: inherit;
+  border: inherit;
+  box-shadow: inherit;
+}
+
+#tocpost-navbar li.active a:not(.area),
+#tocpost-navbar li.active .active a {
+  font-weight: bold;
+}
+
+#tocpost-navbar li.active a,
+#tocpost-navbar li.active .active a {
+  color: #000;
+}
+
+/* Documentation: content. */
+
+.body-content {
+  padding-top: 25px;
+  padding-bottom: 40px;
+}
+
+#small-nav {
+  padding: 5px 0;
+}
+
+.tocpost-nav h4,
+#tocpost-subnavbar h4 {
+  margin-top: 0;
+}
+
+.tocpost h1 {
+  margin-top: 0;
+}
+
+.tocpost .article-container {
+  padding-top: 0;
+}
+
+.edit-github a .btn {
+  max-width: 70px;
+  height: 44px;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
+.edit-github .btn-default {
+  color: #333;
+  border-color: #ccc;
+}
+
+/* Documentation: article footer. */
+
+.tocpost .body-footer {
+  border-top: 1px solid #e8e8e8;
+  margin-top: 30px;
+  padding-top: 10px;
+  font-size: 14px;
+  color: #707070;
+}
+
+/* Article back to top. */
+
+.article-toc-top li a {
+  color: #707070;
+  padding-left: 20px;
+}
+
+.nav.article-toc-top > li > a:focus,
+.nav.article-toc-top > li > a:hover {
+  text-decoration: none;
+  background-color: transparent;
+}
+
+/* Connect aside widget. */
+
+.connect-widget {
+  margin-top: 30px;
+  font-size: 13px;
+}
+
+.connect-widget ul {
+  list-style: none;
+  padding-left: 5px;
+}
+
+/* Documentation: article navigation. */
+
+/* Nav: All levels. */
+nav[data-toggle='toc'] .nav > li > a {
+  display: block;
+  padding: 4px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #767676;
+}
+
+nav[data-toggle='toc'] .nav > li > a:hover,
+nav[data-toggle='toc'] .nav > li > a:focus {
+  padding-left: 19px;
+  color: #3f51b5;
+  text-decoration: none;
+  background-color: transparent;
+  border-left: 1px solid #3f51b5;
+}
+
+nav[data-toggle='toc'] .nav > .active > a,
+nav[data-toggle='toc'] .nav > .active:hover > a,
+nav[data-toggle='toc'] .nav > .active:focus > a {
+  padding-left: 18px;
+  font-weight: bold;
+  color: #3f51b5;
+  background-color: transparent;
+  border-left: 2px solid #3f51b5;
+}
+
+/* Nav: second level. */
+nav[data-toggle='toc'] .nav .nav {
+  display: none; /* Hide second level by default. */
+  padding-bottom: 10px;
+}
+
+nav[data-toggle='toc'] .nav .nav > li > a {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 30px;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+nav[data-toggle='toc'] .nav .nav > li > a:hover,
+nav[data-toggle='toc'] .nav .nav > li > a:focus {
+  padding-left: 29px;
+}
+
+nav[data-toggle='toc'] .nav .nav > .active > a,
+nav[data-toggle='toc'] .nav .nav > .active:hover > a,
+nav[data-toggle='toc'] .nav .nav > .active:focus > a {
+  padding-left: 28px;
+  font-weight: 500;
+}
+
+nav[data-toggle='toc'] .nav > .active > ul {
+  display: block;
+}

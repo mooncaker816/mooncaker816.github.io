@@ -5,6 +5,15 @@
     
     <url>
     
+      <loc>https://mooncaker816.github.io/example/</loc>
+      <lastmod>2018-04-26T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/</loc>
       <lastmod>2018-04-21T13:50:00+00:00</lastmod>
     </url>
@@ -176,6 +185,15 @@
     
     <url>
     
+      <loc>https://mooncaker816.github.io/example/example-2-1/</loc>
+      <lastmod>2017-12-03T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>https://mooncaker816.github.io/2017/09/25/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/</loc>
       <lastmod>2017-09-25T17:00:00+00:00</lastmod>
     </url>
@@ -239,6 +257,51 @@
     
     <url>
     
+      <loc>https://mooncaker816.github.io/example/</loc>
+      <lastmod>2017-09-03T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/example/example-1-1/</loc>
+      <lastmod>2018-01-20T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/example/example-1-2/</loc>
+      <lastmod>2017-12-26T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/example/example-3/</loc>
+      <lastmod>2017-09-03T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/example/example-2-2/</loc>
+      <lastmod>2016-04-18T00:00:00+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</loc>
       <lastmod>2015-09-23T16:30:37+08:00</lastmod>
     </url>
@@ -277,7 +340,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/development/</loc>
+      <loc>https://mooncaker816.github.io/categories/development/</loc>
       <lastmod>2015-09-23T16:30:37+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -287,7 +350,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/development/</loc>
+      <loc>https://mooncaker816.github.io/tags/development/</loc>
       <lastmod>2015-09-23T16:30:37+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -537,8 +600,8 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/golang/</loc>
-      <lastmod>2015-09-23T16:30:37+08:00</lastmod>
+      <loc>https://mooncaker816.github.io/categories/golang/</loc>
+      <lastmod>2018-01-14T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -547,8 +610,8 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-01-14T00:00:00+00:00</lastmod>
+      <loc>https://mooncaker816.github.io/tags/golang/</loc>
+      <lastmod>2015-09-23T16:30:37+08:00</lastmod>
       <priority>0</priority>
     </url>
     

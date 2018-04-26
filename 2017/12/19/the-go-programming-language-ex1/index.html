@@ -59,6 +59,8 @@ Modify the echo program to also print os.Args[0], the name of the command that i
   
   <link rel="stylesheet" href="/styles.css">
   
+  <link rel="stylesheet" href="/css/custom.css">
+  
 
   
     <script>
@@ -106,7 +108,9 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 
   
 
-  
+  <script src="//load.sumome.com/" data-sumo-site-id="179bbb944edcce8627cb15d8b33fadaf440e3b5043efd79feb50582c0be37fb2" async="async"></script>
+
+
 
   <title>The Go Programming Language Ex（1） | Mooncaker816</title>
 
@@ -232,6 +236,25 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 
         
         
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
       
 
       
@@ -242,15 +265,31 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 </nav>
 
 
-<article class="article" itemscope itemtype="http://schema.org/Article">
+<div class="container body-content tocpost">
+  <div class="row">
 
-  
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            <h4>Topics</h4>
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
 
 
-  <div class="article-container">
-    <h1 itemprop="name">The Go Programming Language Ex（1）</h1>
+            <div class="article-container">
+              <h1 itemprop="name">The Go Programming Language Ex（1）</h1>
 
-    
+              
 
 <div class="article-metadata">
 
@@ -338,8 +377,8 @@ Modify the echo program to also print os.Args[0], the name of the command that i
 </div>
 
 
-    <div class="article-style" itemprop="articleBody">
-      <h3 id="ex-1-1">Ex 1.1</h3>
+              <div class="article-style" itemprop="articleBody">
+                <h3 id="ex-1-1">Ex 1.1</h3>
 
 <p>Modify the echo program to also print os.Args[0], the name of the command that invoked it.</p>
 
@@ -886,9 +925,9 @@ func fetch(fileName, url string, ch chan&lt;- string) {
 <h3 id="ex-1-12">Ex 1.12</h3>
 
 <p>TBC</p>
-    </div>
+              </div>
 
-    
+              
 
 
 <div class="article-tags">
@@ -900,12 +939,16 @@ func fetch(fileName, url string, ch chan&lt;- string) {
 
 
 
-    
-    
+              
+              
 
-    
-    <div class="article-widget">
-      <div class="post-nav">
+              <div class="body-footer">
+                  最近更新于 Dec 19, 2017
+              </div>
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
   
   <div class="post-nav-item">
     <div class="meta-nav">下一页</div>
@@ -920,10 +963,10 @@ func fetch(fileName, url string, ch chan&lt;- string) {
   
 </div>
 
-    </div>
-    
+              </div>
+              
 
-    
+              
 <section id="comments">
   <div id="disqus_thread"></div>
 <script>
@@ -949,8 +992,342 @@ func fetch(fileName, url string, ch chan&lt;- string) {
 
 
 
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#ex-1-1">Ex 1.1</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-2">Ex 1.2</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-3">Ex 1.3</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-4">Ex 1.4</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-5">Ex 1.5</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-6">Ex 1.6</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-7">Ex 1.7</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-8">Ex 1.8</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-9">Ex 1.9</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-10">Ex 1.10</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-11">Ex 1.11</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ex-1-12">Ex 1.12</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
   </div>
-</article>
+</div>
 
 <footer class="site-footer">
   <div class="container">
