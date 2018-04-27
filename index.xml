@@ -143,10 +143,7 @@ cp: omitting directory ‘/etc’
 [root@78063f0fe2e8 tmp]# cp -r /etc /tmp
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/1wQwTsxT1J3Xs3MjPk8A7wgLZ.js&#34; id=&#34;asciicast-1wQwTsxT1J3Xs3MjPk8A7wgLZ&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177529&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;rm-remove-删除目录或文件&#34;&gt;rm - remove 删除目录或文件&lt;/h2&gt;
 
@@ -224,10 +221,7 @@ sh-4.2# ls
 ks-script-hE5IPf  tmpxq2sylvo-ascii.cast  yum.log
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/eZnFGqsqST6IJDVts4f7MONRt.js&#34; id=&#34;asciicast-eZnFGqsqST6IJDVts4f7MONRt&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177530&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;mv-move-移动文件或目录-更名&#34;&gt;mv - move 移动文件或目录，更名&lt;/h2&gt;
 
@@ -309,9 +303,7 @@ sh-4.2# ls
 ks-script-hE5IPf  mvtest2  tmp8u627nsx-ascii.cast  yum.log
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/CyAOm5kpvEzi75HFNowZdIV23.js&#34; id=&#34;asciicast-CyAOm5kpvEzi75HFNowZdIV23&#34; async&gt;&lt;/script&gt;</description>
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177531&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;</description>
     </item>
     
     <item>
@@ -428,10 +420,7 @@ sh-4.2# ls -l bashrc --time=atime
 -rw-r--r-- 1 root root 176 Jan  1 10:00 bashrc
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/EK9paXYyASszuUBvO9OOpzIfa.js&#34; id=&#34;asciicast-EK9paXYyASszuUBvO9OOpzIfa&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177538&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;cat-concatenate-浏览文件&#34;&gt;cat - concatenate 浏览文件&lt;/h2&gt;
 
@@ -498,10 +487,7 @@ sh-4.2# cat -An test.conf
      2	this is a test file only...$
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/JqE1p5EPWbGntVdOAXNfnoY1O.js&#34; id=&#34;asciicast-JqE1p5EPWbGntVdOAXNfnoY1O&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177541&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;tac-反向-cat&#34;&gt;tac - 反向 cat&lt;/h2&gt;
 
@@ -702,10 +688,7 @@ drwxr-xr-x 3 root root 4096 Apr 21 05:01 test2
 drwx--x--x 2 root root 4096 Apr 21 05:10 /tmp/mingle
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/IfLUdKAKL7a0b0p84Ye0ZgbGg.js&#34; id=&#34;asciicast-IfLUdKAKL7a0b0p84Ye0ZgbGg&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177520&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;rmdir-remove-empty-directory-删除空目录&#34;&gt;rmdir - remove empty directory 删除空目录&lt;/h2&gt;
 
@@ -739,10 +722,7 @@ rmdir: removing directory, ‘/tmp’
 rmdir: failed to remove directory ‘/tmp’: Directory not empty
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/Cn6E7LzNtzxz21NeFaOUN0U3t.js&#34; id=&#34;asciicast-Cn6E7LzNtzxz21NeFaOUN0U3t&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177521&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;pwd-print-working-directory-打印当前路径&#34;&gt;pwd - print working directory 打印当前路径&lt;/h2&gt;
 
@@ -767,10 +747,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&amp;gt; spool/mail
 /var/mail
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/olfTBQ4qihCn5XdssoKBj9Mn9.js&#34; id=&#34;asciicast-olfTBQ4qihCn5XdssoKBj9Mn9&#34; async&gt;&lt;/script&gt;
-
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177522&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;
 
 &lt;h2 id=&#34;cd-change-directory-切换当前路径&#34;&gt;cd - change directory 切换当前路径&lt;/h2&gt;
 
@@ -799,9 +776,7 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&amp;gt; spool/mail
 [root@78063f0fe2e8 mail]#
 &lt;/code&gt;&lt;/pre&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/tQtEI0jB0jXDClx5NryyKLD6i.js&#34; id=&#34;asciicast-tQtEI0jB0jXDClx5NryyKLD6i&#34; async&gt;&lt;/script&gt;</description>
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177524&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;</description>
     </item>
     
     <item>
@@ -964,9 +939,7 @@ drwxr-xr-x   1 root root  4096 Apr  2 18:38 var
 
 &lt;p&gt;权限设置：rwxr-xr-x (拥有者权限 rwx，所属组权限r-x，其他权限r-x)&lt;/p&gt;
 
-
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/F8v4bzzzs8uLBUHNO1rOCcSHi.js&#34; id=&#34;asciicast-F8v4bzzzs8uLBUHNO1rOCcSHi&#34; async&gt;&lt;/script&gt;</description>
+&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177514&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;</description>
     </item>
     
     <item>
