@@ -340,7 +340,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/development/</loc>
+      <loc>https://mooncaker816.github.io/tags/development/</loc>
       <lastmod>2015-09-23T16:30:37+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -350,7 +350,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/development/</loc>
+      <loc>https://mooncaker816.github.io/categories/development/</loc>
       <lastmod>2015-09-23T16:30:37+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -600,8 +600,8 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-01-14T00:00:00+00:00</lastmod>
+      <loc>https://mooncaker816.github.io/tags/golang/</loc>
+      <lastmod>2015-09-23T16:30:37+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -610,8 +610,8 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/golang/</loc>
-      <lastmod>2015-09-23T16:30:37+08:00</lastmod>
+      <loc>https://mooncaker816.github.io/categories/golang/</loc>
+      <lastmod>2018-01-14T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
