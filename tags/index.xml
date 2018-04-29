@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Mooncaker816</title>
+    <link>https://mooncaker816.github.io/tags/</link>
+    <description>Recent content in Tags on Mooncaker816</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>&amp;copy; 2018-Present</copyright>
+    <lastBuildDate>Sun, 14 Jan 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mooncaker816.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Bytes</title>
+      <link>https://mooncaker816.github.io/tags/bytes/</link>
+      <pubDate>Sun, 14 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/bytes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Centos</title>
+      <link>https://mooncaker816.github.io/tags/centos/</link>
+      <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/centos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Development</title>
+      <link>https://mooncaker816.github.io/tags/development/</link>
+      <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/development/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go BitMap</title>
+      <link>https://mooncaker816.github.io/tags/go-bitmap/</link>
+      <pubDate>Fri, 29 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-bitmap/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go Func</title>
+      <link>https://mooncaker816.github.io/tags/go-func/</link>
+      <pubDate>Thu, 28 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-func/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go In Action</title>
+      <link>https://mooncaker816.github.io/tags/go-in-action/</link>
+      <pubDate>Thu, 14 Dec 2017 09:39:07 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-in-action/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go Interface</title>
+      <link>https://mooncaker816.github.io/tags/go-interface/</link>
+      <pubDate>Sun, 31 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-interface/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go JSON</title>
+      <link>https://mooncaker816.github.io/tags/go-json/</link>
+      <pubDate>Sun, 24 Dec 2017 19:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-json/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go Method</title>
+      <link>https://mooncaker816.github.io/tags/go-method/</link>
+      <pubDate>Fri, 29 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-method/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go Scanner</title>
+      <link>https://mooncaker816.github.io/tags/go-scanner/</link>
+      <pubDate>Sun, 31 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-scanner/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go TCP Conn</title>
+      <link>https://mooncaker816.github.io/tags/go-tcp-conn/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-tcp-conn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go array</title>
+      <link>https://mooncaker816.github.io/tags/go-array/</link>
+      <pubDate>Fri, 08 Dec 2017 17:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-array/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go breadth first crawler</title>
+      <link>https://mooncaker816.github.io/tags/go-breadth-first-crawler/</link>
+      <pubDate>Wed, 03 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-breadth-first-crawler/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go cache store</title>
+      <link>https://mooncaker816.github.io/tags/go-cache-store/</link>
+      <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-cache-store/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go chat room</title>
+      <link>https://mooncaker816.github.io/tags/go-chat-room/</link>
+      <pubDate>Wed, 03 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-chat-room/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go crawler</title>
+      <link>https://mooncaker816.github.io/tags/go-crawler/</link>
+      <pubDate>Thu, 28 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-crawler/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go goroutine</title>
+      <link>https://mooncaker816.github.io/tags/go-goroutine/</link>
+      <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-goroutine/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go interface</title>
+      <link>https://mooncaker816.github.io/tags/go-interface/</link>
+      <pubDate>Thu, 14 Dec 2017 09:39:07 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-interface/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go map</title>
+      <link>https://mooncaker816.github.io/tags/go-map/</link>
+      <pubDate>Sun, 24 Dec 2017 19:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-map/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go method</title>
+      <link>https://mooncaker816.github.io/tags/go-method/</link>
+      <pubDate>Thu, 14 Dec 2017 09:39:07 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-method/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go package</title>
+      <link>https://mooncaker816.github.io/tags/go-package/</link>
+      <pubDate>Mon, 25 Sep 2017 17:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-package/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go select</title>
+      <link>https://mooncaker816.github.io/tags/go-select/</link>
+      <pubDate>Wed, 03 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-select/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go slice</title>
+      <link>https://mooncaker816.github.io/tags/go-slice/</link>
+      <pubDate>Sat, 23 Dec 2017 19:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-slice/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go template</title>
+      <link>https://mooncaker816.github.io/tags/go-template/</link>
+      <pubDate>Sun, 24 Dec 2017 19:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-template/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go type</title>
+      <link>https://mooncaker816.github.io/tags/go-type/</link>
+      <pubDate>Thu, 14 Dec 2017 09:39:07 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-type/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go 标准库</title>
+      <link>https://mooncaker816.github.io/tags/go-%E6%A0%87%E5%87%86%E5%BA%93/</link>
+      <pubDate>Sun, 14 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/go-%E6%A0%87%E5%87%86%E5%BA%93/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Golang</title>
+      <link>https://mooncaker816.github.io/tags/golang/</link>
+      <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Npm</title>
+      <link>https://mooncaker816.github.io/tags/npm/</link>
+      <pubDate>Mon, 14 Aug 2017 19:50:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/npm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Strings</title>
+      <link>https://mooncaker816.github.io/tags/strings/</link>
+      <pubDate>Sun, 14 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/strings/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Go Programming Language Ex</title>
+      <link>https://mooncaker816.github.io/tags/the-go-programming-language-ex/</link>
+      <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/tags/the-go-programming-language-ex/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

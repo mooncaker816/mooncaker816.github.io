@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="Ex 1.1
+
+Modify the echo program to also print os.Args[0], the name of the command that invoked it.
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2017/12/19/the-go-programming-language-ex1/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2017/12/19/the-go-programming-language-ex1/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2017/12/19/the-go-programming-language-ex1/">
+  <meta property="og:title" content="The Go Programming Language Ex（1） | Mooncaker816">
+  <meta property="og:description" content="Ex 1.1
+
+Modify the echo program to also print os.Args[0], the name of the command that invoked it.
+
+">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2017-12-19T17:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2018-04-26T03:16:53&#43;08:00">
+  
+
+  
+
+  <script src="//load.sumome.com/" data-sumo-site-id="179bbb944edcce8627cb15d8b33fadaf440e3b5043efd79feb50582c0be37fb2" async="async"></script>
+
+
+
+  <title>The Go Programming Language Ex（1） | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+            <div class="article-container">
+              <h1 itemprop="name">The Go Programming Language Ex（1）</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2017-12-19 17:00:00 &#43;0000 UTC" itemprop="datePublished dateModified">
+      Apr 26, 2018 03:16
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    4 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2017/12/19/the-go-programming-language-ex1/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">Golang</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=The%20Go%20Programming%20Language%20Ex%ef%bc%881%ef%bc%89&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f19%2fthe-go-programming-language-ex1%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f19%2fthe-go-programming-language-ex1%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f19%2fthe-go-programming-language-ex1%2f&amp;title=The%20Go%20Programming%20Language%20Ex%ef%bc%881%ef%bc%89"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f19%2fthe-go-programming-language-ex1%2f&amp;title=The%20Go%20Programming%20Language%20Ex%ef%bc%881%ef%bc%89"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=The%20Go%20Programming%20Language%20Ex%ef%bc%881%ef%bc%89&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f19%2fthe-go-programming-language-ex1%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <h3 id=1ba3890b63009b929f82b47c8bc8ff22>Ex 1.1</h3>
+
+<p>Modify the echo program to also print os.Args[0], the name of the command that invoked it.</p>
+
+<p></p>
+
+<pre><code class="language-go">//Modify the echo program to also print os.Args[0], the name of the command that invoked it.
+package main
+
+import (
+	"fmt"
+	"os"
+	"strings"
+)
+
+func main() {
+	fmt.Println("打印命令+所有参数")
+	fmt.Println(strings.Join(os.Args[:], " "))
+	fmt.Println("打印所有参数")
+	fmt.Println(strings.Join(os.Args[1:], " "))
+}
+</code></pre>
+
+<pre><code class="language-bash">$ go run main.go a b c d
+打印命令+所有参数
+/var/folders/d8/pcxm4kx97flf9vfs3m7j_qlm0000gn/T/go-build129101527/command-line-arguments/_obj/exe/main a b c d
+打印所有参数
+a b c d
+</code></pre>
+
+<h3 id=e6c78e85b93452a2571bad242c57a345>Ex 1.2</h3>
+
+<p>Modify the echo program to print the index and value of each of its arguments, one per line.</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	for i, v := range os.Args[1:] {
+		fmt.Printf("第%d个参数为：%s\n", i+1, v)
+	}
+}
+</code></pre>
+
+<pre><code class="language-bash">$ go run main.go a b c d
+第1个参数为：a
+第2个参数为：b
+第3个参数为：c
+第4个参数为：d
+</code></pre>
+
+<h3 id=7146e32973e614081d3acd38cfb7f8f1>Ex 1.3</h3>
+
+<p>Experiment to measure the difference in running time between our po inefﬁcient versions and the one that uses strings.Join. (Section 1.6 illustrates part of the time package, and Section 11.4 shows how to write benchmark tests for systematic performance evaluation.)</p>
+
+<pre><code class="language-go">//比较不同版本的性能
+package echo_test
+
+import (
+	"strings"
+	"testing"
+)
+
+func BenchmarkEcho1(b *testing.B) {
+	s1 := []string{"1", "2", "3", "4", "5"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		s, sep := "", ""
+		for _, arg := range s1 {
+			s += sep + arg
+			sep = " "
+		}
+		//fmt.Println(s)
+	}
+}
+
+func BenchmarkEcho2(b *testing.B) {
+	s2 := []string{"1", "2", "3", "4", "5"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		strings.Join(s2, " ")
+		//fmt.Println(strings.Join(s2, " "))
+	}
+}
+
+</code></pre>
+
+<pre><code class="language-bash">$ go test -v -run="none" -bench=. -benchtime="3s" -benchmem
+BenchmarkEcho1-4   	30000000	       172 ns/op	      32 B/op	       4 allocs/op
+BenchmarkEcho2-4   	50000000	        86.2 ns/op	      32 B/op	       2 allocs/op
+PASS
+ok  	The_Go_Programming_Language_Exercises/CH1/ex1.3	9.768s
+</code></pre>
+
+<p>由此可见，<code>strings.Join</code>比<code>s += sep + arg</code>高效</p>
+
+<h3 id=c8b97eb46c8360469c4bace10531b854>Ex 1.4</h3>
+
+<p>Modify dup2 to print the names of all ﬁles in which each duplicated line occurs</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+
+	m := make(map[string]map[string]int)
+	files := os.Args[1:]
+	//fmt.Println(os.Args[1:])
+	if len(files) == 0 {
+		countLines(os.Stdin, m["Stdin"])
+	} else {
+		for _, arg := range files {
+			f, err := os.Open(arg)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "dup2: %v\n", err)
+				continue
+			}
+			m[arg] = map[string]int{"": 0}
+			countLines(f, m[arg])
+			f.Close()
+		}
+	}
+	for filename, mv := range m {
+		for line, counts := range mv {
+			if counts > 1 {
+				fmt.Printf("There are %d lines (\"%s\") in file \"%s\"\n", counts, line, filename)
+			}
+		}
+	}
+}
+
+func countLines(f *os.File, m2 map[string]int) {
+	input := bufio.NewScanner(f)
+	for input.Scan() {
+		//fmt.Println(input.Text())
+		m2[input.Text()]++
+	}
+	// NOTE: ignoring potential errors from input.Err()
+}
+</code></pre>
+
+<pre><code class="language-go">//file a
+a1
+a2
+a3
+a4
+a1
+a2
+//file b
+b1
+b2
+b3
+b3
+b3
+b4
+b4
+b4
+b5
+b5
+b5
+b5
+</code></pre>
+
+<pre><code class="language-bash">$ go run main.go a b
+There are 2 lines ("a1") in file "a"
+There are 2 lines ("a2") in file "a"
+There are 3 lines ("b3") in file "b"
+There are 3 lines ("b4") in file "b"
+There are 4 lines ("b5") in file "b"
+</code></pre>
+
+<h3 id=913b789e20fa2a72aab8fee4b125cdcb>Ex 1.5</h3>
+
+<p>Change the Lissajous program’s color palette to green on black, for a authenticity. To create the web color #RRGGBB, use color.RGBA{0xRR, 0xGG, 0xBB, 0xff}, where each pair of hexadecimal digits represents the intensity of the red, green, or blue component of the pixel.</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"math"
+	"math/rand"
+	"os"
+)
+
+//!-main
+// Packages not needed by version in book.
+import (
+	"log"
+	"net/http"
+	"time"
+)
+
+//!+main
+
+//var palette = []color.Color{color.White, color.Black}
+var palette = []color.Color{color.White, color.RGBA{0, 255, 100, 1}}//替换成绿色
+
+const (
+	whiteIndex = 0 // first color in palette
+	blackIndex = 1 // next color in palette
+)
+
+func main() {
+	//!-main
+	// The sequence of images is deterministic unless we seed
+	// the pseudo-random number generator using the current time.
+	// Thanks to Randall McPherson for pointing out the omission.
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	if len(os.Args) > 1 && os.Args[1] == "web" {
+		//!+http
+		handler := func(w http.ResponseWriter, r *http.Request) {
+			lissajous(w)
+		}
+		http.HandleFunc("/", handler)
+		//!-http
+		log.Fatal(http.ListenAndServe("localhost:8000", nil))
+		return
+	}
+	//!+main
+	lissajous(os.Stdout)
+}
+
+func lissajous(out io.Writer) {
+	const (
+		cycles  = 5     // number of complete x oscillator revolutions
+		res     = 0.001 // angular resolution
+		size    = 100   // image canvas covers [-size..+size]
+		nframes = 64    // number of animation frames
+		delay   = 8     // delay between frames in 10ms units
+	)
+	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
+	anim := gif.GIF{LoopCount: nframes}
+	phase := 0.0 // phase difference
+	for i := 0; i < nframes; i++ {
+		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
+		img := image.NewPaletted(rect, palette)
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
+			x := math.Sin(t)
+			y := math.Sin(t*freq + phase)
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
+				blackIndex)
+		}
+		phase += 0.1
+		anim.Delay = append(anim.Delay, delay)
+		anim.Image = append(anim.Image, img)
+	}
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
+}
+
+//!-main
+
+</code></pre>
+
+<p><img src="http://oumnldfwl.bkt.clouddn.com/out.gif" alt="替换为绿色" /></p>
+
+<h3 id=4d8c92c9475008c0b067076b83c8ac7a>Ex 1.6</h3>
+
+<p>Modify the Lissajous program to produce images in multiple colors by adding more values to palette and then displaying them by changing the third argument of SetColorIndex in some interesting way.</p>
+
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
+// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+// Run with "web" command-line argument for web server.
+// See page 13.
+//!+main
+
+// Lissajous generates GIF animations of random Lissajous figures.
+package main
+
+import (
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"log"
+	"math"
+	"math/rand"
+	"net/http"
+	"os"
+	"time"
+)
+
+//!-main
+// Packages not needed by version in book.
+
+//!+main
+
+//var palette = []color.Color{color.White, color.Black}
+var palette = []color.Color{color.White, color.Black, color.RGBA{0, 255, 100, 1}, color.RGBA{255, 0, 0, 1},
+	color.RGBA{0, 0, 255, 1}}
+
+const (
+	whiteIndex = 0 // first color in palette
+	blackIndex = 1 // next color in palette
+)
+
+func main() {
+	//!-main
+	// The sequence of images is deterministic unless we seed
+	// the pseudo-random number generator using the current time.
+	// Thanks to Randall McPherson for pointing out the omission.
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	if len(os.Args) > 1 && os.Args[1] == "web" {
+		//!+http
+		handler := func(w http.ResponseWriter, r *http.Request) {
+			lissajous(w)
+		}
+		http.HandleFunc("/", handler)
+		//!-http
+		log.Fatal(http.ListenAndServe("localhost:8000", nil))
+		return
+	}
+	//!+main
+	lissajous(os.Stdout)
+}
+
+func lissajous(out io.Writer) {
+	const (
+		cycles  = 5     // number of complete x oscillator revolutions
+		res     = 0.001 // angular resolution
+		size    = 100   // image canvas covers [-size..+size]
+		nframes = 64    // number of animation frames
+		delay   = 8     // delay between frames in 10ms units
+	)
+	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
+	anim := gif.GIF{LoopCount: nframes}
+	phase := 0.0 // phase difference
+	for i := 0; i < nframes; i++ {
+		colorIndex := uint8(i % 5)
+		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
+		img := image.NewPaletted(rect, palette)
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
+			x := math.Sin(t)
+			y := math.Sin(t*freq + phase)
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
+				colorIndex)
+		}
+		phase += 0.1
+		anim.Delay = append(anim.Delay, delay)
+		anim.Image = append(anim.Image, img)
+	}
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
+}
+
+//!-main
+
+</code></pre>
+
+<p><img src="http://oumnldfwl.bkt.clouddn.com/out2.gif" alt="多种颜色交替" /></p>
+
+<h3 id=8ae0d54816f01e56cc257387c237c28f>Ex 1.7</h3>
+
+<p>The function call io.Copy(dst, src) reads from src and writes to dst. Use it instead of ioutil.ReadAll to copy the response body to os.Stdout without requiring a buffer large enough to hold the entire stream. Be sure to check the error result of io.Copy.</p>
+
+<pre><code class="language-go">// Fetch prints the content found at a URL.
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func main() {
+	for _, url := range os.Args[1:] {
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		//b, err := ioutil.ReadAll(resp.Body)
+		_, err = io.Copy(os.Stdout, resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+		//fmt.Printf("%s", b)
+	}
+}
+
+</code></pre>
+
+<h3 id=c38c671d2d76dbf5c7865b284a93d9e0>Ex 1.8</h3>
+
+<p>Modify fetch to add the preﬁx http:// to each argument URL if it is missing. You might want to use strings.HasPrefix.</p>
+
+<pre><code class="language-go">// Fetch prints the content found at a URL.
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+)
+
+func main() {
+	for _, url := range os.Args[1:] {
+		if !strings.HasPrefix(url, "http://") {
+			url = "http://" + url
+		}
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		//b, err := ioutil.ReadAll(resp.Body)
+		_, err = io.Copy(os.Stdout, resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+		//fmt.Printf("%s", b)
+	}
+}
+</code></pre>
+
+<h3 id=f63fb57f2305ea8a18789e937956ff79>Ex 1.9</h3>
+
+<p>Modify fetch to also print the HTTP status code, found in resp.Status.</p>
+
+<pre><code class="language-go">// Fetch prints the content found at a URL.
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+)
+
+func main() {
+	for _, url := range os.Args[1:] {
+		if !strings.HasPrefix(url, "http://") {
+			url = "http://" + url
+		}
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		//b, err := ioutil.ReadAll(resp.Body)
+		_, err = io.Copy(os.Stdout, resp.Body)
+		fmt.Println("Status:", resp.Status)//Status: 200 OK
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+		//fmt.Printf("%s", b)
+	}
+}
+</code></pre>
+
+<h3 id=991812d57e9b856796b92a2a10b60769>Ex 1.10</h3>
+
+<p>Exercise 1.10: Find a web site that produces a large amount of data. Investigate caching by running fetchall twice in succession to see whether the reported time changes much. Do you get the same content each time? Modify fetchall to print its output to a ﬁle so it can be examined.</p>
+
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
+// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+// See page 17.
+//!+
+
+// Fetchall fetches URLs in parallel and reports their times and sizes.
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+)
+
+func main() {
+	start := time.Now()
+	ch := make(chan string)
+	for ix, url := range os.Args[1:] {
+		go fetch(strconv.FormatInt(int64(ix), 10), url, ch) // start a goroutine
+	}
+	for range os.Args[1:] {
+		fmt.Println(<-ch) // receive from channel ch
+	}
+	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
+}
+
+func fetch(fileName, url string, ch chan<- string) {
+	start := time.Now()
+	resp, err := http.Get(url)
+	if err != nil {
+		ch <- fmt.Sprint(err) // send to channel ch
+		return
+	}
+	dst, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println("happend a error when opening", err)
+	}
+	defer dst.Close()
+	nbytes, err := io.Copy(dst, resp.Body)
+	resp.Body.Close() // don't leak resources
+	if err != nil {
+		ch <- fmt.Sprintf("while reading %s: %v", url, err)
+		return
+	}
+	secs := time.Since(start).Seconds()
+	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
+}
+
+//!-
+
+</code></pre>
+
+<pre><code class="language-bash">$ go run main.go http://www.baidu.com http://www.taobao.com http://www.360buy.com
+0.09s   112255  http://www.baidu.com file 0
+0.51s   126963  http://www.360buy.com file 2
+0.51s   128027  http://www.taobao.com file 1
+0.51s elapsed
+</code></pre>
+
+<h3 id=65ebecaa1bfa9f3374bf08ad13db8a0a>Ex 1.11</h3>
+
+<p>TBC</p>
+
+<h3 id=25d67492c20d8494271509f3b97b8e84>Ex 1.12</h3>
+
+<p>TBC</p>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/the-go-programming-language-ex/">The Go Programming Language Ex</a>
+  
+</div>
+
+
+
+
+              
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2017/12/21/the-go-programming-language-ex2/" rel="next">The Go Programming Language Ex（2）</a>
+        </div>
+      </div>
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2017/12/14/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E5%9B%9B/" rel="prev">Go In Action 读书笔记（四）</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 Apr 26, 2018 03:16
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#1ba3890b63009b929f82b47c8bc8ff22">Ex 1.1</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e6c78e85b93452a2571bad242c57a345">Ex 1.2</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#7146e32973e614081d3acd38cfb7f8f1">Ex 1.3</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#c8b97eb46c8360469c4bace10531b854">Ex 1.4</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#913b789e20fa2a72aab8fee4b125cdcb">Ex 1.5</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#4d8c92c9475008c0b067076b83c8ac7a">Ex 1.6</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8ae0d54816f01e56cc257387c237c28f">Ex 1.7</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#c38c671d2d76dbf5c7865b284a93d9e0">Ex 1.8</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#f63fb57f2305ea8a18789e937956ff79">Ex 1.9</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#991812d57e9b856796b92a2a10b60769">Ex 1.10</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#65ebecaa1bfa9f3374bf08ad13db8a0a">Ex 1.11</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#25d67492c20d8494271509f3b97b8e84">Ex 1.12</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+
+  </body>
+</html>
+

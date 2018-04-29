@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Centos on Mooncaker816</title>
+    <link>https://mooncaker816.github.io/tags/centos/</link>
+    <description>Recent content in Centos on Mooncaker816</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>&amp;copy; 2018-Present</copyright>
+    <lastBuildDate>Sat, 21 Apr 2018 13:50:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mooncaker816.github.io/tags/centos/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linux Centos 命令之 cp,rm,mv</title>
+      <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/</link>
+      <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/</guid>
+      <description>&lt;h2 id=&#34;cp-copy-拷贝目录-文件&#34;&gt;cp - copy 拷贝目录，文件&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux Centos 命令之 touch,cat,tac,more,less</title>
+      <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-touchcattacmoreless/</link>
+      <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-touchcattacmoreless/</guid>
+      <description>&lt;h2 id=&#34;touch-创建空文件-修改时间&#34;&gt;touch -  创建空文件，修改时间&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux Centos 命令之 mkdir,rmdir,pwd,cd</title>
+      <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-mkdirrmdirpwdcd/</link>
+      <pubDate>Sat, 21 Apr 2018 12:50:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-mkdirrmdirpwdcd/</guid>
+      <description>&lt;h2 id=&#34;mkdir-make-directory-创建目录&#34;&gt;mkdir - make directory 创建目录&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux Centos 命令之 ls</title>
+      <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/</link>
+      <pubDate>Sat, 21 Apr 2018 11:50:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/</guid>
+      <description>&lt;h2 id=&#34;ls-list-列出文件与目录&#34;&gt;ls - list 列出文件与目录&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

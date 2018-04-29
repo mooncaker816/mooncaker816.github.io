@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="Ex 5.1
+
+Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/">
+  <meta property="og:title" content="The Go Programming Language Ex（6） | Mooncaker816">
+  <meta property="og:description" content="Ex 5.1
+
+Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.
+
+">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2017-12-28T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2018-04-26T03:16:53&#43;08:00">
+  
+
+  
+
+  <script src="//load.sumome.com/" data-sumo-site-id="179bbb944edcce8627cb15d8b33fadaf440e3b5043efd79feb50582c0be37fb2" async="async"></script>
+
+
+
+  <title>The Go Programming Language Ex（6） | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+            <div class="article-container">
+              <h1 itemprop="name">The Go Programming Language Ex（6）</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2017-12-28 00:00:00 &#43;0000 UTC" itemprop="datePublished dateModified">
+      Apr 26, 2018 03:16
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    6 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">Golang</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=The%20Go%20Programming%20Language%20Ex%ef%bc%886%ef%bc%89&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f28%2fthe-go-programming-language-ex6%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f28%2fthe-go-programming-language-ex6%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f28%2fthe-go-programming-language-ex6%2f&amp;title=The%20Go%20Programming%20Language%20Ex%ef%bc%886%ef%bc%89"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f28%2fthe-go-programming-language-ex6%2f&amp;title=The%20Go%20Programming%20Language%20Ex%ef%bc%886%ef%bc%89"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=The%20Go%20Programming%20Language%20Ex%ef%bc%886%ef%bc%89&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2017%2f12%2f28%2fthe-go-programming-language-ex6%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <h3 id=5d4f448d3bc7c564e8759c2df6cd77b4>Ex 5.1</h3>
+
+<p>Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.</p>
+
+<p></p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	doc, err := html.Parse(os.Stdin)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
+		os.Exit(1)
+	}
+	for _, link := range visit(nil, doc) {
+		fmt.Println(link)
+	}
+}
+
+// visit appends to links each link found in n and returns the result.
+func visit(links []string, n *html.Node) []string {
+
+	if n == nil {
+		return links
+	} else {
+		if n.Type == html.ElementNode && n.Data == "a" {
+			for _, a := range n.Attr {
+				if a.Key == "href" {
+					links = append(links, a.Val)
+				}
+			}
+		}
+		links = visit(links, n.FirstChild)
+		links = visit(links, n.NextSibling)
+	}
+	return links
+}
+</code></pre>
+
+<pre><code class="language-bash">$ ./ex1.7 http://www.baidu.com | ./ex5.1
+/
+javascript:;
+javascript:;
+javascript:;
+/
+javascript:;
+https://passport.baidu.com/v2/?login&tpl=mn&u=http%3A%2F%2Fwww.baidu.com%2F
+http://news.baidu.com
+http://www.hao123.com
+http://map.baidu.com
+http://v.baidu.com
+http://tieba.baidu.com
+http://xueshu.baidu.com
+https://passport.baidu.com/v2/?login&tpl=mn&u=http%3A%2F%2Fwww.baidu.com%2F
+http://www.baidu.com/gaoji/preferences.html
+http://www.baidu.com/more/
+http://news.baidu.com/ns?cl=2&rn=20&tn=news&word=
+http://tieba.baidu.com/f?kw=&fr=wwwt
+http://zhidao.baidu.com/q?ct=17&pn=0&tn=ikaslist&rn=10&word=&fr=wwwt
+http://music.baidu.com/search?fr=ps&ie=utf-8&key=
+http://image.baidu.com/search/index?tn=baiduimage&ps=1&ct=201326592&lm=-1&cl=2&nc=1&ie=utf-8&word=
+http://v.baidu.com/v?ct=301989888&rn=20&pn=0&db=0&s=25&ie=utf-8&word=
+http://map.baidu.com/m?word=&fr=ps01000
+http://wenku.baidu.com/search?word=&lm=0&od=0&ie=utf-8
+//www.baidu.com/more/
+//www.baidu.com/cache/sethelp/help.html
+http://home.baidu.com
+http://ir.baidu.com
+http://e.baidu.com/?refer=888
+http://www.baidu.com/duty/
+http://jianyi.baidu.com/
+http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11000002000001
+</code></pre>
+
+<h3 id=202d68ab80de10987575e2288f96830a>Ex 5.2</h3>
+
+<p>Write a function to populate a mapping from element names—p, div, span, and so on—to the number of elements with that name in an HTML document tree.</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"os"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	doc, err := html.Parse(os.Stdin)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
+		os.Exit(1)
+	}
+	m := make(map[string]int)
+	for k, v := range check(m, doc) {
+		fmt.Printf("%s:%d\n", k, v)
+	}
+}
+
+func check(m map[string]int, n *html.Node) map[string]int {
+	if n == nil {
+		return m
+	} else {
+		if n.Type == html.ElementNode {
+			m[n.Data]++
+		}
+		m = check(m, n.FirstChild)
+		m = check(m, n.NextSibling)
+	}
+	return m
+}
+</code></pre>
+
+<pre><code class="language-bash">$ ./ex1.7 http://www.baidu.com | ./ex5.2
+body:1
+img:2
+map:1
+area:1
+a:32
+i:3
+head:1
+title:1
+style:3
+ul:1
+meta:4
+link:11
+form:1
+span:5
+li:4
+p:3
+html:1
+script:13
+noscript:1
+div:21
+input:14
+b:2
+</code></pre>
+
+<h3 id=b8de52455800b7f4f1863ccca5b9fb38>Ex 5.5</h3>
+
+<p>Implement countWordsAndImages. (See Exercise 4.9 for word-splitting.)</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"bufio"
+	"fmt"
+	"net/http"
+	"strings"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	url := "http://www.baidu.com"
+	w, i, err := CountWordsAndImages(url)
+	if err != nil {
+		fmt.Println("CountWordsAndImages error: ", err)
+	}
+	fmt.Printf("words = %d,images = %d\n", w, i)
+}
+
+func CountWordsAndImages(url string) (words, images int, err error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return
+	}
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		err = fmt.Errorf("parsing HTML: %s", err)
+		return
+	}
+	words, images = countWordsAndImages(doc)
+	return
+}
+
+func countWordsAndImages(n *html.Node) (words, images int) {
+	if n == nil {
+		return
+	} else {
+		if n.Type == html.ElementNode {
+			if n.Data == "img" {
+				images++
+			}
+		} else if n.Type == html.TextNode {
+			scanner := bufio.NewScanner(strings.NewReader(n.Data))
+			scanner.Split(bufio.ScanWords)
+			for scanner.Scan() {
+				words++
+			}
+		}
+		w1, i1 := countWordsAndImages(n.FirstChild)
+		words += w1
+		images += i1
+		w2, i2 := countWordsAndImages(n.NextSibling)
+		words += w2
+		images += i2
+	}
+	return
+}
+</code></pre>
+
+<pre><code class="language-bash">$ go run countwi.go
+words = 2805,images = 2
+</code></pre>
+
+<h3 id=e36f5ce40249e49caa277056f727f48e>Ex 5.6</h3>
+
+<p>Modify the corner function in gopl.io/ch3/surface (§3.2) to use named results and a bare return statement.</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"math"
+	"os"
+)
+
+const (
+	width, height = 600, 320            // canvas size in pixels
+	cells         = 100                 // number of grid cells
+	xyrange       = 30.0                // axis ranges (-xyrange..+xyrange)
+	xyscale       = width / 2 / xyrange // pixels per x or y unit
+	zscale        = height * 0.4        // pixels per z unit
+	angle         = math.Pi / 6         // angle of x, y axes (=30°)
+)
+
+var sin30, cos30 = math.Sin(angle), math.Cos(angle) // sin(30°), cos(30°)
+
+func main() {
+	//fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
+	f, err := os.Create("test.svg")
+	if err != nil {
+		fmt.Println("create file error ", err)
+		return
+	}
+	fmt.Fprintf(f, "<svg xmlns='http://www.w3.org/2000/svg' "+
+		"style='stroke: grey; fill: white; stroke-width: 0.7' "+
+		"width='%d' height='%d'>", width, height)
+	for i := 0; i < cells; i++ {
+		for j := 0; j < cells; j++ {
+			ax, ay := corner(i+1, j)
+			bx, by := corner(i, j)
+			cx, cy := corner(i, j+1)
+			dx, dy := corner(i+1, j+1)
+			fmt.Fprintf(f, "<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
+				ax, ay, bx, by, cx, cy, dx, dy)
+		}
+	}
+	fmt.Fprintln(f, "</svg>")
+}
+
+func corner(i, j int) (sx, sy float64) {
+	// Find point (x,y) at corner of cell (i,j).
+	x := xyrange * (float64(i)/cells - 0.5)
+	y := xyrange * (float64(j)/cells - 0.5)
+
+	// Compute surface height z.
+	z := f(x, y)
+
+	// Project (x,y,z) isometrically onto 2-D SVG canvas (sx,sy).
+	sx = width/2 + (x-y)*cos30*xyscale
+	sy = height/2 + (x+y)*sin30*xyscale - z*zscale
+	return
+}
+
+func f(x, y float64) float64 {
+	r := math.Hypot(x, y) // distance from (0,0)
+	return math.Sin(r) / r
+}
+</code></pre>
+
+<h3 id=1a36a06e20cc4d5220e6cb7926df1edc>Ex 5.7</h3>
+
+<p>Develop startElement and endElement into a general HTML pre Print comment nodes, text nodes, and the attributes of each element (<a href='...'>). Use short forms like <img/> instead of <img></img> when an element has no children. Write a test to ensure that the output can be parsed successfully. (See Chapter 11.)</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	for _, url := range os.Args[1:] {
+		outline(url)
+	}
+}
+
+func outline(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	doc, err := html.Parse(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	forEachNode(doc, startElement, endElement)
+
+	return nil
+}
+
+func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
+	if pre != nil {
+		pre(n)
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		forEachNode(c, pre, post)
+	}
+	if post != nil {
+		post(n)
+	}
+}
+
+var depth int
+
+func startElement(n *html.Node) {
+	if n.Type == html.ElementNode ||
+		n.Type == html.TextNode ||
+		n.Type == html.CommentNode {
+		if n.DataAtom != 0 { //去除无法识别标签的节点，如空白的textnode等
+			var attr string
+			for _, v := range n.Attr {
+				attr += " " + v.Key + "='" + v.Val + "'"
+			}
+			if n.FirstChild == nil {
+				fmt.Printf("%*s<%s/>\n", depth*2, "", n.Data)
+			} else {
+				fmt.Printf("%*s<%s%s>\n", depth*2, "", n.Data, attr)
+			}
+			depth++
+		}
+	}
+}
+func endElement(n *html.Node) {
+	if n.Type == html.ElementNode ||
+		n.Type == html.TextNode ||
+		n.Type == html.CommentNode {
+		if n.DataAtom != 0 {
+			depth--
+			if n.FirstChild != nil {
+				fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
+			}
+		}
+	}
+}
+</code></pre>
+
+<pre><code class="language-bash">$ ./ex5.7 http://gopl.io
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <meta/>
+    <title>
+    </title>
+    <script>
+    </script>
+    <link/>
+    <style>
+    </style>
+  </head>
+  <body>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <a href='http://www.informit.com/store/go-programming-language-9780134190440'>
+              <img/>
+            </a>
+            <br/>
+            <div style='text-align: center'>
+              <a href='http://www.amazon.com/dp/0134190440'>
+                <img/>
+              </a>
+              <a href='http://www.informit.com/store/go-programming-language-9780134190440'>
+                <img/>
+              </a>
+              <a href='http://www.barnesandnoble.com/w/1121601944'>
+                <img/>
+              </a>
+            </div>
+            <br/>
+          </td>
+          <td width='500'>
+            <h1 class='center'>
+            </h1>
+            <p class='biblio center'>
+              <br/>
+              <br/>
+              <br/>
+              <tt>
+              </tt>
+              <tt>
+              </tt>
+              <tt>
+              </tt>
+            </p>
+            <div id='toc'>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                    </td>
+                    <td>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                      </h1>
+                      <h1>
+                        <a href='ch1.pdf'>
+                        </a>
+                      </h1>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan='2'>
+                      <h1>
+                        <a href='https://github.com/adonovan/gopl.io/'>
+                        </a>
+                        <a href='reviews.html'>
+                        </a>
+                        <a href='translations.html'>
+                        </a>
+                        <a href='errata.html'>
+                        </a>
+                      </h1>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class='bio'>
+              <a href='http://golang.org/s/oracle-user-manual'>
+                <code>
+                </code>
+              </a>
+              <a href='http://golang.org/lib/godoc/analysis/help.html'>
+                <code>
+                </code>
+              </a>
+              <a href='https://github.com/golang/tools/blob/master/refactor/eg/eg.go'>
+                <code>
+                </code>
+              </a>
+              <a href='https://github.com/golang/tools/blob/master/refactor/rename/rename.go'>
+                <code>
+                </code>
+              </a>
+            </p>
+            <p class='bio'>
+              <a href='http://www.amazon.com/dp/0131103628?tracking_id=disfordig-20'>
+              </a>
+              <a href='http://www.amazon.com/dp/020161586X?tracking_id=disfordig-20'>
+              </a>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
+</code></pre>
+
+<ul>
+<li>遍历TextNode时，含有很多空节点（其实就是空格，也当成了一个节点），或许应该在parse阶段就抛弃这些不是节点的节点。本习题中，我暂时借用了元素节点的字段<code>DataAtom  atom.Atom</code>，若为0，则说明该节点标签无法识别。</li>
+</ul>
+
+<blockquote>
+<p>// A Node consists of a NodeType and some Data (tag name for element nodes,
+// content for text) and are part of a tree of Nodes. Element nodes may also
+// have a Namespace and contain a slice of Attributes. Data is unescaped, so
+// that it looks like “a<b” rather than “a<b”. For element nodes, DataAtom
+// is the atom for Data, or zero if Data is not a known tag name.</p>
+</blockquote>
+
+<h3 id=358ea48c58426603893c926b2eb4cf0a>Ex 5.8</h3>
+
+<p>Modify forEachNode so that the pre and post functions return a boolean re indicating whether to continue the traversal. Use it to write a function ElementByID with the following signature that ﬁnds the ﬁrst HTML element with the speciﬁed id attribute. The function should stop the traversal as soon as a match is found.</p>
+
+<p><code>func ElementByID(doc *html.Node, id string) *html.Node</code></p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"golang.org/x/net/html"
+)
+
+var custID = "css_index_result"
+
+//var custID = "toc"
+
+func main() {
+	for _, url := range os.Args[1:] {
+		outline(url)
+	}
+}
+
+func outline(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	doc, err := html.Parse(resp.Body)
+	if err != nil {
+		return err
+	}
+	//forEachNode(doc, "", startElement, endElement)
+	fmt.Printf("%#v:\n", getElementByID(doc, custID))
+	return nil
+}
+
+func forEachNode(n *html.Node, id string, pre, post func(n *html.Node, id string) bool) *html.Node {
+	var rtn *html.Node
+	if pre != nil {
+		if !pre(n, id) {
+			rtn = n
+		}
+	}
+	for c := n.FirstChild; c != nil && rtn == nil; c = c.NextSibling {
+		rtn = forEachNode(c, id, pre, post)
+	}
+	if post != nil {
+		if !post(n, id) {
+			rtn = n
+		}
+	}
+	return rtn
+}
+
+var depth int
+
+func startElement(n *html.Node, id string) bool {
+	if n.Type == html.ElementNode ||
+		n.Type == html.TextNode ||
+		n.Type == html.CommentNode {
+		if n.DataAtom != 0 { //去除无法识别标签的节点，如空白的textnode等
+			var attr string
+			for _, v := range n.Attr {
+				attr += " " + v.Key + "='" + v.Val + "'"
+			}
+			if n.FirstChild == nil {
+				fmt.Printf("%*s<%s/>\n", depth*2, "", n.Data)
+			} else {
+				fmt.Printf("%*s<%s%s>\n", depth*2, "", n.Data, attr)
+			}
+			depth++
+		}
+		if n.Type == html.ElementNode {
+			for _, v := range n.Attr {
+				if v.Key == "id" && v.Val == id {
+					log.Printf("%#v\n", n)
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
+func endElement(n *html.Node, id string) bool {
+	if n.Type == html.ElementNode ||
+		n.Type == html.TextNode ||
+		n.Type == html.CommentNode {
+		if n.DataAtom != 0 {
+			depth--
+			if n.FirstChild != nil {
+				fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
+			}
+		}
+	}
+	return true
+}
+
+func getElementByID(doc *html.Node, id string) *html.Node {
+	return forEachNode(doc, id, startElement, endElement)
+}
+</code></pre>
+
+<pre><code class="language-bash">$ ./ex5.7 http://www.baidu.com
+<html>
+  <head>
+    <meta/>
+    <meta/>
+    <meta/>
+    <meta/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <link/>
+    <title>
+    </title>
+    <style id='css_index' index='index' type='text/css'>
+    </style>
+    <style data-for='debug'>
+    </style>
+    <style data-for='result' id='css_index_result' type='text/css'>
+2018/01/02 17:53:11 &html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:"style", Namespace:"", Attr:[]html.Attribute{html.Attribute{Namespace:"", Key:"data-for", Val:"result"}, html.Attribute{Namespace:"", Key:"id", Val:"css_index_result"}, html.Attribute{Namespace:"", Key:"type", Val:"text/css"}}}
+    </style>
+  </head>
+</html>
+&html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:"style", Namespace:"", Attr:[]html.Attribute{html.Attribute{Namespace:"", Key:"data-for", Val:"result"}, html.Attribute{Namespace:"", Key:"id", Val:"css_index_result"}, html.Attribute{Namespace:"", Key:"type", Val:"text/css"}}}:
+</code></pre>
+
+<h3 id=7c957a8a3ddaf12792f283861b81b643>Ex 5.12</h3>
+
+<p>The startElement and endElement functions in gopl.io/ch5/outline2 (§5.5) share a global variable, depth. Turn them into anonymous functions that share a variable local to the outline function.</p>
+
+<pre><code class="language-go">// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
+// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+// See page 133.
+
+// Outline prints the outline of an HTML document tree.
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+
+	"golang.org/x/net/html"
+)
+
+func main() {
+	for _, url := range os.Args[1:] {
+		outline(url)
+	}
+}
+
+func outline(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	doc, err := html.Parse(resp.Body)
+	if err != nil {
+		return err
+	}
+	var depth int
+	startElement := func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
+			depth++
+		}
+	}
+
+	endElement := func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			depth--
+			fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
+		}
+	}
+	//!+call
+	forEachNode(doc, startElement, endElement)
+	//!-call
+
+	return nil
+}
+
+//!+forEachNode
+// forEachNode calls the functions pre(x) and post(x) for each node
+// x in the tree rooted at n. Both functions are optional.
+// pre is called before the children are visited (preorder) and
+// post is called after (postorder).
+func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
+	if pre != nil {
+		pre(n)
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		forEachNode(c, pre, post)
+	}
+
+	if post != nil {
+		post(n)
+	}
+}
+</code></pre>
+
+<h3 id=52f9b3cd9b8bb8eebf7aef34e81f7c1a>Ex 5.13</h3>
+
+<p>Modify crawl to make local copies of the pages it ﬁnds, creating directories as necessary. Don’t make copies of pages that come from a different domain. For example, if the original page comes from golang.org, save all ﬁles from there, but exclude ones from vimeo.com.</p>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"net/url"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+
+	"golang.org/x/net/html"
+	"gopl.io/ch5/links"
+)
+
+// Extract makes an HTTP GET request to the specified URL, parses
+// the response as HTML, and returns the links in the HTML document.
+func Extract(urlstr string) ([]string, error) {
+	resp, err := http.Get(urlstr)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		resp.Body.Close()
+		return nil, fmt.Errorf("getting %s: %s", urlstr, resp.Status)
+	}
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("parsing %s as HTML: %v", urlstr, err)
+	}
+	var links []string
+	visitNode := func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "a" {
+			for _, a := range n.Attr {
+				if a.Key != "href" {
+					continue
+				}
+				link, err := resp.Request.URL.Parse(a.Val)
+				if err != nil {
+					continue // ignore bad URLs
+				}
+				links = append(links, link.String())
+			}
+		}
+	}
+	forEachNode(doc, visitNode, nil)
+	return links, nil
+}
+
+//!-Extract
+
+// Copied from gopl.io/ch5/outline2.
+func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
+	if pre != nil {
+		pre(n)
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		forEachNode(c, pre, post)
+	}
+	if post != nil {
+		post(n)
+	}
+}
+
+func breadthFirst(f func(item string, host []string) []string, worklist []string) {
+	seen := make(map[string]bool)
+	host := make([]string, len(worklist))
+	for i, v := range worklist {
+		u, err := url.Parse(v)
+		if err != nil {
+			fmt.Println("initial url parse failed")
+			return
+		}
+		host[i] = u.Host
+	}
+	for len(worklist) > 0 {
+		items := worklist
+		worklist = nil
+		for _, item := range items {
+			if !seen[item] {
+				seen[item] = true
+				worklist = append(worklist, f(item, host)...)
+			}
+		}
+	}
+}
+
+//!-breadthFirst
+
+//!+crawl
+func crawl(urlstr string, sl []string) []string {
+	fmt.Println(urlstr)
+	copycontent(urlstr, sl)
+	list, err := links.Extract(urlstr)
+	if err != nil {
+		log.Print(err)
+	}
+	return list
+}
+
+func copycontent(s string, sl []string) {
+	u, err := url.Parse(s)
+	if err != nil {
+		fmt.Println("url parse failed")
+		return
+	}
+	for _, v := range sl {
+		if u.Host == v {
+			resp, err := http.Get(s)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			if resp.StatusCode != http.StatusOK {
+				resp.Body.Close()
+				return
+			}
+			//fmt.Println(path)
+			dir, _ := os.Getwd() //当前的目录
+			var filename, filepart, dirpart string
+			ns := strings.Count(u.Path, "/")
+			if ns == 0 || ns == 1 && len(u.Path) == 1 {
+				filepart = ""
+				filename = strconv.FormatInt(time.Now().Unix(), 10) + ".html"
+				dirpart = "/"
+			} else {
+				filepart = u.Path[strings.LastIndex(u.Path, "/")+1:]
+				dirpart = u.Path[:strings.LastIndex(u.Path, "/")+1]
+				if strings.Contains(filepart, ".") {
+					filename = filepart
+				} else {
+					dirpart = u.Path
+					filename = strconv.FormatInt(time.Now().Unix(), 10) + ".html"
+				}
+			}
+
+			fullpath := dir + "/" + u.Host + dirpart
+			_, err = os.Stat(fullpath)
+			if err != nil {
+				err = os.MkdirAll(fullpath, os.ModePerm) //在当前目录下生成md目录
+				if err != nil {
+					fmt.Println("create folder failed! ", fullpath, err)
+					return
+				}
+			}
+			filename = dir + "/" + u.Host + dirpart + "/" + filename
+			f, err := os.Create(filename)
+			if err != nil {
+				fmt.Println("create file error:", err, s)
+				return
+			}
+			_, err = io.Copy(f, resp.Body)
+			if err != nil {
+				fmt.Println("failed in copy")
+				return
+			}
+			resp.Body.Close()
+		}
+	}
+}
+func main() {
+	breadthFirst(crawl, os.Args[1:])
+}
+</code></pre>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/the-go-programming-language-ex/">The Go Programming Language Ex</a>
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/go-func/">Go Func</a>
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/go-crawler/">Go crawler</a>
+  
+</div>
+
+
+
+
+              
+              
+              <div class="article-widget">
+                <div class="hr-light"></div>
+                <h3>相关</h3>
+                <ul>
+                  
+                  <li><a href="/2017/12/24/the-go-programming-language-ex5/">The Go Programming Language Ex（5）</a></li>
+                  
+                  <li><a href="/2017/12/23/the-go-programming-language-ex4/">The Go Programming Language Ex（4）</a></li>
+                  
+                  <li><a href="/2017/12/22/the-go-programming-language-ex3/">The Go Programming Language Ex（3）</a></li>
+                  
+                  <li><a href="/2017/12/21/the-go-programming-language-ex2/">The Go Programming Language Ex（2）</a></li>
+                  
+                  <li><a href="/2017/12/19/the-go-programming-language-ex1/">The Go Programming Language Ex（1）</a></li>
+                  
+                </ul>
+              </div>
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2017/12/29/the-go-programming-language-ex7/" rel="next">The Go Programming Language Ex（7）</a>
+        </div>
+      </div>
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2017/12/24/the-go-programming-language-ex5/" rel="prev">The Go Programming Language Ex（5）</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 Apr 26, 2018 03:16
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#5d4f448d3bc7c564e8759c2df6cd77b4">Ex 5.1</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#202d68ab80de10987575e2288f96830a">Ex 5.2</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#b8de52455800b7f4f1863ccca5b9fb38">Ex 5.5</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e36f5ce40249e49caa277056f727f48e">Ex 5.6</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#1a36a06e20cc4d5220e6cb7926df1edc">Ex 5.7</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#358ea48c58426603893c926b2eb4cf0a">Ex 5.8</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#7c957a8a3ddaf12792f283861b81b643">Ex 5.12</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#52f9b3cd9b8bb8eebf7aef34e81f7c1a">Ex 5.13</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+
+  </body>
+</html>
+
