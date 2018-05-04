@@ -1209,5 +1209,4 @@ $A.l=function(a,b,c){b=fj(b);c=yo(fj(c));a=ZA(a,b,c);return cj(new r(null,5,[En,
 B(c);a=null!=a&&(a.m&64||q===a.G)?P(U,a):a;a=D.c(a,Gl);return wy(a)}}(b,c,a)],null))};$A.L=3;da("asciinema.player.js.UnmountPlayer",function(a){a="string"===typeof a?document.getElementById(a):a;gg.l(lq,le,a);return kq().unmountComponentAtNode(a)});registerAsciinemaPlayerElement();
 })();
 
-//# sourceMappingURL=asciinema-player.js.map
 
