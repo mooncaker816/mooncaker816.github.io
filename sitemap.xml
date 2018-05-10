@@ -5,6 +5,15 @@
     
     <url>
     
+      <loc>https://mooncaker816.github.io/2018/05/09/%E5%AF%BF%E6%98%9F%E4%B8%87%E5%B9%B4%E5%8E%86%E7%9A%84go-%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E4%B8%80/</loc>
+      <lastmod>2018-05-10T10:37:27+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>https://mooncaker816.github.io/example/</loc>
       <lastmod>2018-04-26T15:04:42+08:00</lastmod>
     </url>
@@ -340,7 +349,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/development/</loc>
+      <loc>https://mooncaker816.github.io/tags/development/</loc>
       <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -350,7 +359,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/development/</loc>
+      <loc>https://mooncaker816.github.io/categories/development/</loc>
       <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -600,8 +609,8 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-04-26T03:16:53+08:00</lastmod>
+      <loc>https://mooncaker816.github.io/tags/golang/</loc>
+      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -610,8 +619,8 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/golang/</loc>
-      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
+      <loc>https://mooncaker816.github.io/categories/golang/</loc>
+      <lastmod>2018-05-10T10:37:27+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -681,6 +690,16 @@
     
       <loc>https://mooncaker816.github.io/tags/the-go-programming-language-ex/</loc>
       <lastmod>2018-04-26T03:16:53+08:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/tags/%E4%B8%87%E5%B9%B4%E5%8E%86/</loc>
+      <lastmod>2018-05-10T10:37:27+08:00</lastmod>
       <priority>0</priority>
     </url>
     

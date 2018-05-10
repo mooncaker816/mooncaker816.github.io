@@ -11,6 +11,117 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>寿星万年历的Go 语言实现（一）</title>
+      <link>https://mooncaker816.github.io/2018/05/09/%E5%AF%BF%E6%98%9F%E4%B8%87%E5%B9%B4%E5%8E%86%E7%9A%84go-%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E4%B8%80/</link>
+      <pubDate>Wed, 09 May 2018 14:43:35 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/09/%E5%AF%BF%E6%98%9F%E4%B8%87%E5%B9%B4%E5%8E%86%E7%9A%84go-%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E4%B8%80/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;①-背景&#34;&gt;① 背景&lt;/h2&gt;
+
+&lt;p&gt;​        由于要用到农历的节气信息，查阅资料发现，非天文算法实现的日历无法准确的获得节气的时间点，所以只能使用天文算法来推演。&lt;/p&gt;
+
+&lt;p&gt;​        通过度娘，我找到了由许剑伟先生开发的《寿星万年历》，该软件是一套开源的精准的年代跨度大的天文历法工具，有很多有趣的功能，感兴趣的同学可以自行搜索，在此感谢许先生的无私。&lt;/p&gt;
+
+&lt;p&gt;​   接下来就打算把这套算法以 Go 来实现：&lt;a href=&#34;https://github.com/mooncaker816/go-calendar&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;②-基本概念&#34;&gt;② 基本概念&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;公历&lt;/strong&gt;（solar calendar）：公历中规定平年有365日，闰年366日。每年含有12个月。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;儒略历&lt;/strong&gt;（Julian calendar）: 在1582年10月4日以前, 规定每4年设置一个闰年，平均年长度为365.25天&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;格里高利历&lt;/strong&gt;（Gregorian calendar）: 在1582年10月15日之后, 规定每400年97闰，平均年长度为365.2425天&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;由于儒略历存在严重的“多闰”问题，到了1582年，公历跑快了10天左右，当时就人为调整了10天，并从此改用格里历。因此务必注意1582年10月4日（儒略历）的下一日为1582年10月15日（格里高利历）。也就是说1582年10月份少了10天。&lt;/p&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;闰年&lt;/strong&gt; (leap year)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;儒略历&lt;/strong&gt;: 能被4整除的年份为闰年（产生多润的原因）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;格里高利历&lt;/strong&gt;: 能被4整除但不能被100整除的非世纪年 + 能被400整除的世纪年&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日&lt;/strong&gt;（Julian Day）&amp;amp; &lt;strong&gt;儒略日数&lt;/strong&gt;（Julian Day Number，JDN）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;儒略日数的计算&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;从&lt;a href=&#34;https://baike.baidu.com/item/%E6%A0%BC%E6%9E%97%E5%A8%81%E6%B2%BB%E6%A0%87%E5%87%86%E6%97%B6%E9%97%B4&#34; target=&#34;_blank&#34;&gt;格林威治标准时间&lt;/a&gt;的中午开始，包含一个整天的时间，起点的时间（0日）回溯至&lt;a href=&#34;https://baike.baidu.com/item/%E5%84%92%E7%95%A5%E5%8E%86&#34; target=&#34;_blank&#34;&gt;儒略历&lt;/a&gt;的公元前4713年1月1日中午12点（在&lt;a href=&#34;https://baike.baidu.com/item/%E6%A0%BC%E9%87%8C%E5%8E%86&#34; target=&#34;_blank&#34;&gt;格里历&lt;/a&gt;是公元前4714年11月24日），这个日期是三种多年周期的共同起点，且是历史上最接近现代的一个起点。例如，2000年1月1日的&lt;a href=&#34;https://baike.baidu.com/item/UT&#34; target=&#34;_blank&#34;&gt;UT&lt;/a&gt;12:00是儒略日2,451,545。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;设Y为给定年份，M为月份，D为该月日期（可以带小数）。&lt;/p&gt;
+
+&lt;p&gt;若M &amp;gt; 2，Y和M不变，若 M =1或2，以Y–1代Y，以M+12代M，换句话说，如果日期在1月或2月，则被看作是在前一年的13月或14月。&lt;/p&gt;
+
+&lt;p&gt;对格里高利历有 ：A = INT（Y/100） B = 2 - A + INT(A/4)&lt;/p&gt;
+
+&lt;p&gt;对儒略历，取 B = 0&lt;/p&gt;
+
+&lt;p&gt;要求的儒略日即为：JD = INT(365.25(Y+4716))+INT(30.6001(M+1))+D+B-1524.5&lt;/p&gt;
+
+&lt;p&gt;使用数值30.6取代30.6001才是正确的，但我们仍使用30.6001，以确保总能取得恰当的整数。事实上可用30.601甚至30.61来取代30.6001。例如，5乘30.6精确等于153，然而大多数计算机不能精确表示出30.6，这导致得出一个152.999 9998的结果，它的整数部分为152，如此算出的JD就不正确了。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;​  &lt;a href=&#34;https://github.com/mooncaker816/go-calendar/blob/master/greg.go&#34; target=&#34;_blank&#34;&gt;详细代码&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;儒略日反推日期&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;将JD加上0.5，令 Z 为其整数部分，F 为尾数（小数）部分。&lt;/p&gt;
+
+&lt;p&gt;若 Z &amp;lt; 2299161，取A = Z&lt;/p&gt;
+
+&lt;p&gt;若 Z 大于等于2299 161，计算 α=INT((Z-1867216.25)/36524.25) ，A=Z+1+α-INT(α/4)&lt;/p&gt;
+
+&lt;p&gt;然后计算&lt;/p&gt;
+
+&lt;p&gt;B = A+1524&lt;/p&gt;
+
+&lt;p&gt;C = INT((B-122.1)/365.25)&lt;/p&gt;
+
+&lt;p&gt;D = INT(365.25C)&lt;/p&gt;
+
+&lt;p&gt;E = INT((B-D)/30.6001)&lt;/p&gt;
+
+&lt;p&gt;该月日期（带小数部分）则为：d = B - D - INT(30.6001E) + F&lt;/p&gt;
+
+&lt;p&gt;月份m为：
+IF E &amp;lt; 14 THEN m = E – 1
+IF E=14 or E=15 THEN m = E – 13&lt;/p&gt;
+
+&lt;p&gt;年份为y：
+IF m&amp;gt;2 THEN y = C – 4716
+IF m =1 or m=2 THEN y = C – 4715&lt;/p&gt;
+
+&lt;p&gt;这个公式里求E时用的数30.6001不能代之以30.6，哪怕计算机没有先前所说的问题。否则，你得到的结果会是2月0日而不是1月31日，或者4月0日而不是3月31日。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;​  &lt;a href=&#34;https://github.com/mooncaker816/go-calendar/blob/master/julian.go&#34; target=&#34;_blank&#34;&gt;详细代码&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;日期算星期&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;计算该日0时的儒略日，加上1.5，再除以7 ，所得余数将指示出星期几：若余数为0，则为星期日，1为星期一，2为星期二，3为星期三，4为星期四，5为星期五，6为星期六。&lt;/p&gt;
+
+&lt;p&gt;儒略历到格里高利历的换算并不影响星期。因而，在1582年，10月4日星期四接下来的一天便是10月15日星期五。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;​  &lt;a href=&#34;https://github.com/mooncaker816/go-calendar/blob/master/greg.go&#34; target=&#34;_blank&#34;&gt;详细代码&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;TBD。。。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Linux Centos 命令之 cp,rm,mv</title>
       <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/</link>
       <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
@@ -4977,260 +5088,6 @@ func main() {
 1024 1048576 1073741824 1099511627776 1125899906842624 1152921504606846976
 1000 1000000 1000000000 1000000000000 1000000000000000 1000000000000000000
 &lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（2）</title>
-      <link>https://mooncaker816.github.io/2017/12/21/the-go-programming-language-ex2/</link>
-      <pubDate>Thu, 21 Dec 2017 17:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2017/12/21/the-go-programming-language-ex2/</guid>
-      <description>&lt;h3 id=&#34;ex-2-1&#34;&gt;Ex 2.1&lt;/h3&gt;
-
-&lt;p&gt;Add types, constants, and functions to tempconv for processing temperatures in the Kelvin scale, where zero Kelvin is −273.15°C and a difference of 1K has the same magnitude as 1°C.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package tempconv
-
-import &amp;quot;fmt&amp;quot;
-
-type Celsius float64
-type Fahrenheit float64
-type Kelvin float64
-
-const (
-	AbsoluteZeroC Celsius = -273.15
-	FreezingC     Celsius = 0
-	BoilingC      Celsius = 100
-)
-
-func (c Celsius) String() string    { return fmt.Sprintf(&amp;quot;%g°C&amp;quot;, c) }
-func (f Fahrenheit) String() string { return fmt.Sprintf(&amp;quot;%g°F&amp;quot;, f) }
-func (k Kelvin) String() string     { return fmt.Sprintf(&amp;quot;%g°K&amp;quot;, k) }
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package tempconv
-
-// CToF converts a Celsius temperature to Fahrenheit.
-func CToF(c Celsius) Fahrenheit { return Fahrenheit(c*9/5 + 32) }
-
-// FToC converts a Fahrenheit temperature to Celsius.
-func FToC(f Fahrenheit) Celsius { return Celsius((f - 32) * 5 / 9) }
-
-//CToK converts a Celsius temperature to Kelvin.
-func CToK(c Celsius) Kelvin { return Kelvin(c + 273.15) }
-
-//KToC converts a Kelvin temperature to Celsius.
-func KToC(k Kelvin) Celsius { return Celsius(k - 273.15) }
-
-//FToK converts a Fahrenheit temperature to Kelvin.
-func FToK(f Fahrenheit) Kelvin { return Kelvin((f-32)*5/9 + 273.15) }
-
-// KToF converts a Kelvin temperature to Fahrenheit.
-func KToF(k Kelvin) Fahrenheit { return Fahrenheit((k-273.15)*9/5 + 32) }
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;The_Go_Programming_Language_Exercises/CH2/ex2.1/tempconv&amp;quot;
-)
-
-func main() {
-	fmt.Println(tempconv.CToK(tempconv.BoilingC))
-	k1 := tempconv.Kelvin(273)
-	fmt.Println(tempconv.KToC(k1))
-	fmt.Println(tempconv.KToF(k1))
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run main.go
-373.15°K
--0.14999999999997726°C
-31.73000000000004°F
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-2-2&#34;&gt;Ex 2.2&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;bufio&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;io&amp;quot;
-	&amp;quot;os&amp;quot;
-	&amp;quot;strconv&amp;quot;
-	&amp;quot;strings&amp;quot;
-
-	&amp;quot;The_Go_Programming_Language_Exercises/CH2/ex2.2/unitconv&amp;quot;
-)
-
-func main() {
-	var s []string
-	if len(os.Args) &amp;gt; 1 {
-		s = os.Args[1:]
-	} else {
-		input, err := os.Open(&amp;quot;a&amp;quot;)
-		if err != nil {
-			fmt.Println(&amp;quot;happend a error when opening&amp;quot;, err)
-		}
-		defer input.Close()
-		buf := bufio.NewReader(input)
-		for {
-			line, err := buf.ReadString(&#39;\n&#39;)
-			line = strings.TrimSpace(line)
-			s = append(s, line)
-			if err != nil {
-				if err == io.EOF {
-					break
-				}
-				fmt.Fprintf(os.Stderr, &amp;quot;reading error %v\n&amp;quot;, err)
-				os.Exit(1)
-			}
-		}
-	}
-	for _, arg := range s {
-		t, err := strconv.ParseFloat(arg, 64)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, &amp;quot;invalid input: %v\n&amp;quot;, err)
-			os.Exit(1)
-		}
-		f := unitconv.Fahrenheit(t)
-		c := unitconv.Celsius(t)
-		p := unitconv.Pounds(t)
-		kg := unitconv.Kilograms(t)
-		fe := unitconv.Feet(t)
-		m := unitconv.Meter(t)
-		fmt.Printf(&amp;quot;%s = %s, %s = %s\n&amp;quot;, f, unitconv.FToC(f), c, unitconv.CToF(c))
-		fmt.Printf(&amp;quot;%s = %s, %s = %s\n&amp;quot;, p, unitconv.PToKg(p), kg, unitconv.KgToP(kg))
-		fmt.Printf(&amp;quot;%s = %s, %s = %s\n&amp;quot;, fe, unitconv.FeToM(fe), m, unitconv.MToFe(m))
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//file a
-11
-22
-33
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex2.2
-11°F = -11.666666666666666°C, 11°C = 51.8°F
-11 pounds = 4.9895160700000005 kilograms, 11 kilograms = 24.2508488403368 pounds
-11 feets = 3.3528000000000002 meters, 11 meters = 36.08913 feets
-22°F = -5.555555555555555°C, 22°C = 71.6°F
-22 pounds = 9.979032140000001 kilograms, 22 kilograms = 48.5016976806736 pounds
-22 feets = 6.7056000000000004 meters, 22 meters = 72.17826 feets
-33°F = 0.5555555555555556°C, 33°C = 91.4°F
-33 pounds = 14.968548210000002 kilograms, 33 kilograms = 72.7525465210104 pounds
-33 feets = 10.0584 meters, 33 meters = 108.26738999999999 feets
-
-$ ./ex2.2 11 22 33 44.5
-11°F = -11.666666666666666°C, 11°C = 51.8°F
-11 pounds = 4.9895160700000005 kilograms, 11 kilograms = 24.2508488403368 pounds
-11 feets = 3.3528000000000002 meters, 11 meters = 36.08913 feets
-22°F = -5.555555555555555°C, 22°C = 71.6°F
-22 pounds = 9.979032140000001 kilograms, 22 kilograms = 48.5016976806736 pounds
-22 feets = 6.7056000000000004 meters, 22 meters = 72.17826 feets
-33°F = 0.5555555555555556°C, 33°C = 91.4°F
-33 pounds = 14.968548210000002 kilograms, 33 kilograms = 72.7525465210104 pounds
-33 feets = 10.0584 meters, 33 meters = 108.26738999999999 feets
-44.5°F = 6.944444444444445°C, 44.5°C = 112.1°F
-44.5 pounds = 20.184860465 kilograms, 44.5 kilograms = 98.10570667227161 pounds
-44.5 feets = 13.563600000000001 meters, 44.5 meters = 145.996935 feets
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-2-3-2-4-2-5&#34;&gt;Ex 2.3 2.4 2.5&lt;/h3&gt;
-
-&lt;p&gt;Rewrite PopCount to use a loop instead of a single expression. Compare the performance of the two versions. (Section 11.4 shows how to compare the performance of different implementations systematically.)&lt;/p&gt;
-
-&lt;p&gt;Write a version of PopCount that counts bits by shifting its argument through 64 bit positions, testing the rightmost bit each time. Compare its performance to the tablelookup version.&lt;/p&gt;
-
-&lt;p&gt;The expression x&amp;amp;(x-1) clears the rightmost non-zero bit of x. Write a version of PopCount that counts bits by using this fact, and assess its performance.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package popcount_test
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;io/ioutil&amp;quot;
-	&amp;quot;testing&amp;quot;
-)
-
-func init() {
-	for i := range pc {
-		pc[i] = pc[i/2] + byte(i&amp;amp;1)
-	}
-	for i := 0; i &amp;lt; 256; i++ {
-		n[i] = i
-	}
-}
-
-var pc [256]byte
-var n = make([]int, 256)
-
-//通过v&amp;amp;(v-1)，将v对应的二进制中最右的非零位置零，直到v=0为止，此时置零的次数即为popcount的值
-func BenchmarkPopCount1(b *testing.B) {
-	for i := 0; i &amp;lt; b.N; i++ {
-		for _, v := range n {
-			var count int
-			for v != 0 {
-				count++
-				v &amp;amp;= v - 1
-			}
-			fmt.Fprintln(ioutil.Discard, count)
-			//fmt.Fprintln(os.Stdout, count)
-		}
-	}
-}
-
-//把64位平均分为8份，每份对应一个字节，读出该字节的数值，去预先准备好的单字节(8位)所能存储的所有数值对应的popcount的表中查询出每份的popcount，再相加8份的popcount
-func BenchmarkPopCount2(b *testing.B) {
-	for i := 0; i &amp;lt; b.N; i++ {
-		for _, x := range n {
-			count := int(pc[byte(x&amp;gt;&amp;gt;(0*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(1*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(2*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(3*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(4*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(5*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(6*8))] +
-				pc[byte(x&amp;gt;&amp;gt;(7*8))])
-			fmt.Fprintln(ioutil.Discard, count)
-			//fmt.Fprintln(os.Stdout, count)
-		}
-	}
-}
-
-//从最右开始一位一位检查是否为1
-func BenchmarkPopCount3(b *testing.B) {
-	for i := 0; i &amp;lt; b.N; i++ {
-		for _, v := range n {
-			var count int
-			for ; v != 0; v &amp;gt;&amp;gt;= 1 {
-				count += v &amp;amp; 1
-			}
-			fmt.Fprintln(ioutil.Discard, count)
-			//fmt.Fprintln(os.Stdout, count)
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go test -v -run=&amp;quot;none&amp;quot; -bench=. -benchtime=&amp;quot;3s&amp;quot; -benchmem
-BenchmarkPopCount1-4   	  200000	     23154 ns/op	    2048 B/op	     256 allocs/op
-BenchmarkPopCount2-4   	  200000	     21941 ns/op	    2048 B/op	     256 allocs/op
-BenchmarkPopCount3-4   	  200000	     24450 ns/op	    2048 B/op	     256 allocs/op
-PASS
-ok  	The_Go_Programming_Language_Exercises/CH2/ex2.3	14.646s
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;n&amp;amp;(n-1) ：将n的二进制最右边的非零位置零&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;平均来说，此3种方法中查表最快，n&amp;amp;(n-1)居中，一位一位数最慢&lt;/p&gt;</description>
     </item>
     
   </channel>
