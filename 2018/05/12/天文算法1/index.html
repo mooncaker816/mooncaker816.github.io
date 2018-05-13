@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="①背景 计算精确的农历节气和日月合朔时间点，需要使用天文算法来实现。《Astronomical Algorithms》正是这么一本不那么让人望而">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/">
+  <meta property="og:title" content="天文算法1 | Mooncaker816">
+  <meta property="og:description" content="①背景 计算精确的农历节气和日月合朔时间点，需要使用天文算法来实现。《Astronomical Algorithms》正是这么一本不那么让人望而">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-05-12T21:43:17&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-05-13T17:40:48&#43;08:00">
+  
+
+  
+  <script src="//load.sumome.com/" data-sumo-site-id="179bbb944edcce8627cb15d8b33fadaf440e3b5043efd79feb50582c0be37fb2" async="async"></script>
+
+
+
+  <title>天文算法1 | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+            <div class="article-container">
+              <h1 itemprop="name">天文算法1</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2018-05-12 21:43:17 &#43;0800 CST" itemprop="datePublished dateModified">
+      May 13, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    9 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/#disqus_thread"></a>
+  
+
+  
+  
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%951&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f12%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25951%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f12%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25951%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f12%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25951%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%951"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f12%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25951%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%951"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%951&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f12%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25951%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                
+
+<h2 id=e140e270bd8a16df47c57524eb5c1d7d>①背景</h2>
+
+<p>计算精确的农历节气和日月合朔时间点，需要使用天文算法来实现。《Astronomical Algorithms》正是这么一本不那么让人望而生畏的介绍天文算法的书籍，国内比较出名的寿星万年历亦是基于此书中的算法。</p>
+
+<p>作为一名 Gopher 本想自造轮子来实现，但是万能的 Github 上已有前人身先士卒，直接上地址<a href="https://github.com/soniakeys/meeus" target="_blank">meeus</a>，该库基本上完整的实现了Astronomical Algorithms中的算法，而且每一章节对应一个 package，浏览起来不会让人感觉没有头绪。</p>
+
+<p>好了，话不多说，接下来就结合书和代码来学习。</p>
+
+<h2 id=67b6a9c1549b6487f1a184132df91fe1>②第一章Hints and Tips</h2>
+
+<p>略</p>
+
+<h2 id=84cf4601a170e23bb31b3c5e700977f1>③第二章 About accuracy</h2>
+
+<p>略</p>
+
+<h2 id=e9ca11eb03731111ef00027f51b7b69a>④第三章 Interpolation 插值</h2>
+
+<blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6" target="_blank">数学</a>的<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90" target="_blank">数值分析</a>领域中，<strong>内插</strong>或称插值（英语：interpolation)是一种通过已知的、<a href="https://zh.wikipedia.org/wiki/%E9%9B%A2%E6%95%A3" target="_blank">离散</a>的<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE" target="_blank">数据</a>点，在范围内推求新数据点的过程或方法。求解<a href="https://zh.wikipedia.org/wiki/%E7%A7%91%E5%AD%A6" target="_blank">科学</a>和<a href="https://zh.wikipedia.org/wiki/%E5%B7%A5%E7%A8%8B" target="_blank">工程</a>的问题时，通常有许多数据点借由<a href="https://zh.wikipedia.org/wiki/%E9%87%87%E6%A0%B7" target="_blank">采样</a>、<a href="https://zh.wikipedia.org/wiki/%E5%AE%9E%E9%AA%8C" target="_blank">实验</a>等方法获得，这些数据可能代表了有限个数值函数，其中自变量的值。</p>
+</blockquote>
+
+<p>本章主要介绍了低阶等距节点牛顿插值和拉格朗日插值的应用。</p>
+
+<h3 id=7d777a07b9d3c02ca7c9412715d58f39>1. <strong>牛顿插值</strong></h3>
+
+<p><a href="https://zh.wikipedia.org/wiki/%E7%89%9B%E9%A1%BF%E5%A4%9A%E9%A1%B9%E5%BC%8F" target="_blank">牛顿多项式</a></p>
+
+<p><a href="https://zh.wikipedia.org/wiki/%E5%B7%AE%E5%88%86" target="_blank">差分</a></p>
+
+<h3 id=ddaeae3ddeaa1b5a77f16f8781feeab8>2. <strong>三点等距二阶差商的牛顿插值</strong></h3>
+
+<h4 id=47d418f47e49a5a8dcaf9684207e3e90>2.1  插值公式</h4>
+
+<p>二阶牛顿插值多项式为:
+$N(x) = [y_0] + [y_0,y_1](x-x_0) + [y_0,y_1,y_2](x-x_0)(x-x_1)$，如下图
+<img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/b8d0bfa61c4977eeaf3022de361f67dd5f4cb8a9" alt="" /></p>
+
+<p>假设有三点$(x_0,y_0),(x_1,y_1),(x_2,y_2),x_0,x_1,x_2$等距(单位长度1) ,</p>
+
+<p>且$n$ 为插值因子,$x$距离$x_1$最近
+\begin{align}
+n&=(x-x_1)/单位长度\\<br />
+&=x-x1
+\end{align}</p>
+
+<p>令 $a=y_1-y_0, b=y_2-y_1,c=b-a=y_0+y_2-2y_1$
+则有：
+\begin{align}
+x-x_0 &= x-x_1 + 1\\<br />
+&= n + 1
+\end{align}
+\begin{align}
+f(x) &= y_0 + a(x-x_0)+(c/(x_2-x_0))(x-x_0)(x-x_1)\\<br />
+&= y_0 + a(n+1) + 0.5c(n+1)n\\<br />
+&= y_1-a + an + a + 0.5n(cn+c)\\<br />
+&= y_1 + 0.5n(cn+b-a+2a)\\<br />
+&= y_1 + 0.5n(cn+a+b)\\<br />
+\end{align}</p>
+
+<p>即为算法中三点插值的公式.</p>
+
+<blockquote>
+<p>书中三点从1开始计数，公式为:$y_2+0.5n(cn+a+b)$</p>
+</blockquote>
+
+<p>代码：</p>
+
+<pre><code class="language-go">// Len3 allows second difference interpolation.
+// 等距三点插值结构
+type Len3 struct {
+x1, x3             float64   //x1,x3分别为起始点和终止点，无需给出x2，因为等距
+y                  []float64 //y为x1,x2,x3对应的值的序列
+a, b, c            float64   //a=y2-y1, b=y3-y2, c=b-a=y3+y1-2y2
+abSum, xSum, xDiff float64   //计数插值的中间变量
+}
+
+// NewLen3 prepares a Len3 object from a table of three rows of x and y values.
+//
+// X values must be equally spaced, so only the first and last are supplied.
+// X1 must not equal x3.  Y must be a slice of three y values.
+// 根据上述定义，创建三点插值结构
+func NewLen3(x1, x3 float64, y []float64) (*Len3, error) {
+if len(y) != 3 {
+	return nil, ErrorNot3
+}
+if x3 == x1 {
+	return nil, ErrorNoXRange
+}
+d := &Len3{
+	x1: x1,
+	x3: x3,
+	y:  append([]float64{}, y...),
+}
+// differences. (3.1) p. 23
+d.a = y[1] - y[0]
+d.b = y[2] - y[1]
+d.c = d.b - d.a
+// other intermediate values
+d.abSum = d.a + d.b
+d.xSum = x3 + x1
+d.xDiff = x3 - x1
+return d, nil
+}
+</code></pre>
+
+<p>考虑到实际问题中一般可能多于三点，此时只要选取目标点附近的三点即可，可用以下函数来自动构造</p>
+
+<pre><code class="language-go">// Len3ForInterpolateX is a special purpose Len3 constructor.
+//
+// Like NewLen3, it takes a table of x and y values, but it is not limited
+// to tables of 3 rows.  An X value is also passed that represents the
+// interpolation target x value.  Len3ForInterpolateX will locate the
+// appropriate three rows of the table for interpolating for x, and initialize
+// the Len3 object for those rows.
+//
+//	x is the target for interpolation
+//	x1 is the x value corresponding to the first y value of the table.
+//	xn is the x value corresponding to the last y value of the table.
+//	y is all y values in the table.  len(y) should be >= 3.
+//
+// 给定n个点，但是我们只需选取离目标点x最接近的三个点来做三点插值，
+// 此时可用以下函数来自动选择最优三点，来构造三点插值
+// 同样，前提是n个点等距，且与y一一对应
+func Len3ForInterpolateX(x, x1, xn float64, y []float64) (*Len3, error) {
+	if len(y) > 3 {
+		interval := (xn - x1) / float64(len(y)-1)
+		if interval == 0 {
+			return nil, ErrorNoXRange
+		}
+		nearestX := int((x-x1)/interval + .5)
+		if nearestX < 1 {
+			nearestX = 1
+		} else if nearestX > len(y)-2 {
+			nearestX = len(y) - 2
+		}
+		y = y[nearestX-1 : nearestX+2]
+		xn = x1 + float64(nearestX+1)*interval
+		x1 = x1 + float64(nearestX-1)*interval
+	}
+	return NewLen3(x1, xn, y)
+}
+</code></pre>
+
+<p>插值因子 $n$ 为：目标点 $x$ 与 中间点 $x_2$之差除以实际步长<br />
+\begin{equation}
+\because n = 2(x - x_2)/(x_3-x_1), x_2 = x_1 + (x_3-x_1)/2\\<br />
+\therefore n = [2x - (x_1+x_3)]/(x_3-x_1)\\<br />
+\end{equation}</p>
+
+<pre><code class="language-go">// InterpolateX interpolates for a given x value.
+// 计算插值因子n，调用非严格插值计算
+func (d *Len3) InterpolateX(x float64) (y float64) {
+	n := (2*x - d.xSum) / d.xDiff
+	return d.InterpolateN(n)
+}
+
+// InterpolateXStrict interpolates for a given x value,
+// restricting x to the range x1 to x3 given to the constructor NewLen3.
+// 计算插值因子n，调用严格插值计算
+func (d *Len3) InterpolateXStrict(x float64) (y float64, err error) {
+	n := (2*x - d.xSum) / d.xDiff
+	y, err = d.InterpolateNStrict(n)
+	if err == ErrorNOutOfRange {
+		err = ErrorXOutOfRange
+	}
+	return
+}
+</code></pre>
+
+<p>通过调用三点插值公式获得目标插值，这里分为严格模式和非严格模式，</p>
+
+<p>所谓严格模式就是指目标点一定在三点的范围之内且必须离我们选择的三点的中间点最近，确保插值子$|n|<=1$；</p>
+
+<p>非严格模式就没有上述规定，可能目标点已经超出三点范围，得出的结果也相对不如严格模式精确。</p>
+
+<pre><code class="language-go">// InterpolateN interpolates for a given interpolating factor n.
+//
+// This is interpolation formula (3.3)
+//
+// The interpolation factor n is x-x2 in units of the tabular x interval.
+// (See Meeus p. 24.)
+// 非严格插值计算，不用保证目标点插值因子绝对值小于等于1，
+// 即不用保证离我们所选三点中点距离小于一个步长
+func (d *Len3) InterpolateN(n float64) (y float64) {
+	return d.y[1] + n*.5*(d.abSum+n*d.c)
+}
+
+// InterpolateNStrict interpolates for a given interpolating factor n.
+//
+// N is restricted to the range [-1..1] corresponding to the range x1 to x3
+// given to the constructor NewLen3.
+// 严格插值计算，必须保证目标点插值因子绝对值小于等于1，
+// 即必须保证离我们所选三点中点距离小于一个步长
+func (d *Len3) InterpolateNStrict(n float64) (y float64, err error) {
+	if n < -1 || n > 1 {
+		return 0, ErrorNOutOfRange
+	}
+	return d.InterpolateN(n), nil
+}
+</code></pre>
+
+<h4 id=34789e4196d560faa2582f5109ad2ed0>2.2 <strong>极值</strong>：</h4>
+
+<p>因为 $y_1 + 0.5n(cn+a+b)$是关于 $n$ 的二次函数($c \neq 0$时)，由二次函数的性质可知：</p>
+
+<p>当 $n=-(a+b)/(2c)$时，有极值$-(a+b)^2/(8c)$</p>
+
+<p>但是如果插值因子$|n|>1$,则无法取到(已超出插值函数的定义域)</p>
+
+<p>再由$n = [2x - (x_1+x_3)]/(x_3-x_1)$</p>
+
+<p>得出此时实际$x = [n(x_3-x_1)+(x_1+x_3)]/2$</p>
+
+<pre><code class="language-go">// Extremum returns the x and y values at the extremum.
+//
+// Results are restricted to the range of the table given to the constructor
+// NewLen3.
+func (d *Len3) Extremum() (x, y float64, err error) {
+	if d.c == 0 {
+		return 0, 0, ErrorNoExtremum
+	}
+	n := d.abSum / (-2 * d.c) // (3.5), p. 25
+	if n < -1 || n > 1 {
+		return 0, 0, ErrorExtremumOutside
+	}
+	x = .5 * (d.xSum + d.xDiff*n)          // 根据实际步长得出极值点x
+	y = d.y[1] - (d.abSum*d.abSum)/(8*d.c) // (3.4), p. 25
+	return x, y, nil
+}
+</code></pre>
+
+<h4 id=0e1d2066b03692e68b3ee161c0e3629b>2.3 根</h4>
+
+<p>和普通方程类似，有时候我们需要求解插值函数的”根”，即 $y=0$所对应的插值点</p>
+
+<p>同样借助 $y=y_1+ 0.5n(cn+a+b)$,令 $y=0$</p>
+
+<p>得$n = -2y_1/(cn+a+b)$</p>
+
+<p>此时再利用迭代法求解近似根 $n_0$</p>
+
+<p>当插值曲线曲率比较大时，可采用以下修正量来进行迭代，直到满足精度要求为止</p>
+
+<p>$Δn_0 = -[ 2y_1 +n_0 (a+b+cn_0 ) ]/(a +b + 2cn_0 )$</p>
+
+<p>求解得到满足精度要求的 $n$ 后，再根据实际步长得出 $x$，即为”根”</p>
+
+<pre><code class="language-go">// Len3Zero finds a zero of the quadratic function represented by the table.
+//
+// That is, it returns an x value that yields y=0.
+//
+// Argument strong switches between two strategies for the estimation step.
+// when iterating to converge on the zero.
+//
+// Strong=false specifies a quick and dirty estimate that works well
+// for gentle curves, but can work poorly or fail on more dramatic curves.
+//
+// Strong=true specifies a more sophisticated and thus somewhat more
+// expensive estimate.  However, if the curve has quick changes, This estimate
+// will converge more reliably and in fewer steps, making it a better choice.
+//
+// Results are restricted to the range of the table given to the constructor
+// NewLen3.
+// strong 为考虑修正量的迭代方式，更为精确
+func (d *Len3) Zero(strong bool) (x float64, err error) {
+	var f iterFunc
+	if strong {
+		// (3.7), p. 27
+		f = func(n0 float64) float64 {
+			return n0 - (2*d.y[1]+n0*(d.abSum+d.c*n0))/(d.abSum+2*d.c*n0)
+		}
+	} else {
+		// (3.6), p. 26
+		f = func(n0 float64) float64 {
+			return -2 * d.y[1] / (d.abSum + d.c*n0)
+		}
+	}
+	n0, ok := iterate(0, f)
+	if !ok {
+		return 0, ErrorNoConverge
+	}
+	if n0 > 1 || n0 < -1 {
+		return 0, ErrorZeroOutside
+	}
+	return .5 * (d.xSum + d.xDiff*n0), nil // success
+}
+
+type iterFunc func(n0 float64) (n1 float64)
+
+func iterate(n0 float64, f iterFunc) (n1 float64, ok bool) {
+	for limit := 0; limit < 50; limit++ {
+		n1 = f(n0)
+		if math.IsInf(n1, 0) || math.IsNaN(n1) {
+			break // failure to converge
+		}
+		if math.Abs((n1-n0)/n0) < 1e-15 {
+			return n1, true // success
+		}
+		n0 = n1
+	}
+	return 0, false // failure to converge
+}
+</code></pre>
+
+<h3 id=2e0cd2968401b6f02b7e13fa50d6d32c>3.  <strong>五点等距四阶差商的牛顿插值</strong></h3>
+
+<h4 id=5d8025f325d0cae7b0ab79cb145e8269>3.1 五点插值公式</h4>
+
+<p>五点和三点类似，这里直接给出公式，不再进行推导</p>
+
+<p>5点：$(x_1,y_1),(x_2,y_2),(x_3,y_3),(x_4,y_4),(x_5,y_5)$</p>
+
+<p>$y=y_3+ \frac {n} {2}(b+c)+\frac {n^2} {2}f+\frac{n(n^2-1)}{12}(h+j)+\frac {n^2(n^2-1)}{24k}$</p>
+
+<p>或者</p>
+
+<p>$y=y_3+n(\frac {b+c}{2}-\frac {h+j}{12})+n^2(\frac {f}{2}-\frac {k}{24})+n^3(\frac {h+j}{12})+n^4(\frac {k}{24})$</p>
+
+<pre><code class="language-go">// Len5 allows fourth difference interpolation.
+// 五点等距插值结构
+type Len5 struct {
+	x1, x5      float64   // x1为起始点，x5为终止点
+	y           []float64 // y 为x1,x2,x3,x4,x5的一一映射
+	a, b, c, d  float64   // a=y2-y1, b=y3-y2, c=y4-y3, d=y5-y4
+	e, f, g     float64   // e=b-a, f=c-b, g=d-c
+	h, j, k     float64   // h=f-e, j=g-f, k=j-h
+	y3          float64   // y3为中间点的 y 值
+	xSum, xDiff float64   // xSum=x1+x5, xDiff=x5-x1
+	interpCoeff []float64 // 插值函数对应插值因子 n 的各项系数（0-4）
+}
+
+// NewLen5 prepares a Len5 object from a table of five rows of x and y values.
+//
+// X values must be equally spaced, so only the first and last are supplied.
+// X1 must not equal x5.  Y must be a slice of five y values.
+// 构造5点插值结构
+func NewLen5(x1, x5 float64, y []float64) (*Len5, error) {
+	if len(y) != 5 {
+		return nil, ErrorNot5
+	}
+	if x5 == x1 {
+		return nil, ErrorNoXRange
+	}
+	d := &Len5{
+		x1: x1,
+		x5: x5,
+		y:  append([]float64{}, y...),
+		y3: y[2],
+	}
+	// differences
+	d.a = y[1] - y[0]
+	d.b = y[2] - y[1]
+	d.c = y[3] - y[2]
+	d.d = y[4] - y[3]
+	d.e = d.b - d.a
+	d.f = d.c - d.b
+	d.g = d.d - d.c
+	d.h = d.f - d.e
+	d.j = d.g - d.f
+	d.k = d.j - d.h
+	// other intermediate values
+	d.xSum = x5 + x1
+	d.xDiff = x5 - x1
+	d.interpCoeff = []float64{ // (3.8) p. 28
+		d.y3,
+		(d.b+d.c)/2 - (d.h+d.j)/12,
+		d.f/2 - d.k/24,
+		(d.h + d.j) / 12,
+		d.k / 24,
+	}
+	return d, nil
+}
+// InterpolateX interpolates for a given x value.
+func (d *Len5) InterpolateX(x float64) (y float64) {
+	n := (4*x - 2*d.xSum) / d.xDiff
+	return d.InterpolateN(n)
+}
+// InterpolateXStrict interpolates for a given x value,
+// restricting x to the range x1 to x5 given to the the constructor NewLen5.
+func (d *Len5) InterpolateXStrict(x float64) (y float64, err error) {
+	n := (4*x - 2*d.xSum) / d.xDiff
+	y, err = d.InterpolateNStrict(n)
+	if err == ErrorNOutOfRange {
+		err = ErrorXOutOfRange
+	}
+	return
+}
+// InterpolateN interpolates for a given interpolating factor n.
+//
+// The interpolation factor n is x-x3 in units of the tabular x interval.
+// (See Meeus p. 28.)
+// Horner 为工具函数，求解多项式之和，interpCoeff为多项式系数
+func (d *Len5) InterpolateN(n float64) (y float64) {
+	return base.Horner(n, d.interpCoeff...)
+}
+// InterpolateNStrict interpolates for a given interpolating factor n.
+//
+// N is restricted to the range [-1..1].  This is only half the range given
+// to the constructor NewLen5, but is the recommendation given on p. 31.
+func (d *Len5) InterpolateNStrict(n float64) (y float64, err error) {
+	if n < -1 || n > 1 {
+		return 0, ErrorNOutOfRange
+	}
+	return base.Horner(n, d.interpCoeff...), nil
+}
+</code></pre>
+
+<h4 id=a17ccaa1be6cd233004c1885db549065>3.2 五点极值</h4>
+
+<p>函数的极值对应的插值因子 $n_m$ 可通过解以下方程得到：</p>
+
+<p>$n_m=\frac {6b+6c-h-j+3n_m^2(h+j)+2n_m^3k}{k-12f}$</p>
+
+<p>和上面的一样，我们可以执行迭代。首次，把 $n_m=0$代 入方程右边,迭代求得$n_m$</p>
+
+<p>当我们最后得到$n_m$后，$x_m=\frac {x_1+x_5}{2}+\frac {x_5-x_1}{4}n_m$</p>
+
+<p>再代入5点插值函数就可以获得极值</p>
+
+<pre><code class="language-go">// Extremum returns the x and y values at the extremum.
+//
+// Results are restricted to the range of the table given to the constructor
+// NewLen5.  (Meeus actually recommends restricting the range to one unit of
+// the tabular interval, but that seems a little harsh.)
+// 5点插值极值
+func (d *Len5) Extremum() (x, y float64, err error) {
+	// (3.9) p. 29
+	nCoeff := []float64{
+		6*(d.b+d.c) - d.h - d.j,
+		0,
+		3 * (d.h + d.k), // 不应该是 d.h+d.j 吗？
+		2 * d.k,
+	}
+	den := d.k - 12*d.f
+	if den == 0 {
+		return 0, 0, ErrorExtremumOutside
+	}
+	n0, ok := iterate(0, func(n0 float64) float64 {
+		return base.Horner(n0, nCoeff...) / den
+	})
+	if !ok {
+		return 0, 0, ErrorNoConverge
+	}
+	if n0 < -2 || n0 > 2 {
+		return 0, 0, ErrorExtremumOutside
+	}
+	x = .5*d.xSum + .25*d.xDiff*n0
+	y = base.Horner(n0, d.interpCoeff...)
+	return x, y, nil
+}
+</code></pre>
+
+<h4 id=958a6e094d78953925bb8ca2ca98d01d>3.3 五点求根</h4>
+
+<p>令$y=0$通过以下公式迭代求插值因子$n_0$,起始$n_0=0$</p>
+
+<p>$n_0=\frac {-24y_3+n_0^2(k-12f)-2n_0^3(h+j)-n_0^4k}{2(6b+6c-h-j)}$</p>
+
+<p>当曲率比较大时，同样可以加入修正</p>
+
+<p>$Δn_0 =-\frac {Mn_0^4+Nn_0^3+Pn_0^2+Qn_0+y_3}{4Mn_0^3+3Nn_0^2+2Pn_0+Q},$</p>
+
+<p>$(M=\frac{k}{24},N=\frac{h+j}{12},P=\frac{f}{2}-M,Q=\frac{b+c}{2}-N)$</p>
+
+<pre><code class="language-go">// Len5Zero finds a zero of the quartic function represented by the table.
+//
+// That is, it returns an x value that yields y=0.
+//
+// Argument strong switches between two strategies for the estimation step.
+// when iterating to converge on the zero.
+//
+// Strong=false specifies a quick and dirty estimate that works well
+// for gentle curves, but can work poorly or fail on more dramatic curves.
+//
+// Strong=true specifies a more sophisticated and thus somewhat more
+// expensive estimate.  However, if the curve has quick changes, This estimate
+// will converge more reliably and in fewer steps, making it a better choice.
+//
+// Results are restricted to the range of the table given to the constructor
+// NewLen5.
+// strong 为带修正模式
+func (d *Len5) Zero(strong bool) (x float64, err error) {
+	var f iterFunc
+	if strong {
+		// (3.11), p. 29
+		M := d.k / 24
+		N := (d.h + d.j) / 12
+		P := d.f/2 - M
+		Q := (d.b+d.c)/2 - N
+		numCoeff := []float64{d.y3, Q, P, N, M}
+		denCoeff := []float64{Q, 2 * P, 3 * N, 4 * M}
+		f = func(n0 float64) float64 {
+			return n0 -
+				base.Horner(n0, numCoeff...)/base.Horner(n0, denCoeff...)
+		}
+	} else {
+		// (3.10), p. 29
+		numCoeff := []float64{
+			-24 * d.y3,
+			0,
+			d.k - 12*d.f,
+			-2 * (d.h + d.j),
+			-d.k,
+		}
+		den := 12*(d.b+d.c) - 2*(d.h+d.j)
+		f = func(n0 float64) float64 {
+			return base.Horner(n0, numCoeff...) / den
+		}
+	}
+	n0, ok := iterate(0, f)
+	if !ok {
+		return 0, ErrorNoConverge
+	}
+	if n0 > 2 || n0 < -2 {
+		return 0, ErrorZeroOutside
+	}
+	x = .5*d.xSum + .25*d.xDiff*n0
+	return x, nil
+}
+</code></pre>
+
+<h3 id=e5ba8d1486cad91f78f905ee6dddb24a>4. <strong>四点等距中间点插值</strong></h3>
+
+<p>假设有$(x_1,y_1),(x_2,y_2),(x_3,y_3),(x_4,y_4)$
+那么 $x_2$到 $x_3$ 之间的中点对应的函数值为：
+$y = [ 9(y_2 +y_3 ) - y_1 - y_4 ] / 16$</p>
+
+<pre><code class="language-go">// Len4Half interpolates a center value from a table of four rows.
+func Len4Half(y []float64) (float64, error) {
+	if len(y) != 4 {
+		return 0, ErrorNot4
+	}
+	// (3.12) p. 32
+	return (9*(y[1]+y[2]) - y[0] - y[3]) / 16, nil
+}
+</code></pre>
+
+<h3 id=8191214c4d6bae8e2cc23998ce009f38>5. <strong>横坐标不等间距插值：拉格朗日插值</strong></h3>
+
+<p>\begin{align}
+y=y_1L_1+y_2L_2+\cdots+y_nL_n\\<br />
+L_i = \prod_{i=1,i \neq j}^n \frac {x-x_j}{x_i-x_j}
+\end{align}</p>
+
+<p>上式是一个 $n-1$ 阶的多项式，这是利用 $y_1,y_2,\dots y_n$ 所能得到的唯一的一个 $n-1$ 阶多项式（注：多项式 插值具有唯一性）。但拉格朗日公式本身有个缺点，就是没有给出所需的数据点数量，以争取达到理想的精度。不过， 当我们希望表达一个函数的明确的插值多项式时，而$x$ 又远离插值节点，那么使用拉格朗日公式是有益的。</p>
+
+<pre><code class="language-go">// Lagrange performs interpolation with unequally-spaced abscissae.
+//
+// Given a table of X and Y values, interpolate a new y value for argument x.
+//
+// X values in the table do not have to be equally spaced; they do not even
+// have to be in order.  They must however, be distinct.
+// table 中包含了 n 个点且xi 必须互异,x 为目标插值点
+func Lagrange(x float64, table []struct{ X, Y float64 }) (y float64) {
+	// method of BASIC program, p. 33.
+	sum := 0.
+	for i := range table {
+		xi := table[i].X
+		prod := 1.
+		for j := range table {
+			if i != j {
+				xj := table[j].X
+				prod *= (x - xj) / (xi - xj)
+			}
+		}
+		sum += table[i].Y * prod
+	}
+	return sum
+}
+// LagrangePoly uses the formula of Lagrange to produce an interpolating
+// polynomial.
+//
+// X values in the table do not have to be equally spaced; they do not even
+// have to be in order.  They must however, be distinct.
+//
+// The returned polynomial will be of degree n-1 where n is the number of rows
+// in the table.  It can be evaluated for x using common.Horner.
+// 构造拉格朗日多项式，返回各项系数(0-n)
+func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
+	// Method not fully described by Meeus, but needed for numerical solution
+	// to Example 3.g.
+	sum := make([]float64, len(table))
+	prod := make([]float64, len(table))
+	last := len(table) - 1
+	for i := range table {
+		xi := table[i].X
+		yi := table[i].Y
+		prod[last] = 1
+		den := 1.
+		n := last
+		for j := range table {
+			if i != j {
+				xj := table[j].X
+				prod[n-1] = prod[n] * -xj
+				for k := n; k < last; k++ {
+					prod[k] -= prod[k+1] * xj
+				}
+				n--
+				den *= (xi - xj)
+			}
+		}
+		for j, pj := range prod {
+			sum[j] += yi * pj / den
+		}
+	}
+	return sum
+}
+</code></pre>
+
+              </div>
+
+              
+
+
+
+
+
+              
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/" rel="prev">Linux Centos 命令之 cp,rm,mv</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 May 13, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#e140e270bd8a16df47c57524eb5c1d7d">①背景</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#67b6a9c1549b6487f1a184132df91fe1">②第一章Hints and Tips</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#84cf4601a170e23bb31b3c5e700977f1">③第二章 About accuracy</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e9ca11eb03731111ef00027f51b7b69a">④第三章 Interpolation 插值</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#7d777a07b9d3c02ca7c9412715d58f39">1. 牛顿插值</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ddaeae3ddeaa1b5a77f16f8781feeab8">2. 三点等距二阶差商的牛顿插值</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#47d418f47e49a5a8dcaf9684207e3e90">2.1 插值公式</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#34789e4196d560faa2582f5109ad2ed0">2.2 极值：</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#0e1d2066b03692e68b3ee161c0e3629b">2.3 根</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#2e0cd2968401b6f02b7e13fa50d6d32c">3. 五点等距四阶差商的牛顿插值</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#5d8025f325d0cae7b0ab79cb145e8269">3.1 五点插值公式</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#a17ccaa1be6cd233004c1885db549065">3.2 五点极值</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#958a6e094d78953925bb8ca2ca98d01d">3.3 五点求根</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#e5ba8d1486cad91f78f905ee6dddb24a">4. 四点等距中间点插值</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8191214c4d6bae8e2cc23998ce009f38">5. 横坐标不等间距插值：拉格朗日插值</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+    <script src="/js/three.js"></script>
+    
+    <script src="/js/threetxt.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-CAabypVDudfgvBO+DMRNRLzeEUwZKgktkEDbHig9UxA=" crossorigin="anonymous"></script>
+    
+    
+
+  </body>
+</html>
+
