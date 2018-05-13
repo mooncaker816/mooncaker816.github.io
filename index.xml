@@ -16,9 +16,9 @@
       <pubDate>Sat, 12 May 2018 21:43:17 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/</guid>
-      <description>
+      <description>&lt;h2 id=&#34;①背景&#34;&gt;①背景&lt;/h2&gt;
 
-&lt;h2 id=&#34;①背景&#34;&gt;①背景&lt;/h2&gt;
+&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;计算精确的农历节气和日月合朔时间点，需要使用天文算法来实现。《Astronomical Algorithms》正是这么一本不那么让人望而生畏的介绍天文算法的书籍，国内比较出名的寿星万年历亦是基于此书中的算法。&lt;/p&gt;
 
@@ -626,8 +626,7 @@ func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
 	}
 	return sum
 }
-&lt;/code&gt;&lt;/pre&gt;
-</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
