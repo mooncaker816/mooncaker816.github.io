@@ -45,7 +45,9 @@
 
 &lt;p&gt;假设拟合的曲线为直线$y=ax+b$,则最小二乘差方和为：
 $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
-对上式中a求偏导&lt;/p&gt;
+所以问题转化为求解上述关于a,b的二元函数的最小值&lt;/p&gt;
+
+&lt;p&gt;对上式中a求偏导&lt;/p&gt;
 
 &lt;p&gt;\begin{multline}
 \shoveleft
@@ -57,9 +59,9 @@ $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
 
 &lt;p&gt;\begin{multline}
 \shoveleft
-\because y_i = ax_i+b\\[2ex]
+\text {由极值的必要条件可知，}\\[2ex]
 \shoveleft
-\therefore -2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)] = 0\\[2ex]
+-2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)] = 0\\[2ex]
 \shoveleft
 \therefore \sum_{i=1}^n{x_iy_i}-a\sum_{i=1}^n{x_i^2}-b\sum_{i=1}^n{x_i}=0
 \end{multline}&lt;/p&gt;
