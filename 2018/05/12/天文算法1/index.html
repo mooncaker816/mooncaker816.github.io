@@ -61,7 +61,7 @@
   
   <link rel="stylesheet" href="/css/asciinema-player.css">
   
-
+  
   
     <script>
       window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -101,11 +101,12 @@
   
   <meta property="article:published_time" content="2018-05-12T21:43:17&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-05-13T17:46:15&#43;08:00">
+  <meta property="article:modified_time" content="2018-05-14T17:33:29&#43;08:00">
   
 
   
   <script src="//load.sumome.com/" data-sumo-site-id="179bbb944edcce8627cb15d8b33fadaf440e3b5043efd79feb50582c0be37fb2" async="async"></script>
+
 
 
 
@@ -454,7 +455,7 @@
         最近更新于
     
     <time datetime="2018-05-12 21:43:17 &#43;0800 CST" itemprop="datePublished dateModified">
-      May 13, 2018
+      May 14, 2018
     </time>
   </span>
   <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
@@ -1071,8 +1072,13 @@ func Len4Half(y []float64) (float64, error) {
 <h3 id=8191214c4d6bae8e2cc23998ce009f38>5. <strong>横坐标不等间距插值：拉格朗日插值</strong></h3>
 
 <p>\begin{align}
-y=y_1L_1+y_2L_2+\cdots+y_nL_n\\<br />
-L_i = \prod_{i=1,i \neq j}^n \frac {x-x_j}{x_i-x_j}
+y=y_1L_1+y_2L_2+\cdots+y_nL_n\\[2ex]
+L_i = \prod_{
+\substack{
+i+1\\<br />
+i \neq j
+}}^n
+\frac {x-x_j}{x_i-x_j}
 \end{align}</p>
 
 <p>上式是一个 $n-1$ 阶的多项式，这是利用 $y_1,y_2,\dots y_n$ 所能得到的唯一的一个 $n-1$ 阶多项式（注：多项式 插值具有唯一性）。但拉格朗日公式本身有个缺点，就是没有给出所需的数据点数量，以争取达到理想的精度。不过， 当我们希望表达一个函数的明确的插值多项式时，而$x$ 又远离插值节点，那么使用拉格朗日公式是有益的。</p>
@@ -1155,6 +1161,12 @@ func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
                 <div class="post-nav">
   <div class="row">
       
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/" rel="next">天文算法2</a>
+        </div>
+      </div>
+      
       
       <div class="col-sm-9 col-md-6">上一页
         <div class="post-nav-item">
@@ -1169,7 +1181,7 @@ func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
               
 
               <div class="body-footer">
-                  最近更新于 May 13, 2018
+                  最近更新于 May 14, 2018
               </div>
               
               
@@ -1736,10 +1748,14 @@ func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
     
     
     <script type="text/x-mathjax-config">
+        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
         MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
     </script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+    
     
     
 

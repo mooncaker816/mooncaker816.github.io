@@ -11,6 +11,162 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法2</title>
+      <link>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</link>
+      <pubDate>Sun, 13 May 2018 19:38:14 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</guid>
+      <description>&lt;h1 id=&#34;第四章-拟合-curve-fitting&#34;&gt;第四章 拟合 Curve Fitting&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是拟合&#34;&gt;什么是拟合&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;曲线拟合(Curve Fitting)的数学定义是指用连续曲线近似地刻画或比拟平面上一组离散点所表示的坐标之间的函数关系，是一种用解析表达式逼近离散数据的方法。曲线拟合通俗的说法就是“拉曲线”，也就是将现有数据透过数学方法来代入一条数学方程式的表示方法。科学和工程遇到的很多问题，往往只能通过诸如采样、实验等方法获得若干离散的数据，根据这些数据，如果能够找到一个连续的函数（也就是曲线）或者更加密集的离散方程，使得实验数据与方程的曲线能够在最大程度上近似吻合，就可以根据曲线方程对数据进行数学计算，对实验结果进行理论分析，甚至对某些不具备测量条件的位置的结果进行估算。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;最小二乘拟合&#34;&gt;最小二乘拟合&lt;/h2&gt;
+
+&lt;p&gt;考虑 N 个数据点，它们的坐标是$(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$
+假设这些值中的 X 是严格的精确值，Y 的值是测量值(含有一些误差)。
+对于一个给定的 X，如$x_1$，对应的值$y_1$与曲线 C 上对应的 Y 值将存在一个差值$d_1$，我们称这个差值为偏差、误差或残差，它可能是正、负或零。类似的，$x_2,\dots,x_n$,对应的差值为 $d_2,\dots,d_n$。&lt;/p&gt;
+
+&lt;p&gt;我们用 $d_1^2+d_2^2+\cdots+d_n^2$ 作为衡量曲线 C 拟合的“最佳”程度，这个值越小越好，越大则越不好。因此，我们做以下定义：任何一种类型的曲线，它们都有一个共同的特性， 当 $$\sum_{i=1}^n d_i^2$$最小时，称为最佳拟合曲线。&lt;/p&gt;
+
+&lt;p&gt;一条曲线具有这一特性时，称之为“最小二乘拟合”， 这样的曲线称为“最小二乘曲线”。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;最小二乘线性拟合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;假设拟合的曲线为直线$y=ax+b$,则最小二乘差方和为：
+$$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
+对上式中a求偏导&lt;/p&gt;
+
+&lt;p&gt;\begin{multline}
+\shoveleft
+\begin{aligned}
+\frac \partial {\partial a}\sum_{i=1}^n[y_i-(ax_i+b)]^2 &amp;amp;= -2\sum_{i=1}^n({x_iy_i}-a{x_i^2}-b{x_i})\\[2ex]
+&amp;amp; =-2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)]\\[2ex]
+\end{aligned}
+\end{multline}&lt;/p&gt;
+
+&lt;p&gt;\begin{multline}
+\shoveleft
+\because y_i = ax_i+b\\[2ex]
+\shoveleft
+\therefore -2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)] = 0\\[2ex]
+\shoveleft
+\therefore \sum_{i=1}^n{x_iy_i}-a\sum_{i=1}^n{x_i^2}-b\sum_{i=1}^n{x_i}=0
+\end{multline}&lt;/p&gt;
+
+&lt;p&gt;同理对b求偏导可得：
+\begin{align}
+\sum_{i=1}^n{y_i}-a\sum_{i=1}^n{x_i}-bn=0
+\end{align}&lt;/p&gt;
+
+&lt;p&gt;求解关于a,b 的二元一次方程组，
+\begin{cases}
+\sum\limits_{i=1}^n{x_iy_i}-a\sum\limits_{i=1}^n{x_i^2}-b\sum\limits_{i=1}^n{x_i}=0 \\[2ex]
+\sum\limits_{i=1}^n{y_i}-a\sum\limits_{i=1}^n{x_i}-bn=0
+\end{cases}&lt;/p&gt;
+
+&lt;p&gt;得
+\begin{align}
+a &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{y_i}-n\sum\limits_{i=1}^n{x_iy_i}}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}\\[2ex]
+b &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{x_iy_i}-\sum\limits_{i=1}^n{y_i}\sum\limits_{i=1}^n{x_i}^2}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}
+\end{align}&lt;/p&gt;
+
+&lt;p&gt;皮尔逊相关系数r：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%9A%AE%E5%B0%94%E9%80%8A%E7%A7%AF%E7%9F%A9%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0&#34; target=&#34;_blank&#34;&gt;定义&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;由定义可知，
+\begin{align}
+r=\frac {\sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sqrt {\sum\limits_{i=1}^n(x_i-\bar x)^2}\sqrt {\sum\limits_{i=1}^n(y_i-\bar y)^2}}, \\[2ex]
+\text {其中 } \bar x=\frac 1n\sum_{i=1}^nx_i,\bar y=\frac 1n\sum_{i=1}^ny_i
+\end{align}&lt;/p&gt;
+
+&lt;p&gt;\begin{multline}
+\shoveleft
+\begin{aligned}
+化简 \ \  &amp;amp; \sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^n(x_iy_i-x_i\bar y-\bar xy_i+\bar x\bar y)\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_iy_i - \sum\limits_{i=1}^nx_i\bar y - \sum\limits_{i=1}^n\bar xy_i+\sum\limits_{i=1}^n\bar x\bar y\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_iy_i - \frac 1n\sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i - \frac 1n\sum\limits_{i=1}^nx_i\sum\limits_{i=1}^ny_i + \frac 1n\sum\limits_{i=1}^nx_i\sum\limits_{i=1}^ny_i\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_iy_i - \frac 1n\sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i\\[2ex]
+化简 \ \  &amp;amp; \sum\limits_{i=1}^n(x_i-\bar x)^2\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^n(x_i^2-2x_i\bar x+\bar x^2)\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_i^2 - 2\bar x\sum\limits_{i=1}^nx_i + n\bar x^2\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_i^2 - 2n\bar x^2 + n\bar x^2\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_i^2 - n\bar x^2\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^nx_i^2 - \frac 1n(\sum\limits_{i=1}^nx_i)^2\\[2ex]
+同上 \ \  &amp;amp; \sum\limits_{i=1}^n(y_i-\bar y)^2\\[2ex]
+= &amp;amp; \sum\limits_{i=1}^ny_i^2 - \frac 1n(\sum\limits_{i=1}^ny_i)^2\\[2ex]
+\end{aligned}
+\end{multline}
+\begin{multline}
+\shoveleft
+\begin{aligned}
+\therefore \ \ r&amp;amp;=\frac {\sum\limits_{i=1}^nx_iy_i - \frac 1n\sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i}{\sqrt{\sum\limits_{i=1}^nx_i^2 - \frac 1n(\sum\limits_{i=1}^nx_i)^2}\sqrt{\sum\limits_{i=1}^ny_i^2 - \frac 1n(\sum\limits_{i=1}^ny_i)^2}}\\[2ex]
+&amp;amp; =\frac {n\sum\limits_{i=1}^nx_iy_i - \sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i}{\sqrt{n\sum\limits_{i=1}^nx_i^2 - (\sum\limits_{i=1}^nx_i)^2}\sqrt{n\sum\limits_{i=1}^ny_i^2 - (\sum\limits_{i=1}^ny_i)^2}}
+\end{aligned}
+\end{multline}&lt;/p&gt;
+
+&lt;p&gt;这个系数介于+1 到-1 之间。如果值为+1 或-1，说明 x 和 y 之间有完全的线性关系，所有的点(x,y)精确的在同一条直线上。如果 r = +1，y 随 x 单调递增，如果 r = -1，y 随 x 单调递减。&lt;/p&gt;
+
+&lt;p&gt;到这里我们就已经推导出求解线性方程和相关系数的公式，再结合代码看看&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Linear fits a line to sample data.
+//
+// Argument p is a list of data points.  Results a and b are coefficients
+// of the best fit line y = ax + b.
+// 求解线性拟合直线
+// sx = ∑x sy = ∑y sxy = ∑xy sx2 = ∑x^2
+func Linear(p []struct{ X, Y float64 }) (a, b float64) {
+	var sx, sy, sx2, sxy float64
+	for i := range p {
+		x := p[i].X
+		y := p[i].Y
+		sx += x
+		sy += y
+		sx2 += x * x
+		sxy += x * y
+	}
+	n := float64(len(p))
+	d := n*sx2 - sx*sx
+	// (4.2) p. 36
+	a = (n*sxy - sx*sy) / d
+	b = (sy*sx2 - sx*sxy) / d
+	return
+}
+
+// CorrelationCoefficient returns a correlation coefficient for sample data.
+// 求解相关系数 r
+func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
+	var sx, sy, sx2, sy2, sxy float64
+	for i := range p {
+		x := p[i].X
+		y := p[i].Y
+		sx += x
+		sy += y
+		sx2 += x * x
+		sy2 += y * y
+		sxy += x * y
+	}
+	n := float64(len(p))
+	// (4.3) p. 38
+	return (n*sxy - sx*sy) / (math.Sqrt(n*sx2-sx*sx) * math.Sqrt(n*sy2-sy*sy))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;二次曲线拟合&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法1</title>
       <link>https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/</link>
       <pubDate>Sat, 12 May 2018 21:43:17 +0800</pubDate>
@@ -559,8 +715,13 @@ func Len4Half(y []float64) (float64, error) {
 &lt;h3 id=&#34;5-横坐标不等间距插值-拉格朗日插值&#34;&gt;5. &lt;strong&gt;横坐标不等间距插值：拉格朗日插值&lt;/strong&gt;&lt;/h3&gt;
 
 &lt;p&gt;\begin{align}
-y=y_1L_1+y_2L_2+\cdots+y_nL_n\\&lt;br /&gt;
-L_i = \prod_{i=1,i \neq j}^n \frac {x-x_j}{x_i-x_j}
+y=y_1L_1+y_2L_2+\cdots+y_nL_n\\[2ex]
+L_i = \prod_{
+\substack{
+i+1\\&lt;br /&gt;
+i \neq j
+}}^n
+\frac {x-x_j}{x_i-x_j}
 \end{align}&lt;/p&gt;
 
 &lt;p&gt;上式是一个 $n-1$ 阶的多项式，这是利用 $y_1,y_2,\dots y_n$ 所能得到的唯一的一个 $n-1$ 阶多项式（注：多项式 插值具有唯一性）。但拉格朗日公式本身有个缺点，就是没有给出所需的数据点数量，以争取达到理想的精度。不过， 当我们希望表达一个函数的明确的插值多项式时，而$x$ 又远离插值节点，那么使用拉格朗日公式是有益的。&lt;/p&gt;
@@ -5144,384 +5305,6 @@ Milestone: Go1.11
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/ex4.14.png&#34; alt=&#34;ex4.14 report.html&#34; /&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（4）</title>
-      <link>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</link>
-      <pubDate>Sat, 23 Dec 2017 19:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</guid>
-      <description>&lt;h3 id=&#34;ex-4-1&#34;&gt;Ex 4.1&lt;/h3&gt;
-
-&lt;p&gt;Write a function that counts the number of bits that are different in two SHA256 hashes. (See PopCount from Section 2.6.2.)&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;crypto/sha256&amp;quot;
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	str1 := &amp;quot;abc&amp;quot;
-	str2 := &amp;quot;xyz&amp;quot;
-	hash1 := sha256.Sum256([]byte(str1))
-	hash2 := sha256.Sum256([]byte(str2))
-	var dif int
-	for i := 0; i &amp;lt; 32; i++ {
-		dif += popcount(hash1[i] ^ hash2[i])
-	}
-	fmt.Printf(&amp;quot;there are %d different bits between these 2 hashes\n&amp;quot;, dif)
-}
-
-func popcount(x byte) int {
-	var count int
-	for x != 0 {
-		count++
-		x &amp;amp;= x - 1
-	}
-	return count
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run difhash.go
-there are 121 different bits between these 2 hashes
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-2&#34;&gt;Ex 4.2&lt;/h3&gt;
-
-&lt;p&gt;Write a program that prints the SHA256 hash of its standard input by default but supports a command-line ﬂag to print the SHA384 or SHA512 hash instead.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;crypto/sha256&amp;quot;
-	&amp;quot;crypto/sha512&amp;quot;
-	&amp;quot;flag&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-)
-
-func main() {
-	method := flag.String(&amp;quot;sha&amp;quot;, &amp;quot;256&amp;quot;, &amp;quot;default is SHA256, optional 384,512&amp;quot;)
-	flag.Parse()
-	//去掉flag参数后剩余的输入参数，此处为需要计算hash的字符串
-	fmt.Printf(&amp;quot;there are %d non-flag input params\n&amp;quot;, flag.NArg())
-	for i, str := range flag.Args() {
-		switch *method {
-		case &amp;quot;256&amp;quot;:
-			c := sha256.Sum256([]byte(str))
-			fmt.Printf(&amp;quot;#%d:SHA256 of %s is %x\n&amp;quot;, i, str, c)
-		case &amp;quot;384&amp;quot;:
-			c := sha512.Sum384([]byte(str))
-			fmt.Printf(&amp;quot;#%d:SHA384 of %s is %x\n&amp;quot;, i, str, c)
-		case &amp;quot;512&amp;quot;:
-			c := sha512.Sum512([]byte(str))
-			fmt.Printf(&amp;quot;#%d:SHA512 of %s is %x\n&amp;quot;, i, str, c)
-		default:
-			log.Fatal(&amp;quot;not support&amp;quot;)
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex4.2 -sha 256 a b c abc
-there are 4 non-flag input params
-#0:SHA256 of a is ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
-#1:SHA256 of b is 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
-#2:SHA256 of c is 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
-#3:SHA256 of abc is ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-$ ./ex4.2 -sha 384 a b c abc
-there are 4 non-flag input params
-#0:SHA384 of a is 54a59b9f22b0b80880d8427e548b7c23abd873486e1f035dce9cd697e85175033caa88e6d57bc35efae0b5afd3145f31
-#1:SHA384 of b is 98a906182cdcfb1eb4eb47117600f68958e2ddd140248b47984f4bde6587b89c8215c3da895a336e94ad1aca39015c40
-#2:SHA384 of c is 40f98a05660bf871802ee59964de1945bd731a45cc7f48e4dadd92f34a7eeec089e149ad8c2434f11792e588b740d997
-#3:SHA384 of abc is cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7
-$ ./ex4.2 -sha 512 a b c abc
-there are 4 non-flag input params
-#0:SHA512 of a is 1f40fc92da241694750979ee6cf582f2d5d7d28e18335de05abc54d0560e0f5302860c652bf08d560252aa5e74210546f369fbbbce8c12cfc7957b2652fe9a75
-#1:SHA512 of b is 5267768822ee624d48fce15ec5ca79cbd602cb7f4c2157a516556991f22ef8c7b5ef7b18d1ff41c59370efb0858651d44a936c11b7b144c48fe04df3c6a3e8da
-#2:SHA512 of c is acc28db2beb7b42baa1cb0243d401ccb4e3fce44d7b02879a52799aadff541522d8822598b2fa664f9d5156c00c924805d75c3868bd56c2acb81d37e98e35adc
-#3:SHA512 of abc is ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f
-$ ./ex4.2 -sha 777 a b c abc
-there are 4 non-flag input params
-2017/12/22 20:53:41 not support
-$./ex4.2 a b c abc
-there are 4 non-flag input params
-#0:SHA256 of a is ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
-#1:SHA256 of b is 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
-#2:SHA256 of c is 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
-#3:SHA256 of abc is ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-3&#34;&gt;Ex 4.3&lt;/h3&gt;
-
-&lt;p&gt;Rewrite reverse to use an array pointer instead of a slice.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	s := [5]byte{1, 2, 3, 4, 5}
-	fmt.Println(s)
-	reverse(&amp;amp;s)
-	fmt.Println(s)
-}
-
-func reverse(a *[5]byte) {
-	for i, j := 0, len(a)-1; i &amp;lt; j; i, j = i+1, j-1 {
-		a[i], a[j] = a[j], a[i]
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run reverse.go
-[1 2 3 4 5]
-[5 4 3 2 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-4&#34;&gt;Ex 4.4&lt;/h3&gt;
-
-&lt;p&gt;Write a version of rotate that operates in a single pass.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-)
-
-func main() {
-	s := []int{0, 1, 2, 3, 4, 5, 6, 7, 8}
-	rotate(&amp;amp;s, 3)
-	fmt.Println(s)
-}
-
-func rotate(s *[]int, n int) {
-	if n &amp;gt; len(*s) {
-		log.Fatal(&amp;quot;invalid rotate num&amp;quot;)
-	}
-	var ls []int
-	ls = append(ls, (*s)[n:]...)
-	ls = append(ls, (*s)[:n]...)
-	*s = ls
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run rotate.go
-[3 4 5 6 7 8 0 1 2]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-5&#34;&gt;Ex 4.5&lt;/h3&gt;
-
-&lt;p&gt;Write an in-place function to eliminate adjacent duplicates in a []string slice.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	s1 := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot;d&amp;quot;, &amp;quot;d&amp;quot;}
-	s11 := s1
-	dup(&amp;amp;s1)
-	dup1(&amp;amp;s11)
-	fmt.Println(s1, s11)
-	s2 := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;}
-	s21 := s2
-	dup(&amp;amp;s2)
-	dup(&amp;amp;s21)
-	fmt.Println(s2, s21)
-}
-
-func dup(s *[]string) {
-	var ls []string
-	ls = append(ls, (*s)[0])
-	for i := 0; i &amp;lt; len(*s)-1; i++ {
-		if (*s)[i] != (*s)[i+1] {
-			ls = append(ls, (*s)[i+1])
-		}
-	}
-	*s = ls
-}
-
-func dup1(s *[]string) {
-	j := 0
-	var temp string
-	for i := range *s {
-		(*s)[j] = (*s)[i]
-		j++
-		if i &amp;gt; 0 &amp;amp;&amp;amp; temp == (*s)[i] {
-			j--
-		}
-		temp = (*s)[i]
-	}
-	*s = (*s)[:j]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run dup.go
-[a b c d] [a b c d]
-[a b c] [a b c]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-6&#34;&gt;Ex 4.6&lt;/h3&gt;
-
-&lt;p&gt;Write an in-place function that squashes each run of adjacent Unicode spac (see unicode.IsSpace) in a UTF-8-encoded []byte slice into a single ASCII space.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;unicode&amp;quot;
-	&amp;quot;unicode/utf8&amp;quot;
-)
-
-func main() {
-	str := &amp;quot;\t世界a \na\r\t\vb   &amp;quot;
-	s1 := []byte(str)
-	s2 := []byte(str)
-	//s1 := []byte{&#39;a&#39;, &#39;b&#39;, &#39; &#39;, &#39;	&#39;, &#39;\n&#39;, &#39;c&#39;, &#39; &#39;}
-	fmt.Printf(&amp;quot;before:%d %[1]v %[1]s\n&amp;quot;, s1)
-	utf8space(&amp;amp;s1)
-	fmt.Printf(&amp;quot;after:%d %[1]v %[1]s\n&amp;quot;, s1)
-	//s2 := []byte{&#39;1&#39;, &#39;2&#39;, &#39; &#39;, &#39;	&#39;, &#39;\n&#39;, &#39;3&#39;, &#39; &#39;, &#39;\t&#39;}
-	fmt.Printf(&amp;quot;before:%d %[1]v %[1]s\n&amp;quot;, s2)
-	utf8space2(&amp;amp;s2)
-	fmt.Printf(&amp;quot;after:%d %[1]v %[1]s\n&amp;quot;, s2)
-}
-
-func utf8space(s *[]byte) {
-	var ls []byte
-	runes := []rune(string(*s))
-	spaceInd := false
-	for _, r := range runes {
-		if !unicode.IsSpace(r) {
-			spaceInd = false
-			ls = append(ls, []byte(string(r))...)
-		} else if unicode.IsSpace(r) &amp;amp;&amp;amp; !spaceInd {
-			spaceInd = true
-			ls = append(ls, byte(32))
-		}
-	}
-	*s = ls
-}
-
-func utf8space2(s *[]byte) {
-	str := string(*s)
-	spaceInd := false
-	j := 0
-	for i, r := range str {
-		bytelen := utf8.RuneLen(r)
-		if !unicode.IsSpace(r) {
-			spaceInd = false
-			copy((*s)[j:], (*s)[i:i+bytelen])
-			j += bytelen
-		} else if unicode.IsSpace(r) &amp;amp;&amp;amp; !spaceInd {
-			spaceInd = true
-			bytelen = 1
-			copy((*s)[j:], &amp;quot; &amp;quot;)
-			j += bytelen
-		}
-	}
-	*s = (*s)[:j]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run utf8space.go
-before:[9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] [9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] 	世界a
-a
-        b
-after:[32 228 184 150 231 149 140 97 32 97 32 98 32] [32 228 184 150 231 149 140 97 32 97 32 98 32]  世界a a b
-before:[9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] [9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] 	世界a
-a
-        b
-after:[32 228 184 150 231 149 140 97 32 97 32 98 32] [32 228 184 150 231 149 140 97 32 97 32 98 32]  世界a a b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;for range遍历&lt;u&gt;&lt;code&gt;字符串&lt;/code&gt;&lt;/u&gt;的时候，i为当前字符开始的位置，v为当前字符。换句话说，字符串包含多字节utf8字符时，i不连续，因为遍历的单位不是byte，而是rune（unicode）。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/range%20loop%20for%20string.png&#34; alt=&#34;range loop for string&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-4-7&#34;&gt;Ex 4.7&lt;/h3&gt;
-
-&lt;p&gt;Modify reverse to reverse the characters of a []byte slice that represents a UTF-8-encoded string, in place. Can you do it without allocating new memory?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;unicode&amp;quot;
-)
-
-func main() {
-	str := &amp;quot;\U00000080world,世界,hello,你好&amp;quot;
-	s1 := []byte(str) //每个元素根据utf8的格式，确定utf8表达字符的字节数，或为单字节或为多字节
-	s2 := []rune(str) //一个元素就是一个unicode
-	fmt.Printf(&amp;quot;% x \n % x\n&amp;quot;, s1, s2)
-	fmt.Println(Reverse(str))
-	reverse(s2)
-	fmt.Println(string(s2))
-}
-
-// Reverse reverses the input while respecting UTF8 encoding and combined characters
-func Reverse(text string) string {
-	textRunes := []rune(text)
-	textRunesLength := len(textRunes)
-	if textRunesLength &amp;lt;= 1 {
-		return text
-	}
-
-	i, j := 0, 0
-	for i &amp;lt; textRunesLength &amp;amp;&amp;amp; j &amp;lt; textRunesLength {
-		j = i + 1
-		for j &amp;lt; textRunesLength &amp;amp;&amp;amp; isMark(textRunes[j]) {
-			j++
-		}
-
-		if isMark(textRunes[j-1]) {
-			// Reverses Combined Characters
-			reverse(textRunes[i:j])
-		}
-
-		i = j
-	}
-
-	// Reverses the entire array
-	reverse(textRunes)
-
-	return string(textRunes)
-}
-
-func reverse(runes []rune) {
-	for i, j := 0, len(runes)-1; i &amp;lt; j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-}
-
-// isMark determines whether the rune is a marker
-func isMark(r rune) bool {
-	return unicode.Is(unicode.Mn, r) || unicode.Is(unicode.Me, r) || unicode.Is(unicode.Mc, r)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run utf8reverse.go
-c2 80 77 6f 72 6c 64 2c e4 b8 96 e7 95 8c 2c 68 65 6c 6c 6f 2c e4 bd a0 e5 a5 bd
- [ 80  77  6f  72  6c  64  2c  4e16  754c  2c  68  65  6c  6c  6f  2c  4f60  597d]
-好你,olleh,界世,dlrow
-好你,olleh,界世,dlrow
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Reverse：确保了组合字符（多个unicode组合成一个字符）翻转的正确性&lt;/p&gt;
-
-&lt;p&gt;reverse：不考虑组合字符，翻转正确&lt;/p&gt;</description>
     </item>
     
   </channel>
