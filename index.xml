@@ -20,25 +20,28 @@
 
 &lt;p&gt;&lt;/p&gt;
 
-&lt;h2 id=&#34;什么是拟合&#34;&gt;什么是拟合&lt;/h2&gt;
+&lt;h2 id=&#34;1-什么是拟合&#34;&gt;1. 什么是拟合&lt;/h2&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;曲线拟合(Curve Fitting)的数学定义是指用连续曲线近似地刻画或比拟平面上一组离散点所表示的坐标之间的函数关系，是一种用解析表达式逼近离散数据的方法。曲线拟合通俗的说法就是“拉曲线”，也就是将现有数据透过数学方法来代入一条数学方程式的表示方法。科学和工程遇到的很多问题，往往只能通过诸如采样、实验等方法获得若干离散的数据，根据这些数据，如果能够找到一个连续的函数（也就是曲线）或者更加密集的离散方程，使得实验数据与方程的曲线能够在最大程度上近似吻合，就可以根据曲线方程对数据进行数学计算，对实验结果进行理论分析，甚至对某些不具备测量条件的位置的结果进行估算。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;最小二乘拟合&#34;&gt;最小二乘拟合&lt;/h2&gt;
+&lt;h2 id=&#34;2-最小二乘拟合&#34;&gt;2. 最小二乘拟合&lt;/h2&gt;
 
-&lt;p&gt;考虑 N 个数据点，它们的坐标是$(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$
+&lt;p&gt;　　考虑 N 个数据点，它们的坐标是$(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$
 假设这些值中的 X 是严格的精确值，Y 的值是测量值(含有一些误差)。
 对于一个给定的 X，如$x_1$，对应的值$y_1$与曲线 C 上对应的 Y 值将存在一个差值$d_1$，我们称这个差值为偏差、误差或残差，它可能是正、负或零。类似的，$x_2,\dots,x_n$,对应的差值为 $d_2,\dots,d_n$。&lt;/p&gt;
 
-&lt;p&gt;我们用 $d_1^2+d_2^2+\cdots+d_n^2$ 作为衡量曲线 C 拟合的“最佳”程度，这个值越小越好，越大则越不好。因此，我们做以下定义：任何一种类型的曲线，它们都有一个共同的特性， 当 $$\sum_{i=1}^n d_i^2$$最小时，称为最佳拟合曲线。&lt;/p&gt;
+&lt;p&gt;　　我们用 $d_1^2+d_2^2+\cdots+d_n^2$ 作为衡量曲线 C 拟合的“最佳”程度，这个值越小越好，越大则越不好。因此，我们做以下定义：任何一种类型的曲线，它们都有一个共同的特性， 当 $$\sum_{i=1}^n d_i^2$$最小时，称为最佳拟合曲线。&lt;/p&gt;
 
-&lt;p&gt;一条曲线具有这一特性时，称之为“最小二乘拟合”， 这样的曲线称为“最小二乘曲线”。&lt;/p&gt;
+&lt;p&gt;　　一条曲线具有这一特性时，称之为“最小二乘拟合”， 这样的曲线称为“最小二乘曲线”。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-线性拟合&#34;&gt;2.1 线性拟合&lt;/h3&gt;
+
+&lt;p&gt;　　&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;最小二乘线性拟合&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;线性方程&lt;/p&gt;
 
 &lt;p&gt;假设拟合的曲线为直线$y=ax+b$,则最小二乘差方和为：
 $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
@@ -47,7 +50,7 @@ $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
 &lt;p&gt;\begin{multline}
 \shoveleft
 \begin{aligned}
-\frac \partial {\partial a}\sum_{i=1}^n[y_i-(ax_i+b)]^2 &amp;amp;= -2\sum_{i=1}^n({x_iy_i}-a{x_i^2}-b{x_i})\\[2ex]
+\frac \partial {\partial a}\sum_{i=1}^n[y_i-(ax_i+b)]^2 &amp;amp;= -2\sum_{i=1}^n({x_iy_i}-a{x_i^2}-b {x_i})\\[2ex]
 &amp;amp; =-2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)]\\[2ex]
 \end{aligned}
 \end{multline}&lt;/p&gt;
@@ -74,11 +77,11 @@ $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
 
 &lt;p&gt;得
 \begin{align}
-a &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{y_i}-n\sum\limits_{i=1}^n{x_iy_i}}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}\\[2ex]
-b &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{x_iy_i}-\sum\limits_{i=1}^n{y_i}\sum\limits_{i=1}^n{x_i}^2}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}
-\end{align}&lt;/p&gt;
+a &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{y_i}-n\sum\limits_{i=1}^n{x_iy_i}}{  (\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}\\[2ex]
+b &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{x_iy_i}-\sum\limits_{i=1}^n{y_i} \sum\limits_{i=1}^n{x_i}^2}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}
+\end{align}&lt;/p&gt;&lt;/li&gt;
 
-&lt;p&gt;皮尔逊相关系数r：&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;皮尔逊相关系数r&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%9A%AE%E5%B0%94%E9%80%8A%E7%A7%AF%E7%9F%A9%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0&#34; target=&#34;_blank&#34;&gt;定义&lt;/a&gt;&lt;/p&gt;
 
@@ -114,9 +117,11 @@ r=\frac {\sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sqrt {\sum\limits_{i=1}^n
 \end{aligned}
 \end{multline}&lt;/p&gt;
 
-&lt;p&gt;这个系数介于+1 到-1 之间。如果值为+1 或-1，说明 x 和 y 之间有完全的线性关系，所有的点(x,y)精确的在同一条直线上。如果 r = +1，y 随 x 单调递增，如果 r = -1，y 随 x 单调递减。&lt;/p&gt;
+&lt;p&gt;　　这个系数介于+1 到-1 之间。如果值为+1 或-1，说明 x 和 y 之间有完全的线性关系，所有的点(x,y)精确的在同一条直线上。如果 r = +1，y 随 x 单调递增，如果 r = -1，y 随 x 单调递减。&lt;/p&gt;&lt;/li&gt;
 
-&lt;p&gt;到这里我们就已经推导出求解线性方程和相关系数的公式，再结合代码看看&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;代码&lt;/p&gt;
+
+&lt;p&gt;　　到这里我们就已经推导出求解线性方程和相关系数的公式，再结合代码看看&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Linear fits a line to sample data.
 //
@@ -125,45 +130,44 @@ r=\frac {\sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sqrt {\sum\limits_{i=1}^n
 // 求解线性拟合直线
 // sx = ∑x sy = ∑y sxy = ∑xy sx2 = ∑x^2
 func Linear(p []struct{ X, Y float64 }) (a, b float64) {
-	var sx, sy, sx2, sxy float64
-	for i := range p {
-		x := p[i].X
-		y := p[i].Y
-		sx += x
-		sy += y
-		sx2 += x * x
-		sxy += x * y
-	}
-	n := float64(len(p))
-	d := n*sx2 - sx*sx
-	// (4.2) p. 36
-	a = (n*sxy - sx*sy) / d
-	b = (sy*sx2 - sx*sxy) / d
-	return
+    var sx, sy, sx2, sxy float64
+    for i := range p {
+        x := p[i].X
+        y := p[i].Y
+        sx += x
+        sy += y
+        sx2 += x * x
+        sxy += x * y
+    }
+    n := float64(len(p))
+    d := n*sx2 - sx*sx
+    // (4.2) p. 36
+    a = (n*sxy - sx*sy) / d
+    b = (sy*sx2 - sx*sxy) / d
+    return
 }
 
 // CorrelationCoefficient returns a correlation coefficient for sample data.
 // 求解相关系数 r
 func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
-	var sx, sy, sx2, sy2, sxy float64
-	for i := range p {
-		x := p[i].X
-		y := p[i].Y
-		sx += x
-		sy += y
-		sx2 += x * x
-		sy2 += y * y
-		sxy += x * y
-	}
-	n := float64(len(p))
-	// (4.3) p. 38
-	return (n*sxy - sx*sy) / (math.Sqrt(n*sx2-sx*sx) * math.Sqrt(n*sy2-sy*sy))
+    var sx, sy, sx2, sy2, sxy float64
+    for i := range p {
+        x := p[i].X
+        y := p[i].Y
+        sx += x
+        sy += y
+        sx2 += x * x
+        sy2 += y * y
+        sxy += x * y
+    }
+    n := float64(len(p))
+    // (4.3) p. 38
+    return (n*sxy - sx*sy) / (math.Sqrt(n*sx2-sx*sx) * math.Sqrt(n*sy2-sy*sy))
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;ul&gt;
-&lt;li&gt;二次曲线拟合&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;h3 id=&#34;2-2-二次曲线拟合&#34;&gt;2.2 二次曲线拟合&lt;/h3&gt;</description>
     </item>
     
     <item>

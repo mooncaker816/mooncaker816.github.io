@@ -101,7 +101,7 @@
   
   <meta property="article:published_time" content="2018-05-13T19:38:14&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-05-14T17:33:29&#43;08:00">
+  <meta property="article:modified_time" content="2018-05-14T18:00:00&#43;08:00">
   
 
   
@@ -300,6 +300,26 @@
         
         
     
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
 
 
 <div class="container body-content tocpost">
@@ -413,25 +433,28 @@
 
 <p></p>
 
-<h2 id=3770bab291a8fcd618fef7baa7411a33>什么是拟合</h2>
+<h2 id=529ee18febeeffa576844b7f41654404>1. 什么是拟合</h2>
 
 <blockquote>
 <p>曲线拟合(Curve Fitting)的数学定义是指用连续曲线近似地刻画或比拟平面上一组离散点所表示的坐标之间的函数关系，是一种用解析表达式逼近离散数据的方法。曲线拟合通俗的说法就是“拉曲线”，也就是将现有数据透过数学方法来代入一条数学方程式的表示方法。科学和工程遇到的很多问题，往往只能通过诸如采样、实验等方法获得若干离散的数据，根据这些数据，如果能够找到一个连续的函数（也就是曲线）或者更加密集的离散方程，使得实验数据与方程的曲线能够在最大程度上近似吻合，就可以根据曲线方程对数据进行数学计算，对实验结果进行理论分析，甚至对某些不具备测量条件的位置的结果进行估算。</p>
 </blockquote>
 
-<h2 id=850bb5c0c9a25956b01d847403f23f0a>最小二乘拟合</h2>
+<h2 id=7d32a19bbfe0c7222f673b84319af81f>2. 最小二乘拟合</h2>
 
-<p>考虑 N 个数据点，它们的坐标是$(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$
+<p>　　考虑 N 个数据点，它们的坐标是$(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$
 假设这些值中的 X 是严格的精确值，Y 的值是测量值(含有一些误差)。
 对于一个给定的 X，如$x_1$，对应的值$y_1$与曲线 C 上对应的 Y 值将存在一个差值$d_1$，我们称这个差值为偏差、误差或残差，它可能是正、负或零。类似的，$x_2,\dots,x_n$,对应的差值为 $d_2,\dots,d_n$。</p>
 
-<p>我们用 $d_1^2+d_2^2+\cdots+d_n^2$ 作为衡量曲线 C 拟合的“最佳”程度，这个值越小越好，越大则越不好。因此，我们做以下定义：任何一种类型的曲线，它们都有一个共同的特性， 当 $$\sum_{i=1}^n d_i^2$$最小时，称为最佳拟合曲线。</p>
+<p>　　我们用 $d_1^2+d_2^2+\cdots+d_n^2$ 作为衡量曲线 C 拟合的“最佳”程度，这个值越小越好，越大则越不好。因此，我们做以下定义：任何一种类型的曲线，它们都有一个共同的特性， 当 $$\sum_{i=1}^n d_i^2$$最小时，称为最佳拟合曲线。</p>
 
-<p>一条曲线具有这一特性时，称之为“最小二乘拟合”， 这样的曲线称为“最小二乘曲线”。</p>
+<p>　　一条曲线具有这一特性时，称之为“最小二乘拟合”， 这样的曲线称为“最小二乘曲线”。</p>
+
+<h3 id=7954392ab770cd5f3f39a53f8415afb3>2.1 线性拟合</h3>
+
+<p>　　</p>
 
 <ul>
-<li>最小二乘线性拟合</li>
-</ul>
+<li><p>线性方程</p>
 
 <p>假设拟合的曲线为直线$y=ax+b$,则最小二乘差方和为：
 $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
@@ -440,7 +463,7 @@ $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
 <p>\begin{multline}
 \shoveleft
 \begin{aligned}
-\frac \partial {\partial a}\sum_{i=1}^n[y_i-(ax_i+b)]^2 &= -2\sum_{i=1}^n({x_iy_i}-a{x_i^2}-b{x_i})\\[2ex]
+\frac \partial {\partial a}\sum_{i=1}^n[y_i-(ax_i+b)]^2 &= -2\sum_{i=1}^n({x_iy_i}-a{x_i^2}-b {x_i})\\[2ex]
 & =-2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)]\\[2ex]
 \end{aligned}
 \end{multline}</p>
@@ -467,11 +490,11 @@ $$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
 
 <p>得
 \begin{align}
-a &= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{y_i}-n\sum\limits_{i=1}^n{x_iy_i}}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}\\[2ex]
-b &= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{x_iy_i}-\sum\limits_{i=1}^n{y_i}\sum\limits_{i=1}^n{x_i}^2}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}
-\end{align}</p>
+a &= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{y_i}-n\sum\limits_{i=1}^n{x_iy_i}}{  (\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}\\[2ex]
+b &= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{x_iy_i}-\sum\limits_{i=1}^n{y_i} \sum\limits_{i=1}^n{x_i}^2}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}
+\end{align}</p></li>
 
-<p>皮尔逊相关系数r：</p>
+<li><p>皮尔逊相关系数r</p>
 
 <p><a href="https://zh.wikipedia.org/wiki/%E7%9A%AE%E5%B0%94%E9%80%8A%E7%A7%AF%E7%9F%A9%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0" target="_blank">定义</a></p>
 
@@ -507,9 +530,11 @@ r=\frac {\sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sqrt {\sum\limits_{i=1}^n
 \end{aligned}
 \end{multline}</p>
 
-<p>这个系数介于+1 到-1 之间。如果值为+1 或-1，说明 x 和 y 之间有完全的线性关系，所有的点(x,y)精确的在同一条直线上。如果 r = +1，y 随 x 单调递增，如果 r = -1，y 随 x 单调递减。</p>
+<p>　　这个系数介于+1 到-1 之间。如果值为+1 或-1，说明 x 和 y 之间有完全的线性关系，所有的点(x,y)精确的在同一条直线上。如果 r = +1，y 随 x 单调递增，如果 r = -1，y 随 x 单调递减。</p></li>
 
-<p>到这里我们就已经推导出求解线性方程和相关系数的公式，再结合代码看看</p>
+<li><p>代码</p>
+
+<p>　　到这里我们就已经推导出求解线性方程和相关系数的公式，再结合代码看看</p>
 
 <pre><code class="language-go">// Linear fits a line to sample data.
 //
@@ -518,45 +543,44 @@ r=\frac {\sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sqrt {\sum\limits_{i=1}^n
 // 求解线性拟合直线
 // sx = ∑x sy = ∑y sxy = ∑xy sx2 = ∑x^2
 func Linear(p []struct{ X, Y float64 }) (a, b float64) {
-	var sx, sy, sx2, sxy float64
-	for i := range p {
-		x := p[i].X
-		y := p[i].Y
-		sx += x
-		sy += y
-		sx2 += x * x
-		sxy += x * y
-	}
-	n := float64(len(p))
-	d := n*sx2 - sx*sx
-	// (4.2) p. 36
-	a = (n*sxy - sx*sy) / d
-	b = (sy*sx2 - sx*sxy) / d
-	return
+    var sx, sy, sx2, sxy float64
+    for i := range p {
+        x := p[i].X
+        y := p[i].Y
+        sx += x
+        sy += y
+        sx2 += x * x
+        sxy += x * y
+    }
+    n := float64(len(p))
+    d := n*sx2 - sx*sx
+    // (4.2) p. 36
+    a = (n*sxy - sx*sy) / d
+    b = (sy*sx2 - sx*sxy) / d
+    return
 }
 
 // CorrelationCoefficient returns a correlation coefficient for sample data.
 // 求解相关系数 r
 func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
-	var sx, sy, sx2, sy2, sxy float64
-	for i := range p {
-		x := p[i].X
-		y := p[i].Y
-		sx += x
-		sy += y
-		sx2 += x * x
-		sy2 += y * y
-		sxy += x * y
-	}
-	n := float64(len(p))
-	// (4.3) p. 38
-	return (n*sxy - sx*sy) / (math.Sqrt(n*sx2-sx*sx) * math.Sqrt(n*sy2-sy*sy))
+    var sx, sy, sx2, sy2, sxy float64
+    for i := range p {
+        x := p[i].X
+        y := p[i].Y
+        sx += x
+        sy += y
+        sx2 += x * x
+        sy2 += y * y
+        sxy += x * y
+    }
+    n := float64(len(p))
+    // (4.3) p. 38
+    return (n*sxy - sx*sy) / (math.Sqrt(n*sx2-sx*sx) * math.Sqrt(n*sy2-sy*sy))
 }
-</code></pre>
-
-<ul>
-<li>二次曲线拟合</li>
+</code></pre></li>
 </ul>
+
+<h3 id=39ca3b6c41119b878403662b5db207e0>2.2 二次曲线拟合</h3>
               </div>
 
               
@@ -669,7 +693,7 @@ func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
         
 
         <li>
-          <a href="#3770bab291a8fcd618fef7baa7411a33">什么是拟合</a>
+          <a href="#529ee18febeeffa576844b7f41654404">1. 什么是拟合</a>
 
         
 
@@ -696,7 +720,63 @@ func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
         
 
         <li>
-          <a href="#850bb5c0c9a25956b01d847403f23f0a">最小二乘拟合</a>
+          <a href="#7d32a19bbfe0c7222f673b84319af81f">2. 最小二乘拟合</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#7954392ab770cd5f3f39a53f8415afb3">2.1 线性拟合</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#39ca3b6c41119b878403662b5db207e0">2.2 二次曲线拟合</a>
 
         
           
@@ -707,6 +787,8 @@ func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
 
     
     
+    
+      </li></ul></li>
     
       </li></ul></li>
     
