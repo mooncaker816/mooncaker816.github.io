@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="第五章 迭代 Iteration
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/">
+  <meta property="og:title" content="天文算法3 | Mooncaker816">
+  <meta property="og:description" content="第五章 迭代 Iteration
+
+">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-05-15T13:48:36&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-05-15T16:51:41&#43;08:00">
+  
+
+  
+  
+
+
+
+
+  <title>天文算法3 | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+            <div class="article-container">
+              <h1 itemprop="name">天文算法3</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2018-05-15 13:48:36 &#43;0800 CST" itemprop="datePublished dateModified">
+      May 15, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    3 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">golang</a
+    >, 
+    
+    <a href="https://mooncaker816.github.io/categories/%E7%AE%97%E6%B3%95/">算法</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%953&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f15%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25953%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f15%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25953%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f15%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25953%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%953"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f15%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25953%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%953"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%953&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f15%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25953%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <h1 id=dd03153b83e2fb4a6d7f171298a64805>第五章 迭代 Iteration</h1>
+
+<p></p>
+
+<h2 id=94def7fc83c82103c37ef5672ba7c43b>1. 什么是迭代算法</h2>
+
+<blockquote>
+<p>　　迭代法（英语：Iterative Method），在计算数学中，迭代是通过从一个初始估计出发寻找一系列近似解来解决问题（一般是解方程或者方程组）的数学过程，为实现这一过程所使用的方法统称。</p>
+
+<p>　　跟迭代法相对应的是直接法（或者称为一次解法），即一次性解决问题，例如通过开方解决方程 $ x^{2}=4$。一般如果可能，直接解法总是优先考虑的。但当遇到复杂问题时，特别是在未知量很多，方程为非线性时，我们无法找到直接解法（例如五次以及更高次的代数方程没有解析解，参见阿贝尔定理），这时候或许可以通过迭代法寻求方程（组）的近似解。</p>
+
+<p>　　最常见的迭代法是牛顿法。其他还包括最速下降法、共轭迭代法、变尺度迭代法、最小二乘法、线性规划、非线性规划、单纯型法、惩罚函数法、斜率投影法、遗传算法、模拟退火等等。</p>
+</blockquote>
+
+<p>　　以上是 wiki 上对迭代算法的描述，可以看出，迭代法的主要用途就是求解近似根，这一点我们再第三章插值函数逆推插值点的介绍中已经得到了运用。下面我们主要介绍牛顿迭代法和二分迭代法。</p>
+
+<h2 id=18f5a21ca2cb150380eb3a4352fc5e3e>2. 牛顿迭代法</h2>
+
+<blockquote>
+<p>　　首先，选择一个接近函数$f(x)$零点的 $x_0$，计算相应的 $f(x_0)$和切线斜率 $f’(x_0)$。然后我们计算穿过点 $(x_0,f(x_0))$并且斜率为 $f’(x_0)$的直线和 $x$轴的交点的 $x$坐标，也就是求如下方程的解：
+$$0=(x-x_0)f’(x_0)+f(x_0)$$
+　　我们将新求得的点的$x$坐标命名为$x_1$，通常$x_1$会比$x_0$更接近方程$f(x)=0$的解。因此我们现在可以利用$x_1$开始下一轮迭代。迭代公式可化简为如下所示：
+$$x_{n+1}=x_n - \frac {f(x_n)}{f’(x_n)}$$
+　　已经证明，如果$f’$是连续的，并且待求的零点$x$是孤立的，那么在零点$x$周围存在一个区域，只要初始值$x_0$位于这个邻近区域内，那么牛顿法必定收敛。</p>
+
+<p>　　并且，如果$f’(x)\neq 0$，那么牛顿法将具有平方收敛的性能。粗略的说，这意味着每迭代一次，牛顿法结果的有效数字将增加一倍。</p>
+</blockquote>
+
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/NewtonIteration_Ani.gif/600px-NewtonIteration_Ani.gif" width=400 height=300 /></p>
+
+<pre><code class="language-go">// BetterFunc is a convience type definition.
+type BetterFunc func(float64) float64
+
+// DecimalPlaces iterates to a fixed number of decimal places.
+//
+// Inputs are an improvement function, a starting value, the number of
+// decimal places desired in the result, and an iteration limit.
+// better 为迭代公式，start 为起始点，places 为视作迭代结束的最大精度值的小数点位数
+// maxIterations 为迭代最大次数
+func DecimalPlaces(better BetterFunc, start float64, places, maxIterations int) (float64, error) {
+	d := math.Pow(10, float64(-places))
+	for i := 0; i < maxIterations; i++ {
+		n := better(start)
+		if math.Abs(n-start) < d {
+			return n, nil
+		}
+		start = n
+	}
+	return 0, errors.New("Maximum iterations reached")
+}
+
+// FullPrecison iterates to (nearly) the full precision of a float64.
+//
+// To allow for a little bit of floating point jitter, FullPrecision iterates
+// to 15 significant figures, which is the maximum number of full significant
+// figures representable in a float64, but still a couple of bits shy of the
+// full representable precision.
+// 和 DecimalPlaces 功能类似，只不过默认迭代结束的标志为小于float64的最大精度15
+func FullPrecision(better BetterFunc, start float64, maxIterations int) (float64, error) {
+	for i := 0; i < maxIterations; i++ {
+		n := better(start)
+		if math.Abs((n-start)/n) < 1e-15 {
+			return n, nil
+		}
+		start = n
+	}
+	return 0, errors.New("Maximum iterations reached")
+}
+ 
+</code></pre>
+
+<h2 id=d7b367fde7326d4cefcc3f2e78e3efb6>3. 二分迭代法</h2>
+
+<p>　　二分迭代法，顾名思义，就是计算中点的函数值，并与当前低值和高值比较，</p>
+
+<ul>
+<li><p>若与低值同号，则把该值作为新的低值，继续迭代</p></li>
+
+<li><p>若与高值同号，则把该值作为新的高值，继续迭代</p></li>
+</ul>
+
+<pre><code class="language-go">// RootFunc is a convience type definition.
+type RootFunc func(float64) float64
+
+// BinaryRoot finds a root between given bounds by binary search.
+//
+// Inputs are a function on x and the bounds on x.  A root must exist between
+// the given bounds, otherwise the result is not meaningful.
+// 因为float64 的小数bit位最多为52位(10进制为15位有效数字)，
+// 即每次迭代理论上能提升一位精度，所以最多52次就应该跳出迭代
+func BinaryRoot(f RootFunc, lower, upper float64) float64 {
+	yLower := f(lower)
+	var mid float64
+	for j := 0; j < 52; j++ {
+		mid = (lower + upper) / 2
+		yMid := f(mid)
+		if yMid == 0 {
+			break
+		}
+		if math.Signbit(yLower) == math.Signbit(yMid) { // 与低值同号，替代低值
+			lower = mid
+			yLower = yMid
+		} else {
+			upper = mid //与高值同号，替换高值
+		}
+	}
+	return mid
+}
+</code></pre>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%95/">天文算法</a>
+  
+</div>
+
+
+
+
+              
+              
+              <div class="article-widget">
+                <div class="hr-light"></div>
+                <h3>相关</h3>
+                <ul>
+                  
+                  <li><a href="/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/">天文算法2</a></li>
+                  
+                  <li><a href="/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/">天文算法1</a></li>
+                  
+                </ul>
+              </div>
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/" rel="prev">天文算法2</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 May 15, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#dd03153b83e2fb4a6d7f171298a64805">第五章 迭代 Iteration</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#94def7fc83c82103c37ef5672ba7c43b">1. 什么是迭代算法</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#18f5a21ca2cb150380eb3a4352fc5e3e">2. 牛顿迭代法</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#d7b367fde7326d4cefcc3f2e78e3efb6">3. 二分迭代法</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+    
+    
+    
+
+  </body>
+</html>
+

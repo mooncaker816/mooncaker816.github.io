@@ -11,6 +11,123 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法3</title>
+      <link>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/</link>
+      <pubDate>Tue, 15 May 2018 13:48:36 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/</guid>
+      <description>&lt;h1 id=&#34;第五章-迭代-iteration&#34;&gt;第五章 迭代 Iteration&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-什么是迭代算法&#34;&gt;1. 什么是迭代算法&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;　　迭代法（英语：Iterative Method），在计算数学中，迭代是通过从一个初始估计出发寻找一系列近似解来解决问题（一般是解方程或者方程组）的数学过程，为实现这一过程所使用的方法统称。&lt;/p&gt;
+
+&lt;p&gt;　　跟迭代法相对应的是直接法（或者称为一次解法），即一次性解决问题，例如通过开方解决方程 $ x^{2}=4$。一般如果可能，直接解法总是优先考虑的。但当遇到复杂问题时，特别是在未知量很多，方程为非线性时，我们无法找到直接解法（例如五次以及更高次的代数方程没有解析解，参见阿贝尔定理），这时候或许可以通过迭代法寻求方程（组）的近似解。&lt;/p&gt;
+
+&lt;p&gt;　　最常见的迭代法是牛顿法。其他还包括最速下降法、共轭迭代法、变尺度迭代法、最小二乘法、线性规划、非线性规划、单纯型法、惩罚函数法、斜率投影法、遗传算法、模拟退火等等。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　以上是 wiki 上对迭代算法的描述，可以看出，迭代法的主要用途就是求解近似根，这一点我们再第三章插值函数逆推插值点的介绍中已经得到了运用。下面我们主要介绍牛顿迭代法和二分迭代法。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-牛顿迭代法&#34;&gt;2. 牛顿迭代法&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;　　首先，选择一个接近函数$f(x)$零点的 $x_0$，计算相应的 $f(x_0)$和切线斜率 $f&amp;rsquo;(x_0)$。然后我们计算穿过点 $(x_0,f(x_0))$并且斜率为 $f&amp;rsquo;(x_0)$的直线和 $x$轴的交点的 $x$坐标，也就是求如下方程的解：
+$$0=(x-x_0)f&amp;rsquo;(x_0)+f(x_0)$$
+　　我们将新求得的点的$x$坐标命名为$x_1$，通常$x_1$会比$x_0$更接近方程$f(x)=0$的解。因此我们现在可以利用$x_1$开始下一轮迭代。迭代公式可化简为如下所示：
+$$x_{n+1}=x_n - \frac {f(x_n)}{f&amp;rsquo;(x_n)}$$
+　　已经证明，如果$f&amp;rsquo;$是连续的，并且待求的零点$x$是孤立的，那么在零点$x$周围存在一个区域，只要初始值$x_0$位于这个邻近区域内，那么牛顿法必定收敛。&lt;/p&gt;
+
+&lt;p&gt;　　并且，如果$f&amp;rsquo;(x)\neq 0$，那么牛顿法将具有平方收敛的性能。粗略的说，这意味着每迭代一次，牛顿法结果的有效数字将增加一倍。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/NewtonIteration_Ani.gif/600px-NewtonIteration_Ani.gif&#34; width=400 height=300 /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// BetterFunc is a convience type definition.
+type BetterFunc func(float64) float64
+
+// DecimalPlaces iterates to a fixed number of decimal places.
+//
+// Inputs are an improvement function, a starting value, the number of
+// decimal places desired in the result, and an iteration limit.
+// better 为迭代公式，start 为起始点，places 为视作迭代结束的最大精度值的小数点位数
+// maxIterations 为迭代最大次数
+func DecimalPlaces(better BetterFunc, start float64, places, maxIterations int) (float64, error) {
+	d := math.Pow(10, float64(-places))
+	for i := 0; i &amp;lt; maxIterations; i++ {
+		n := better(start)
+		if math.Abs(n-start) &amp;lt; d {
+			return n, nil
+		}
+		start = n
+	}
+	return 0, errors.New(&amp;quot;Maximum iterations reached&amp;quot;)
+}
+
+// FullPrecison iterates to (nearly) the full precision of a float64.
+//
+// To allow for a little bit of floating point jitter, FullPrecision iterates
+// to 15 significant figures, which is the maximum number of full significant
+// figures representable in a float64, but still a couple of bits shy of the
+// full representable precision.
+// 和 DecimalPlaces 功能类似，只不过默认迭代结束的标志为小于float64的最大精度15
+func FullPrecision(better BetterFunc, start float64, maxIterations int) (float64, error) {
+	for i := 0; i &amp;lt; maxIterations; i++ {
+		n := better(start)
+		if math.Abs((n-start)/n) &amp;lt; 1e-15 {
+			return n, nil
+		}
+		start = n
+	}
+	return 0, errors.New(&amp;quot;Maximum iterations reached&amp;quot;)
+}
+ 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-二分迭代法&#34;&gt;3. 二分迭代法&lt;/h2&gt;
+
+&lt;p&gt;　　二分迭代法，顾名思义，就是计算中点的函数值，并与当前低值和高值比较，&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;若与低值同号，则把该值作为新的低值，继续迭代&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;若与高值同号，则把该值作为新的高值，继续迭代&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// RootFunc is a convience type definition.
+type RootFunc func(float64) float64
+
+// BinaryRoot finds a root between given bounds by binary search.
+//
+// Inputs are a function on x and the bounds on x.  A root must exist between
+// the given bounds, otherwise the result is not meaningful.
+// 因为float64 的小数bit位最多为52位(10进制为15位有效数字)，
+// 即每次迭代理论上能提升一位精度，所以最多52次就应该跳出迭代
+func BinaryRoot(f RootFunc, lower, upper float64) float64 {
+	yLower := f(lower)
+	var mid float64
+	for j := 0; j &amp;lt; 52; j++ {
+		mid = (lower + upper) / 2
+		yMid := f(mid)
+		if yMid == 0 {
+			break
+		}
+		if math.Signbit(yLower) == math.Signbit(yMid) { // 与低值同号，替代低值
+			lower = mid
+			yLower = yMid
+		} else {
+			upper = mid //与高值同号，替换高值
+		}
+	}
+	return mid
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法2</title>
       <link>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</link>
       <pubDate>Sun, 13 May 2018 19:38:14 +0800</pubDate>
@@ -5311,384 +5428,6 @@ Milestone: Go1.11
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/ex4.14.png&#34; alt=&#34;ex4.14 report.html&#34; /&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（4）</title>
-      <link>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</link>
-      <pubDate>Sat, 23 Dec 2017 19:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</guid>
-      <description>&lt;h3 id=&#34;ex-4-1&#34;&gt;Ex 4.1&lt;/h3&gt;
-
-&lt;p&gt;Write a function that counts the number of bits that are different in two SHA256 hashes. (See PopCount from Section 2.6.2.)&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;crypto/sha256&amp;quot;
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	str1 := &amp;quot;abc&amp;quot;
-	str2 := &amp;quot;xyz&amp;quot;
-	hash1 := sha256.Sum256([]byte(str1))
-	hash2 := sha256.Sum256([]byte(str2))
-	var dif int
-	for i := 0; i &amp;lt; 32; i++ {
-		dif += popcount(hash1[i] ^ hash2[i])
-	}
-	fmt.Printf(&amp;quot;there are %d different bits between these 2 hashes\n&amp;quot;, dif)
-}
-
-func popcount(x byte) int {
-	var count int
-	for x != 0 {
-		count++
-		x &amp;amp;= x - 1
-	}
-	return count
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run difhash.go
-there are 121 different bits between these 2 hashes
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-2&#34;&gt;Ex 4.2&lt;/h3&gt;
-
-&lt;p&gt;Write a program that prints the SHA256 hash of its standard input by default but supports a command-line ﬂag to print the SHA384 or SHA512 hash instead.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;crypto/sha256&amp;quot;
-	&amp;quot;crypto/sha512&amp;quot;
-	&amp;quot;flag&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-)
-
-func main() {
-	method := flag.String(&amp;quot;sha&amp;quot;, &amp;quot;256&amp;quot;, &amp;quot;default is SHA256, optional 384,512&amp;quot;)
-	flag.Parse()
-	//去掉flag参数后剩余的输入参数，此处为需要计算hash的字符串
-	fmt.Printf(&amp;quot;there are %d non-flag input params\n&amp;quot;, flag.NArg())
-	for i, str := range flag.Args() {
-		switch *method {
-		case &amp;quot;256&amp;quot;:
-			c := sha256.Sum256([]byte(str))
-			fmt.Printf(&amp;quot;#%d:SHA256 of %s is %x\n&amp;quot;, i, str, c)
-		case &amp;quot;384&amp;quot;:
-			c := sha512.Sum384([]byte(str))
-			fmt.Printf(&amp;quot;#%d:SHA384 of %s is %x\n&amp;quot;, i, str, c)
-		case &amp;quot;512&amp;quot;:
-			c := sha512.Sum512([]byte(str))
-			fmt.Printf(&amp;quot;#%d:SHA512 of %s is %x\n&amp;quot;, i, str, c)
-		default:
-			log.Fatal(&amp;quot;not support&amp;quot;)
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex4.2 -sha 256 a b c abc
-there are 4 non-flag input params
-#0:SHA256 of a is ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
-#1:SHA256 of b is 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
-#2:SHA256 of c is 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
-#3:SHA256 of abc is ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-$ ./ex4.2 -sha 384 a b c abc
-there are 4 non-flag input params
-#0:SHA384 of a is 54a59b9f22b0b80880d8427e548b7c23abd873486e1f035dce9cd697e85175033caa88e6d57bc35efae0b5afd3145f31
-#1:SHA384 of b is 98a906182cdcfb1eb4eb47117600f68958e2ddd140248b47984f4bde6587b89c8215c3da895a336e94ad1aca39015c40
-#2:SHA384 of c is 40f98a05660bf871802ee59964de1945bd731a45cc7f48e4dadd92f34a7eeec089e149ad8c2434f11792e588b740d997
-#3:SHA384 of abc is cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7
-$ ./ex4.2 -sha 512 a b c abc
-there are 4 non-flag input params
-#0:SHA512 of a is 1f40fc92da241694750979ee6cf582f2d5d7d28e18335de05abc54d0560e0f5302860c652bf08d560252aa5e74210546f369fbbbce8c12cfc7957b2652fe9a75
-#1:SHA512 of b is 5267768822ee624d48fce15ec5ca79cbd602cb7f4c2157a516556991f22ef8c7b5ef7b18d1ff41c59370efb0858651d44a936c11b7b144c48fe04df3c6a3e8da
-#2:SHA512 of c is acc28db2beb7b42baa1cb0243d401ccb4e3fce44d7b02879a52799aadff541522d8822598b2fa664f9d5156c00c924805d75c3868bd56c2acb81d37e98e35adc
-#3:SHA512 of abc is ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f
-$ ./ex4.2 -sha 777 a b c abc
-there are 4 non-flag input params
-2017/12/22 20:53:41 not support
-$./ex4.2 a b c abc
-there are 4 non-flag input params
-#0:SHA256 of a is ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
-#1:SHA256 of b is 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
-#2:SHA256 of c is 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
-#3:SHA256 of abc is ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-3&#34;&gt;Ex 4.3&lt;/h3&gt;
-
-&lt;p&gt;Rewrite reverse to use an array pointer instead of a slice.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	s := [5]byte{1, 2, 3, 4, 5}
-	fmt.Println(s)
-	reverse(&amp;amp;s)
-	fmt.Println(s)
-}
-
-func reverse(a *[5]byte) {
-	for i, j := 0, len(a)-1; i &amp;lt; j; i, j = i+1, j-1 {
-		a[i], a[j] = a[j], a[i]
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run reverse.go
-[1 2 3 4 5]
-[5 4 3 2 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-4&#34;&gt;Ex 4.4&lt;/h3&gt;
-
-&lt;p&gt;Write a version of rotate that operates in a single pass.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-)
-
-func main() {
-	s := []int{0, 1, 2, 3, 4, 5, 6, 7, 8}
-	rotate(&amp;amp;s, 3)
-	fmt.Println(s)
-}
-
-func rotate(s *[]int, n int) {
-	if n &amp;gt; len(*s) {
-		log.Fatal(&amp;quot;invalid rotate num&amp;quot;)
-	}
-	var ls []int
-	ls = append(ls, (*s)[n:]...)
-	ls = append(ls, (*s)[:n]...)
-	*s = ls
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run rotate.go
-[3 4 5 6 7 8 0 1 2]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-5&#34;&gt;Ex 4.5&lt;/h3&gt;
-
-&lt;p&gt;Write an in-place function to eliminate adjacent duplicates in a []string slice.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	s1 := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot;d&amp;quot;, &amp;quot;d&amp;quot;}
-	s11 := s1
-	dup(&amp;amp;s1)
-	dup1(&amp;amp;s11)
-	fmt.Println(s1, s11)
-	s2 := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;}
-	s21 := s2
-	dup(&amp;amp;s2)
-	dup(&amp;amp;s21)
-	fmt.Println(s2, s21)
-}
-
-func dup(s *[]string) {
-	var ls []string
-	ls = append(ls, (*s)[0])
-	for i := 0; i &amp;lt; len(*s)-1; i++ {
-		if (*s)[i] != (*s)[i+1] {
-			ls = append(ls, (*s)[i+1])
-		}
-	}
-	*s = ls
-}
-
-func dup1(s *[]string) {
-	j := 0
-	var temp string
-	for i := range *s {
-		(*s)[j] = (*s)[i]
-		j++
-		if i &amp;gt; 0 &amp;amp;&amp;amp; temp == (*s)[i] {
-			j--
-		}
-		temp = (*s)[i]
-	}
-	*s = (*s)[:j]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run dup.go
-[a b c d] [a b c d]
-[a b c] [a b c]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-4-6&#34;&gt;Ex 4.6&lt;/h3&gt;
-
-&lt;p&gt;Write an in-place function that squashes each run of adjacent Unicode spac (see unicode.IsSpace) in a UTF-8-encoded []byte slice into a single ASCII space.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;unicode&amp;quot;
-	&amp;quot;unicode/utf8&amp;quot;
-)
-
-func main() {
-	str := &amp;quot;\t世界a \na\r\t\vb   &amp;quot;
-	s1 := []byte(str)
-	s2 := []byte(str)
-	//s1 := []byte{&#39;a&#39;, &#39;b&#39;, &#39; &#39;, &#39;	&#39;, &#39;\n&#39;, &#39;c&#39;, &#39; &#39;}
-	fmt.Printf(&amp;quot;before:%d %[1]v %[1]s\n&amp;quot;, s1)
-	utf8space(&amp;amp;s1)
-	fmt.Printf(&amp;quot;after:%d %[1]v %[1]s\n&amp;quot;, s1)
-	//s2 := []byte{&#39;1&#39;, &#39;2&#39;, &#39; &#39;, &#39;	&#39;, &#39;\n&#39;, &#39;3&#39;, &#39; &#39;, &#39;\t&#39;}
-	fmt.Printf(&amp;quot;before:%d %[1]v %[1]s\n&amp;quot;, s2)
-	utf8space2(&amp;amp;s2)
-	fmt.Printf(&amp;quot;after:%d %[1]v %[1]s\n&amp;quot;, s2)
-}
-
-func utf8space(s *[]byte) {
-	var ls []byte
-	runes := []rune(string(*s))
-	spaceInd := false
-	for _, r := range runes {
-		if !unicode.IsSpace(r) {
-			spaceInd = false
-			ls = append(ls, []byte(string(r))...)
-		} else if unicode.IsSpace(r) &amp;amp;&amp;amp; !spaceInd {
-			spaceInd = true
-			ls = append(ls, byte(32))
-		}
-	}
-	*s = ls
-}
-
-func utf8space2(s *[]byte) {
-	str := string(*s)
-	spaceInd := false
-	j := 0
-	for i, r := range str {
-		bytelen := utf8.RuneLen(r)
-		if !unicode.IsSpace(r) {
-			spaceInd = false
-			copy((*s)[j:], (*s)[i:i+bytelen])
-			j += bytelen
-		} else if unicode.IsSpace(r) &amp;amp;&amp;amp; !spaceInd {
-			spaceInd = true
-			bytelen = 1
-			copy((*s)[j:], &amp;quot; &amp;quot;)
-			j += bytelen
-		}
-	}
-	*s = (*s)[:j]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run utf8space.go
-before:[9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] [9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] 	世界a
-a
-        b
-after:[32 228 184 150 231 149 140 97 32 97 32 98 32] [32 228 184 150 231 149 140 97 32 97 32 98 32]  世界a a b
-before:[9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] [9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] 	世界a
-a
-        b
-after:[32 228 184 150 231 149 140 97 32 97 32 98 32] [32 228 184 150 231 149 140 97 32 97 32 98 32]  世界a a b
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;for range遍历&lt;u&gt;&lt;code&gt;字符串&lt;/code&gt;&lt;/u&gt;的时候，i为当前字符开始的位置，v为当前字符。换句话说，字符串包含多字节utf8字符时，i不连续，因为遍历的单位不是byte，而是rune（unicode）。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/range%20loop%20for%20string.png&#34; alt=&#34;range loop for string&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-4-7&#34;&gt;Ex 4.7&lt;/h3&gt;
-
-&lt;p&gt;Modify reverse to reverse the characters of a []byte slice that represents a UTF-8-encoded string, in place. Can you do it without allocating new memory?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;unicode&amp;quot;
-)
-
-func main() {
-	str := &amp;quot;\U00000080world,世界,hello,你好&amp;quot;
-	s1 := []byte(str) //每个元素根据utf8的格式，确定utf8表达字符的字节数，或为单字节或为多字节
-	s2 := []rune(str) //一个元素就是一个unicode
-	fmt.Printf(&amp;quot;% x \n % x\n&amp;quot;, s1, s2)
-	fmt.Println(Reverse(str))
-	reverse(s2)
-	fmt.Println(string(s2))
-}
-
-// Reverse reverses the input while respecting UTF8 encoding and combined characters
-func Reverse(text string) string {
-	textRunes := []rune(text)
-	textRunesLength := len(textRunes)
-	if textRunesLength &amp;lt;= 1 {
-		return text
-	}
-
-	i, j := 0, 0
-	for i &amp;lt; textRunesLength &amp;amp;&amp;amp; j &amp;lt; textRunesLength {
-		j = i + 1
-		for j &amp;lt; textRunesLength &amp;amp;&amp;amp; isMark(textRunes[j]) {
-			j++
-		}
-
-		if isMark(textRunes[j-1]) {
-			// Reverses Combined Characters
-			reverse(textRunes[i:j])
-		}
-
-		i = j
-	}
-
-	// Reverses the entire array
-	reverse(textRunes)
-
-	return string(textRunes)
-}
-
-func reverse(runes []rune) {
-	for i, j := 0, len(runes)-1; i &amp;lt; j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-}
-
-// isMark determines whether the rune is a marker
-func isMark(r rune) bool {
-	return unicode.Is(unicode.Mn, r) || unicode.Is(unicode.Me, r) || unicode.Is(unicode.Mc, r)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run utf8reverse.go
-c2 80 77 6f 72 6c 64 2c e4 b8 96 e7 95 8c 2c 68 65 6c 6c 6f 2c e4 bd a0 e5 a5 bd
- [ 80  77  6f  72  6c  64  2c  4e16  754c  2c  68  65  6c  6c  6f  2c  4f60  597d]
-好你,olleh,界世,dlrow
-好你,olleh,界世,dlrow
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Reverse：确保了组合字符（多个unicode组合成一个字符）翻转的正确性&lt;/p&gt;
-
-&lt;p&gt;reverse：不考虑组合字符，翻转正确&lt;/p&gt;</description>
     </item>
     
   </channel>
