@@ -101,7 +101,7 @@
   
   <meta property="article:published_time" content="2018-05-15T13:48:36&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-05-15T16:59:05&#43;08:00">
+  <meta property="article:modified_time" content="2018-05-15T17:29:52&#43;08:00">
   
 
   
@@ -463,12 +463,14 @@ $$x_{n+1}=x_n - \frac {f(x_n)}{f’(x_n)}$$
 
 <pre><code class="language-go">// BetterFunc is a convience type definition.
 type BetterFunc func(float64) float64
+</code></pre>
 
-// DecimalPlaces iterates to a fixed number of decimal places.
+<pre><code class="language-go">// DecimalPlaces iterates to a fixed number of decimal places.
 //
 // Inputs are an improvement function, a starting value, the number of
 // decimal places desired in the result, and an iteration limit.
-// better 为迭代公式，start 为起始点，places 为视作迭代结束的最大精度值的小数点位数,maxIterations 为迭代最大次数
+// better 为迭代公式，start 为起始点，places 为视作迭代结束的最大精度值的小数点位数,
+// maxIterations 为迭代最大次数
 func DecimalPlaces(better BetterFunc, start float64, places, maxIterations int) (float64, error) {
 	d := math.Pow(10, float64(-places))
 	for i := 0; i < maxIterations; i++ {
@@ -512,12 +514,14 @@ func FullPrecision(better BetterFunc, start float64, maxIterations int) (float64
 
 <pre><code class="language-go">// RootFunc is a convience type definition.
 type RootFunc func(float64) float64
+</code></pre>
 
-// BinaryRoot finds a root between given bounds by binary search.
+<pre><code class="language-go">// BinaryRoot finds a root between given bounds by binary search.
 //
 // Inputs are a function on x and the bounds on x.  A root must exist between
 // the given bounds, otherwise the result is not meaningful.
-// 因为float64 的小数bit位最多为52位(10进制为15位有效数字)，即每次迭代理论上能提升一位精度，所以最多52次就应该跳出迭代
+// 因为float64 的小数bit位最多为52位(10进制为15位有效数字)，
+// 即每次迭代理论上能提升一位精度，所以最多52次就应该跳出迭代
 func BinaryRoot(f RootFunc, lower, upper float64) float64 {
 	yLower := f(lower)
 	var mid float64
