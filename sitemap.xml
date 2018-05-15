@@ -6,7 +6,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</loc>
-      <lastmod>2018-05-15T11:28:19+08:00</lastmod>
+      <lastmod>2018-05-15T11:34:39+08:00</lastmod>
     </url>
     
   
@@ -15,7 +15,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/</loc>
-      <lastmod>2018-05-14T17:33:29+08:00</lastmod>
+      <lastmod>2018-05-15T11:34:39+08:00</lastmod>
     </url>
     
   
@@ -367,7 +367,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/development/</loc>
+      <loc>https://mooncaker816.github.io/categories/development/</loc>
       <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -377,7 +377,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/categories/development/</loc>
+      <loc>https://mooncaker816.github.io/tags/development/</loc>
       <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -627,7 +627,7 @@
     
     <url>
     
-      <loc>https://mooncaker816.github.io/tags/golang/</loc>
+      <loc>https://mooncaker816.github.io/categories/golang/</loc>
       <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
@@ -639,6 +639,16 @@
     
       <loc>https://mooncaker816.github.io/categories/golang/</loc>
       <lastmod>2018-05-13T17:40:48+08:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/tags/golang/</loc>
+      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -728,6 +738,26 @@
     
       <loc>https://mooncaker816.github.io/tags/%E4%B8%87%E5%B9%B4%E5%8E%86/</loc>
       <lastmod>2018-05-13T17:40:48+08:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/tags/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%95/</loc>
+      <lastmod>2018-05-15T11:34:39+08:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
+      <lastmod>2018-05-15T11:34:39+08:00</lastmod>
       <priority>0</priority>
     </url>
     
