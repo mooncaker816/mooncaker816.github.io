@@ -7,19 +7,10 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
-    <lastBuildDate>Wed, 09 May 2018 14:43:35 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>寿星万年历的Go 语言实现（一）</title>
-      <link>https://mooncaker816.github.io/tmp/%E4%B8%87%E5%B9%B4%E5%8E%86/</link>
-      <pubDate>Wed, 09 May 2018 14:43:35 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/tmp/%E4%B8%87%E5%B9%B4%E5%8E%86/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
-    </item>
     
     <item>
       <title>Go 标准库学习</title>

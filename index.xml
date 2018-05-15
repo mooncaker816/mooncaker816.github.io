@@ -951,160 +951,6 @@ func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
     </item>
     
     <item>
-      <title>寿星万年历的Go 语言实现（一）</title>
-      <link>https://mooncaker816.github.io/tmp/%E4%B8%87%E5%B9%B4%E5%8E%86/</link>
-      <pubDate>Wed, 09 May 2018 14:43:35 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/tmp/%E4%B8%87%E5%B9%B4%E5%8E%86/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;①-背景&#34;&gt;① 背景&lt;/h2&gt;
-
-&lt;p&gt;​        由于要用到农历的节气信息，查阅资料发现，非天文算法实现的日历无法准确的获得节气的时间点，所以只能使用天文算法来推演。&lt;/p&gt;
-
-&lt;p&gt;​        通过度娘，我找到了由许剑伟先生开发的《寿星万年历》，该软件是一套开源的精准的年代跨度大的天文历法工具，有很多有趣的功能，感兴趣的同学可以自行搜索，在此感谢许先生的无私。&lt;/p&gt;
-
-&lt;p&gt;​   接下来就打算把这套算法以 Go 来实现：&lt;a href=&#34;https://github.com/mooncaker816/go-calendar&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;②-基本概念&#34;&gt;② 基本概念&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;公历&lt;/strong&gt;（solar calendar）：公历中规定平年有365日，闰年366日。每年含有12个月。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;儒略历&lt;/strong&gt;（Julian calendar）: 在1582年10月4日以前, 规定每4年设置一个闰年，平均年长度为365.25天&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;格里高利历&lt;/strong&gt;（Gregorian calendar）: 在1582年10月15日之后, 规定每400年97闰，平均年长度为365.2425天&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;由于儒略历存在严重的“多闰”问题，到了1582年，公历跑快了10天左右，当时就人为调整了10天，并从此改用格里历。因此务必注意1582年10月4日（儒略历）的下一日为1582年10月15日（格里高利历）。也就是说1582年10月份少了10天。&lt;/p&gt;
-&lt;/blockquote&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;闰年&lt;/strong&gt; (leap year)&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;儒略历&lt;/strong&gt;: 能被4整除的年份为闰年（产生多润的原因）&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;格里高利历&lt;/strong&gt;: 能被4整除但不能被100整除的非世纪年 + 能被400整除的世纪年&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日&lt;/strong&gt;（Julian Day）&amp;amp; &lt;strong&gt;儒略日数&lt;/strong&gt;（Julian Day Number，JDN）&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;儒略日数的计算&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;从&lt;a href=&#34;https://baike.baidu.com/item/%E6%A0%BC%E6%9E%97%E5%A8%81%E6%B2%BB%E6%A0%87%E5%87%86%E6%97%B6%E9%97%B4&#34; target=&#34;_blank&#34;&gt;格林威治标准时间&lt;/a&gt;的中午开始，包含一个整天的时间，起点的时间（0日）回溯至&lt;a href=&#34;https://baike.baidu.com/item/%E5%84%92%E7%95%A5%E5%8E%86&#34; target=&#34;_blank&#34;&gt;儒略历&lt;/a&gt;的公元前4713年1月1日中午12点（在&lt;a href=&#34;https://baike.baidu.com/item/%E6%A0%BC%E9%87%8C%E5%8E%86&#34; target=&#34;_blank&#34;&gt;格里历&lt;/a&gt;是公元前4714年11月24日），这个日期是三种多年周期的共同起点，且是历史上最接近现代的一个起点。例如，2000年1月1日的&lt;a href=&#34;https://baike.baidu.com/item/UT&#34; target=&#34;_blank&#34;&gt;UT&lt;/a&gt;12:00是儒略日2,451,545。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;设Y为给定年份，M为月份，D为该月日期（可以带小数）。&lt;/p&gt;
-
-&lt;p&gt;若M &amp;gt; 2，Y和M不变，若 M =1或2，以Y–1代Y，以M+12代M，换句话说，如果日期在1月或2月，则被看作是在前一年的13月或14月。&lt;/p&gt;
-
-&lt;p&gt;对格里高利历有 ：A = INT（Y/100） B = 2 - A + INT(A/4)&lt;/p&gt;
-
-&lt;p&gt;对儒略历，取 B = 0&lt;/p&gt;
-
-&lt;p&gt;要求的儒略日即为：JD = INT(365.25(Y+4716))+INT(30.6001(M+1))+D+B-1524.5&lt;/p&gt;
-
-&lt;p&gt;使用数值30.6取代30.6001才是正确的，但我们仍使用30.6001，以确保总能取得恰当的整数。事实上可用30.601甚至30.61来取代30.6001。例如，5乘30.6精确等于153，然而大多数计算机不能精确表示出30.6，这导致得出一个152.999 9998的结果，它的整数部分为152，如此算出的JD就不正确了。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;​  &lt;a href=&#34;https://github.com/mooncaker816/go-calendar/blob/master/greg.go&#34; target=&#34;_blank&#34;&gt;详细代码&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;儒略日反推日期&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;将JD加上0.5，令 Z 为其整数部分，F 为尾数（小数）部分。&lt;/p&gt;
-
-&lt;p&gt;若 Z &amp;lt; 2299161，取A = Z&lt;/p&gt;
-
-&lt;p&gt;若 Z 大于等于2299 161，计算 α=INT((Z-1867216.25)/36524.25) ，A=Z+1+α-INT(α/4)&lt;/p&gt;
-
-&lt;p&gt;然后计算&lt;/p&gt;
-
-&lt;p&gt;B = A+1524&lt;/p&gt;
-
-&lt;p&gt;C = INT((B-122.1)/365.25)&lt;/p&gt;
-
-&lt;p&gt;D = INT(365.25C)&lt;/p&gt;
-
-&lt;p&gt;E = INT((B-D)/30.6001)&lt;/p&gt;
-
-&lt;p&gt;该月日期（带小数部分）则为：d = B - D - INT(30.6001E) + F&lt;/p&gt;
-
-&lt;p&gt;月份m为：
-IF E &amp;lt; 14 THEN m = E – 1
-IF E=14 or E=15 THEN m = E – 13&lt;/p&gt;
-
-&lt;p&gt;年份为y：
-IF m&amp;gt;2 THEN y = C – 4716
-IF m =1 or m=2 THEN y = C – 4715&lt;/p&gt;
-
-&lt;p&gt;这个公式里求E时用的数30.6001不能代之以30.6，哪怕计算机没有先前所说的问题。否则，你得到的结果会是2月0日而不是1月31日，或者4月0日而不是3月31日。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;​  &lt;a href=&#34;https://github.com/mooncaker816/go-calendar/blob/master/julian.go&#34; target=&#34;_blank&#34;&gt;详细代码&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;日期算星期&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;计算该日0时的儒略日，加上1.5，再除以7 ，所得余数将指示出星期几：若余数为0，则为星期日，1为星期一，2为星期二，3为星期三，4为星期四，5为星期五，6为星期六。&lt;/p&gt;
-
-&lt;p&gt;儒略历到格里高利历的换算并不影响星期。因而，在1582年，10月4日星期四接下来的一天便是10月15日星期五。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;​  &lt;a href=&#34;https://github.com/mooncaker816/go-calendar/blob/master/greg.go&#34; target=&#34;_blank&#34;&gt;详细代码&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;坐标系统&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;地平坐标系统&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;在*地平*或高度方位系统，观测者位于地球上，围绕着自身的自转轴每一&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%81%92%E6%98%9F%E6%97%A5&#34; target=&#34;_blank&#34;&gt;恒星日&lt;/a&gt;（23h56m）相对于固定的&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%81%86%E6%98%9F&#34; target=&#34;_blank&#34;&gt;恒星&lt;/a&gt;背景旋转一周。在地平系统中，天体位置的定位主要用于计算出与没的短暂时间，例如，太阳升起和沉没时间的计算。过去它也用于导航，例如，确定行星位置的高度与方位，依据时间确定船只正确的经度和纬度。许多望远镜也采用经纬仪的架台，然后依据时间、地理位置，利用电脑计算天体在地平上的位置（高度和方位）。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/b/b7/Horizontal_coordinate_system_2_%28zh%29.png&#34; alt=&#34;地平坐标系统&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;地平坐标系&lt;/strong&gt;，又作&lt;strong&gt;地平座标系&lt;/strong&gt;，是&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%A4%A9%E7%90%83%E5%9D%90%E6%A0%87%E7%B3%BB%E7%BB%9F&#34; target=&#34;_blank&#34;&gt;天球坐标系统&lt;/a&gt;中的一种，以观测者所在地为中心点，所在地的&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%9C%B0%E5%B9%B3%E7%B7%9A&#34; target=&#34;_blank&#34;&gt;地平线&lt;/a&gt;作为&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%9F%BA%E7%A4%8E%E5%B9%B3%E9%9D%A2&#34; target=&#34;_blank&#34;&gt;基础平面&lt;/a&gt;，将天球适当的分成能看见的上&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%8D%8A%E7%90%83&#34; target=&#34;_blank&#34;&gt;半球&lt;/a&gt;和看不见（被地球本身遮蔽）的下半球。上半球的顶点（最高点）称为&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%A4%A9%E9%A0%82&#34; target=&#34;_blank&#34;&gt;天顶&lt;/a&gt;，下半球的顶点（最低点）称为&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%A4%A9%E5%BA%95&#34; target=&#34;_blank&#34;&gt;地底&lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;地平坐标系统是：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;高度角（Altitude, Alt）或仰角又称&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%A4%A9%E7%90%83%E5%9D%90%E6%A0%87%E7%B3%BB%E7%BB%9F&#34; target=&#34;_blank&#34;&gt;地平纬度&lt;/a&gt;，是天体和观测者所在地的地平线的夹角，有时就称为*高度*或海拔标高（elevation, geometric height）。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%96%B9%E4%BD%8D%E8%A7%92&#34; target=&#34;_blank&#34;&gt;方位角&lt;/a&gt;（Azimuth, Az）又称地平经度，是沿着地平线测量的角度（由正北方为起点向东方测量）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因此&lt;strong&gt;地平坐标系&lt;/strong&gt;有时也被称为&lt;strong&gt;高度/方位（Alt/Az）坐标系统&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;赤道坐标系统&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;*赤道*坐标系统以地球的中心为中心并且固定住环绕我们的天空，因此它看起来与地球固定在一起，而我们在地球的表面上绕着自身的轴旋转。赤道坐标描述的天空，包括所见的太阳系，和现在所有的星图几乎全都用赤道坐标来绘制，而古代的东方天文学家早已使用这种坐标绘制星图。&lt;/p&gt;
-
-&lt;p&gt;*赤道*系统是专业天文学家最常用的坐标系统，业余天文学家也使用赤道系统的架台在夜晚追踪天空的运动。天体被调整好的望远镜或其它种类的仪器找到之后，这些天体就会使用与赤道坐标匹配来标示它们的位置。&lt;/p&gt;
-
-&lt;p&gt;最常被选用的赤道系统是古老的&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%9B%86%E5%85%83&#34; target=&#34;_blank&#34;&gt;1950分点&lt;/a&gt;或现代的&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%9B%86%E5%85%83&#34; target=&#34;_blank&#34;&gt;2000分点&lt;/a&gt;，但也可以使用标示日期的赤道系统，意味着必须考量日期的需要，例如对一颗行星或太空船位置的测量。也有细分到“平均日”坐标，它们采用平均值而忽略&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%AB%A0%E5%8B%95&#34; target=&#34;_blank&#34;&gt;章动&lt;/a&gt;和包含章动的&amp;rdquo;真正日期&amp;rdquo;。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-&lt;li&gt;黄道坐标系统&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;黄道坐标系统是一种古老的坐标系统，使用在&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%A4%A9%E6%96%87%E5%AD%B8&#34; target=&#34;_blank&#34;&gt;天文学&lt;/a&gt;和&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%8D%A0%E6%98%9F%E8%A1%93&#34; target=&#34;_blank&#34;&gt;占星术&lt;/a&gt;上未分家前的星图上，特别是在西方世界。&lt;/p&gt;
-
-&lt;p&gt;黄道系统描述的是行星环绕太阳移动的轨道，它的中心在太阳系的重心，也就是太阳的位置。它的基本平面是地球的轨道面，称为黄道面。在行星科学中被大量使用，像是计算行星的位置和其他重要的行星轨道参数：倾角、升交点、降交点、近日点位置等等。&lt;/p&gt;
-&lt;/blockquote&gt;&lt;/li&gt;
-&lt;/ol&gt;</description>
-    </item>
-    
-    <item>
       <title>Linux Centos 命令之 cp,rm,mv</title>
       <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/</link>
       <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
@@ -5465,6 +5311,384 @@ Milestone: Go1.11
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/ex4.14.png&#34; alt=&#34;ex4.14 report.html&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>The Go Programming Language Ex（4）</title>
+      <link>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</link>
+      <pubDate>Sat, 23 Dec 2017 19:00:00 +0000</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</guid>
+      <description>&lt;h3 id=&#34;ex-4-1&#34;&gt;Ex 4.1&lt;/h3&gt;
+
+&lt;p&gt;Write a function that counts the number of bits that are different in two SHA256 hashes. (See PopCount from Section 2.6.2.)&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;crypto/sha256&amp;quot;
+	&amp;quot;fmt&amp;quot;
+)
+
+func main() {
+	str1 := &amp;quot;abc&amp;quot;
+	str2 := &amp;quot;xyz&amp;quot;
+	hash1 := sha256.Sum256([]byte(str1))
+	hash2 := sha256.Sum256([]byte(str2))
+	var dif int
+	for i := 0; i &amp;lt; 32; i++ {
+		dif += popcount(hash1[i] ^ hash2[i])
+	}
+	fmt.Printf(&amp;quot;there are %d different bits between these 2 hashes\n&amp;quot;, dif)
+}
+
+func popcount(x byte) int {
+	var count int
+	for x != 0 {
+		count++
+		x &amp;amp;= x - 1
+	}
+	return count
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run difhash.go
+there are 121 different bits between these 2 hashes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;ex-4-2&#34;&gt;Ex 4.2&lt;/h3&gt;
+
+&lt;p&gt;Write a program that prints the SHA256 hash of its standard input by default but supports a command-line ﬂag to print the SHA384 or SHA512 hash instead.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;crypto/sha256&amp;quot;
+	&amp;quot;crypto/sha512&amp;quot;
+	&amp;quot;flag&amp;quot;
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;log&amp;quot;
+)
+
+func main() {
+	method := flag.String(&amp;quot;sha&amp;quot;, &amp;quot;256&amp;quot;, &amp;quot;default is SHA256, optional 384,512&amp;quot;)
+	flag.Parse()
+	//去掉flag参数后剩余的输入参数，此处为需要计算hash的字符串
+	fmt.Printf(&amp;quot;there are %d non-flag input params\n&amp;quot;, flag.NArg())
+	for i, str := range flag.Args() {
+		switch *method {
+		case &amp;quot;256&amp;quot;:
+			c := sha256.Sum256([]byte(str))
+			fmt.Printf(&amp;quot;#%d:SHA256 of %s is %x\n&amp;quot;, i, str, c)
+		case &amp;quot;384&amp;quot;:
+			c := sha512.Sum384([]byte(str))
+			fmt.Printf(&amp;quot;#%d:SHA384 of %s is %x\n&amp;quot;, i, str, c)
+		case &amp;quot;512&amp;quot;:
+			c := sha512.Sum512([]byte(str))
+			fmt.Printf(&amp;quot;#%d:SHA512 of %s is %x\n&amp;quot;, i, str, c)
+		default:
+			log.Fatal(&amp;quot;not support&amp;quot;)
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex4.2 -sha 256 a b c abc
+there are 4 non-flag input params
+#0:SHA256 of a is ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+#1:SHA256 of b is 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
+#2:SHA256 of c is 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
+#3:SHA256 of abc is ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+$ ./ex4.2 -sha 384 a b c abc
+there are 4 non-flag input params
+#0:SHA384 of a is 54a59b9f22b0b80880d8427e548b7c23abd873486e1f035dce9cd697e85175033caa88e6d57bc35efae0b5afd3145f31
+#1:SHA384 of b is 98a906182cdcfb1eb4eb47117600f68958e2ddd140248b47984f4bde6587b89c8215c3da895a336e94ad1aca39015c40
+#2:SHA384 of c is 40f98a05660bf871802ee59964de1945bd731a45cc7f48e4dadd92f34a7eeec089e149ad8c2434f11792e588b740d997
+#3:SHA384 of abc is cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7
+$ ./ex4.2 -sha 512 a b c abc
+there are 4 non-flag input params
+#0:SHA512 of a is 1f40fc92da241694750979ee6cf582f2d5d7d28e18335de05abc54d0560e0f5302860c652bf08d560252aa5e74210546f369fbbbce8c12cfc7957b2652fe9a75
+#1:SHA512 of b is 5267768822ee624d48fce15ec5ca79cbd602cb7f4c2157a516556991f22ef8c7b5ef7b18d1ff41c59370efb0858651d44a936c11b7b144c48fe04df3c6a3e8da
+#2:SHA512 of c is acc28db2beb7b42baa1cb0243d401ccb4e3fce44d7b02879a52799aadff541522d8822598b2fa664f9d5156c00c924805d75c3868bd56c2acb81d37e98e35adc
+#3:SHA512 of abc is ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f
+$ ./ex4.2 -sha 777 a b c abc
+there are 4 non-flag input params
+2017/12/22 20:53:41 not support
+$./ex4.2 a b c abc
+there are 4 non-flag input params
+#0:SHA256 of a is ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+#1:SHA256 of b is 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
+#2:SHA256 of c is 2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6
+#3:SHA256 of abc is ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;ex-4-3&#34;&gt;Ex 4.3&lt;/h3&gt;
+
+&lt;p&gt;Rewrite reverse to use an array pointer instead of a slice.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+)
+
+func main() {
+	s := [5]byte{1, 2, 3, 4, 5}
+	fmt.Println(s)
+	reverse(&amp;amp;s)
+	fmt.Println(s)
+}
+
+func reverse(a *[5]byte) {
+	for i, j := 0, len(a)-1; i &amp;lt; j; i, j = i+1, j-1 {
+		a[i], a[j] = a[j], a[i]
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run reverse.go
+[1 2 3 4 5]
+[5 4 3 2 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;ex-4-4&#34;&gt;Ex 4.4&lt;/h3&gt;
+
+&lt;p&gt;Write a version of rotate that operates in a single pass.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;log&amp;quot;
+)
+
+func main() {
+	s := []int{0, 1, 2, 3, 4, 5, 6, 7, 8}
+	rotate(&amp;amp;s, 3)
+	fmt.Println(s)
+}
+
+func rotate(s *[]int, n int) {
+	if n &amp;gt; len(*s) {
+		log.Fatal(&amp;quot;invalid rotate num&amp;quot;)
+	}
+	var ls []int
+	ls = append(ls, (*s)[n:]...)
+	ls = append(ls, (*s)[:n]...)
+	*s = ls
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run rotate.go
+[3 4 5 6 7 8 0 1 2]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;ex-4-5&#34;&gt;Ex 4.5&lt;/h3&gt;
+
+&lt;p&gt;Write an in-place function to eliminate adjacent duplicates in a []string slice.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+)
+
+func main() {
+	s1 := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot;d&amp;quot;, &amp;quot;d&amp;quot;}
+	s11 := s1
+	dup(&amp;amp;s1)
+	dup1(&amp;amp;s11)
+	fmt.Println(s1, s11)
+	s2 := []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;}
+	s21 := s2
+	dup(&amp;amp;s2)
+	dup(&amp;amp;s21)
+	fmt.Println(s2, s21)
+}
+
+func dup(s *[]string) {
+	var ls []string
+	ls = append(ls, (*s)[0])
+	for i := 0; i &amp;lt; len(*s)-1; i++ {
+		if (*s)[i] != (*s)[i+1] {
+			ls = append(ls, (*s)[i+1])
+		}
+	}
+	*s = ls
+}
+
+func dup1(s *[]string) {
+	j := 0
+	var temp string
+	for i := range *s {
+		(*s)[j] = (*s)[i]
+		j++
+		if i &amp;gt; 0 &amp;amp;&amp;amp; temp == (*s)[i] {
+			j--
+		}
+		temp = (*s)[i]
+	}
+	*s = (*s)[:j]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run dup.go
+[a b c d] [a b c d]
+[a b c] [a b c]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;ex-4-6&#34;&gt;Ex 4.6&lt;/h3&gt;
+
+&lt;p&gt;Write an in-place function that squashes each run of adjacent Unicode spac (see unicode.IsSpace) in a UTF-8-encoded []byte slice into a single ASCII space.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;unicode&amp;quot;
+	&amp;quot;unicode/utf8&amp;quot;
+)
+
+func main() {
+	str := &amp;quot;\t世界a \na\r\t\vb   &amp;quot;
+	s1 := []byte(str)
+	s2 := []byte(str)
+	//s1 := []byte{&#39;a&#39;, &#39;b&#39;, &#39; &#39;, &#39;	&#39;, &#39;\n&#39;, &#39;c&#39;, &#39; &#39;}
+	fmt.Printf(&amp;quot;before:%d %[1]v %[1]s\n&amp;quot;, s1)
+	utf8space(&amp;amp;s1)
+	fmt.Printf(&amp;quot;after:%d %[1]v %[1]s\n&amp;quot;, s1)
+	//s2 := []byte{&#39;1&#39;, &#39;2&#39;, &#39; &#39;, &#39;	&#39;, &#39;\n&#39;, &#39;3&#39;, &#39; &#39;, &#39;\t&#39;}
+	fmt.Printf(&amp;quot;before:%d %[1]v %[1]s\n&amp;quot;, s2)
+	utf8space2(&amp;amp;s2)
+	fmt.Printf(&amp;quot;after:%d %[1]v %[1]s\n&amp;quot;, s2)
+}
+
+func utf8space(s *[]byte) {
+	var ls []byte
+	runes := []rune(string(*s))
+	spaceInd := false
+	for _, r := range runes {
+		if !unicode.IsSpace(r) {
+			spaceInd = false
+			ls = append(ls, []byte(string(r))...)
+		} else if unicode.IsSpace(r) &amp;amp;&amp;amp; !spaceInd {
+			spaceInd = true
+			ls = append(ls, byte(32))
+		}
+	}
+	*s = ls
+}
+
+func utf8space2(s *[]byte) {
+	str := string(*s)
+	spaceInd := false
+	j := 0
+	for i, r := range str {
+		bytelen := utf8.RuneLen(r)
+		if !unicode.IsSpace(r) {
+			spaceInd = false
+			copy((*s)[j:], (*s)[i:i+bytelen])
+			j += bytelen
+		} else if unicode.IsSpace(r) &amp;amp;&amp;amp; !spaceInd {
+			spaceInd = true
+			bytelen = 1
+			copy((*s)[j:], &amp;quot; &amp;quot;)
+			j += bytelen
+		}
+	}
+	*s = (*s)[:j]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run utf8space.go
+before:[9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] [9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] 	世界a
+a
+        b
+after:[32 228 184 150 231 149 140 97 32 97 32 98 32] [32 228 184 150 231 149 140 97 32 97 32 98 32]  世界a a b
+before:[9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] [9 228 184 150 231 149 140 97 32 10 97 13 9 11 98 32 32 32] 	世界a
+a
+        b
+after:[32 228 184 150 231 149 140 97 32 97 32 98 32] [32 228 184 150 231 149 140 97 32 97 32 98 32]  世界a a b
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;for range遍历&lt;u&gt;&lt;code&gt;字符串&lt;/code&gt;&lt;/u&gt;的时候，i为当前字符开始的位置，v为当前字符。换句话说，字符串包含多字节utf8字符时，i不连续，因为遍历的单位不是byte，而是rune（unicode）。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/range%20loop%20for%20string.png&#34; alt=&#34;range loop for string&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ex-4-7&#34;&gt;Ex 4.7&lt;/h3&gt;
+
+&lt;p&gt;Modify reverse to reverse the characters of a []byte slice that represents a UTF-8-encoded string, in place. Can you do it without allocating new memory?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;unicode&amp;quot;
+)
+
+func main() {
+	str := &amp;quot;\U00000080world,世界,hello,你好&amp;quot;
+	s1 := []byte(str) //每个元素根据utf8的格式，确定utf8表达字符的字节数，或为单字节或为多字节
+	s2 := []rune(str) //一个元素就是一个unicode
+	fmt.Printf(&amp;quot;% x \n % x\n&amp;quot;, s1, s2)
+	fmt.Println(Reverse(str))
+	reverse(s2)
+	fmt.Println(string(s2))
+}
+
+// Reverse reverses the input while respecting UTF8 encoding and combined characters
+func Reverse(text string) string {
+	textRunes := []rune(text)
+	textRunesLength := len(textRunes)
+	if textRunesLength &amp;lt;= 1 {
+		return text
+	}
+
+	i, j := 0, 0
+	for i &amp;lt; textRunesLength &amp;amp;&amp;amp; j &amp;lt; textRunesLength {
+		j = i + 1
+		for j &amp;lt; textRunesLength &amp;amp;&amp;amp; isMark(textRunes[j]) {
+			j++
+		}
+
+		if isMark(textRunes[j-1]) {
+			// Reverses Combined Characters
+			reverse(textRunes[i:j])
+		}
+
+		i = j
+	}
+
+	// Reverses the entire array
+	reverse(textRunes)
+
+	return string(textRunes)
+}
+
+func reverse(runes []rune) {
+	for i, j := 0, len(runes)-1; i &amp;lt; j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+}
+
+// isMark determines whether the rune is a marker
+func isMark(r rune) bool {
+	return unicode.Is(unicode.Mn, r) || unicode.Is(unicode.Me, r) || unicode.Is(unicode.Mc, r)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run utf8reverse.go
+c2 80 77 6f 72 6c 64 2c e4 b8 96 e7 95 8c 2c 68 65 6c 6c 6f 2c e4 bd a0 e5 a5 bd
+ [ 80  77  6f  72  6c  64  2c  4e16  754c  2c  68  65  6c  6c  6f  2c  4f60  597d]
+好你,olleh,界世,dlrow
+好你,olleh,界世,dlrow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Reverse：确保了组合字符（多个unicode组合成一个字符）翻转的正确性&lt;/p&gt;
+
+&lt;p&gt;reverse：不考虑组合字符，翻转正确&lt;/p&gt;</description>
     </item>
     
   </channel>
