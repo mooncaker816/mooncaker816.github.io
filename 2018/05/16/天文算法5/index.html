@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="第七章 儒略日 Julian Day
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/">
+  <meta property="og:title" content="天文算法5 | Mooncaker816">
+  <meta property="og:description" content="第七章 儒略日 Julian Day
+
+"><meta property="og:image" content="https://mooncaker816.github.io/img/dark-full-moon-lunar-53153.jpg">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-05-16T09:27:51&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-05-16T22:07:01&#43;08:00">
+  
+
+  
+  
+
+
+
+
+  <title>天文算法5 | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+<div class="article-header">
+  
+  
+    <img src="/img/dark-full-moon-lunar-53153.jpg" class="article-banner" itemprop="image">
+  
+
+  
+</div>
+<br>
+
+
+
+            <div class="article-container">
+              <h1 itemprop="name">天文算法5</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2018-05-16 09:27:51 &#43;0800 CST" itemprop="datePublished dateModified">
+      May 16, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    12 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">golang</a
+    >, 
+    
+    <a href="https://mooncaker816.github.io/categories/%E7%AE%97%E6%B3%95/">算法</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%955&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f16%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25955%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f16%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25955%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f16%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25955%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%955"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f16%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25955%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%955"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%955&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f16%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%25955%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <h1 id=9979314cdc1aebe3c12644c14593fca8>第七章 儒略日 Julian Day</h1>
+
+<p></p>
+
+<h2 id=f72381a983496a2d21f3602257f505ca>1. 儒略历和格里高利历</h2>
+
+<h3 id=3e32ea2ece32219e0c71f777e02634a0>1.1 定义</h3>
+
+<blockquote>
+<p>儒略历，是格里历的前身，由罗马共和国独裁官儒略·凯撒采纳埃及亚历山大的希腊数学家兼天文学家索西琴尼计算的历法，在公元前45年1月1日起执行，取代旧罗马历历法的历法。一年设12个月，大小月交替，四年一闰，平年365日，闰年于二月底增加一闰日，年平均长度为365.25日。由于累积误差随着时间越来越大，1582年后由教皇格里高利十三世改良，变为格里历，即沿用至今的公历。但大英帝国、北美十三州等直到1752年才从儒略历改用格里历。现今儒略历只有苏格兰昔德兰群岛之富拉岛、阿索斯神权共和国和一些北非的柏柏尔人使用。</p>
+
+<p>格里历（拉丁语：Calendarium Gregorianum，又译、国瑞历、额我略历、格列高利历、格里高利历、葛瑞格里历、格列高历，也称基督历[1]），是由意大利医生兼哲学家阿洛伊修斯·里利乌斯改革儒略历制定的历法，由罗马大公教会教宗格列高利十三世在1582年颁行。公历是阳历的一种，于1912年在中国引进采用，因农历等中国传统历法是阴阳历，故公历在中文中又称阳历、西历、新历、公历。格里历与儒略历一样，格里历也是每四年在2月底置一闰日，但格里历特别规定，除非能被400整除，所有的世纪年（能被100整除）都不设闰日；如此，每四百年，格里历仅有97个闰年，比儒略历减少3个闰年 [注 1]。 格里历的历年平均长度为365.2425日，接近平均回归年的365.242199074日，即约每3300年误差一日，也更接近春分点回归年的365.24237日，即约每8000年误差一日；而儒略历的历年为365.25日，约每128年就误差一日[注 1]。到1582年时，儒略历的春分日（3月21日）与地球公转到春分点的实际时间已相差10天。因此，格里历开始实行时，将儒略历1582年10月4日星期四的次日，为格里历1582年10月15日星期五，即有10天被删除，但原星期的周期保持不变。格里历的纪年沿用儒略历，自传统的耶稣诞生年开始，称为“公元”，亦称“西元”。</p>
+</blockquote>
+
+<h3 id=58515d194f8ca4f01a73020ed3132c05>1.2 区别</h3>
+
+<p>　　由定义可见，儒略历和格里高利历都属于阳历，后者是以太阳回归年为基础，对前者置润误差进行调整后的历法。所以两者之间最大的不同就是置润规则。</p>
+
+<h4 id=7ef9ebed2b6dcb98664931661974547d>1.2.1 置润规则</h4>
+
+<ul>
+<li><p><strong>儒略历</strong></p>
+
+<p>能被4整除的年份为闰年（产生多润的原因，从而使儒略历在日期上落后于格里历）</p></li>
+
+<li><p><strong>格里历</strong></p>
+
+<p>能被4整除但不能被100整除的非世纪年 + 能被400整除的世纪年，即要在儒略历闰年中扣除那些不能被400整除的世纪年（如1600，1700等）</p></li>
+</ul>
+
+<pre><code class="language-go">// LeapYearJulian returns true if year y in the Julian calendar is a leap year.
+// 儒略历闰年判断
+func LeapYearJulian(y int) bool {
+	return y%4 == 0
+}
+
+// LeapYearGregorian returns true if year y in the Gregorian calendar is a leap year.
+// 格里历闰年判断
+func LeapYearGregorian(y int) bool {
+	return (y%4 == 0 && y%100 != 0) || y%400 == 0
+}
+</code></pre>
+
+<h4 id=b7a8cc6899b445d7ed75269a284cfc01>1.2.2 转换</h4>
+
+<p>　　知道了这个不同，我们就能推导出两种历法之间实际的相差天数，如下：</p>
+
+<ul>
+<li>1582年：<br />
+格里历10月15日，合儒略历10月5日，或之后的日期：格里历日期减10日等于儒略历日期。</li>
+<li>1583年——1699年：<br />
+格里历日期减10日等于儒略历日期。</li>
+<li>1700年（格里历没有闰日，但儒略历有）：<br />
+格里历2月28日，合儒略历2月18日，或之前的日期：格里历日期减10日等于儒略历日期。<br />
+格里历3月1日，合儒略历2月19日，或之后的日期：格里历日期减11日等于儒略历日期。</li>
+<li>1701年——1799年：<br />
+格里历日期减11日等于儒略历日期。</li>
+<li>1800年（格里历没有闰日，但儒略历有）：<br />
+格里历2月28日，合儒略历2月17日，或之前的日期：格里历日期减11日等于儒略历日期。<br />
+格里历3月1日，合儒略历2月18日，或之后的日期：格里历日期减12日等于儒略历日期。</li>
+<li>1801年——1899年：<br />
+格里历日期减12日等于儒略历日期。</li>
+<li>1900年（格里历没有闰日，但儒略历有）：<br />
+格里历2月28日，合儒略历2月16日，或之前的日期：格里历日期减12日等于儒略历日期。<br />
+格里历3月1日，合儒略历2月17日，或之后的日期：格里历日期减13日等于儒略历日期。</li>
+<li>1901年——2099年：<br />
+格里历日期减13日等于儒略历日期。</li>
+<li>2100年（格里历没有闰日，但儒略历有）：<br />
+格里历2月28日，合儒略历2月15日，或之前的日期：格里历日期减13日等于儒略历日期。<br />
+格里历3月1日，合儒略历2月16日，或之后的日期：格里历日期减14日等于儒略历日期。</li>
+</ul>
+
+<h2 id=1ec97bcabd2f12542be3477ed7b240cc>2. 儒略日 Julian Day</h2>
+
+<ul>
+<li><p><strong>儒略日（Julian Day）</strong><br />
+儒略日是在儒略周期内以连续的日数计算时间的计时法，主要是天文学家在使用。</p></li>
+
+<li><p><strong>儒略日数（Julian Day Number，JDN）</strong><br />
+儒略日数的计算是从格林威治标准时间的中午开始，包含一个整天的时间，起点的时间（0日）回溯至儒略历的公元前4713年1月1日中午12点（在格里历是公元前4714年11月24日），这个日期是三种多年周期的共同起点，且是历史上最接近现代的一个起点。例如，2000年1月1日的UT12:00是儒略日2,451,545。</p></li>
+
+<li><p><strong>儒略日期（Julian date，JD）</strong><br />
+儒略日期是以格林威治标准时中午12:00的儒略日加上那一天的瞬时时间的分数。儒略日期是儒略日添加小数部分所表示的儒略日数。例如，2013年1月1日00:30:00（UT）是儒略日期2,456,293.520833。</p></li>
+
+<li><p><strong>儒略周期（Julian Period）</strong><br />
+儒略周期是开始于公元前4713年，长达7980年的纪年法，被用于历史上各种不同历法的日期转换。公元2018年是儒略周期的6731年，下一个儒略周期将开始于公元3268年。</p></li>
+
+<li><p><strong>儒略日起点</strong><br />
+儒略日的起点订在西元前4713年（天文学上记为 -4712年）1月1日格林威治时间平午（世界时12:00），即JD 0指定为UT时间B.C.4713年1月1日12:00到UC时间B.C.4713年1月2日12:00的24小时。每一天赋予了一个唯一的数字，顺数而下，如：1996年1月1日12:00:00的儒略日是2450084。这个日期是考虑了太阳、月亮的轨道运行周期，以及当时收税的间隔而订出来的。Joseph Scaliger定义儒略周期为7980年，是因28、19、15的最小公倍数为28×19×15=7980。其中：</p>
+
+<p>28年为一太阳周期（solar cycle），经过一太阳周期，则星期的日序与月的日序会重复。</p>
+
+<p>19年为一太阴周期，或称默冬章（Metonic cycle），因235朔望月=19回归年，经过一太阴周期则阴历月年的日序重复。</p>
+
+<p>15年为一小纪（indiction cycle），此为罗马皇帝君士坦丁一世所颁，每15年评定财产价值以供课税，成为古罗马用的一个纪元单位，</p>
+
+<p>故以7980年为一儒略周期，而所选的起点公元前4713年，则是这三个循环周期同时开始的最近年份。</p></li>
+
+<li><p><strong>简化儒略日（MJD）</strong><br />
+由于儒略日数字位数太多，国际天文学联合会于1973年采用简化儒略日（MJD），其定义为MJD = JD - 2400000.5。MJD相应的起点是1858年11月17日世界时0时。</p></li>
+</ul>
+
+<p>　　算法中主要用的是 <strong>儒略日期（Julian date，JD）</strong>，后续简称为<strong>儒略日</strong></p>
+
+<h2 id=76b0213170c550fd708f4e15adc4226e>3. 儒略日和阳历日期（格里历、儒略历日期）的转换</h2>
+
+<h3 id=413c14560eba5b4735d16467bbedf0c6>3.1 阳历日期$(Y,M,D)$ $\Rightarrow$ 儒略日$(JD)$</h3>
+
+<ol>
+<li><p>设$Y$为给定年份，$M$为月份，$D$为该月日期（可以带小数）。</p></li>
+
+<li><p>若 $M > 2$，$Y$和$M$不变，</p></li>
+
+<li><p>若 $M =1或2$，以$Y–1$代$Y$，以$M+12$代$M$，换句话说，如果日期在1月或2月，则被看作是在前一年的13月或14月。</p></li>
+
+<li><p>对格里历有 ：$A = \lfloor \frac {Y}{100}\rfloor$ $B = 2 - A + \lfloor \frac{A}{4}\rfloor$</p></li>
+
+<li><p>对儒略历，取 $B = 0$</p></li>
+
+<li><p>要求的儒略日即为：$$JD = \lfloor 365.25(Y+4716)\rfloor+\lfloor30.6001(M+1)\rfloor+D+B-1524.5$$</p></li>
+</ol>
+
+<blockquote>
+<p>此处作对30.6001取值的解释是为了确保小数在运算时的准确性，如30.6 * 5 应该等于153，但是很多计算机得出的结果是152.999 9998。</p>
+
+<p>另一种方式就是用306代替，最后再除以10取整</p>
+</blockquote>
+
+<pre><code class="language-go">// FloorDiv returns the integer floor of the fractional value (x / y).
+//
+// It uses integer math only, so is more efficient than using floating point
+// intermediate values.  This function can be used in many places where INT()
+// appears in AA.  As with built in integer division, it panics with y == 0.
+func FloorDiv(x, y int) (q int) {
+	q = x / y
+	if (x < 0) != (y < 0) && x%y != 0 {
+		q--
+	}
+	return
+}
+
+// FloorDiv64 returns the integer floor of the fractional value (x / y).
+//
+// It uses integer math only, so is more efficient than using floating point
+// intermediate values.  This function can be used in many places where INT()
+// appears in AA.  As with built in integer division, it panics with y == 0.
+func FloorDiv64(x, y int64) (q int64) {
+	q = x / y
+	if (x < 0) != (y < 0) && x%y != 0 {
+		q--
+	}
+	return
+}
+</code></pre>
+
+<pre><code class="language-go">// CalendarGregorianToJD converts a Gregorian year, month, and day of month
+// to Julian day.
+//
+// Negative years are valid, back to JD 0.  The result is not valid for
+// dates before JD 0.
+// 格里历日期转儒略日
+func CalendarGregorianToJD(y, m int, d float64) float64 {
+	switch m {
+	case 1, 2:
+		y--
+		m += 12
+	}
+	a := base.FloorDiv(y, 100)
+	b := 2 - a + base.FloorDiv(a, 4)
+	// (7.1) p. 61
+	return float64(base.FloorDiv64(36525*(int64(y+4716)), 100)) +
+		float64(base.FloorDiv(306*(m+1), 10)+b) + d - 1524.5
+}
+
+// CalendarJulianToJD converts a Julian year, month, and day of month to Julian day.
+//
+// Negative years are valid, back to JD 0.  The result is not valid for
+// dates before JD 0.
+// 儒略历日期转儒略日
+func CalendarJulianToJD(y, m int, d float64) float64 {
+	switch m {
+	case 1, 2:
+		y--
+		m += 12
+	}
+	return float64(base.FloorDiv64(36525*(int64(y+4716)), 100)) +
+		float64(base.FloorDiv(306*(m+1), 10)) + d - 1524.5
+}
+</code></pre>
+
+<h3 id=191832370a09179f2037f09e1e2ad059>3.2 儒略日$(JD)$ $\Rightarrow$ 阳历日期$(y,m,d)$</h3>
+
+<ol>
+<li>将 $JD$ 加上 0.5，令$Z$为其整数部分，$F$ 为尾数（小数）部分。</li>
+<li>若 $Z$ < 2299161，取 $A$ = $Z$;<br />
+若 $Z$ 大于等于 2299161，计算
+\begin{align}
+α &=\lfloor \frac {Z-1867216.25}{36524.25}\rfloor\\[2ex]
+A &=Z+1+α-\lfloor \frac α4\rfloor
+\end{align}</li>
+<li>然后计算
+\begin{align}
+B &= A+1524\\[2ex]
+C &= \lfloor \frac {B-122.1}{365.25}\rfloor\\[2ex]
+D &= \lfloor 365.25C\rfloor\\[2ex]
+E &= \lfloor \frac {B-D}{30.6001}\rfloor\\[2ex]
+\end{align}</li>
+<li>该月日期（带小数部分）则为：$$d = B - D - \lfloor 30.6001E\rfloor + F$$</li>
+<li>月份 m 为：
+\begin{cases}
+m = E – 1 ;&  \text {if $E$ < 14}\\[2ex]
+m = E – 13 ;&  \text {if $E$ $\geq$ 14}
+\end{cases}</li>
+<li>年份为 y：
+\begin{cases}
+y = C – 4716 ;&  \text {if $m$ > 2}\\[2ex]
+y = C – 4715 ;&  \text {if $m$ $\leq$ 2}
+\end{cases}</li>
+</ol>
+
+<pre><code class="language-go">// JDToCalendar returns the calendar date for the given jd.
+//
+// Note that this function returns a date in either the Julian or Gregorian
+// Calendar, as appropriate.
+// 儒略日转公历日期
+// 如果儒略日对应的格里历时间点在1582-10-15 12点之前，则转为儒略历日期
+// 如果儒略日对应的格里历时间点在1582-10-15 12点之后，则转为格里历日期
+func JDToCalendar(jd float64) (year, month int, day float64) {
+	zf, f := math.Modf(jd + .5)
+	z := int64(zf)
+	a := z
+	// if z >= 2299151 { // typo 应该是2299161对应于现实格里历起始日1582-10-15中午12点
+	if z >= 2299161 { // typo 应该是2299161对应于现实格里历起始日1582-10-15中午12点
+		α := base.FloorDiv64(z*100-186721625, 3652425)
+		a = z + 1 + α - base.FloorDiv64(α, 4)
+	}
+	b := a + 1524
+	c := base.FloorDiv64(b*100-12210, 36525)
+	d := base.FloorDiv64(36525*c, 100)
+	e := int(base.FloorDiv64((b-d)*1e4, 306001))
+	// compute return values
+	day = float64(int(b-d)-base.FloorDiv(306001*e, 1e4)) + f
+	switch e {
+	default:
+		month = e - 1
+	case 14, 15:
+		month = e - 13
+	}
+	switch month {
+	default:
+		year = int(c) - 4716
+	case 1, 2:
+		year = int(c) - 4715
+	}
+	return
+}
+
+// jdToCalendarGregorian returns the Gregorian calendar date for the given jd.
+//
+// Note that it returns a Gregorian date even for dates before the start of
+// the Gregorian calendar.  The function is useful when working with Go
+// time.Time values because they are always based on the Gregorian calendar.
+// 始终转为格里历，忽略儒略历转格里历被扣除的那10天，即把1582-10-15 12点之前的日期也当成格里历算
+func jdToCalendarGregorian(jd float64) (year, month int, day float64) {
+	zf, f := math.Modf(jd + .5)
+	z := int64(zf)
+	α := base.FloorDiv64(z*100-186721625, 3652425)
+	a := z + 1 + α - base.FloorDiv64(α, 4)
+	b := a + 1524
+	c := base.FloorDiv64(b*100-12210, 36525)
+	d := base.FloorDiv64(36525*c, 100)
+	e := int(base.FloorDiv64((b-d)*1e4, 306001))
+	// compute return values
+	day = float64(int(b-d)-base.FloorDiv(306001*e, 1e4)) + f
+	switch e {
+	default:
+		month = e - 1
+	case 14, 15:
+		month = e - 13
+	}
+	switch month {
+	default:
+		year = int(c) - 4716
+	case 1, 2:
+		year = int(c) - 4715
+	}
+	return
+}
+
+// JDToTime takes a JD and returns a Go time.Time value.
+// 儒略历转为格里历日期对应的 Go Time 类型
+func JDToTime(jd float64) time.Time {
+	// time.Time is always Gregorian
+	y, m, d := jdToCalendarGregorian(jd)
+	t := time.Date(y, time.Month(m), 0, 0, 0, 0, 0, time.UTC)
+	return t.Add(time.Duration(d * 24 * float64(time.Hour)))
+}
+
+// TimeToJD takes a Go time.Time and returns a JD as float64.
+//
+// Any time zone offset in the time.Time is ignored and the time is
+// treated as UTC.
+// Go Time 类型转为儒略日（默认日期为格里历）
+func TimeToJD(t time.Time) float64 {
+	ut := t.UTC()
+	y, m, _ := ut.Date()
+	d := ut.Sub(time.Date(y, m, 0, 0, 0, 0, 0, time.UTC))
+	// time.Time is always Gregorian
+	return CalendarGregorianToJD(y, int(m), float64(d)/float64(24*time.Hour))
+}
+</code></pre>
+
+<h3 id=4e82e61393610464af886cd53cc0d240>3.3 儒略日$(JD)$ $\Rightarrow$ 星期几</h3>
+
+<p>　　因为儒略日0.0(-4712-1-1 12:00) 是星期一，往后7天一循环就能得出星期几了<br />
+　　计算该日0时的儒略日，加上1.5，再除以7，所得余数将指示出星期几：<br />
+若余数为0，则为星期日，1为星期一，2为星期二，3为星期三，4为星期四，5为星期五，6为星期六。<br />
+　　儒略历到格里高利历的换算并不影响星期。 因而，在1582年10月4日星期四接下来的一天便是10月15日星期五。</p>
+
+<pre><code class="language-go">// DayOfWeek determines the day of the week for a given JD.
+//
+// The value returned is an integer in the range 0 to 6, where 0 represents
+// Sunday.  This is the same convention followed in the time package of the
+// Go standard library.
+// 儒略日0.0为-4712-1-1 12:00 星期一，往后7天一循环就能得出星期几了
+func DayOfWeek(jd float64) int {
+	return int(jd+1.5) % 7
+}
+</code></pre>
+
+<h3 id=4fa1e47b3bb9cd9973ecd6ac5a858216>3.4 日阳历日期$(Y,M,D)$ $\Rightarrow$ 年内序数日$(N)$</h3>
+
+<p>　　年内的序数日$N$可由以下公式得出：$$N = \lfloor \frac {275M}{9}\rfloor - K\lfloor \frac {M+9}{12}\rfloor + D - 30 $$
+　　此处$M$为月份，$D$为该月日期，闰年$K = 1$，平年$K = 2$<br />
+　　$N$ 取整数，自1月1日开始取值1，直至12月31日取值365（或闰年取值366）。</p>
+
+<p>　　<strong>如何推导出这个公式？</strong><br />
+　　乍一看挺没头绪的，我们先来看一个数列$$ a_m = \lfloor \frac {5(m+1)}{9}\rfloor, (m=0,1,2,\dots,12)$$</p>
+
+<p>\begin{array}{c|ccl}
+m & a_m & a_m - a_{m-1} & 当月天数 \\<br />
+\hline
+0 & 0 & - & - \\<br />
+1 & 1 & 1 & 31 \\<br />
+2 & 1 & 0 & 30(看做30) \\<br />
+3 & 2 & 1 & 31 \\<br />
+4 & 2 & 0 & 30 \\<br />
+5 & 3 & 1 & 31 \\<br />
+6 & 3 & 0 & 30 \\<br />
+7 & 4 & 1 & 31 \\<br />
+8 & 5 & 1 & 31 \\<br />
+9 & 5 & 0 & 30 \\<br />
+10 & 6 & 1 & 31 \\<br />
+11 & 6 & 0 & 30 \\<br />
+12 & 7 & 1 & 31
+\end{array}</p>
+
+<p>　　如果把$m$看成是月份，并且暂时把二月看成是30天，那么第二列恰好是$当月天数-30$，所以我们就可以用以下公式来表示每个月的天数。
+$$D_m = 30 + a_m - a_{m-1}$$</p>
+
+<p>　　所以从1月到m月的总天数：
+\begin{align}
+S_m = & D_1+D_2+,\dots,+D_m\\[2ex]
+= & 30 + a_m - a_{m-1} + \\[2ex]
+& 30 + a_{m-1} - a_{m-2} + \\[2ex]
+& \cdots \\[2ex]
+& 30 + a_2 - a_1 + \\[2ex]
+& 30 + a_1 - a_0 \\[2ex]
+= & 30m + a_m - a_0\\[2ex]
+= & 30m + \lfloor \frac {5(m+1)}{9}\rfloor
+\end{align}</p>
+
+<p>　　由于上述表达式只有在2月等于30天的情况下才成立，所以当$m\geq 2$时还要根据平年、闰年分别减去相应的天数2，1，得到1月到$m$月的总天数和为：
+\begin{align}
+S_m=30m + \lfloor \frac {5(m+1)}{9}\rfloor - \lfloor \frac {m+10}{12}\rfloor k,\ 其中
+\end{align}
+\begin{cases}
+k = 1 , \ 闰年\\[2ex]
+k = 2 , \ 平年
+\end{cases}</p>
+
+<p>　　所以$M$月$D$日的年内序数$N$为：
+\begin{align}
+N &= S_{M-1} + D\\[2ex]
+&= 30(M-1) + \lfloor \frac {5M}{9}\rfloor - \lfloor \frac {M+9}{12}\rfloor k + D\\[2ex]
+&= \lfloor \frac {275M}{9}\rfloor - \lfloor \frac {M+9}{12}\rfloor k -30 + D\\[2ex]
+\end{align}</p>
+
+<pre><code class="language-go">// DayOfYearGregorian computes the day number within the year of the Gregorian
+// calendar.
+// 格里历年内序数
+func DayOfYearGregorian(y, m, d int) int {
+	return DayOfYear(y, m, d, LeapYearGregorian(y))
+}
+
+// DayOfYearJulian computes the day number within the year of the Julian
+// calendar.
+// 儒略历年内序数
+func DayOfYearJulian(y, m, d int) int {
+	return DayOfYear(y, m, d, LeapYearJulian(y))
+}
+
+// DayOfYear computes the day number within the year.
+//
+// This form of the function is not specific to the Julian or Gregorian
+// calendar, but you must tell it whether the year is a leap year.
+// 输入闰年标识，计算年内序数
+func DayOfYear(y, m, d int, leap bool) int {
+	k := 2
+	if leap {
+		k--
+	}
+	return wholeMonths(m, k) + d
+}
+
+// m月之前的所有月份天数之和
+func wholeMonths(m, k int) int {
+	return 275*m/9 - k*((m+9)/12) - 30
+}
+</code></pre>
+
+<h3 id=32be4f4d6427dc633908f527eb71b810>3.5 年内序数日$(N)$  $\Rightarrow$ 阳历日期$(M,D)$</h3>
+
+<pre><code class="language-go">// DayOfYearToCalendar returns the calendar month and day for a given
+// day of year and leap year status.
+// 年内序数求对应的日期
+func DayOfYearToCalendar(n int, leap bool) (m, d int) {
+	k := 2
+	if leap {
+		k--
+	}
+	if n < 32 {
+		m = 1
+	} else {
+		m = (900*(k+n) + 98*275) / 27500
+	}
+	return m, n - wholeMonths(m, k)
+}
+</code></pre>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%95/">天文算法</a>
+  
+</div>
+
+
+
+
+              
+              
+              <div class="article-widget">
+                <div class="hr-light"></div>
+                <h3>相关</h3>
+                <ul>
+                  
+                  <li><a href="/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%954/">天文算法4</a></li>
+                  
+                  <li><a href="/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/">天文算法3</a></li>
+                  
+                  <li><a href="/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/">天文算法2</a></li>
+                  
+                  <li><a href="/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/">天文算法1</a></li>
+                  
+                </ul>
+              </div>
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%954/" rel="prev">天文算法4</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 May 16, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#9979314cdc1aebe3c12644c14593fca8">第七章 儒略日 Julian Day</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#f72381a983496a2d21f3602257f505ca">1. 儒略历和格里高利历</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#3e32ea2ece32219e0c71f777e02634a0">1.1 定义</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#58515d194f8ca4f01a73020ed3132c05">1.2 区别</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#7ef9ebed2b6dcb98664931661974547d">1.2.1 置润规则</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#b7a8cc6899b445d7ed75269a284cfc01">1.2.2 转换</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#1ec97bcabd2f12542be3477ed7b240cc">2. 儒略日 Julian Day</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#76b0213170c550fd708f4e15adc4226e">3. 儒略日和阳历日期（格里历、儒略历日期）的转换</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#413c14560eba5b4735d16467bbedf0c6">3.1 阳历日期$(Y,M,D)$ $\Rightarrow$ 儒略日$(JD)$</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#191832370a09179f2037f09e1e2ad059">3.2 儒略日$(JD)$ $\Rightarrow$ 阳历日期$(y,m,d)$</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#4e82e61393610464af886cd53cc0d240">3.3 儒略日$(JD)$ $\Rightarrow$ 星期几</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#4fa1e47b3bb9cd9973ecd6ac5a858216">3.4 日阳历日期$(Y,M,D)$ $\Rightarrow$ 年内序数日$(N)$</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#32be4f4d6427dc633908f527eb71b810">3.5 年内序数日$(N)$ $\Rightarrow$ 阳历日期$(M,D)$</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+    
+    
+    
+
+  </body>
+</html>
+

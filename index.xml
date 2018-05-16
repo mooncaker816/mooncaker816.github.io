@@ -11,6 +11,453 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法5</title>
+      <link>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</link>
+      <pubDate>Wed, 16 May 2018 09:27:51 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</guid>
+      <description>&lt;h1 id=&#34;第七章-儒略日-julian-day&#34;&gt;第七章 儒略日 Julian Day&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-儒略历和格里高利历&#34;&gt;1. 儒略历和格里高利历&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-定义&#34;&gt;1.1 定义&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;儒略历，是格里历的前身，由罗马共和国独裁官儒略·凯撒采纳埃及亚历山大的希腊数学家兼天文学家索西琴尼计算的历法，在公元前45年1月1日起执行，取代旧罗马历历法的历法。一年设12个月，大小月交替，四年一闰，平年365日，闰年于二月底增加一闰日，年平均长度为365.25日。由于累积误差随着时间越来越大，1582年后由教皇格里高利十三世改良，变为格里历，即沿用至今的公历。但大英帝国、北美十三州等直到1752年才从儒略历改用格里历。现今儒略历只有苏格兰昔德兰群岛之富拉岛、阿索斯神权共和国和一些北非的柏柏尔人使用。&lt;/p&gt;
+
+&lt;p&gt;格里历（拉丁语：Calendarium Gregorianum，又译、国瑞历、额我略历、格列高利历、格里高利历、葛瑞格里历、格列高历，也称基督历[1]），是由意大利医生兼哲学家阿洛伊修斯·里利乌斯改革儒略历制定的历法，由罗马大公教会教宗格列高利十三世在1582年颁行。公历是阳历的一种，于1912年在中国引进采用，因农历等中国传统历法是阴阳历，故公历在中文中又称阳历、西历、新历、公历。格里历与儒略历一样，格里历也是每四年在2月底置一闰日，但格里历特别规定，除非能被400整除，所有的世纪年（能被100整除）都不设闰日；如此，每四百年，格里历仅有97个闰年，比儒略历减少3个闰年 [注 1]。 格里历的历年平均长度为365.2425日，接近平均回归年的365.242199074日，即约每3300年误差一日，也更接近春分点回归年的365.24237日，即约每8000年误差一日；而儒略历的历年为365.25日，约每128年就误差一日[注 1]。到1582年时，儒略历的春分日（3月21日）与地球公转到春分点的实际时间已相差10天。因此，格里历开始实行时，将儒略历1582年10月4日星期四的次日，为格里历1582年10月15日星期五，即有10天被删除，但原星期的周期保持不变。格里历的纪年沿用儒略历，自传统的耶稣诞生年开始，称为“公元”，亦称“西元”。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;1-2-区别&#34;&gt;1.2 区别&lt;/h3&gt;
+
+&lt;p&gt;　　由定义可见，儒略历和格里高利历都属于阳历，后者是以太阳回归年为基础，对前者置润误差进行调整后的历法。所以两者之间最大的不同就是置润规则。&lt;/p&gt;
+
+&lt;h4 id=&#34;1-2-1-置润规则&#34;&gt;1.2.1 置润规则&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略历&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;能被4整除的年份为闰年（产生多润的原因，从而使儒略历在日期上落后于格里历）&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;格里历&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;能被4整除但不能被100整除的非世纪年 + 能被400整除的世纪年，即要在儒略历闰年中扣除那些不能被400整除的世纪年（如1600，1700等）&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LeapYearJulian returns true if year y in the Julian calendar is a leap year.
+// 儒略历闰年判断
+func LeapYearJulian(y int) bool {
+	return y%4 == 0
+}
+
+// LeapYearGregorian returns true if year y in the Gregorian calendar is a leap year.
+// 格里历闰年判断
+func LeapYearGregorian(y int) bool {
+	return (y%4 == 0 &amp;amp;&amp;amp; y%100 != 0) || y%400 == 0
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-2-2-转换&#34;&gt;1.2.2 转换&lt;/h4&gt;
+
+&lt;p&gt;　　知道了这个不同，我们就能推导出两种历法之间实际的相差天数，如下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1582年：&lt;br /&gt;
+格里历10月15日，合儒略历10月5日，或之后的日期：格里历日期减10日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1583年——1699年：&lt;br /&gt;
+格里历日期减10日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1700年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
+格里历2月28日，合儒略历2月18日，或之前的日期：格里历日期减10日等于儒略历日期。&lt;br /&gt;
+格里历3月1日，合儒略历2月19日，或之后的日期：格里历日期减11日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1701年——1799年：&lt;br /&gt;
+格里历日期减11日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1800年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
+格里历2月28日，合儒略历2月17日，或之前的日期：格里历日期减11日等于儒略历日期。&lt;br /&gt;
+格里历3月1日，合儒略历2月18日，或之后的日期：格里历日期减12日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1801年——1899年：&lt;br /&gt;
+格里历日期减12日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1900年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
+格里历2月28日，合儒略历2月16日，或之前的日期：格里历日期减12日等于儒略历日期。&lt;br /&gt;
+格里历3月1日，合儒略历2月17日，或之后的日期：格里历日期减13日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;1901年——2099年：&lt;br /&gt;
+格里历日期减13日等于儒略历日期。&lt;/li&gt;
+&lt;li&gt;2100年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
+格里历2月28日，合儒略历2月15日，或之前的日期：格里历日期减13日等于儒略历日期。&lt;br /&gt;
+格里历3月1日，合儒略历2月16日，或之后的日期：格里历日期减14日等于儒略历日期。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;2-儒略日-julian-day&#34;&gt;2. 儒略日 Julian Day&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日（Julian Day）&lt;/strong&gt;&lt;br /&gt;
+儒略日是在儒略周期内以连续的日数计算时间的计时法，主要是天文学家在使用。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日数（Julian Day Number，JDN）&lt;/strong&gt;&lt;br /&gt;
+儒略日数的计算是从格林威治标准时间的中午开始，包含一个整天的时间，起点的时间（0日）回溯至儒略历的公元前4713年1月1日中午12点（在格里历是公元前4714年11月24日），这个日期是三种多年周期的共同起点，且是历史上最接近现代的一个起点。例如，2000年1月1日的UT12:00是儒略日2,451,545。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日期（Julian date，JD）&lt;/strong&gt;&lt;br /&gt;
+儒略日期是以格林威治标准时中午12:00的儒略日加上那一天的瞬时时间的分数。儒略日期是儒略日添加小数部分所表示的儒略日数。例如，2013年1月1日00:30:00（UT）是儒略日期2,456,293.520833。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略周期（Julian Period）&lt;/strong&gt;&lt;br /&gt;
+儒略周期是开始于公元前4713年，长达7980年的纪年法，被用于历史上各种不同历法的日期转换。公元2018年是儒略周期的6731年，下一个儒略周期将开始于公元3268年。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日起点&lt;/strong&gt;&lt;br /&gt;
+儒略日的起点订在西元前4713年（天文学上记为 -4712年）1月1日格林威治时间平午（世界时12:00），即JD 0指定为UT时间B.C.4713年1月1日12:00到UC时间B.C.4713年1月2日12:00的24小时。每一天赋予了一个唯一的数字，顺数而下，如：1996年1月1日12:00:00的儒略日是2450084。这个日期是考虑了太阳、月亮的轨道运行周期，以及当时收税的间隔而订出来的。Joseph Scaliger定义儒略周期为7980年，是因28、19、15的最小公倍数为28×19×15=7980。其中：&lt;/p&gt;
+
+&lt;p&gt;28年为一太阳周期（solar cycle），经过一太阳周期，则星期的日序与月的日序会重复。&lt;/p&gt;
+
+&lt;p&gt;19年为一太阴周期，或称默冬章（Metonic cycle），因235朔望月=19回归年，经过一太阴周期则阴历月年的日序重复。&lt;/p&gt;
+
+&lt;p&gt;15年为一小纪（indiction cycle），此为罗马皇帝君士坦丁一世所颁，每15年评定财产价值以供课税，成为古罗马用的一个纪元单位，&lt;/p&gt;
+
+&lt;p&gt;故以7980年为一儒略周期，而所选的起点公元前4713年，则是这三个循环周期同时开始的最近年份。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;简化儒略日（MJD）&lt;/strong&gt;&lt;br /&gt;
+由于儒略日数字位数太多，国际天文学联合会于1973年采用简化儒略日（MJD），其定义为MJD = JD - 2400000.5。MJD相应的起点是1858年11月17日世界时0时。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　算法中主要用的是 &lt;strong&gt;儒略日期（Julian date，JD）&lt;/strong&gt;，后续简称为&lt;strong&gt;儒略日&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;3-儒略日和阳历日期-格里历-儒略历日期-的转换&#34;&gt;3. 儒略日和阳历日期（格里历、儒略历日期）的转换&lt;/h2&gt;
+
+&lt;h3 id=&#34;3-1-阳历日期-y-m-d-rightarrow-儒略日-jd&#34;&gt;3.1 阳历日期$(Y,M,D)$ $\Rightarrow$ 儒略日$(JD)$&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;设$Y$为给定年份，$M$为月份，$D$为该月日期（可以带小数）。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;若 $M &amp;gt; 2$，$Y$和$M$不变，&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;若 $M =1或2$，以$Y–1$代$Y$，以$M+12$代$M$，换句话说，如果日期在1月或2月，则被看作是在前一年的13月或14月。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对格里历有 ：$A = \lfloor \frac {Y}{100}\rfloor$ $B = 2 - A + \lfloor \frac{A}{4}\rfloor$&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对儒略历，取 $B = 0$&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;要求的儒略日即为：$$JD = \lfloor 365.25(Y+4716)\rfloor+\lfloor30.6001(M+1)\rfloor+D+B-1524.5$$&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;此处作对30.6001取值的解释是为了确保小数在运算时的准确性，如30.6 * 5 应该等于153，但是很多计算机得出的结果是152.999 9998。&lt;/p&gt;
+
+&lt;p&gt;另一种方式就是用306代替，最后再除以10取整&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// FloorDiv returns the integer floor of the fractional value (x / y).
+//
+// It uses integer math only, so is more efficient than using floating point
+// intermediate values.  This function can be used in many places where INT()
+// appears in AA.  As with built in integer division, it panics with y == 0.
+func FloorDiv(x, y int) (q int) {
+	q = x / y
+	if (x &amp;lt; 0) != (y &amp;lt; 0) &amp;amp;&amp;amp; x%y != 0 {
+		q--
+	}
+	return
+}
+
+// FloorDiv64 returns the integer floor of the fractional value (x / y).
+//
+// It uses integer math only, so is more efficient than using floating point
+// intermediate values.  This function can be used in many places where INT()
+// appears in AA.  As with built in integer division, it panics with y == 0.
+func FloorDiv64(x, y int64) (q int64) {
+	q = x / y
+	if (x &amp;lt; 0) != (y &amp;lt; 0) &amp;amp;&amp;amp; x%y != 0 {
+		q--
+	}
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// CalendarGregorianToJD converts a Gregorian year, month, and day of month
+// to Julian day.
+//
+// Negative years are valid, back to JD 0.  The result is not valid for
+// dates before JD 0.
+// 格里历日期转儒略日
+func CalendarGregorianToJD(y, m int, d float64) float64 {
+	switch m {
+	case 1, 2:
+		y--
+		m += 12
+	}
+	a := base.FloorDiv(y, 100)
+	b := 2 - a + base.FloorDiv(a, 4)
+	// (7.1) p. 61
+	return float64(base.FloorDiv64(36525*(int64(y+4716)), 100)) +
+		float64(base.FloorDiv(306*(m+1), 10)+b) + d - 1524.5
+}
+
+// CalendarJulianToJD converts a Julian year, month, and day of month to Julian day.
+//
+// Negative years are valid, back to JD 0.  The result is not valid for
+// dates before JD 0.
+// 儒略历日期转儒略日
+func CalendarJulianToJD(y, m int, d float64) float64 {
+	switch m {
+	case 1, 2:
+		y--
+		m += 12
+	}
+	return float64(base.FloorDiv64(36525*(int64(y+4716)), 100)) +
+		float64(base.FloorDiv(306*(m+1), 10)) + d - 1524.5
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-2-儒略日-jd-rightarrow-阳历日期-y-m-d&#34;&gt;3.2 儒略日$(JD)$ $\Rightarrow$ 阳历日期$(y,m,d)$&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;将 $JD$ 加上 0.5，令$Z$为其整数部分，$F$ 为尾数（小数）部分。&lt;/li&gt;
+&lt;li&gt;若 $Z$ &amp;lt; 2299161，取 $A$ = $Z$;&lt;br /&gt;
+若 $Z$ 大于等于 2299161，计算
+\begin{align}
+α &amp;amp;=\lfloor \frac {Z-1867216.25}{36524.25}\rfloor\\[2ex]
+A &amp;amp;=Z+1+α-\lfloor \frac α4\rfloor
+\end{align}&lt;/li&gt;
+&lt;li&gt;然后计算
+\begin{align}
+B &amp;amp;= A+1524\\[2ex]
+C &amp;amp;= \lfloor \frac {B-122.1}{365.25}\rfloor\\[2ex]
+D &amp;amp;= \lfloor 365.25C\rfloor\\[2ex]
+E &amp;amp;= \lfloor \frac {B-D}{30.6001}\rfloor\\[2ex]
+\end{align}&lt;/li&gt;
+&lt;li&gt;该月日期（带小数部分）则为：$$d = B - D - \lfloor 30.6001E\rfloor + F$$&lt;/li&gt;
+&lt;li&gt;月份 m 为：
+\begin{cases}
+m = E – 1 ;&amp;amp;  \text {if $E$ &amp;lt; 14}\\[2ex]
+m = E – 13 ;&amp;amp;  \text {if $E$ $\geq$ 14}
+\end{cases}&lt;/li&gt;
+&lt;li&gt;年份为 y：
+\begin{cases}
+y = C – 4716 ;&amp;amp;  \text {if $m$ &amp;gt; 2}\\[2ex]
+y = C – 4715 ;&amp;amp;  \text {if $m$ $\leq$ 2}
+\end{cases}&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// JDToCalendar returns the calendar date for the given jd.
+//
+// Note that this function returns a date in either the Julian or Gregorian
+// Calendar, as appropriate.
+// 儒略日转公历日期
+// 如果儒略日对应的格里历时间点在1582-10-15 12点之前，则转为儒略历日期
+// 如果儒略日对应的格里历时间点在1582-10-15 12点之后，则转为格里历日期
+func JDToCalendar(jd float64) (year, month int, day float64) {
+	zf, f := math.Modf(jd + .5)
+	z := int64(zf)
+	a := z
+	// if z &amp;gt;= 2299151 { // typo 应该是2299161对应于现实格里历起始日1582-10-15中午12点
+	if z &amp;gt;= 2299161 { // typo 应该是2299161对应于现实格里历起始日1582-10-15中午12点
+		α := base.FloorDiv64(z*100-186721625, 3652425)
+		a = z + 1 + α - base.FloorDiv64(α, 4)
+	}
+	b := a + 1524
+	c := base.FloorDiv64(b*100-12210, 36525)
+	d := base.FloorDiv64(36525*c, 100)
+	e := int(base.FloorDiv64((b-d)*1e4, 306001))
+	// compute return values
+	day = float64(int(b-d)-base.FloorDiv(306001*e, 1e4)) + f
+	switch e {
+	default:
+		month = e - 1
+	case 14, 15:
+		month = e - 13
+	}
+	switch month {
+	default:
+		year = int(c) - 4716
+	case 1, 2:
+		year = int(c) - 4715
+	}
+	return
+}
+
+// jdToCalendarGregorian returns the Gregorian calendar date for the given jd.
+//
+// Note that it returns a Gregorian date even for dates before the start of
+// the Gregorian calendar.  The function is useful when working with Go
+// time.Time values because they are always based on the Gregorian calendar.
+// 始终转为格里历，忽略儒略历转格里历被扣除的那10天，即把1582-10-15 12点之前的日期也当成格里历算
+func jdToCalendarGregorian(jd float64) (year, month int, day float64) {
+	zf, f := math.Modf(jd + .5)
+	z := int64(zf)
+	α := base.FloorDiv64(z*100-186721625, 3652425)
+	a := z + 1 + α - base.FloorDiv64(α, 4)
+	b := a + 1524
+	c := base.FloorDiv64(b*100-12210, 36525)
+	d := base.FloorDiv64(36525*c, 100)
+	e := int(base.FloorDiv64((b-d)*1e4, 306001))
+	// compute return values
+	day = float64(int(b-d)-base.FloorDiv(306001*e, 1e4)) + f
+	switch e {
+	default:
+		month = e - 1
+	case 14, 15:
+		month = e - 13
+	}
+	switch month {
+	default:
+		year = int(c) - 4716
+	case 1, 2:
+		year = int(c) - 4715
+	}
+	return
+}
+
+// JDToTime takes a JD and returns a Go time.Time value.
+// 儒略历转为格里历日期对应的 Go Time 类型
+func JDToTime(jd float64) time.Time {
+	// time.Time is always Gregorian
+	y, m, d := jdToCalendarGregorian(jd)
+	t := time.Date(y, time.Month(m), 0, 0, 0, 0, 0, time.UTC)
+	return t.Add(time.Duration(d * 24 * float64(time.Hour)))
+}
+
+// TimeToJD takes a Go time.Time and returns a JD as float64.
+//
+// Any time zone offset in the time.Time is ignored and the time is
+// treated as UTC.
+// Go Time 类型转为儒略日（默认日期为格里历）
+func TimeToJD(t time.Time) float64 {
+	ut := t.UTC()
+	y, m, _ := ut.Date()
+	d := ut.Sub(time.Date(y, m, 0, 0, 0, 0, 0, time.UTC))
+	// time.Time is always Gregorian
+	return CalendarGregorianToJD(y, int(m), float64(d)/float64(24*time.Hour))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-3-儒略日-jd-rightarrow-星期几&#34;&gt;3.3 儒略日$(JD)$ $\Rightarrow$ 星期几&lt;/h3&gt;
+
+&lt;p&gt;　　因为儒略日0.0(-4712-1-1 12:00) 是星期一，往后7天一循环就能得出星期几了&lt;br /&gt;
+　　计算该日0时的儒略日，加上1.5，再除以7，所得余数将指示出星期几：&lt;br /&gt;
+若余数为0，则为星期日，1为星期一，2为星期二，3为星期三，4为星期四，5为星期五，6为星期六。&lt;br /&gt;
+　　儒略历到格里高利历的换算并不影响星期。 因而，在1582年10月4日星期四接下来的一天便是10月15日星期五。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DayOfWeek determines the day of the week for a given JD.
+//
+// The value returned is an integer in the range 0 to 6, where 0 represents
+// Sunday.  This is the same convention followed in the time package of the
+// Go standard library.
+// 儒略日0.0为-4712-1-1 12:00 星期一，往后7天一循环就能得出星期几了
+func DayOfWeek(jd float64) int {
+	return int(jd+1.5) % 7
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-4-日阳历日期-y-m-d-rightarrow-年内序数日-n&#34;&gt;3.4 日阳历日期$(Y,M,D)$ $\Rightarrow$ 年内序数日$(N)$&lt;/h3&gt;
+
+&lt;p&gt;　　年内的序数日$N$可由以下公式得出：$$N = \lfloor \frac {275M}{9}\rfloor - K\lfloor \frac {M+9}{12}\rfloor + D - 30 $$
+　　此处$M$为月份，$D$为该月日期，闰年$K = 1$，平年$K = 2$&lt;br /&gt;
+　　$N$ 取整数，自1月1日开始取值1，直至12月31日取值365（或闰年取值366）。&lt;/p&gt;
+
+&lt;p&gt;　　&lt;strong&gt;如何推导出这个公式？&lt;/strong&gt;&lt;br /&gt;
+　　乍一看挺没头绪的，我们先来看一个数列$$ a_m = \lfloor \frac {5(m+1)}{9}\rfloor, (m=0,1,2,\dots,12)$$&lt;/p&gt;
+
+&lt;p&gt;\begin{array}{c|ccl}
+m &amp;amp; a_m &amp;amp; a_m - a_{m-1} &amp;amp; 当月天数 \\&lt;br /&gt;
+\hline
+0 &amp;amp; 0 &amp;amp; - &amp;amp; - \\&lt;br /&gt;
+1 &amp;amp; 1 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
+2 &amp;amp; 1 &amp;amp; 0 &amp;amp; 30(看做30) \\&lt;br /&gt;
+3 &amp;amp; 2 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
+4 &amp;amp; 2 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
+5 &amp;amp; 3 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
+6 &amp;amp; 3 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
+7 &amp;amp; 4 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
+8 &amp;amp; 5 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
+9 &amp;amp; 5 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
+10 &amp;amp; 6 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
+11 &amp;amp; 6 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
+12 &amp;amp; 7 &amp;amp; 1 &amp;amp; 31
+\end{array}&lt;/p&gt;
+
+&lt;p&gt;　　如果把$m$看成是月份，并且暂时把二月看成是30天，那么第二列恰好是$当月天数-30$，所以我们就可以用以下公式来表示每个月的天数。
+$$D_m = 30 + a_m - a_{m-1}$$&lt;/p&gt;
+
+&lt;p&gt;　　所以从1月到m月的总天数：
+\begin{align}
+S_m = &amp;amp; D_1+D_2+,\dots,+D_m\\[2ex]
+= &amp;amp; 30 + a_m - a_{m-1} + \\[2ex]
+&amp;amp; 30 + a_{m-1} - a_{m-2} + \\[2ex]
+&amp;amp; \cdots \\[2ex]
+&amp;amp; 30 + a_2 - a_1 + \\[2ex]
+&amp;amp; 30 + a_1 - a_0 \\[2ex]
+= &amp;amp; 30m + a_m - a_0\\[2ex]
+= &amp;amp; 30m + \lfloor \frac {5(m+1)}{9}\rfloor
+\end{align}&lt;/p&gt;
+
+&lt;p&gt;　　由于上述表达式只有在2月等于30天的情况下才成立，所以当$m\geq 2$时还要根据平年、闰年分别减去相应的天数2，1，得到1月到$m$月的总天数和为：
+\begin{align}
+S_m=30m + \lfloor \frac {5(m+1)}{9}\rfloor - \lfloor \frac {m+10}{12}\rfloor k,\ 其中
+\end{align}
+\begin{cases}
+k = 1 , \ 闰年\\[2ex]
+k = 2 , \ 平年
+\end{cases}&lt;/p&gt;
+
+&lt;p&gt;　　所以$M$月$D$日的年内序数$N$为：
+\begin{align}
+N &amp;amp;= S_{M-1} + D\\[2ex]
+&amp;amp;= 30(M-1) + \lfloor \frac {5M}{9}\rfloor - \lfloor \frac {M+9}{12}\rfloor k + D\\[2ex]
+&amp;amp;= \lfloor \frac {275M}{9}\rfloor - \lfloor \frac {M+9}{12}\rfloor k -30 + D\\[2ex]
+\end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DayOfYearGregorian computes the day number within the year of the Gregorian
+// calendar.
+// 格里历年内序数
+func DayOfYearGregorian(y, m, d int) int {
+	return DayOfYear(y, m, d, LeapYearGregorian(y))
+}
+
+// DayOfYearJulian computes the day number within the year of the Julian
+// calendar.
+// 儒略历年内序数
+func DayOfYearJulian(y, m, d int) int {
+	return DayOfYear(y, m, d, LeapYearJulian(y))
+}
+
+// DayOfYear computes the day number within the year.
+//
+// This form of the function is not specific to the Julian or Gregorian
+// calendar, but you must tell it whether the year is a leap year.
+// 输入闰年标识，计算年内序数
+func DayOfYear(y, m, d int, leap bool) int {
+	k := 2
+	if leap {
+		k--
+	}
+	return wholeMonths(m, k) + d
+}
+
+// m月之前的所有月份天数之和
+func wholeMonths(m, k int) int {
+	return 275*m/9 - k*((m+9)/12) - 30
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-5-年内序数日-n-rightarrow-阳历日期-m-d&#34;&gt;3.5 年内序数日$(N)$  $\Rightarrow$ 阳历日期$(M,D)$&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DayOfYearToCalendar returns the calendar month and day for a given
+// day of year and leap year status.
+// 年内序数求对应的日期
+func DayOfYearToCalendar(n int, leap bool) (m, d int) {
+	k := 2
+	if leap {
+		k--
+	}
+	if n &amp;lt; 32 {
+		m = 1
+	} else {
+		m = (900*(k+n) + 98*275) / 27500
+	}
+	return m, n - wholeMonths(m, k)
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法4</title>
       <link>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%954/</link>
       <pubDate>Tue, 15 May 2018 17:34:49 +0800</pubDate>
@@ -3765,923 +4212,6 @@ set3 DifferenceWith set2: {1 4444}
 set2 SymmetricDifference set3: {1 4444 666666}
 set3 SymmetricDifference set2: {1 4444 666666}
 elem slice in set2: [333 55555 666666]
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（6）</title>
-      <link>https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/</link>
-      <pubDate>Thu, 28 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/</guid>
-      <description>&lt;h3 id=&#34;ex-5-1&#34;&gt;Ex 5.1&lt;/h3&gt;
-
-&lt;p&gt;Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;os&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-)
-
-func main() {
-	doc, err := html.Parse(os.Stdin)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, &amp;quot;findlinks1: %v\n&amp;quot;, err)
-		os.Exit(1)
-	}
-	for _, link := range visit(nil, doc) {
-		fmt.Println(link)
-	}
-}
-
-// visit appends to links each link found in n and returns the result.
-func visit(links []string, n *html.Node) []string {
-
-	if n == nil {
-		return links
-	} else {
-		if n.Type == html.ElementNode &amp;amp;&amp;amp; n.Data == &amp;quot;a&amp;quot; {
-			for _, a := range n.Attr {
-				if a.Key == &amp;quot;href&amp;quot; {
-					links = append(links, a.Val)
-				}
-			}
-		}
-		links = visit(links, n.FirstChild)
-		links = visit(links, n.NextSibling)
-	}
-	return links
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex1.7 http://www.baidu.com | ./ex5.1
-/
-javascript:;
-javascript:;
-javascript:;
-/
-javascript:;
-https://passport.baidu.com/v2/?login&amp;amp;tpl=mn&amp;amp;u=http%3A%2F%2Fwww.baidu.com%2F
-http://news.baidu.com
-http://www.hao123.com
-http://map.baidu.com
-http://v.baidu.com
-http://tieba.baidu.com
-http://xueshu.baidu.com
-https://passport.baidu.com/v2/?login&amp;amp;tpl=mn&amp;amp;u=http%3A%2F%2Fwww.baidu.com%2F
-http://www.baidu.com/gaoji/preferences.html
-http://www.baidu.com/more/
-http://news.baidu.com/ns?cl=2&amp;amp;rn=20&amp;amp;tn=news&amp;amp;word=
-http://tieba.baidu.com/f?kw=&amp;amp;fr=wwwt
-http://zhidao.baidu.com/q?ct=17&amp;amp;pn=0&amp;amp;tn=ikaslist&amp;amp;rn=10&amp;amp;word=&amp;amp;fr=wwwt
-http://music.baidu.com/search?fr=ps&amp;amp;ie=utf-8&amp;amp;key=
-http://image.baidu.com/search/index?tn=baiduimage&amp;amp;ps=1&amp;amp;ct=201326592&amp;amp;lm=-1&amp;amp;cl=2&amp;amp;nc=1&amp;amp;ie=utf-8&amp;amp;word=
-http://v.baidu.com/v?ct=301989888&amp;amp;rn=20&amp;amp;pn=0&amp;amp;db=0&amp;amp;s=25&amp;amp;ie=utf-8&amp;amp;word=
-http://map.baidu.com/m?word=&amp;amp;fr=ps01000
-http://wenku.baidu.com/search?word=&amp;amp;lm=0&amp;amp;od=0&amp;amp;ie=utf-8
-//www.baidu.com/more/
-//www.baidu.com/cache/sethelp/help.html
-http://home.baidu.com
-http://ir.baidu.com
-http://e.baidu.com/?refer=888
-http://www.baidu.com/duty/
-http://jianyi.baidu.com/
-http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11000002000001
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-5-2&#34;&gt;Ex 5.2&lt;/h3&gt;
-
-&lt;p&gt;Write a function to populate a mapping from element names—p, div, span, and so on—to the number of elements with that name in an HTML document tree.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;os&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-)
-
-func main() {
-	doc, err := html.Parse(os.Stdin)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, &amp;quot;findlinks1: %v\n&amp;quot;, err)
-		os.Exit(1)
-	}
-	m := make(map[string]int)
-	for k, v := range check(m, doc) {
-		fmt.Printf(&amp;quot;%s:%d\n&amp;quot;, k, v)
-	}
-}
-
-func check(m map[string]int, n *html.Node) map[string]int {
-	if n == nil {
-		return m
-	} else {
-		if n.Type == html.ElementNode {
-			m[n.Data]++
-		}
-		m = check(m, n.FirstChild)
-		m = check(m, n.NextSibling)
-	}
-	return m
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex1.7 http://www.baidu.com | ./ex5.2
-body:1
-img:2
-map:1
-area:1
-a:32
-i:3
-head:1
-title:1
-style:3
-ul:1
-meta:4
-link:11
-form:1
-span:5
-li:4
-p:3
-html:1
-script:13
-noscript:1
-div:21
-input:14
-b:2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-5-5&#34;&gt;Ex 5.5&lt;/h3&gt;
-
-&lt;p&gt;Implement countWordsAndImages. (See Exercise 4.9 for word-splitting.)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;bufio&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;strings&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-)
-
-func main() {
-	url := &amp;quot;http://www.baidu.com&amp;quot;
-	w, i, err := CountWordsAndImages(url)
-	if err != nil {
-		fmt.Println(&amp;quot;CountWordsAndImages error: &amp;quot;, err)
-	}
-	fmt.Printf(&amp;quot;words = %d,images = %d\n&amp;quot;, w, i)
-}
-
-func CountWordsAndImages(url string) (words, images int, err error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return
-	}
-	doc, err := html.Parse(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		err = fmt.Errorf(&amp;quot;parsing HTML: %s&amp;quot;, err)
-		return
-	}
-	words, images = countWordsAndImages(doc)
-	return
-}
-
-func countWordsAndImages(n *html.Node) (words, images int) {
-	if n == nil {
-		return
-	} else {
-		if n.Type == html.ElementNode {
-			if n.Data == &amp;quot;img&amp;quot; {
-				images++
-			}
-		} else if n.Type == html.TextNode {
-			scanner := bufio.NewScanner(strings.NewReader(n.Data))
-			scanner.Split(bufio.ScanWords)
-			for scanner.Scan() {
-				words++
-			}
-		}
-		w1, i1 := countWordsAndImages(n.FirstChild)
-		words += w1
-		images += i1
-		w2, i2 := countWordsAndImages(n.NextSibling)
-		words += w2
-		images += i2
-	}
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run countwi.go
-words = 2805,images = 2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-5-6&#34;&gt;Ex 5.6&lt;/h3&gt;
-
-&lt;p&gt;Modify the corner function in gopl.io/ch3/surface (§3.2) to use named results and a bare return statement.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;math&amp;quot;
-	&amp;quot;os&amp;quot;
-)
-
-const (
-	width, height = 600, 320            // canvas size in pixels
-	cells         = 100                 // number of grid cells
-	xyrange       = 30.0                // axis ranges (-xyrange..+xyrange)
-	xyscale       = width / 2 / xyrange // pixels per x or y unit
-	zscale        = height * 0.4        // pixels per z unit
-	angle         = math.Pi / 6         // angle of x, y axes (=30°)
-)
-
-var sin30, cos30 = math.Sin(angle), math.Cos(angle) // sin(30°), cos(30°)
-
-func main() {
-	//fmt.Printf(&amp;quot;&amp;lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; &amp;quot;+
-	f, err := os.Create(&amp;quot;test.svg&amp;quot;)
-	if err != nil {
-		fmt.Println(&amp;quot;create file error &amp;quot;, err)
-		return
-	}
-	fmt.Fprintf(f, &amp;quot;&amp;lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; &amp;quot;+
-		&amp;quot;style=&#39;stroke: grey; fill: white; stroke-width: 0.7&#39; &amp;quot;+
-		&amp;quot;width=&#39;%d&#39; height=&#39;%d&#39;&amp;gt;&amp;quot;, width, height)
-	for i := 0; i &amp;lt; cells; i++ {
-		for j := 0; j &amp;lt; cells; j++ {
-			ax, ay := corner(i+1, j)
-			bx, by := corner(i, j)
-			cx, cy := corner(i, j+1)
-			dx, dy := corner(i+1, j+1)
-			fmt.Fprintf(f, &amp;quot;&amp;lt;polygon points=&#39;%g,%g %g,%g %g,%g %g,%g&#39;/&amp;gt;\n&amp;quot;,
-				ax, ay, bx, by, cx, cy, dx, dy)
-		}
-	}
-	fmt.Fprintln(f, &amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;)
-}
-
-func corner(i, j int) (sx, sy float64) {
-	// Find point (x,y) at corner of cell (i,j).
-	x := xyrange * (float64(i)/cells - 0.5)
-	y := xyrange * (float64(j)/cells - 0.5)
-
-	// Compute surface height z.
-	z := f(x, y)
-
-	// Project (x,y,z) isometrically onto 2-D SVG canvas (sx,sy).
-	sx = width/2 + (x-y)*cos30*xyscale
-	sy = height/2 + (x+y)*sin30*xyscale - z*zscale
-	return
-}
-
-func f(x, y float64) float64 {
-	r := math.Hypot(x, y) // distance from (0,0)
-	return math.Sin(r) / r
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-5-7&#34;&gt;Ex 5.7&lt;/h3&gt;
-
-&lt;p&gt;Develop startElement and endElement into a general HTML pre Print comment nodes, text nodes, and the attributes of each element (&lt;a href=&#39;...&#39;&gt;). Use short forms like &lt;img/&gt; instead of &lt;img&gt;&lt;/img&gt; when an element has no children. Write a test to ensure that the output can be parsed successfully. (See Chapter 11.)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;os&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-)
-
-func main() {
-	for _, url := range os.Args[1:] {
-		outline(url)
-	}
-}
-
-func outline(url string) error {
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	doc, err := html.Parse(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	forEachNode(doc, startElement, endElement)
-
-	return nil
-}
-
-func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
-	if pre != nil {
-		pre(n)
-	}
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		forEachNode(c, pre, post)
-	}
-	if post != nil {
-		post(n)
-	}
-}
-
-var depth int
-
-func startElement(n *html.Node) {
-	if n.Type == html.ElementNode ||
-		n.Type == html.TextNode ||
-		n.Type == html.CommentNode {
-		if n.DataAtom != 0 { //去除无法识别标签的节点，如空白的textnode等
-			var attr string
-			for _, v := range n.Attr {
-				attr += &amp;quot; &amp;quot; + v.Key + &amp;quot;=&#39;&amp;quot; + v.Val + &amp;quot;&#39;&amp;quot;
-			}
-			if n.FirstChild == nil {
-				fmt.Printf(&amp;quot;%*s&amp;lt;%s/&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data)
-			} else {
-				fmt.Printf(&amp;quot;%*s&amp;lt;%s%s&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data, attr)
-			}
-			depth++
-		}
-	}
-}
-func endElement(n *html.Node) {
-	if n.Type == html.ElementNode ||
-		n.Type == html.TextNode ||
-		n.Type == html.CommentNode {
-		if n.DataAtom != 0 {
-			depth--
-			if n.FirstChild != nil {
-				fmt.Printf(&amp;quot;%*s&amp;lt;/%s&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data)
-			}
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex5.7 http://gopl.io
-&amp;lt;html xmlns=&#39;http://www.w3.org/1999/xhtml&#39;&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta/&amp;gt;
-    &amp;lt;title&amp;gt;
-    &amp;lt;/title&amp;gt;
-    &amp;lt;script&amp;gt;
-    &amp;lt;/script&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;style&amp;gt;
-    &amp;lt;/style&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;
-    &amp;lt;table&amp;gt;
-      &amp;lt;tbody&amp;gt;
-        &amp;lt;tr&amp;gt;
-          &amp;lt;td&amp;gt;
-            &amp;lt;a href=&#39;http://www.informit.com/store/go-programming-language-9780134190440&#39;&amp;gt;
-              &amp;lt;img/&amp;gt;
-            &amp;lt;/a&amp;gt;
-            &amp;lt;br/&amp;gt;
-            &amp;lt;div style=&#39;text-align: center&#39;&amp;gt;
-              &amp;lt;a href=&#39;http://www.amazon.com/dp/0134190440&#39;&amp;gt;
-                &amp;lt;img/&amp;gt;
-              &amp;lt;/a&amp;gt;
-              &amp;lt;a href=&#39;http://www.informit.com/store/go-programming-language-9780134190440&#39;&amp;gt;
-                &amp;lt;img/&amp;gt;
-              &amp;lt;/a&amp;gt;
-              &amp;lt;a href=&#39;http://www.barnesandnoble.com/w/1121601944&#39;&amp;gt;
-                &amp;lt;img/&amp;gt;
-              &amp;lt;/a&amp;gt;
-            &amp;lt;/div&amp;gt;
-            &amp;lt;br/&amp;gt;
-          &amp;lt;/td&amp;gt;
-          &amp;lt;td width=&#39;500&#39;&amp;gt;
-            &amp;lt;h1 class=&#39;center&#39;&amp;gt;
-            &amp;lt;/h1&amp;gt;
-            &amp;lt;p class=&#39;biblio center&#39;&amp;gt;
-              &amp;lt;br/&amp;gt;
-              &amp;lt;br/&amp;gt;
-              &amp;lt;br/&amp;gt;
-              &amp;lt;tt&amp;gt;
-              &amp;lt;/tt&amp;gt;
-              &amp;lt;tt&amp;gt;
-              &amp;lt;/tt&amp;gt;
-              &amp;lt;tt&amp;gt;
-              &amp;lt;/tt&amp;gt;
-            &amp;lt;/p&amp;gt;
-            &amp;lt;div id=&#39;toc&#39;&amp;gt;
-              &amp;lt;table&amp;gt;
-                &amp;lt;tbody&amp;gt;
-                  &amp;lt;tr&amp;gt;
-                    &amp;lt;td&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                        &amp;lt;a href=&#39;ch1.pdf&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                        &amp;lt;a href=&#39;ch1.pdf&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                        &amp;lt;a href=&#39;ch1.pdf&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                    &amp;lt;/td&amp;gt;
-                    &amp;lt;td&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                        &amp;lt;a href=&#39;ch1.pdf&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                    &amp;lt;/td&amp;gt;
-                  &amp;lt;/tr&amp;gt;
-                  &amp;lt;tr&amp;gt;
-                    &amp;lt;td colspan=&#39;2&#39;&amp;gt;
-                      &amp;lt;h1&amp;gt;
-                        &amp;lt;a href=&#39;https://github.com/adonovan/gopl.io/&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                        &amp;lt;a href=&#39;reviews.html&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                        &amp;lt;a href=&#39;translations.html&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                        &amp;lt;a href=&#39;errata.html&#39;&amp;gt;
-                        &amp;lt;/a&amp;gt;
-                      &amp;lt;/h1&amp;gt;
-                    &amp;lt;/td&amp;gt;
-                  &amp;lt;/tr&amp;gt;
-                &amp;lt;/tbody&amp;gt;
-              &amp;lt;/table&amp;gt;
-            &amp;lt;/div&amp;gt;
-            &amp;lt;p class=&#39;bio&#39;&amp;gt;
-              &amp;lt;a href=&#39;http://golang.org/s/oracle-user-manual&#39;&amp;gt;
-                &amp;lt;code&amp;gt;
-                &amp;lt;/code&amp;gt;
-              &amp;lt;/a&amp;gt;
-              &amp;lt;a href=&#39;http://golang.org/lib/godoc/analysis/help.html&#39;&amp;gt;
-                &amp;lt;code&amp;gt;
-                &amp;lt;/code&amp;gt;
-              &amp;lt;/a&amp;gt;
-              &amp;lt;a href=&#39;https://github.com/golang/tools/blob/master/refactor/eg/eg.go&#39;&amp;gt;
-                &amp;lt;code&amp;gt;
-                &amp;lt;/code&amp;gt;
-              &amp;lt;/a&amp;gt;
-              &amp;lt;a href=&#39;https://github.com/golang/tools/blob/master/refactor/rename/rename.go&#39;&amp;gt;
-                &amp;lt;code&amp;gt;
-                &amp;lt;/code&amp;gt;
-              &amp;lt;/a&amp;gt;
-            &amp;lt;/p&amp;gt;
-            &amp;lt;p class=&#39;bio&#39;&amp;gt;
-              &amp;lt;a href=&#39;http://www.amazon.com/dp/0131103628?tracking_id=disfordig-20&#39;&amp;gt;
-              &amp;lt;/a&amp;gt;
-              &amp;lt;a href=&#39;http://www.amazon.com/dp/020161586X?tracking_id=disfordig-20&#39;&amp;gt;
-              &amp;lt;/a&amp;gt;
-            &amp;lt;/p&amp;gt;
-          &amp;lt;/td&amp;gt;
-        &amp;lt;/tr&amp;gt;
-      &amp;lt;/tbody&amp;gt;
-    &amp;lt;/table&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;遍历TextNode时，含有很多空节点（其实就是空格，也当成了一个节点），或许应该在parse阶段就抛弃这些不是节点的节点。本习题中，我暂时借用了元素节点的字段&lt;code&gt;DataAtom  atom.Atom&lt;/code&gt;，若为0，则说明该节点标签无法识别。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;// A Node consists of a NodeType and some Data (tag name for element nodes,
-// content for text) and are part of a tree of Nodes. Element nodes may also
-// have a Namespace and contain a slice of Attributes. Data is unescaped, so
-// that it looks like &amp;ldquo;a&amp;lt;b&amp;rdquo; rather than &amp;ldquo;a&amp;lt;b&amp;rdquo;. For element nodes, DataAtom
-// is the atom for Data, or zero if Data is not a known tag name.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&#34;ex-5-8&#34;&gt;Ex 5.8&lt;/h3&gt;
-
-&lt;p&gt;Modify forEachNode so that the pre and post functions return a boolean re indicating whether to continue the traversal. Use it to write a function ElementByID with the following signature that ﬁnds the ﬁrst HTML element with the speciﬁed id attribute. The function should stop the traversal as soon as a match is found.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;func ElementByID(doc *html.Node, id string) *html.Node&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;os&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-)
-
-var custID = &amp;quot;css_index_result&amp;quot;
-
-//var custID = &amp;quot;toc&amp;quot;
-
-func main() {
-	for _, url := range os.Args[1:] {
-		outline(url)
-	}
-}
-
-func outline(url string) error {
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	doc, err := html.Parse(resp.Body)
-	if err != nil {
-		return err
-	}
-	//forEachNode(doc, &amp;quot;&amp;quot;, startElement, endElement)
-	fmt.Printf(&amp;quot;%#v:\n&amp;quot;, getElementByID(doc, custID))
-	return nil
-}
-
-func forEachNode(n *html.Node, id string, pre, post func(n *html.Node, id string) bool) *html.Node {
-	var rtn *html.Node
-	if pre != nil {
-		if !pre(n, id) {
-			rtn = n
-		}
-	}
-	for c := n.FirstChild; c != nil &amp;amp;&amp;amp; rtn == nil; c = c.NextSibling {
-		rtn = forEachNode(c, id, pre, post)
-	}
-	if post != nil {
-		if !post(n, id) {
-			rtn = n
-		}
-	}
-	return rtn
-}
-
-var depth int
-
-func startElement(n *html.Node, id string) bool {
-	if n.Type == html.ElementNode ||
-		n.Type == html.TextNode ||
-		n.Type == html.CommentNode {
-		if n.DataAtom != 0 { //去除无法识别标签的节点，如空白的textnode等
-			var attr string
-			for _, v := range n.Attr {
-				attr += &amp;quot; &amp;quot; + v.Key + &amp;quot;=&#39;&amp;quot; + v.Val + &amp;quot;&#39;&amp;quot;
-			}
-			if n.FirstChild == nil {
-				fmt.Printf(&amp;quot;%*s&amp;lt;%s/&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data)
-			} else {
-				fmt.Printf(&amp;quot;%*s&amp;lt;%s%s&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data, attr)
-			}
-			depth++
-		}
-		if n.Type == html.ElementNode {
-			for _, v := range n.Attr {
-				if v.Key == &amp;quot;id&amp;quot; &amp;amp;&amp;amp; v.Val == id {
-					log.Printf(&amp;quot;%#v\n&amp;quot;, n)
-					return false
-				}
-			}
-		}
-	}
-	return true
-}
-func endElement(n *html.Node, id string) bool {
-	if n.Type == html.ElementNode ||
-		n.Type == html.TextNode ||
-		n.Type == html.CommentNode {
-		if n.DataAtom != 0 {
-			depth--
-			if n.FirstChild != nil {
-				fmt.Printf(&amp;quot;%*s&amp;lt;/%s&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data)
-			}
-		}
-	}
-	return true
-}
-
-func getElementByID(doc *html.Node, id string) *html.Node {
-	return forEachNode(doc, id, startElement, endElement)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex5.7 http://www.baidu.com
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta/&amp;gt;
-    &amp;lt;meta/&amp;gt;
-    &amp;lt;meta/&amp;gt;
-    &amp;lt;meta/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;link/&amp;gt;
-    &amp;lt;title&amp;gt;
-    &amp;lt;/title&amp;gt;
-    &amp;lt;style id=&#39;css_index&#39; index=&#39;index&#39; type=&#39;text/css&#39;&amp;gt;
-    &amp;lt;/style&amp;gt;
-    &amp;lt;style data-for=&#39;debug&#39;&amp;gt;
-    &amp;lt;/style&amp;gt;
-    &amp;lt;style data-for=&#39;result&#39; id=&#39;css_index_result&#39; type=&#39;text/css&#39;&amp;gt;
-2018/01/02 17:53:11 &amp;amp;html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:&amp;quot;style&amp;quot;, Namespace:&amp;quot;&amp;quot;, Attr:[]html.Attribute{html.Attribute{Namespace:&amp;quot;&amp;quot;, Key:&amp;quot;data-for&amp;quot;, Val:&amp;quot;result&amp;quot;}, html.Attribute{Namespace:&amp;quot;&amp;quot;, Key:&amp;quot;id&amp;quot;, Val:&amp;quot;css_index_result&amp;quot;}, html.Attribute{Namespace:&amp;quot;&amp;quot;, Key:&amp;quot;type&amp;quot;, Val:&amp;quot;text/css&amp;quot;}}}
-    &amp;lt;/style&amp;gt;
-  &amp;lt;/head&amp;gt;
-&amp;lt;/html&amp;gt;
-&amp;amp;html.Node{Parent:(*html.Node)(0xc4201322a0), FirstChild:(*html.Node)(0xc4201336c0), LastChild:(*html.Node)(0xc4201336c0), PrevSibling:(*html.Node)(0xc4201335e0), NextSibling:(*html.Node)(0xc420133730), Type:0x3, DataAtom:0x6f905, Data:&amp;quot;style&amp;quot;, Namespace:&amp;quot;&amp;quot;, Attr:[]html.Attribute{html.Attribute{Namespace:&amp;quot;&amp;quot;, Key:&amp;quot;data-for&amp;quot;, Val:&amp;quot;result&amp;quot;}, html.Attribute{Namespace:&amp;quot;&amp;quot;, Key:&amp;quot;id&amp;quot;, Val:&amp;quot;css_index_result&amp;quot;}, html.Attribute{Namespace:&amp;quot;&amp;quot;, Key:&amp;quot;type&amp;quot;, Val:&amp;quot;text/css&amp;quot;}}}:
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-5-12&#34;&gt;Ex 5.12&lt;/h3&gt;
-
-&lt;p&gt;The startElement and endElement functions in gopl.io/ch5/outline2 (§5.5) share a global variable, depth. Turn them into anonymous functions that share a variable local to the outline function.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 133.
-
-// Outline prints the outline of an HTML document tree.
-package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;os&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-)
-
-func main() {
-	for _, url := range os.Args[1:] {
-		outline(url)
-	}
-}
-
-func outline(url string) error {
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	doc, err := html.Parse(resp.Body)
-	if err != nil {
-		return err
-	}
-	var depth int
-	startElement := func(n *html.Node) {
-		if n.Type == html.ElementNode {
-			fmt.Printf(&amp;quot;%*s&amp;lt;%s&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data)
-			depth++
-		}
-	}
-
-	endElement := func(n *html.Node) {
-		if n.Type == html.ElementNode {
-			depth--
-			fmt.Printf(&amp;quot;%*s&amp;lt;/%s&amp;gt;\n&amp;quot;, depth*2, &amp;quot;&amp;quot;, n.Data)
-		}
-	}
-	//!+call
-	forEachNode(doc, startElement, endElement)
-	//!-call
-
-	return nil
-}
-
-//!+forEachNode
-// forEachNode calls the functions pre(x) and post(x) for each node
-// x in the tree rooted at n. Both functions are optional.
-// pre is called before the children are visited (preorder) and
-// post is called after (postorder).
-func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
-	if pre != nil {
-		pre(n)
-	}
-
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		forEachNode(c, pre, post)
-	}
-
-	if post != nil {
-		post(n)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-5-13&#34;&gt;Ex 5.13&lt;/h3&gt;
-
-&lt;p&gt;Modify crawl to make local copies of the pages it ﬁnds, creating directories as necessary. Don’t make copies of pages that come from a different domain. For example, if the original page comes from golang.org, save all ﬁles from there, but exclude ones from vimeo.com.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;io&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;net/url&amp;quot;
-	&amp;quot;os&amp;quot;
-	&amp;quot;strconv&amp;quot;
-	&amp;quot;strings&amp;quot;
-	&amp;quot;time&amp;quot;
-
-	&amp;quot;golang.org/x/net/html&amp;quot;
-	&amp;quot;gopl.io/ch5/links&amp;quot;
-)
-
-// Extract makes an HTTP GET request to the specified URL, parses
-// the response as HTML, and returns the links in the HTML document.
-func Extract(urlstr string) ([]string, error) {
-	resp, err := http.Get(urlstr)
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
-		return nil, fmt.Errorf(&amp;quot;getting %s: %s&amp;quot;, urlstr, resp.Status)
-	}
-	doc, err := html.Parse(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		return nil, fmt.Errorf(&amp;quot;parsing %s as HTML: %v&amp;quot;, urlstr, err)
-	}
-	var links []string
-	visitNode := func(n *html.Node) {
-		if n.Type == html.ElementNode &amp;amp;&amp;amp; n.Data == &amp;quot;a&amp;quot; {
-			for _, a := range n.Attr {
-				if a.Key != &amp;quot;href&amp;quot; {
-					continue
-				}
-				link, err := resp.Request.URL.Parse(a.Val)
-				if err != nil {
-					continue // ignore bad URLs
-				}
-				links = append(links, link.String())
-			}
-		}
-	}
-	forEachNode(doc, visitNode, nil)
-	return links, nil
-}
-
-//!-Extract
-
-// Copied from gopl.io/ch5/outline2.
-func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
-	if pre != nil {
-		pre(n)
-	}
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		forEachNode(c, pre, post)
-	}
-	if post != nil {
-		post(n)
-	}
-}
-
-func breadthFirst(f func(item string, host []string) []string, worklist []string) {
-	seen := make(map[string]bool)
-	host := make([]string, len(worklist))
-	for i, v := range worklist {
-		u, err := url.Parse(v)
-		if err != nil {
-			fmt.Println(&amp;quot;initial url parse failed&amp;quot;)
-			return
-		}
-		host[i] = u.Host
-	}
-	for len(worklist) &amp;gt; 0 {
-		items := worklist
-		worklist = nil
-		for _, item := range items {
-			if !seen[item] {
-				seen[item] = true
-				worklist = append(worklist, f(item, host)...)
-			}
-		}
-	}
-}
-
-//!-breadthFirst
-
-//!+crawl
-func crawl(urlstr string, sl []string) []string {
-	fmt.Println(urlstr)
-	copycontent(urlstr, sl)
-	list, err := links.Extract(urlstr)
-	if err != nil {
-		log.Print(err)
-	}
-	return list
-}
-
-func copycontent(s string, sl []string) {
-	u, err := url.Parse(s)
-	if err != nil {
-		fmt.Println(&amp;quot;url parse failed&amp;quot;)
-		return
-	}
-	for _, v := range sl {
-		if u.Host == v {
-			resp, err := http.Get(s)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			if resp.StatusCode != http.StatusOK {
-				resp.Body.Close()
-				return
-			}
-			//fmt.Println(path)
-			dir, _ := os.Getwd() //当前的目录
-			var filename, filepart, dirpart string
-			ns := strings.Count(u.Path, &amp;quot;/&amp;quot;)
-			if ns == 0 || ns == 1 &amp;amp;&amp;amp; len(u.Path) == 1 {
-				filepart = &amp;quot;&amp;quot;
-				filename = strconv.FormatInt(time.Now().Unix(), 10) + &amp;quot;.html&amp;quot;
-				dirpart = &amp;quot;/&amp;quot;
-			} else {
-				filepart = u.Path[strings.LastIndex(u.Path, &amp;quot;/&amp;quot;)+1:]
-				dirpart = u.Path[:strings.LastIndex(u.Path, &amp;quot;/&amp;quot;)+1]
-				if strings.Contains(filepart, &amp;quot;.&amp;quot;) {
-					filename = filepart
-				} else {
-					dirpart = u.Path
-					filename = strconv.FormatInt(time.Now().Unix(), 10) + &amp;quot;.html&amp;quot;
-				}
-			}
-
-			fullpath := dir + &amp;quot;/&amp;quot; + u.Host + dirpart
-			_, err = os.Stat(fullpath)
-			if err != nil {
-				err = os.MkdirAll(fullpath, os.ModePerm) //在当前目录下生成md目录
-				if err != nil {
-					fmt.Println(&amp;quot;create folder failed! &amp;quot;, fullpath, err)
-					return
-				}
-			}
-			filename = dir + &amp;quot;/&amp;quot; + u.Host + dirpart + &amp;quot;/&amp;quot; + filename
-			f, err := os.Create(filename)
-			if err != nil {
-				fmt.Println(&amp;quot;create file error:&amp;quot;, err, s)
-				return
-			}
-			_, err = io.Copy(f, resp.Body)
-			if err != nil {
-				fmt.Println(&amp;quot;failed in copy&amp;quot;)
-				return
-			}
-			resp.Body.Close()
-		}
-	}
-}
-func main() {
-	breadthFirst(crawl, os.Args[1:])
-}
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     

@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
-    <lastBuildDate>Tue, 15 May 2018 17:34:49 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 16 May 2018 09:27:51 +0800</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/tags/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>天文算法5</title>
+      <link>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</link>
+      <pubDate>Wed, 16 May 2018 09:27:51 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</guid>
+      <description>&lt;h1 id=&#34;第七章-儒略日-julian-day&#34;&gt;第七章 儒略日 Julian Day&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>天文算法4</title>
