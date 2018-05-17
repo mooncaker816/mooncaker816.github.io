@@ -11,6 +11,85 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法6</title>
+      <link>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%956/</link>
+      <pubDate>Thu, 17 May 2018 07:40:44 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%956/</guid>
+      <description>&lt;h1 id=&#34;第八章-复活节日-date-of-easter&#34;&gt;第八章 复活节日 Date of Easter&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;　　对西方的节日没有多少了解，这里就直接给出书中的算法吧~&lt;/p&gt;
+
+&lt;h2 id=&#34;1-格里历复活节算法&#34;&gt;1. 格里历复活节算法&lt;/h2&gt;
+
+&lt;p&gt;\begin{array}{l|ccc}
+被除数 &amp;amp; 除数 &amp;amp; 商 &amp;amp; 余数 \\&lt;br /&gt;
+\hline
+年份y &amp;amp; 19 &amp;amp; - &amp;amp; a \\&lt;br /&gt;
+年份y &amp;amp; 100 &amp;amp; b &amp;amp; c \\&lt;br /&gt;
+b &amp;amp; 4 &amp;amp; d &amp;amp; e \\&lt;br /&gt;
+b+8 &amp;amp; 25 &amp;amp; f &amp;amp; - \\&lt;br /&gt;
+b-f+1 &amp;amp; 3 &amp;amp; g &amp;amp; - \\&lt;br /&gt;
+19a+b-d-g+15 &amp;amp; 30 &amp;amp; - &amp;amp; h \\&lt;br /&gt;
+c &amp;amp; 4 &amp;amp; i &amp;amp; k \\&lt;br /&gt;
+32+2e+2i-h-k &amp;amp; 7 &amp;amp; - &amp;amp; l \\&lt;br /&gt;
+a+11h+22l &amp;amp; 451 &amp;amp; m &amp;amp; - \\&lt;br /&gt;
+h+l-7m+114 &amp;amp; 31 &amp;amp; n &amp;amp; p \\&lt;br /&gt;
+\end{array}&lt;/p&gt;
+
+&lt;p&gt;得 $$n = 月份, \ p+1 = 日期$$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Gregorian returns month and day of Easter in the Gregorian calendar.
+// 格里历复活节日算法
+func Gregorian(y int) (m, d int) {
+	a := y % 19
+	b, c := y/100, y%100
+	d, e := b/4, b%4
+	f := (b + 8) / 25
+	g := (b - f + 1) / 3
+	h := (19*a + b - d - g + 15) % 30
+	i, k := c/4, c%4
+	l := (32 + 2*e + 2*i - h - k) % 7
+	m = (a + 11*h + 22*l) / 451
+	n := h + l - 7*m + 114
+	n, p := n/31, n%31
+	return n, p + 1
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-儒略历复活节算法&#34;&gt;2. 儒略历复活节算法&lt;/h2&gt;
+
+&lt;p&gt;\begin{array}{l|ccc}
+被除数 &amp;amp; 除数 &amp;amp; 商 &amp;amp; 余数 \\&lt;br /&gt;
+\hline
+年份y &amp;amp; 4 &amp;amp; - &amp;amp; a \\&lt;br /&gt;
+年份y &amp;amp; 7 &amp;amp; - &amp;amp; b \\&lt;br /&gt;
+年份y &amp;amp; 19 &amp;amp; - &amp;amp; c \\&lt;br /&gt;
+19c+15 &amp;amp; 30 &amp;amp; - &amp;amp; d \\&lt;br /&gt;
+2a+4b-d+34 &amp;amp; 7 &amp;amp; - &amp;amp; e \\&lt;br /&gt;
+d+e+114 &amp;amp; 31 &amp;amp; f &amp;amp; g \\&lt;br /&gt;
+\end{array}&lt;/p&gt;
+
+&lt;p&gt;得 $$f = 月份, \ g+1 = 日期$$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Julian returns month and day of Easter in the Julian calendar.
+// 儒略历复活节日算法
+func Julian(y int) (m, d int) {
+	a := y % 4
+	b := y % 7
+	c := y % 19
+	d = (19*c + 15) % 30
+	e := (2*a + 4*b - d + 34) % 7
+	f := d + e + 114
+	f, g := f/31, f%31
+	return f, g + 1
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法5</title>
       <link>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</link>
       <pubDate>Wed, 16 May 2018 09:27:51 +0800</pubDate>
@@ -3974,244 +4053,6 @@ func (db database) delete(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, &amp;quot;%s not exist!&amp;quot;, item)
 	}
 }
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（7）</title>
-      <link>https://mooncaker816.github.io/2017/12/29/the-go-programming-language-ex7/</link>
-      <pubDate>Fri, 29 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2017/12/29/the-go-programming-language-ex7/</guid>
-      <description>&lt;h3 id=&#34;ex-6-1&#34;&gt;Ex 6.1&lt;/h3&gt;
-
-&lt;p&gt;Implement these additional methods:&lt;/p&gt;
-
-&lt;p&gt;func (*IntSet) Len() int // return the number of elements&lt;/p&gt;
-
-&lt;p&gt;func (*IntSet) Remove(x int) //remove x from the set&lt;/p&gt;
-
-&lt;p&gt;func (*IntSet) Clear() // remove all elements from the set&lt;/p&gt;
-
-&lt;p&gt;func (*IntSet) Copy() *IntSet // return a copy of the set&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-6-2&#34;&gt;Ex 6.2&lt;/h3&gt;
-
-&lt;p&gt;Deﬁne a variadic (*IntSet).AddAll(&amp;hellip;int) method that allows a list of values to be added, such as s.AddAll(1, 2, 3).&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-6-3&#34;&gt;Ex 6.3&lt;/h3&gt;
-
-&lt;p&gt;(*IntSet).UnionWith computes the union of two sets using |, the word-parallel bitwise OR operator. Implement methods for IntersectWith, DifferenceWith, and SymmetricDifference for the corresponding set operations. (The symmetric difference of two sets contains the elements present in one set or the other but not both.)&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-6-4&#34;&gt;Ex 6.4&lt;/h3&gt;
-
-&lt;p&gt;Add a method Elems that returns a slice containing the elements of the set, suitable for iterating over with a range loop.&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-6-5&#34;&gt;Ex 6.5&lt;/h3&gt;
-
-&lt;p&gt;The type of each word used by IntSet is uint64, but 64-bit arithmetic may be inefﬁcient on a 32-bit platform. Modify the program to use the uint type, which is the most efﬁcient unsigned integer type for the platform. Instead of dividing by 64, deﬁne a constant holding the effective size of uint in bits, 32 or 64. You can use the perhaps too-clever expression 32 &amp;lt;&amp;lt; (^uint(0) &amp;gt;&amp;gt; 63) for this purpose.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;bytes&amp;quot;
-	&amp;quot;fmt&amp;quot;
-)
-
-const wordlen = 32 &amp;lt;&amp;lt; (^uint(0) &amp;gt;&amp;gt; 63) //当前计算机的位数
-
-type IntSet struct {
-	words []uint
-}
-
-func (s *IntSet) Add(x int) {
-	word, bit := x/wordlen, uint(x%wordlen)
-	for word &amp;gt;= len(s.words) {
-		s.words = append(s.words, 0)
-	}
-	s.words[word] |= 1 &amp;lt;&amp;lt; bit
-}
-
-func (s *IntSet) Has(x int) bool {
-	word, bit := x/wordlen, uint(x%wordlen)
-	return word &amp;lt; len(s.words) &amp;amp;&amp;amp; s.words[word]&amp;amp;(1&amp;lt;&amp;lt;bit) != 0
-}
-
-func (s *IntSet) UnionWith(t *IntSet) {
-	for i, tword := range t.words {
-		if i &amp;lt; len(s.words) {
-			s.words[i] |= tword
-		} else {
-			s.words = append(s.words, tword)
-		}
-	}
-}
-
-func (s *IntSet) String() string {
-	var buf bytes.Buffer
-	buf.WriteByte(&#39;{&#39;)
-	for i, word := range s.words {
-		if word == 0 {
-			continue
-		}
-		for j := 0; j &amp;lt; wordlen; j++ {
-			if word&amp;amp;(1&amp;lt;&amp;lt;uint(j)) != 0 {
-				if buf.Len() &amp;gt; len(&amp;quot;{&amp;quot;) {
-					buf.WriteByte(&#39; &#39;)
-				}
-				fmt.Fprintf(&amp;amp;buf, &amp;quot;%d&amp;quot;, wordlen*i+j)
-			}
-		}
-	}
-	buf.WriteByte(&#39;}&#39;)
-	return buf.String()
-}
-
-func (s *IntSet) Len() int {
-	var count int
-	for _, n := range s.words {
-		for n != 0 {
-			count++
-			n = n &amp;amp; (n - 1)
-		}
-	}
-	return count
-}
-
-func (s *IntSet) Remove(x int) {
-	word, bit := x/wordlen, uint(x%wordlen)
-	if word &amp;lt; len(s.words) {
-		s.words[word] &amp;amp;= ^(1 &amp;lt;&amp;lt; bit)
-	}
-}
-
-func (s *IntSet) Clear() {
-	s.words = []uint{0}
-}
-func (s *IntSet) Copy() *IntSet {
-	ns := IntSet{make([]uint, len(s.words))}
-	copy(ns.words, s.words)
-	return &amp;amp;ns
-}
-
-func (s *IntSet) AddAll(x ...int) {
-	for _, v := range x {
-		s.Add(v)
-	}
-}
-
-func (s *IntSet) IntersectWith(t *IntSet) *IntSet {
-	tmp := make([]uint, 0)
-	for i, tword := range t.words {
-		if i &amp;lt; len(s.words) {
-			tmp = append(tmp, s.words[i]&amp;amp;tword)
-		}
-	}
-	return &amp;amp;IntSet{tmp}
-}
-func (s *IntSet) SymmetricDifference(t *IntSet) *IntSet {
-	tmp := make([]uint, 0)
-	if len(t.words) &amp;gt; len(s.words) {
-		for i, tword := range t.words {
-			if i &amp;lt; len(s.words) {
-				tmp = append(tmp, s.words[i]^tword)
-			} else {
-				tmp = append(tmp, tword)
-			}
-		}
-	} else {
-		for i, sword := range s.words {
-			if i &amp;lt; len(t.words) {
-				tmp = append(tmp, t.words[i]^sword)
-			} else {
-				tmp = append(tmp, sword)
-			}
-		}
-	}
-	return &amp;amp;IntSet{tmp}
-}
-
-func (s *IntSet) DifferenceWith(t *IntSet) *IntSet {
-	tmp := make([]uint, 0)
-	for i, sword := range s.words {
-		if i &amp;lt; len(t.words) {
-			tmp = append(tmp, sword&amp;amp;^t.words[i])
-		} else {
-			tmp = append(tmp, sword)
-		}
-	}
-	return &amp;amp;IntSet{tmp}
-}
-func (s *IntSet) Elems() []int {
-	tmp := make([]int, 0)
-	for i, word := range s.words {
-		if word == 0 {
-			continue
-		}
-		for j := 0; j &amp;lt; wordlen; j++ {
-			if word&amp;amp;(1&amp;lt;&amp;lt;uint(j)) != 0 {
-				tmp = append(tmp, wordlen*i+j)
-			}
-		}
-	}
-	return tmp
-}
-
-func main() {
-	var set1, set2, set3 IntSet
-	set1.Add(1)
-	set1.Add(22)
-	set2.Add(333)
-	fmt.Println(&amp;quot;set1:&amp;quot;, &amp;amp;set1)
-	fmt.Println(&amp;quot;set1 是否包含1：&amp;quot;, set1.Has(1), &amp;quot;set1 是否包含333：&amp;quot;, set1.Has(333))
-	fmt.Println(&amp;quot;before union with {333}: &amp;quot;, &amp;amp;set1)
-	fmt.Println(&amp;quot;len: &amp;quot;, set1.Len())
-	set1.UnionWith(&amp;amp;set2)
-	fmt.Println(&amp;quot;after union with {333}: &amp;quot;, &amp;amp;set1)
-	fmt.Println(&amp;quot;len: &amp;quot;, set1.Len())
-	set1.Remove(22)
-	fmt.Println(&amp;quot;after remove 22: &amp;quot;, &amp;amp;set1)
-	fmt.Println(&amp;quot;len: &amp;quot;, set1.Len())
-	set3 = *set1.Copy()
-	fmt.Println(&amp;quot;copy set1 to set3: &amp;quot;, &amp;amp;set3)
-	set1.Clear()
-	fmt.Println(&amp;quot;after clear set1: &amp;quot;, &amp;amp;set1, &amp;amp;set3)
-	set3.AddAll(4444, 55555)
-	fmt.Println(&amp;quot;after add all set3: &amp;quot;, &amp;amp;set3)
-	set2.AddAll(55555, 666666)
-	fmt.Println(&amp;quot;se2:&amp;quot;, &amp;amp;set2)
-	fmt.Println(&amp;quot;se3:&amp;quot;, &amp;amp;set3)
-	fmt.Println(&amp;quot;set2交set3:&amp;quot;, set2.IntersectWith(&amp;amp;set3))
-	fmt.Println(&amp;quot;set2 DifferenceWith set3:&amp;quot;, set2.DifferenceWith(&amp;amp;set3))
-	fmt.Println(&amp;quot;set3 DifferenceWith set2:&amp;quot;, set3.DifferenceWith(&amp;amp;set2))
-	fmt.Println(&amp;quot;set2 SymmetricDifference set3:&amp;quot;, set2.SymmetricDifference(&amp;amp;set3))
-	fmt.Println(&amp;quot;set3 SymmetricDifference set2:&amp;quot;, set3.SymmetricDifference(&amp;amp;set2))
-	fmt.Println(&amp;quot;elem slice in set2:&amp;quot;, set2.Elems())
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run bitmap.go
-set1: {1 22}
-set1 是否包含1： true set1 是否包含333： false
-before union with {333}:  {1 22}
-len:  2
-after union with {333}:  {1 22 333}
-len:  3
-after remove 22:  {1 333}
-len:  2
-copy set1 to set3:  {1 333}
-after clear set1:  {} {1 333}
-after add all set3:  {1 333 4444 55555}
-se2: {333 55555 666666}
-se3: {1 333 4444 55555}
-set2交set3: {333 55555}
-set2 DifferenceWith set3: {666666}
-set3 DifferenceWith set2: {1 4444}
-set2 SymmetricDifference set3: {1 4444 666666}
-set3 SymmetricDifference set2: {1 4444 666666}
-elem slice in set2: [333 55555 666666]
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
