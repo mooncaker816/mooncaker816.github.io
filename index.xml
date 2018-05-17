@@ -11,6 +11,196 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法8</title>
+      <link>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%958/</link>
+      <pubDate>Thu, 17 May 2018 09:56:34 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%958/</guid>
+      <description>&lt;h1 id=&#34;第十章-力学时和世界时-dynamical-time-universal-time&#34;&gt;第十章 力学时和世界时 Dynamical Time &amp;amp; Universal Time&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-力学时&#34;&gt;1. 力学时&lt;/h2&gt;
+
+&lt;p&gt;　　力学时（Dynamical Time，简称DT）是一种从历书时(ET)到地球时(TT)过渡的时间尺度。分为地球力学时（Temps Dynamique Terrestrique，简称TDT）和质心力学时（Temps Dynamique Barycentrique，简称TDB）两种。&lt;/p&gt;
+
+&lt;p&gt;　　1958年国际天文学联合会（IAU）决定从1960年开始使用以地球公转运动为基准的历书时（ET）代替以地球自转为基准的世界时（UT），目的是解决由于地球自转速度不均匀导致的世界时的时间尺度不均匀的问题。但是由于历书时所用的基准地球运动的理论框架是牛顿力学，根据广义相对论可知，在以太阳为中心的坐标系和以地球为中心的坐标系中时间将会不同。为解决这一问题，1976年国际天文学联合会分别定义了地球力学时（TDT）和质心力学时（TDB）。这两个时间尺度可以看作是历书时在两个坐标系中的实现。1991年，地球力学时被重新精确定义后改名为地球时（TT）。&lt;/p&gt;
+
+&lt;p&gt;　　太阳系质心力学时（TDB）和地心力学时（TDT） 的区分。这两个系统最多相差 0.0017 秒，此种差异与地球以椭圆轨道绕日运动有关(相对论效应)。因这一差异小到可以被大多数实际应用忽略，&lt;strong&gt;&lt;em&gt;故此处我们对质心力学时和地球力学时不加区分，统称为力学时(TD)。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;　　&lt;/p&gt;
+
+&lt;h2 id=&#34;2-世界时&#34;&gt;2. 世界时&lt;/h2&gt;
+
+&lt;p&gt;　　世界时（Universal Time，简称UT）是一种以格林尼治子夜起算的平太阳时。世界时是以地球自转为基准得到的时间尺度，其精度受到地球自转不均匀变化和极移的影响，为了解决这种影响，1955年国际天文联合会定义了UT0、UT1和UT2三个系统：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;UT0系统是由一个天文台的天文观测直接测定的世界时，没有考虑极移造成的天文台地理坐标变化。该系统曾长期被认为是稳定均匀的时间计量系统，得到过广泛应用。&lt;/li&gt;
+&lt;li&gt;UT1系统是在UT0的基础上加入了极移改正 Δλ，修正地轴摆动的影响。&lt;strong&gt;UT1是目前使用的世界时标准。被作为目前世界民用时间标准UTC在增减闰秒时的参照标准。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;UT2系统是UT1的平滑处理版本，在UT1基础上加入了地球自转速率的季节性改正 ΔT。&lt;/li&gt;
+&lt;li&gt;它们之间的关系可以表示为：
+\begin{align}
+UT1 = UT0 + Δλ\\[2ex]
+UT2 = UT1 + ΔT
+\end{align}&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　&lt;/p&gt;
+
+&lt;h2 id=&#34;3-协调世界时&#34;&gt;3. 协调世界时&lt;/h2&gt;
+
+&lt;p&gt;　　协调世界时（英语：Coordinated Universal Time，法语：Temps Universel Coordonné，简称UTC）是最主要的世界时间标准，其以原子时秒长为基础，在时刻上尽量接近于格林尼治标准时间。&lt;/p&gt;
+
+&lt;p&gt;　　协调世界时是世界上调节时钟和时间的主要时间标准，它与0度经线的平太阳时相差不超过1秒，并不遵守夏令时。协调世界时是最接近格林威治标准时间（GMT）的几个替代时间系统之一。对于大多数用途来说，UTC时间被认为能与GMT时间互换，但GMT时间已不再被科学界所确定。&lt;/p&gt;
+
+&lt;p&gt;　　UTC基于国际原子时，并通过不规则的加入闰秒来抵消地球自转变慢的影响。闰秒在必要的时候会被插入到UTC中，以保证协调世界时（UTC）与世界时（UT1）相差不超过0.9秒。&lt;/p&gt;
+
+&lt;p&gt;　　为了保证协调世界时很接近世界时UT1，UTC从基于TAI的线性方程转变成另一方程时，偶尔会出现不连续点。这些不连续点以闰秒的形式体现出来，这些不连续点就是造成了UTC天的长度不规则的闰秒。IERS规定不连续点仅出现在6月或12月底，但也有规定将3月或者9月作为备选。国际地球自转服务组织(IERS)跟踪并公布UTC时间和世界时的差别，即$DUT1 = UT1 - UTC$，另外，IERS也负责引入不连续的闰秒来保证它们的时间差DUT1在±0.9秒之间。&lt;/p&gt;
+
+&lt;p&gt;　　&lt;/p&gt;
+
+&lt;h2 id=&#34;4-计算力学时和世界时之间的差值&#34;&gt;4. 计算力学时和世界时之间的差值&lt;/h2&gt;
+
+&lt;p&gt;　　由于地球自转一直在变缓，而且变缓规律难以预测，力学时和世界时之间的精确差值 $ΔT = TD - UT$ 只能由天文观测值推算。&lt;br /&gt;
+　　书中给出了1620年至1998年的ΔT数据，所以在此之间的时间可以通过插值法来计算，其余时期的数据可以用以下方式推算：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;令 $t=\frac {year-2000}{100}$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// c2000 returns centuries from calendar year 2000.0.
+//
+// Arg should be a calendar year.
+// 计算年份y距离2000年的世纪数
+func c2000(y float64) float64 {
+    return (y - 2000) * .01
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;$ΔT = 2177 + 497t + 44.1t^2, year &amp;lt; +948 $&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// PolyBefore948 returns a polynomial approximation of ΔT valid for calendar
+// years before 948.
+// +948年之前的ΔT推算公式
+func PolyBefore948(year float64) (ΔT unit.Time) {
+    // (10.1) p. 78
+    return unit.Time(base.Horner(c2000(year), 2177, 497, 44.1))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;$ΔT = 102 + 102t + 25.3t^2, +948 \leq year \leq +1600 || year \geq +2000 $&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Poly948to1600 returns a polynomial approximation of ΔT valid for calendar
+// years 948 to 1600.
+// +984年至1600年的ΔT推算公式
+func Poly948to1600(year float64) (ΔT unit.Time) {
+    // (10.2) p. 78
+    return unit.Time(base.Horner(c2000(year), 102, 102, 25.3))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;若 $+2000 \leq year \leq +2100$, 还要在第3步的基础上加上一个修正量$+0.37(year-2100)$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// PolyAfter2000 returns a polynomial approximation of ΔT valid for calendar
+// years after 2000.
+// 2000年以后的ΔT推算公式
+func PolyAfter2000(year float64) (ΔT unit.Time) {
+    ΔT = Poly948to1600(year)
+    if year &amp;lt; 2100 {
+        ΔT += unit.Time(.37 * (year - 2100))
+    }
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;经验公式：&lt;/p&gt;
+
+&lt;p&gt;5.0 $\  儒略日世纪数\theta=\frac {JDE-J1900.0}{36525},J1900.0=2415020.0(1899-12-31)$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// jc1900 returns julian centuries from the epoch J1900.0
+//
+// Arg should be a julian day, technically JDE.
+// 计算儒略日jde距离J1900.0的世纪数
+func jc1900(jde float64) float64 {
+    return (jde - base.J1900) / base.JulianCentury
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.1 $\  1800 - 1997$：(最大误差2.3秒)
+    \begin{align}
+    ΔT = &amp;amp;-1.02 + 91.02\theta + 265.90\theta^2 - 839.16\theta^3 - 1545.20\theta^4 \\[2ex]
+    &amp;amp;+ 3603.62\theta^5 + 4385.98\theta^6 - 6993.23\theta^7 - 6090.04\theta^8 \\[2ex]
+    &amp;amp;+ 6298.12\theta^9 + 4102.86\theta^{10} - 2137.64\theta^{11} - 1081.51\theta^{12}
+    \end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Poly1800to1997 returns a polynomial approximation of ΔT valid for years
+// 1800 to 1997.
+//
+// The accuracy is within 2.3 seconds.
+// 1800至1997ΔT经验公式，最大误差2.3秒
+func Poly1800to1997(jde float64) (ΔT unit.Time) {
+    return unit.Time(base.Horner(jc1900(jde),
+        -1.02, 91.02, 265.90, -839.16, -1545.20,
+        3603.62, 4385.98, -6993.23, -6090.04,
+        6298.12, 4102.86, -2137.64, -1081.51))
+}    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.2 $\  1800 - 1899$：(最大误差0.9秒)
+    \begin{align}
+    ΔT = &amp;amp;-2.50 + 228.95\theta + 5218.61\theta^2 + 56282.84\theta^3 + 324011.78\theta^4 \\[2ex]
+    &amp;amp;+ 1061660.75\theta^5 + 2087298.89\theta^6 + 2513807.78\theta^7 + 1818961.41\theta^8 \\[2ex]
+    &amp;amp;+ 727058.63\theta^9 + 123563.95\theta^{10}
+    \end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Poly1800to1899 returns a polynomial approximation of ΔT valid for years
+// 1800 to 1899.
+//
+// The accuracy is within 0.9 seconds.
+// 1800至1899ΔT经验公式，最大误差0.9秒
+func Poly1800to1899(jde float64) (ΔT unit.Time) {
+    return unit.Time(base.Horner(jc1900(jde),
+        -2.50, 228.95, 5218.61, 56282.84, 324011.78,
+        1061660.75, 2087298.89, 2513807.78,
+        1818961.41, 727058.63, 123563.95))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5.3 $\  1900 - 1997$：(最大误差0.9秒)
+    \begin{align}
+    ΔT = &amp;amp;-2.44 + 87.24\theta + 815.20\theta^2 - 2637.80\theta^3 - 18756.33\theta^4 \\[2ex]
+    &amp;amp;+ 124906.15\theta^5 - 303191.19\theta^6 + 372919.88\theta^7 - 232424.66\theta^8 \\[2ex]
+    &amp;amp;+ 58353.42\theta^9
+    \end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Poly1900to1997 returns a polynomial approximation of ΔT valid for years
+// 1900 to 1997.
+//
+// The accuracy is within 0.9 seconds.
+// 1900至1997ΔT经验公式，最大误差0.9秒
+func Poly1900to1997(jde float64) (ΔT unit.Time) {
+    return unit.Time(base.Horner(jc1900(jde),
+        -2.44, 87.24, 815.20, -2637.80, -18756.33,
+        124906.15, -303191.19, 372919.88,
+        -232424.66, 58353.42))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>天文算法7</title>
+      <link>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%957/</link>
+      <pubDate>Thu, 17 May 2018 08:56:34 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%957/</guid>
+      <description>&lt;h1 id=&#34;第九章-犹太历和穆斯林历&#34;&gt;第九章 犹太历和穆斯林历&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;略&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法6</title>
       <link>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%956/</link>
       <pubDate>Thu, 17 May 2018 07:40:44 +0800</pubDate>
@@ -3332,727 +3522,6 @@ ththth
 [2018-01-04 01:09:41] 127.0.0.1:55630 has left
 [2018-01-04 01:09:48] no msg in last 20 sec since 2018-01-04 01:09:28, closing connect!
 2018/01/04 01:09:49 done
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（9）</title>
-      <link>https://mooncaker816.github.io/2018/01/01/the-go-programming-language-ex9/</link>
-      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/01/01/the-go-programming-language-ex9/</guid>
-      <description>&lt;h3 id=&#34;ex-8-1&#34;&gt;Ex 8.1&lt;/h3&gt;
-
-&lt;p&gt;Modify clock2 to accept a port number, and write a program, clockwall, that acts as a client of several clock servers at once, reading the times from each one and displaying the results in a table, akin to the wall of clocks seen in some business ofﬁces. If you have access to geographically distributed computers, run instances remotely ; otherwise run local instances on different ports with fake time zones.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;$ TZ=US/Eastern ./clock2 -port 8010 &amp;amp; $ TZ=Asia/Tokyo ./clock2 -port 8020 &amp;amp; $ TZ=Europe/London ./clock2 -port 8030 &amp;amp; $ clockwall NewYork=localhost:8010 London=localhost:8020 Tokyo=localhost:8030&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//clockwall
-package main
-
-import (
-	&amp;quot;html/template&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;net/http&amp;quot;
-)
-
-type City struct {
-	Name string
-	Addr string
-	Time string
-}
-
-type cities []City
-
-const templ = `
-&amp;lt;h1&amp;gt;current times:&amp;lt;/h1&amp;gt;
-&amp;lt;table&amp;gt;
-&amp;lt;tr style=&#39;text-align: left&#39;&amp;gt;
-  &amp;lt;th&amp;gt;City&amp;lt;/th&amp;gt;
-  &amp;lt;th&amp;gt;Time&amp;lt;/th&amp;gt;
-&amp;lt;/tr&amp;gt;
-{{range . }}
-&amp;lt;tr&amp;gt;
-  &amp;lt;td&amp;gt;{{.Name}}&amp;lt;/td&amp;gt;
-  &amp;lt;td&amp;gt;{{.Time}}&amp;lt;/td&amp;gt;
-&amp;lt;/tr&amp;gt;
-{{end}}
-&amp;lt;/table&amp;gt;
-`
-
-var report = template.Must(template.New(&amp;quot;result&amp;quot;).
-	Parse(templ))
-var cs = cities{
-	{&amp;quot;NewYork&amp;quot;, &amp;quot;localhost:8010&amp;quot;, &amp;quot;&amp;quot;},
-	{&amp;quot;Tokyo&amp;quot;, &amp;quot;localhost:8020&amp;quot;, &amp;quot;&amp;quot;},
-	{&amp;quot;London&amp;quot;, &amp;quot;localhost:8030&amp;quot;, &amp;quot;&amp;quot;},
-}
-
-func main() {
-	for i := range cs {
-		go func(c *City) {
-			conn, err := net.Dial(&amp;quot;tcp&amp;quot;, c.Addr)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer conn.Close()
-			buf := make([]byte, 20)
-			for {
-				n, _ := conn.Read(buf)
-				c.Time = string(buf[:n])
-			}
-		}(&amp;amp;cs[i])
-	}
-	http.HandleFunc(&amp;quot;/gettime&amp;quot;, cs.gettime)
-	log.Fatal(http.ListenAndServe(&amp;quot;localhost:8000&amp;quot;, nil))
-}
-
-func (cs cities) gettime(w http.ResponseWriter, req *http.Request) {
-	if err := report.Execute(w, cs); err != nil {
-		log.Fatal(err)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//clock
-package main
-
-import (
-	&amp;quot;flag&amp;quot;
-	&amp;quot;io&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;time&amp;quot;
-)
-
-func handleConn(c net.Conn) {
-	defer c.Close()
-	for {
-		_, err := io.WriteString(c, time.Now().Format(&amp;quot;15:04:05\n&amp;quot;))
-		if err != nil {
-			return // e.g., client disconnected
-		}
-		time.Sleep(1 * time.Second)
-	}
-}
-
-func main() {
-	port := flag.String(&amp;quot;port&amp;quot;, &amp;quot;8000&amp;quot;, &amp;quot;port num&amp;quot;)
-	flag.Parse()
-	address := &amp;quot;localhost:&amp;quot; + *port
-	listener, err := net.Listen(&amp;quot;tcp&amp;quot;, address)
-	if err != nil {
-		log.Fatal(err)
-	}
-	//!+
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Print(err) // e.g., connection aborted
-			continue
-		}
-		go handleConn(conn) // handle connections concurrently
-	}
-	//!-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//启动服务器
-TZ=US/Eastern    ./clock -port 8010 &amp;amp;
-TZ=Asia/Tokyo    ./clock -port 8020 &amp;amp;
-TZ=Europe/London ./clock -port 8030
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/clockwall.png?imageView2/0/h/200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-8-3&#34;&gt;Ex 8.3&lt;/h3&gt;
-
-&lt;p&gt;In netcat3, the interface value conn has the concrete type *net.TCPConn, which represents a TCP connection. A TCP connection consists of two halves that may be closed independently using its CloseRead and CloseWrite methods. Modify the main goroutine of netcat3 to close only the write half of the connection so that the program will continue to print the ﬁnal echoes from the reverb1 server even after the standard input has been closed. (Doing this for the reverb2 server is harder; see Exercise 8.4.)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;io&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;os&amp;quot;
-)
-
-//!+
-func main() {
-	conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;localhost:8000&amp;quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	done := make(chan struct{})
-	go func() {
-		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println(&amp;quot;done&amp;quot;)
-		done &amp;lt;- struct{}{} // signal the main goroutine
-	}()
-	mustCopy(conn, os.Stdin)
-	//conn.Close()
-	if conn, ok := conn.(*net.TCPConn); ok {
-		conn.CloseWrite()
-	}
-	&amp;lt;-done // wait for background goroutine to finish
-}
-
-//!-
-
-func mustCopy(dst io.Writer, src io.Reader) {
-	if _, err := io.Copy(dst, src); err != nil {
-		log.Fatal(err)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-8-4&#34;&gt;Ex 8.4&lt;/h3&gt;
-
-&lt;p&gt;Modify the reverb2 server to use a sync.WaitGroup per connection to count the number of active echo goroutines. When it falls to zero, close the write half of the TCP connection as described in Exercise 8.3. Verify that your modiﬁed netcat3 client from that exercise waits for the ﬁnal echoes of multiple concurrent shouts, even after the standard input has been closed.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//client
-package main
-
-import (
-	&amp;quot;io&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;os&amp;quot;
-)
-
-func init() {
-	log.SetFlags(log.Ldate | log.Lmicroseconds)
-}
-
-//!+
-func main() {
-	f, err := os.Open(&amp;quot;a&amp;quot;)
-	defer f.Close()
-	conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;localhost:8000&amp;quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	done := make(chan struct{})
-	go func() {
-		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println(&amp;quot;done&amp;quot;)
-		done &amp;lt;- struct{}{} // signal the main goroutine
-	}()
-	mustCopy(conn, f)
-	//conn.Close()
-	log.Printf(&amp;quot;local in server: %#v\n&amp;quot;, conn.LocalAddr())
-	log.Printf(&amp;quot;remote in server: %#v\n&amp;quot;, conn.RemoteAddr())
-	err = conn.(*net.TCPConn).CloseWrite() //经实验：必须要关，否则无法通知服务端输入已结束（但不应该是服务端根据EOF来判断吗？）
-	log.Println(&amp;quot;write finished in client: &amp;quot;, err)
-	&amp;lt;-done // wait for background goroutine to finish
-	log.Println(&amp;quot;finish print&amp;quot;)
-	//err = conn.(*net.TCPConn).CloseRead()
-	//log.Println(&amp;quot;read finished in client: &amp;quot;, err)
-	err = conn.Close()
-	log.Println(err)
-}
-
-//!-
-
-func mustCopy(dst io.Writer, src io.Reader) {
-	if _, err := io.Copy(dst, src); err != nil {
-		log.Fatal(err)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//server
-// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 224.
-
-// Reverb2 is a TCP server that simulates an echo.
-package main
-
-import (
-	&amp;quot;bufio&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;strings&amp;quot;
-	&amp;quot;sync&amp;quot;
-	&amp;quot;time&amp;quot;
-)
-
-func init() {
-	log.SetFlags(log.Ldate | log.Lmicroseconds)
-}
-func echo(c net.Conn, shout string, delay time.Duration, wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Fprintln(c, &amp;quot;\t&amp;quot;, strings.ToUpper(shout))
-	time.Sleep(delay)
-	fmt.Fprintln(c, &amp;quot;\t&amp;quot;, shout)
-	time.Sleep(delay)
-	fmt.Fprintln(c, &amp;quot;\t&amp;quot;, strings.ToLower(shout))
-}
-
-//!+
-func handleConn(c net.Conn) {
-	input := bufio.NewScanner(c)
-	var wg sync.WaitGroup
-	for input.Scan() {
-		wg.Add(1)
-		go echo(c, input.Text(), 1*time.Second, &amp;amp;wg)
-		fmt.Println(input.Text())
-	}
-	// NOTE: ignoring potential errors from input.Err()
-	//err := c.(*net.TCPConn).CloseRead()
-	//log.Println(&amp;quot;read finished in server: &amp;quot;, err)
-	log.Println(&amp;quot;finish scan&amp;quot;)
-	log.Printf(&amp;quot;local in server: %#v\n&amp;quot;, c.LocalAddr())
-	log.Printf(&amp;quot;remote in server: %#v\n&amp;quot;, c.RemoteAddr())
-	wg.Wait()
-	err := c.(*net.TCPConn).CloseWrite()
-	//err := c.Close()
-	log.Println(&amp;quot;finished in server: &amp;quot;, err)
-}
-
-//!-
-
-func main() {
-	l, err := net.Listen(&amp;quot;tcp&amp;quot;, &amp;quot;localhost:8000&amp;quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for {
-		conn, err := l.Accept()
-		if err != nil {
-			log.Print(err) // e.g., connection aborted
-			continue
-		}
-		go handleConn(conn)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//client
-$ ./ex8.3
-2018/01/02 08:56:18.122881 local in server: &amp;amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:59580, Zone:&amp;quot;&amp;quot;}
-2018/01/02 08:56:18.123015 remote in server: &amp;amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:&amp;quot;&amp;quot;}
-2018/01/02 08:56:18.123035 write finished in client:  &amp;lt;nil&amp;gt;
-	 A
-	 F
-	 B
-	 C
-	 D
-	 E
-	 G
-	 e
-	 b
-	 c
-	 f
-	 d
-	 g
-	 a
-	 e
-	 a
-	 d
-	 b
-	 f
-	 c
-	 g
-2018/01/02 08:56:20.125582 done
-2018/01/02 08:56:20.125625 finish print
-2018/01/02 08:56:20.125699 &amp;lt;nil&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//server
-$ ./ex8.4
-a
-b
-c
-d
-e
-f
-g
-2018/01/02 08:56:18.123125 finish scan
-2018/01/02 08:56:18.123409 local in server: &amp;amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:&amp;quot;&amp;quot;}
-2018/01/02 08:56:18.123427 remote in server: &amp;amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:59580, Zone:&amp;quot;&amp;quot;}
-2018/01/02 08:56:20.125383 finished in server:  &amp;lt;nil&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;conn是双向的（从各自local，remote属性相反可以看出），客户端本身对连接的关闭，只会影响客户端本身通过该连接的相关操作，不会影响服务器端连接；反之亦然！&lt;/li&gt;
-&lt;li&gt;经过实验，客户端通过标准输入向conn写入消息时，即使写入EOF，服务器端也还会继续等待客户端输入的到来，只有当客户端CloseWrite()后，服务器端才会放弃等待输入，继续后面的逻辑；反之服务器端写，客户端读，也是这种情况。似乎与练习要达到的效果有些出入（手动ctrl-d，文件EOF都不行）~&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（8）</title>
-      <link>https://mooncaker816.github.io/2017/12/31/the-go-programming-language-ex8/</link>
-      <pubDate>Sun, 31 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2017/12/31/the-go-programming-language-ex8/</guid>
-      <description>&lt;h3 id=&#34;ex-7-1&#34;&gt;Ex 7.1&lt;/h3&gt;
-
-&lt;p&gt;Using the ideas from ByteCounter, implement counters for words and for lines. You will ﬁnd bufio.ScanWords useful.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;bufio&amp;quot;
-	&amp;quot;bytes&amp;quot;
-	&amp;quot;fmt&amp;quot;
-)
-
-func main() {
-	var c ByteCounter
-	c.Write([]byte(&amp;quot;hello&amp;quot;))
-	fmt.Println(c) // &amp;quot;5&amp;quot;, = len(&amp;quot;hello&amp;quot;)
-	c = 0          // reset the counter
-	var name = &amp;quot;Dolly&amp;quot;
-	fmt.Fprintf(&amp;amp;c, &amp;quot;hello, %s&amp;quot;, name)
-	fmt.Println(c) // &amp;quot;12&amp;quot;, = len(&amp;quot;hello, Dolly&amp;quot;)
-
-	var w WordCounter
-	w.Write([]byte(&amp;quot;hello world, 世界&amp;quot;))
-	fmt.Println(w)
-	w = 0
-	var str = &amp;quot;你 好&amp;quot;
-	fmt.Fprintf(&amp;amp;w, &amp;quot;hello, %s&amp;quot;, str)
-	fmt.Println(w)
-
-	var l LineCounter
-	l.Write([]byte(&amp;quot;hello world, 世界\nabc\nosjoij\nwefw&amp;quot;))
-	fmt.Println(l)
-}
-
-type ByteCounter int
-
-func (c *ByteCounter) Write(p []byte) (int, error) {
-	*c += ByteCounter(len(p)) // convert int to ByteCounter
-	return len(p), nil
-}
-
-type WordCounter int
-
-func (w *WordCounter) Write(p []byte) (int, error) {
-	scanner := bufio.NewScanner(bytes.NewReader(p))
-	scanner.Split(bufio.ScanWords)
-	var count int
-	for scanner.Scan() {
-		count++
-	}
-	*w += WordCounter(count)
-	return count, nil
-}
-
-type LineCounter int
-
-func (l *LineCounter) Write(p []byte) (int, error) {
-	scanner := bufio.NewScanner(bytes.NewReader(p))
-	scanner.Split(bufio.ScanLines)
-	var count int
-	for scanner.Scan() {
-		count++
-	}
-	*l += LineCounter(count)
-	return count, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run counter.go
-5
-12
-3
-3
-4
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-7-2&#34;&gt;Ex 7.2&lt;/h3&gt;
-
-&lt;p&gt;Write a function CountingWriter with the signature below that, given an io.Writer, returns a new Writer that wraps the original, and a pointer to an int64 variable that at any moment contains the number of bytes written to the new Writer.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;func CountingWriter(w io.Writer) (io.Writer, *int64)&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;io&amp;quot;
-	&amp;quot;os&amp;quot;
-)
-
-type byteCounter struct {
-	n int64
-	w io.Writer
-}
-
-func (c *byteCounter) Write(p []byte) (int, error) {
-	c.n += int64(len(p))
-	var err error
-	if c.w != nil {
-		_, err = c.w.Write(p)
-	}
-	return len(p), err
-}
-
-func CountingWriter(w io.Writer) (io.Writer, *int64) {
-	var b byteCounter
-	b.w = w
-	return &amp;amp;b, &amp;amp;b.n
-}
-
-func main() {
-	w, n := CountingWriter(os.Stdout)
-	fmt.Fprintf(w, &amp;quot;hello, word!\n&amp;quot;)
-	fmt.Printf(&amp;quot;writer count [%d]\n&amp;quot;, *n)
-	fmt.Fprintf(w, &amp;quot;1234567890\n&amp;quot;)
-	fmt.Printf(&amp;quot;writer count [%d]\n&amp;quot;, *n)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ go run counting.go
-hello, word!
-writer count [13]
-1234567890
-writer count [24]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-7-11&#34;&gt;Ex 7.11&lt;/h3&gt;
-
-&lt;p&gt;Add additional handlers so that clients can create, read, update, and delete database entries. For example, a request of the form /update?item=socks&amp;amp;price=6 will update the price of an item in the inventory and report an error if the item does not exist or if the price is invalid. (Warning: this change introduces concurrent variable updates.)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;strconv&amp;quot;
-	&amp;quot;sync&amp;quot;
-)
-
-var mu sync.Mutex
-
-func main() {
-	db := database{&amp;quot;shoes&amp;quot;: 50, &amp;quot;socks&amp;quot;: 5}
-	http.HandleFunc(&amp;quot;/list&amp;quot;, db.list)
-	http.HandleFunc(&amp;quot;/price&amp;quot;, db.price)
-	http.HandleFunc(&amp;quot;/update&amp;quot;, db.update)
-	http.HandleFunc(&amp;quot;/add&amp;quot;, db.add)
-	http.HandleFunc(&amp;quot;/delete&amp;quot;, db.delete)
-	log.Fatal(http.ListenAndServe(&amp;quot;localhost:8000&amp;quot;, nil))
-}
-
-type dollars float32
-
-func (d dollars) String() string { return fmt.Sprintf(&amp;quot;$%.2f&amp;quot;, d) }
-
-type database map[string]dollars
-
-func (db database) list(w http.ResponseWriter, req *http.Request) {
-	for item, price := range db {
-		fmt.Fprintf(w, &amp;quot;%s: %s\n&amp;quot;, item, price)
-	}
-}
-
-func (db database) price(w http.ResponseWriter, req *http.Request) {
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if price, ok := db[item]; ok {
-		fmt.Fprintf(w, &amp;quot;%s\n&amp;quot;, price)
-	} else {
-		w.WriteHeader(http.StatusNotFound) // 404
-		fmt.Fprintf(w, &amp;quot;no such item: %q\n&amp;quot;, item)
-	}
-}
-
-func (db database) update(w http.ResponseWriter, req *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if _, ok := db[item]; ok {
-		newpricestr := req.URL.Query().Get(&amp;quot;price&amp;quot;)
-		newprice, err := strconv.ParseFloat(newpricestr, 32)
-		if err != nil {
-			w.Write([]byte(&amp;quot;price invalid!&amp;quot;))
-		} else {
-			db[item] = dollars(float32(newprice))
-			w.Write([]byte(&amp;quot;new price updated!\n\n&amp;quot;))
-			db.list(w, req)
-		}
-	} else {
-		fmt.Fprintf(w, &amp;quot;no such item: %q\n&amp;quot;, item)
-	}
-}
-
-func (db database) add(w http.ResponseWriter, req *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if _, ok := db[item]; ok {
-		fmt.Fprintf(w, &amp;quot;%s already exist!&amp;quot;, item)
-	} else {
-		newpricestr := req.URL.Query().Get(&amp;quot;price&amp;quot;)
-		if len(newpricestr) &amp;lt;= 0 {
-			newpricestr = &amp;quot;0&amp;quot;
-		}
-		newprice, err := strconv.ParseFloat(newpricestr, 32)
-		if err != nil {
-			w.Write([]byte(&amp;quot;price invalid!&amp;quot;))
-		} else {
-			db[item] = dollars(float32(newprice))
-			fmt.Fprintf(w, &amp;quot;%s added!\n\n&amp;quot;, item)
-			db.list(w, req)
-		}
-	}
-}
-
-func (db database) delete(w http.ResponseWriter, req *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if _, ok := db[item]; ok {
-		delete(db, item)
-		fmt.Fprintf(w, &amp;quot;%s deleted!\n\n&amp;quot;, item)
-		db.list(w, req)
-	} else {
-		fmt.Fprintf(w, &amp;quot;%s not exist!&amp;quot;, item)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/list item.png?imageView2/0/h/200&#34; alt=&#34;list&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/add item.png?imageView2/0/h/200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/update price.png?imageView2/0/h/200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://oumnldfwl.bkt.clouddn.com/delete item.png?imageView2/0/h/200&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-7-12&#34;&gt;Ex 7.12&lt;/h3&gt;
-
-&lt;p&gt;Change the handler for /list to print its output as an HTML table, not text. You may ﬁnd the html/template package (§4.6) useful.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;html/template&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net/http&amp;quot;
-	&amp;quot;strconv&amp;quot;
-	&amp;quot;sync&amp;quot;
-)
-
-var mu sync.Mutex
-
-const templ = `
-&amp;lt;h1&amp;gt;current prices:&amp;lt;/h1&amp;gt;
-&amp;lt;table&amp;gt;
-&amp;lt;tr style=&#39;text-align: left&#39;&amp;gt;
-  &amp;lt;th&amp;gt;Item&amp;lt;/th&amp;gt;
-  &amp;lt;th&amp;gt;Price&amp;lt;/th&amp;gt;
-&amp;lt;/tr&amp;gt;
-{{range $key, $value := . }}
-&amp;lt;tr&amp;gt;
-  &amp;lt;td&amp;gt;{{$key}}&amp;lt;/td&amp;gt;
-  &amp;lt;td&amp;gt;{{$value}}&amp;lt;/td&amp;gt;
-&amp;lt;/tr&amp;gt;
-{{end}}
-&amp;lt;/table&amp;gt;
-`
-
-var report = template.Must(template.New(&amp;quot;result&amp;quot;).
-	Parse(templ))
-
-func main() {
-	db := database{&amp;quot;shoes&amp;quot;: 50, &amp;quot;socks&amp;quot;: 5}
-	http.HandleFunc(&amp;quot;/list&amp;quot;, db.list)
-	http.HandleFunc(&amp;quot;/price&amp;quot;, db.price)
-	http.HandleFunc(&amp;quot;/update&amp;quot;, db.update)
-	http.HandleFunc(&amp;quot;/add&amp;quot;, db.add)
-	http.HandleFunc(&amp;quot;/delete&amp;quot;, db.delete)
-	log.Fatal(http.ListenAndServe(&amp;quot;localhost:8000&amp;quot;, nil))
-}
-
-type dollars float32
-
-func (d dollars) String() string { return fmt.Sprintf(&amp;quot;$%.2f&amp;quot;, d) }
-
-type database map[string]dollars
-
-func (db database) list(w http.ResponseWriter, req *http.Request) {
-	if err := report.Execute(w, db); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func (db database) price(w http.ResponseWriter, req *http.Request) {
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if price, ok := db[item]; ok {
-		fmt.Fprintf(w, &amp;quot;%s\n&amp;quot;, price)
-	} else {
-		w.WriteHeader(http.StatusNotFound) // 404
-		fmt.Fprintf(w, &amp;quot;no such item: %q\n&amp;quot;, item)
-	}
-}
-
-func (db database) update(w http.ResponseWriter, req *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if _, ok := db[item]; ok {
-		newpricestr := req.URL.Query().Get(&amp;quot;price&amp;quot;)
-		newprice, err := strconv.ParseFloat(newpricestr, 32)
-		if err != nil {
-			w.Write([]byte(&amp;quot;price invalid!&amp;quot;))
-		} else {
-			db[item] = dollars(float32(newprice))
-			w.Write([]byte(&amp;quot;new price updated!\n\n&amp;quot;))
-			db.list(w, req)
-		}
-	} else {
-		fmt.Fprintf(w, &amp;quot;no such item: %q\n&amp;quot;, item)
-	}
-}
-
-func (db database) add(w http.ResponseWriter, req *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if _, ok := db[item]; ok {
-		fmt.Fprintf(w, &amp;quot;%s already exist!&amp;quot;, item)
-	} else {
-		newpricestr := req.URL.Query().Get(&amp;quot;price&amp;quot;)
-		if len(newpricestr) &amp;lt;= 0 {
-			newpricestr = &amp;quot;0&amp;quot;
-		}
-		newprice, err := strconv.ParseFloat(newpricestr, 32)
-		if err != nil {
-			w.Write([]byte(&amp;quot;price invalid!&amp;quot;))
-		} else {
-			db[item] = dollars(float32(newprice))
-			fmt.Fprintf(w, &amp;quot;%s added!\n\n&amp;quot;, item)
-			db.list(w, req)
-		}
-	}
-}
-
-func (db database) delete(w http.ResponseWriter, req *http.Request) {
-	mu.Lock()
-	defer mu.Unlock()
-	item := req.URL.Query().Get(&amp;quot;item&amp;quot;)
-	if _, ok := db[item]; ok {
-		delete(db, item)
-		fmt.Fprintf(w, &amp;quot;%s deleted!\n\n&amp;quot;, item)
-		db.list(w, req)
-	} else {
-		fmt.Fprintf(w, &amp;quot;%s not exist!&amp;quot;, item)
-	}
-}
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
