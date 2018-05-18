@@ -7,23 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
-    <lastBuildDate>Wed, 23 Sep 2015 16:30:37 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>你好，Hugo</title>
-      <link>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</link>
-      <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
+      <title>Go 标准库学习</title>
+      <link>https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Sun, 14 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</guid>
-      <description>&lt;p&gt;这是使用Hugo创建的站点中的第一篇文章。
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>数比对&lt;/h3&gt;
+      <guid>https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/</guid>
+      <description>&lt;h3 id=&#34;bytes和strings函数比对&#34;&gt;bytes和strings函数比对&lt;/h3&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>

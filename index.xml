@@ -11,6 +11,212 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法9</title>
+      <link>https://mooncaker816.github.io/2018/05/18/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%959/</link>
+      <pubDate>Fri, 18 May 2018 15:55:20 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/18/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%959/</guid>
+      <description>&lt;h1 id=&#34;第十一章-地球球体-the-earth-s-globe&#34;&gt;第十一章 地球球体 The Earth&amp;rsquo;s Globe&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-椭球体&#34;&gt;1. 椭球体&lt;/h2&gt;
+
+&lt;p&gt;　　天文学上，通常我们将地球看做一个近似的椭球体。如下图，&lt;img src=&#34;http://www.tleer.cn/uploads/allimg/170224/2-1F224111032348.jpg&#34; alt=&#34;&#34; /&gt;
+所以子午圈截面为一个椭圆。如下图，&lt;img src=&#34;https://mooncaker816.github.io/img/tuoyuan.png&#34; alt=&#34;&#34; /&gt;
+　　假设上图中$C$为地心，$N$为北极，$S$为南极，$CF$为赤道半径，$NC = b, CF = a$,$O$为观察点，$HK$为地平面，$OP\perp HK$,$OM//SN$，$OM$与$OH$的夹角是$φ$，$CF$与$CO$的夹角是$φ&amp;rsquo;$，$CO$的长度为$\rho$&lt;br /&gt;
+　　则$φ$为$O$点的&lt;strong&gt;地理纬度&lt;/strong&gt;，$\angle OPF = φ$，$φ&amp;rsquo;$为$O$点的&lt;strong&gt;地心纬度&lt;/strong&gt;,$\rho$为$O$点的&lt;strong&gt;地心半径&lt;/strong&gt;,在极点和赤道上$φ=φ′$，在其它纬度上$|φ′|&amp;lt;|φ|$&lt;br /&gt;
+　　地心纬度$φ&amp;rsquo;$与地理纬度$φ$的关系为：$\tan φ′=\frac {b^2}{a^2} \tan φ，$(&lt;a href=&#34;https://baike.baidu.com/item/地心纬度&#34; target=&#34;_blank&#34;&gt;推导&lt;/a&gt;)&lt;br /&gt;
+　　由椭球体扁率$f=\frac {a-b}a$,可知$b=a(1-f)$,子午圈椭圆离心率
+\begin{align}
+e &amp;amp;= \frac ca\\[2ex]
+&amp;amp; = \frac {\sqrt {a^2-b^2}}{a}\\[2ex]
+&amp;amp; = \sqrt {2f-f^2}
+\end{align}
+　　地心纬度$φ&amp;rsquo;$对应的归化纬度$u$,有
+\begin{cases}
+\tan φ&amp;rsquo; = \frac ba \tan u\\[2ex]
+\tan u = \frac ba \tan φ\\[2ex]
+\end{cases}
+且
+\begin{cases}
+\rho \cos φ&amp;rsquo; = a\cos u, \ (相当于子午圈椭圆上观察点O的x坐标)\\[2ex]
+\rho \sin φ&amp;rsquo; = b\sin u, \ (相当于子午圈椭圆上观察点O的y坐标)
+\end{cases}
+　　如果观察点的海拔高度为$H$,且$\rho$以赤道半径$a$为单位，则有
+\begin{cases}
+\rho \cos φ&amp;rsquo; = cos u + \frac Ha\cos φ\\[2ex]
+\rho \sin φ&amp;rsquo; = \frac ba\sin u + \frac Ha\sin φ
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Ellipsoid represents an ellipsoid of revolution.
+//
+// Typical unit for Er is Km.
+// 地球椭球体
+type Ellipsoid struct {
+	Er float64 // equatorial radius 赤道半径
+	Fl float64 // flattening 地球扁率
+}
+
+// IAU 1976 values.  Radius in Km.
+var Earth76 = Ellipsoid{Er: 6378.14, Fl: 1 / 298.257}
+
+// A returns equatorial radius in units of e.Er.
+//
+// A is a common identifier for equatorial radius.
+// 子午圈椭圆长半轴（赤道半径）
+func (e Ellipsoid) A() float64 {
+	return e.Er
+}
+
+// B returns polar radius in units of e.ER.
+//
+// B is a common identifier for polar radius.
+//
+// 子午圈椭圆短半轴（地心到极点的距离）
+func (e Ellipsoid) B() float64 {
+	return e.Er * (1 - e.Fl)
+}
+
+// Eccentricity of a meridian.
+// 子午圈椭圆离心率
+func (e Ellipsoid) Eccentricity() float64 {
+	return math.Sqrt((2 - e.Fl) * e.Fl)
+}
+
+// ParallaxConstants computes parallax constants ρ sin φ′ and ρ cos φ′.
+//
+// Arguments are geographic latitude φ and height h above the ellipsoid.
+// For e.Er in Km, h must be in meters.
+// 海拔为h的观察点对应的ρ sin φ′，ρ cos φ′
+func (e Ellipsoid) ParallaxConstants(φ unit.Angle, h float64) (s, c float64) {
+	boa := 1 - e.Fl
+	su, cu := math.Sincos(math.Atan(boa * φ.Tan()))
+	s, c = φ.Sincos()
+	hoa := h * 1e-3 / e.Er
+	return su*boa + hoa*s, cu + hoa*c
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-其他椭球公式&#34;&gt;2. 其他椭球公式&lt;/h2&gt;
+
+&lt;p&gt;　　在椭球上给定的一点，地理纬度与地心纬度的差值为：$φ - φ′ = 692&amp;rdquo;.73sin(2φ) - 1&amp;rdquo;.16sin(4φ)$&lt;br /&gt;
+　　当$u=45°$时，$φ-φ′$达到最大值。 如果$φ_0$和$φ_0′$是此时相应的地理纬度和地心纬度，我们有：$$tan(φ_0) = a/b，tan(φ_0′) = b/a， φ_0+φ_0′=90°$$
+对于&lt;strong&gt;&lt;em&gt;IAU1976&lt;/em&gt;&lt;/strong&gt;($a = 6378.14km,b = 6356.755km,f=\frac {1}{298.257}$)
+有
+\begin{align}
+φ_0 = 45°05′46&amp;rdquo;.36,\\[2ex]
+φ_0′ = 44°54′13&amp;rdquo;.64,\\[2ex]
+φ_0 - φ_0′ = 11′32&amp;rdquo;.73
+\end{align}
+　　海平面上，$$\rho =0.9983271+0.0016764\cos {2φ}-0.0000035\cos {4φ}$$
+　　同纬度$φ$的圆的半径：$$R_p = \frac {a\cos φ}{\sqrt{(1-e^2\sin^2φ)}}$$
+　　因此，在同一纬度$φ$上，经度变化1度，相应的长度变化为$(π/180)R_p$,线速度为$ωR_p$,其中$ω = 7.292114992*10^{-5}(弧度/秒)$&lt;br /&gt;
+　　地球子午圈的曲率半径，在纬度$φ$：$$R_m=\frac {a(1-e^2)}{(1-e^2\sin ^2 φ)^{\frac 32}}$$
+且纬度变化1度，相应的长度变化：$(π/180)R_m$,在赤道时，$R_m$达到最小值，值为$a(1-e^2)=6335.44km$， 在极点时达到最大值，值为$\frac {a}{\sqrt {1-e^2}}=6399.60km$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Rho is distance from Earth center to a point on the ellipsoid at latitude φ.
+//
+// Result unit is fraction of the equatorial radius.
+// 海平面上，ρ值计算
+func Rho(φ unit.Angle) float64 {
+	// Magic numbers...
+	return .9983271 + .0016764*φ.Mul(2).Cos() - .0000035*φ.Mul(4).Cos()
+}
+
+// RadiusAtLatitude returns the radius of the circle that is the parallel of
+// latitude φ.
+//
+// Result unit is same as e.Er (typically Km.)
+// 同纬度圆半径
+func (e Ellipsoid) RadiusAtLatitude(φ unit.Angle) float64 {
+	s, c := φ.Sincos()
+	return e.A() * c / math.Sqrt(1-(2-e.Fl)*e.Fl*s*s)
+}
+
+// OneDegreeOfLongitude returns the length of one degree of longitude.
+//
+// Argument rp is the radius of a circle that is a parallel of latitude
+// (as returned by Ellipsoid.RadiusAtLatitude.)
+//
+// Result is distance along one degree of the circle, in same units as rp.
+// 同纬度，计算经度变化1度时长度变化的值
+func OneDegreeOfLongitude(rp float64) float64 {
+	return rp * math.Pi / 180
+}
+
+// RotationRate1996_5 is the rotational angular velocity of the Earth
+// with respect to the stars at the epoch 1996.5.
+//
+// Unit is radian/second.
+const RotationRate1996_5 = 7.292114992e-5
+
+// RadiusOfCurvature of meridian at latitude φ.
+//
+// Result in units of e.ER, typically Km.
+// 纬度为φ，子午圈曲率半径
+func (e Ellipsoid) RadiusOfCurvature(φ unit.Angle) float64 {
+	s := φ.Sin()
+	e2 := (2 - e.Fl) * e.Fl
+	return e.A() * (1 - e2) / math.Pow(1-e2*s*s, 1.5)
+}
+
+// OneDegreeOfLatitude returns the length of one degree of latitude.
+//
+// Argument rm is the radius of curvature along a meridian.
+// (as returned by Ellipsoid.RadiusOfCurvature.)
+// Result is distance in units of rm along one degree of the meridian.
+// 同经度，计算纬度变化1度时长度变化的值
+func OneDegreeOfLatitude(rm float64) float64 {
+	return rm * math.Pi / 180
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-地表两点间的距离&#34;&gt;3. 地表两点间的距离&lt;/h2&gt;
+
+&lt;p&gt;　　假设经纬度是分别是$(L_1,φ_1),(L_2,φ_2)$，且这两点在海平面。
+　　如果精度要求不高，可以把地球看作球形，平均半径为6371km。使用下式可得到两点间的角距离：$$\cos d=\sin φ_1\sin φ_2 +\cos φ_1\cos φ_2\cos(L_1-L_2)$$
+那么$$s = \frac {6371πd}{180}$$
+　　高精度计算可使用以下方法：
+$$F=\frac {φ_1+φ_2}{2},G=\frac {φ_1-φ_2}{2},\lambda = \frac {L_1-L_2}{2}$$
+$$S = \sin^2G\cos^2\lambda+\cos^2F\sin^2\lambda$$
+$$C = \cos^2G\cos^2\lambda+\sin^2F\sin^2\lambda$$
+$$\tan ω = \sqrt{\frac SC}$$
+$$R=\frac{\sqrt{SC}}{ω}$$
+$$D=2ωa,H_1=\frac{3R-1}{2C},H_2=\frac{3R+1}{2S}$$
+$$s=D(1+fH_1\sin^2F\cos^2G-fH_2\cos^2F\sin^2G)$$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Distance is distance between two points measured along the surface
+// of an ellipsoid.
+//
+// Accuracy is much better than that of ApproxAngularDistance or
+// ApproxLinearDistance.
+//
+// Result unit is units of e.Er, typically Km.
+// 地表两点距离
+func (e Ellipsoid) Distance(c1, c2 Coord) float64 {
+	// From AA, ch 11, p 84.
+	s2f, c2f := sincos2((c1.Lat + c2.Lat) / 2)
+	s2g, c2g := sincos2((c1.Lat - c2.Lat) / 2)
+	s2λ, c2λ := sincos2((c1.Lon - c2.Lon) / 2)
+	s := s2g*c2λ + c2f*s2λ
+	c := c2g*c2λ + s2f*s2λ
+	ω := math.Atan(math.Sqrt(s / c))
+	r := math.Sqrt(s*c) / ω
+	d := 2 * ω * e.Er
+	h1 := (3*r - 1) / (2 * c)
+	h2 := (3*r + 1) / (2 * s)
+	return d * (1 + e.Fl*(h1*s2f*c2g-h2*c2f*s2g))
+}
+
+func sincos2(x unit.Angle) (s2, c2 float64) {
+	s, c := x.Sincos()
+	return s * s, c * c
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法8</title>
       <link>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%958/</link>
       <pubDate>Thu, 17 May 2018 09:56:34 +0800</pubDate>
@@ -2964,564 +3170,6 @@ func (e *entry) deliver(response chan&amp;lt;- result, done &amp;lt;-chan struct
 		response &amp;lt;- result{nil, errors.New(&amp;quot;request cancelled&amp;quot;)}
 	}
 }
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（10）</title>
-      <link>https://mooncaker816.github.io/2018/01/03/the-go-programming-language-ex10/</link>
-      <pubDate>Wed, 03 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/01/03/the-go-programming-language-ex10/</guid>
-      <description>&lt;h3 id=&#34;ex-8-6&#34;&gt;Ex 8.6&lt;/h3&gt;
-
-&lt;p&gt;Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3, then only URLs reachable by at most three links will be fetched.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 241.
-
-// Crawl2 crawls web links starting with the command-line arguments.
-//
-// This version uses a buffered channel as a counting semaphore
-// to limit the number of concurrent calls to links.Extract.
-package main
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;os&amp;quot;
-
-	&amp;quot;gopl.io/ch5/links&amp;quot;
-)
-
-//!+sema
-// tokens is a counting semaphore used to
-// enforce a limit of 20 concurrent requests.
-var tokens = make(chan struct{}, 20)
-
-func crawl(url string, deepth int, f *os.File) work {
-	tokens &amp;lt;- struct{}{} // acquire a token
-	list, err := links.Extract(url)
-	fmt.Fprintln(f, deepth, &amp;quot; &amp;quot;, url, &amp;quot; &amp;quot;, len(list))
-	&amp;lt;-tokens // release the token
-	deepth++
-	if err != nil {
-		log.Print(err)
-	}
-	return work{list, deepth}
-}
-
-//!-sema
-type work struct {
-	worklist   []string
-	workdeepth int
-}
-
-const DEEPTH = 2
-
-//!+
-func main() {
-	wkpool := make(chan work)
-	var n int // number of pending sends to worklist
-	f, _ := os.Create(&amp;quot;stat&amp;quot;)
-	defer f.Close()
-	// Start with the command-line arguments.
-	n++
-	go func() { wkpool &amp;lt;- work{os.Args[1:], 0} }()
-
-	// Crawl the web concurrently.
-	seen := make(map[string]bool)
-	for ; n &amp;gt; 0; n-- {
-		wk := &amp;lt;-wkpool
-		if wk.workdeepth &amp;gt; DEEPTH {
-			continue
-		}
-		for _, link := range wk.worklist {
-			if !seen[link] {
-				seen[link] = true
-				n++
-				go func(link string, deepth int, f *os.File) {
-					wkpool &amp;lt;- crawl(link, deepth, f)
-				}(link, wk.workdeepth, f)
-			}
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-8-8&#34;&gt;Ex 8.8&lt;/h3&gt;
-
-&lt;p&gt;Using a select statement, add a timeout to the echo server from Section 8.3 so that it disconnects any client that shouts nothing within 10 seconds.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//client
-package main
-
-import (
-	&amp;quot;io&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;os&amp;quot;
-)
-
-func init() {
-	log.SetFlags(log.Ldate | log.Lmicroseconds)
-}
-
-//!+
-func main() {
-	f, err := os.Open(&amp;quot;a&amp;quot;)
-	defer f.Close()
-	conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;localhost:8000&amp;quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(&amp;quot;connected!&amp;quot;)
-	done := make(chan struct{})
-	go func() {
-		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println(&amp;quot;done&amp;quot;)
-		done &amp;lt;- struct{}{} // signal the main goroutine
-	}()
-	go func() {
-		mustCopy(conn, os.Stdin)
-		//conn.Close()
-		err = conn.(*net.TCPConn).CloseWrite() //经实验：必须要关，否则无法通知服务端输入已结束（但不应该是服务端根据EOF来判断吗？）
-		log.Println(&amp;quot;write finished in client: &amp;quot;, err)
-	}()
-	&amp;lt;-done // wait for background goroutine to finish
-	log.Printf(&amp;quot;local in server: %#v\n&amp;quot;, conn.LocalAddr())
-	log.Printf(&amp;quot;remote in server: %#v\n&amp;quot;, conn.RemoteAddr())
-	log.Println(&amp;quot;finish print&amp;quot;)
-	//err = conn.(*net.TCPConn).CloseRead()
-	//log.Println(&amp;quot;read finished in client: &amp;quot;, err)
-	err = conn.Close()
-	log.Println(err)
-}
-
-//!-
-
-func mustCopy(dst io.Writer, src io.Reader) {
-	if _, err := io.Copy(dst, src); err != nil {
-		log.Fatal(err)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//server
-// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 224.
-
-// Reverb2 is a TCP server that simulates an echo.
-package main
-
-import (
-	&amp;quot;bufio&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;strings&amp;quot;
-	&amp;quot;sync&amp;quot;
-	&amp;quot;time&amp;quot;
-)
-
-func init() {
-	log.SetFlags(log.Ldate | log.Lmicroseconds)
-}
-func echo(c net.Conn, shout string, delay time.Duration, wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Fprintln(c, &amp;quot;\t&amp;quot;, strings.ToUpper(shout))
-	time.Sleep(delay)
-	fmt.Fprintln(c, &amp;quot;\t&amp;quot;, shout)
-	time.Sleep(delay)
-	fmt.Fprintln(c, &amp;quot;\t&amp;quot;, strings.ToLower(shout))
-}
-
-//!+
-func handleConn(c net.Conn) {
-	msg := make(chan string)
-	go func(c net.Conn) {
-		//for {
-		input := bufio.NewScanner(c)
-		for input.Scan() {
-			fmt.Println(&amp;quot;getting: &amp;quot;, input.Text())
-			msg &amp;lt;- input.Text()
-		}
-		msg &amp;lt;- &amp;quot;eof&amp;quot;
-		//}
-	}(c)
-	ticker := time.NewTicker(5 * time.Second)
-	var wg sync.WaitGroup
-label1:
-	for {
-		select {
-		case &amp;lt;-ticker.C:
-			ticker.Stop()
-			c.Close()
-			fmt.Println(&amp;quot;connect closed!!&amp;quot;)
-			return
-		case s := &amp;lt;-msg:
-			if s == &amp;quot;eof&amp;quot; {
-				break label1
-			}
-			ticker.Stop()
-			fmt.Println(s)
-			wg.Add(1)
-			go echo(c, s, 1*time.Second, &amp;amp;wg)
-		}
-	}
-	// NOTE: ignoring potential errors from input.Err()
-	//err := c.(*net.TCPConn).CloseRead()
-	//log.Println(&amp;quot;read finished in server: &amp;quot;, err)
-	log.Println(&amp;quot;finish scan&amp;quot;)
-	log.Printf(&amp;quot;local in server: %#v\n&amp;quot;, c.LocalAddr())
-	log.Printf(&amp;quot;remote in server: %#v\n&amp;quot;, c.RemoteAddr())
-	wg.Wait()
-	err := c.(*net.TCPConn).CloseWrite()
-	//err := c.Close()
-	log.Println(&amp;quot;finished in server: &amp;quot;, err)
-}
-
-//!-
-
-func main() {
-	l, err := net.Listen(&amp;quot;tcp&amp;quot;, &amp;quot;localhost:8000&amp;quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for {
-		conn, err := l.Accept()
-		if err != nil {
-			log.Print(err) // e.g., connection aborted
-			continue
-		}
-		go handleConn(conn)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//client
-$ ./ex8.3
-2018/01/03 17:01:15.985187 connected!
-2018/01/03 17:01:20.989292 done
-2018/01/03 17:01:20.989515 local in server: &amp;amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:49954, Zone:&amp;quot;&amp;quot;}
-2018/01/03 17:01:20.989576 remote in server: &amp;amp;net.TCPAddr{IP:net.IP{0x7f, 0x0, 0x0, 0x1}, Port:8000, Zone:&amp;quot;&amp;quot;}
-2018/01/03 17:01:20.989596 finish print
-2018/01/03 17:01:20.989774 &amp;lt;nil&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//server
-./ex8.8
-2018/01/03 17:01:20.989248 connect closed!! 127.0.0.1:8000 127.0.0.1:49954
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-8-9&#34;&gt;Ex 8.9&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 250.
-
-// The du3 command computes the disk usage of the files in a directory.
-package main
-
-// The du3 variant traverses all directories in parallel.
-// It uses a concurrency-limiting counting semaphore
-// to avoid opening too many files at once.
-
-import (
-	&amp;quot;flag&amp;quot;
-	&amp;quot;io/ioutil&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;os&amp;quot;
-	&amp;quot;path/filepath&amp;quot;
-	&amp;quot;sync&amp;quot;
-	&amp;quot;time&amp;quot;
-)
-
-var vFlag = flag.Bool(&amp;quot;v&amp;quot;, false, &amp;quot;show verbose progress messages&amp;quot;)
-
-func init() {
-	log.SetFlags(log.Ldate | log.Lmicroseconds)
-}
-
-//!+
-func main() {
-	// ...determine roots...
-
-	//!-
-	flag.Parse()
-
-	// Determine the initial directories.
-	roots := flag.Args()
-	if len(roots) == 0 {
-		roots = []string{&amp;quot;.&amp;quot;}
-	}
-
-	//!+
-	// Traverse each root of the file tree in parallel.
-	//fileSizes := make(chan int64)
-	var m sync.WaitGroup
-	for _, root := range roots {
-		var tick &amp;lt;-chan time.Time
-		if *vFlag {
-			tick = time.Tick(100 * time.Millisecond)
-		}
-		var fileSizes chan int64
-		var n sync.WaitGroup
-		fileSizes = make(chan int64)
-		n.Add(1)
-		go walkDir(root, &amp;amp;n, fileSizes)
-		go func() {
-			n.Wait()
-			close(fileSizes)
-		}()
-		m.Add(1)
-		go func(root string, tick &amp;lt;-chan time.Time) {
-			defer m.Done()
-			var nfiles, nbytes int64
-		loop:
-			for {
-				select {
-				case size, ok := &amp;lt;-fileSizes:
-					if !ok {
-						break loop // fileSizes was closed
-					}
-					nfiles++
-					nbytes += size
-				case &amp;lt;-tick:
-					printDiskUsage(root, nfiles, nbytes)
-				}
-			}
-			printDiskUsage(root, nfiles, nbytes) // final totals
-		}(root, tick)
-	}
-	m.Wait()
-}
-
-//!-
-
-func printDiskUsage(root string, nfiles, nbytes int64) {
-	log.Printf(&amp;quot;%s: %d files  %.1f GB\n&amp;quot;, root, nfiles, float64(nbytes)/1e9)
-}
-
-// walkDir recursively walks the file tree rooted at dir
-// and sends the size of each found file on fileSizes.
-//!+walkDir
-func walkDir(dir string, n *sync.WaitGroup, fileSizes chan&amp;lt;- int64) {
-	defer n.Done()
-	for _, entry := range dirents(dir) {
-		if entry.IsDir() {
-			n.Add(1)
-			subdir := filepath.Join(dir, entry.Name())
-			go walkDir(subdir, n, fileSizes)
-		} else {
-			fileSizes &amp;lt;- entry.Size()
-		}
-	}
-}
-
-//!-walkDir
-
-//!+sema
-// sema is a counting semaphore for limiting concurrency in dirents.
-var sema = make(chan struct{}, 20)
-
-// dirents returns the entries of directory dir.
-func dirents(dir string) []os.FileInfo {
-	sema &amp;lt;- struct{}{}        // acquire token
-	defer func() { &amp;lt;-sema }() // release token
-	// ...
-	//!-sema
-
-	entries, err := ioutil.ReadDir(dir)
-	if err != nil {
-		//fmt.Fprintf(os.Stderr, &amp;quot;du: %v\n&amp;quot;, err)
-		return nil
-	}
-	return entries
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ex8.9 -v /etc /usr /bin /var
-2018/01/03 20:36:21.368337 /bin: 36 files  0.0 GB
-2018/01/03 20:36:21.370797 /etc: 308 files  0.0 GB
-2018/01/03 20:36:21.483464 /var: 2270 files  6.1 GB
-2018/01/03 20:36:21.483846 /usr: 4322 files  1.9 GB
-2018/01/03 20:36:21.571401 /var: 2449 files  6.3 GB
-2018/01/03 20:36:21.599092 /usr: 9322 files  2.1 GB
-2018/01/03 20:36:21.678850 /usr: 18130 files  2.6 GB
-2018/01/03 20:36:21.782177 /usr: 47807 files  3.2 GB
-2018/01/03 20:36:21.872339 /usr: 65859 files  3.7 GB
-2018/01/03 20:36:21.920744 /usr: 89008 files  3.9 GB
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-8-12&#34;&gt;Ex 8.12&lt;/h3&gt;
-
-&lt;p&gt;Make the broadcaster announce the current set of clients to each new arrival. This requires that the clients set and the entering and leaving channels record the client name too.&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-8-13&#34;&gt;Ex 8.13&lt;/h3&gt;
-
-&lt;p&gt;Make the chat server disconnect idle clients, such as those that have sent no messages in the last ﬁve minutes. Hint: calling conn.Close() in another goroutine unblocks active Read calls such as the one done by input.Scan().&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-8-14&#34;&gt;Ex 8.14&lt;/h3&gt;
-
-&lt;p&gt;Change the chat server’s network protocol so that each client provides its name on entering. Use that name instead of the network address when preﬁxing each message with its sender’s identity.&lt;/p&gt;
-
-&lt;p&gt;只需要添加自定义协议，在压包解包的时候按协议进行就行，待做。。。&lt;/p&gt;
-
-&lt;h3 id=&#34;ex-8-15&#34;&gt;Ex 8.15&lt;/h3&gt;
-
-&lt;p&gt;Failure of any client program to read data in a timely manner ultimately causes all clients to get stuck. Modify the broadcaster to skip a message rather than wait if a client writer is not ready to accept it. Alternatively, add buffering to each client’s outgoing message channel so that most messages are not dropped; the broadcaster should use a non-blocking send to this channel.&lt;/p&gt;
-
-&lt;p&gt;将broadcaster中向各个客户端发送消息的部分写入go routine，并将客户端发送通道定义为缓存通道&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 254.
-//!+
-
-// Chat is a server that lets clients chat with each other.
-package main
-
-import (
-	&amp;quot;bufio&amp;quot;
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;log&amp;quot;
-	&amp;quot;net&amp;quot;
-	&amp;quot;time&amp;quot;
-)
-
-//!+broadcaster
-type client chan&amp;lt;- string // an outgoing message channel
-
-var (
-	entering = make(chan client)
-	leaving  = make(chan client)
-	messages = make(chan string) // all incoming client messages
-)
-
-func broadcaster() {
-	clients := make(map[client]bool) // all connected clients
-	for {
-		select {
-		case msg := &amp;lt;-messages:
-			// Broadcast incoming message to all
-			// clients&#39; outgoing message channels.
-			for cli := range clients {
-				cli &amp;lt;- msg
-			}
-
-		case cli := &amp;lt;-entering:
-			clients[cli] = true
-
-		case cli := &amp;lt;-leaving:
-			delete(clients, cli)
-			close(cli)
-		}
-	}
-}
-
-//!-broadcaster
-
-//!+handleConn
-func handleConn(conn net.Conn) {
-	inittime := time.Now()
-	itimestr := &amp;quot;[&amp;quot; + inittime.Format(&amp;quot;2006-01-02 15:04:05&amp;quot;) + &amp;quot;]&amp;quot;
-	ch := make(chan string) // outgoing client messages
-	go clientWriter(conn, ch)
-	lastmsgtime := make(chan time.Time)
-	who := conn.RemoteAddr().String()
-	go func(t time.Time) {
-		for {
-			select {
-			case t = &amp;lt;-lastmsgtime:
-			default:
-			}
-			if time.Now().After(t.Add(20 * time.Second)) {
-				ch &amp;lt;- fmt.Sprintf(&amp;quot;[%s] no msg in last 20 sec since %s, closing connect!&amp;quot;, time.Now().Format(&amp;quot;2006-01-02 15:04:05&amp;quot;), t.Format(&amp;quot;2006-01-02 15:04:05&amp;quot;))
-				time.Sleep(1 * time.Second)
-				conn.Close()
-				//leaving &amp;lt;- ch
-				//messages &amp;lt;- who + &amp;quot; has left&amp;quot;
-				break
-			}
-		}
-	}(inittime)
-	ch &amp;lt;- itimestr + &amp;quot; &amp;quot; + &amp;quot;You are &amp;quot; + who
-	messages &amp;lt;- itimestr + &amp;quot; &amp;quot; + who + &amp;quot; has arrived&amp;quot;
-	entering &amp;lt;- ch
-
-	input := bufio.NewScanner(conn)
-	for input.Scan() {
-		messages &amp;lt;- &amp;quot;[&amp;quot; + time.Now().Format(&amp;quot;2006-01-02 15:04:05&amp;quot;) + &amp;quot;]&amp;quot; + &amp;quot; &amp;quot; + who + &amp;quot;: &amp;quot; + input.Text()
-		lastmsgtime &amp;lt;- time.Now()
-	}
-	// NOTE: ignoring potential errors from input.Err()
-
-	leaving &amp;lt;- ch
-	messages &amp;lt;- &amp;quot;[&amp;quot; + time.Now().Format(&amp;quot;2006-01-02 15:04:05&amp;quot;) + &amp;quot;]&amp;quot; + &amp;quot; &amp;quot; + who + &amp;quot; has left&amp;quot;
-	conn.Close()
-}
-
-func clientWriter(conn net.Conn, ch &amp;lt;-chan string) {
-	for msg := range ch {
-		fmt.Fprintln(conn, msg) // NOTE: ignoring network errors
-	}
-}
-
-//!-handleConn
-
-//!+main
-func main() {
-	listener, err := net.Listen(&amp;quot;tcp&amp;quot;, &amp;quot;localhost:8000&amp;quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	go broadcaster()
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Print(err)
-			continue
-		}
-		go handleConn(conn)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./netcat1
-[2018-01-04 01:09:14] You are 127.0.0.1:55627
-[2018-01-04 01:09:18] 127.0.0.1:55630 has arrived
-[2018-01-04 01:09:20] 127.0.0.1:55630: sdf
-[2018-01-04 01:09:24] 127.0.0.1:55635 has arrived
-[2018-01-04 01:09:28] 127.0.0.1:55635: ththth
-[2018-01-04 01:09:34] no msg in last 20 sec since 2018-01-04 01:09:14, closing connect!
-2018/01/04 01:09:35 done
-$ ./netcat2
-[2018-01-04 01:09:18] You are 127.0.0.1:55630
-sdf
-[2018-01-04 01:09:20] 127.0.0.1:55630: sdf
-[2018-01-04 01:09:24] 127.0.0.1:55635 has arrived
-[2018-01-04 01:09:28] 127.0.0.1:55635: ththth
-[2018-01-04 01:09:35] 127.0.0.1:55627 has left
-[2018-01-04 01:09:40] no msg in last 20 sec since 2018-01-04 01:09:20, closing connect!
-2018/01/04 01:09:41 done
-$ ./netcat3
-[2018-01-04 01:09:24] You are 127.0.0.1:55635
-ththth
-[2018-01-04 01:09:28] 127.0.0.1:55635: ththth
-[2018-01-04 01:09:35] 127.0.0.1:55627 has left
-[2018-01-04 01:09:41] 127.0.0.1:55630 has left
-[2018-01-04 01:09:48] no msg in last 20 sec since 2018-01-04 01:09:28, closing connect!
-2018/01/04 01:09:49 done
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
