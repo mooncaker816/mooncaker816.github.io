@@ -11,6 +11,146 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法10</title>
+      <link>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9510/</link>
+      <pubDate>Sat, 19 May 2018 09:20:12 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9510/</guid>
+      <description>&lt;h1 id=&#34;第十二章-格林威治恒星时-sidereal-time-at-greenwich&#34;&gt;第十二章 格林威治恒星时 Sidereal Time at Greenwich&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-恒星时&#34;&gt;1. 恒星时&lt;/h2&gt;
+
+&lt;p&gt;　　&lt;strong&gt;恒星时是天文学和大地测量学标示的天球子午圈值&lt;/strong&gt;，由于借用了时间的计量单位，所以常被误解为是一种时间单位。恒星时是根据地球自转来计算的，它的基础是恒星日（比地球的自转周期短约8.4毫秒）。由于地球环绕太阳的公转运动，恒星日比平太阳日（也就是日常生活中所使用的日）短约1/365（相应约四分钟或一度）。&lt;/p&gt;
+
+&lt;p&gt;　　恒星时的定义是一个地方的子午圈与天球的春分点之间的时角，因此地球上每个地方的恒星时都与它的经度有关。&lt;/p&gt;
+
+&lt;p&gt;　　由于地球的章动春分点在天球上并不固定，而是以18.6年的周期围绕着平均春分点摆动。因此恒星时又分真恒星时和平恒星时。真恒星时是通过直接测量子午线与实际的春分点之间的时角获得的，平恒星时则忽略了地球的章动。真恒星时与平恒星时之间的差异最大可达约0.4秒。&lt;/p&gt;
+
+&lt;p&gt;　　一个地方的当地恒星时与格林尼治天文台的恒星时之间的差就是这个地方的经度（参见天体导航）。因此通过观测恒星时可以确定当地的经度（假如格林尼治天文台的恒星时已知的话）或者可以确定时间（假如当地的经度已知的话）。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一颗恒星的时角$\tau$ 、它的赤经$α$和当地的恒星时$θ$之间的关系为 $\tau=\theta -\alpha$&lt;/li&gt;
+&lt;li&gt;当地的恒星时等于位于天顶的恒星的赤经&lt;/li&gt;
+&lt;li&gt;当地的恒星时等于正位于中天恒星的赤经&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　通过确定恒星时可以简化天文学的计算，比如通过恒星时和当地的纬度可以很方便地计算出哪些星正好在地平线以上。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-恒星时的计算&#34;&gt;2. 恒星时的计算&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-格林威治0h平恒星时&#34;&gt;2.1 格林威治0h平恒星时&lt;/h3&gt;
+
+&lt;p&gt;　　一个给定的世界时日期的&lt;strong&gt;&lt;em&gt;(0h UT)&lt;/em&gt;&lt;/strong&gt;，格林尼治子午圈的平恒星时可按如下计算。&lt;br /&gt;
+　　1. 先计算当天（0h UT）对应的$JD$&lt;br /&gt;
+　　2. 计算$T = \frac {JD - 2451545.0}{36525}$&lt;br /&gt;
+　　3. 采用 &lt;strong&gt;IAU1982&lt;/strong&gt; 的格林尼治子午圈的平恒星时表达式： $$θ_0 = 6h41m50s.54841 + 8640184s.812866T + 0s.093104T^2 - 0s.0000062T^3$$
+　　4. 若以度为单位，则上式为：$$θ_0 = 100.46061837 + 36000.770053608T + 0.000387933T^2 - T^3 / 38710000$$&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注意，上述公式只适用于(0h UT）&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// jdToCFrac returns values for use in computing sidereal time at Greenwich.
+//
+// Cen is centuries from J2000 of the JD at 0h UT of argument jd.  This is
+// the value to use for evaluating the IAU sidereal time polynomial.
+// DayFrac is the fraction of jd after 0h UT.  It is used to compute the
+// final value of sidereal time.
+// 计算 T = cen，dayFrac 为此 jd 对应的天的小数
+func jdToCFrac(jd float64) (cen, dayFrac float64) {
+	j0, f := math.Modf(jd + .5)
+	return base.J2000Century(j0 - .5), f
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// J2000Century returns the number of Julian centuries since J2000.
+//
+// The quantity appears as T in a number of time series.
+func J2000Century(jde float64) float64 {
+	// The formula is given in a number of places in the book, for example
+	// (12.1) p. 87.
+	// (22.1) p. 143.
+	// (25.1) p. 163.
+	return (jde - J2000) / JulianCentury
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Mean0UT returns mean sidereal time at Greenwich at 0h UT on the given JD.
+//
+// The result is in the range [0,86400).
+// 计算格林威治 0h UT 平恒星时，并化简为单位为秒一天之内的值[0,86400).
+func Mean0UT(jd float64) unit.Time {
+	s, _ := mean0UT(jd)
+	return s.Mod1()
+}
+
+// 计算格林威治 0h UT 平恒星时，并返回此 jd 一天中相对于0h的秒数，用于瞬时平恒星时的计算
+func mean0UT(jd float64) (sidereal, dayFrac unit.Time) {
+	cen, f := jdToCFrac(jd)
+	// (12.2) p. 87
+	return unit.Time(base.Horner(cen, iau82...)), unit.TimeFromDay(f)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-格林威治任意-ut-平恒星时&#34;&gt;2.2 格林威治任意 UT 平恒星时&lt;/h3&gt;
+
+&lt;p&gt;　　1. 计算0h 平恒星时&lt;br /&gt;
+　　2. UT * 1.00273790935&lt;br /&gt;
+　　3. 1 + 2 的结果即为格林威治瞬时平恒星时&lt;br /&gt;
+　　4. 若以度为单位，则：$$θ_0 = 280.46061837 + 360.98564736629(JD-2451545.0) + 0.000387933T^2 - T^3 / 38710000$$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Mean returns mean sidereal time at Greenwich for a given JD.
+//
+// Computation is by IAU 1982 coefficients.
+// The result is in the range [0,86400).
+// 计算格林威治 jd 时刻的瞬时平恒星时,化简结果至一天范围之内
+func Mean(jd float64) unit.Time {
+	return mean(jd).Mod1()
+}
+
+// 计算格林威治 jd 时刻的瞬时平恒星时
+func mean(jd float64) unit.Time {
+	s, f := mean0UT(jd)
+	return s + f*1.00273790935
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-3-格林威治视恒星时&#34;&gt;2.3 格林威治视恒星时&lt;/h3&gt;
+
+&lt;p&gt;　　要取得视恒星时，即真春分点起算的格林尼治时角，应加上修正值 $Δψ\cos ε$，式中 $Δψ$ 是黄经章动，$ε$ 是真黄赤交角。这个修正值也就作赤经章动（也称作分点方程）。因为 $Δψ$ 是个小量，所以 $ε$ 误差 10&amp;rdquo;也没关系。&lt;br /&gt;
+　　如果 $Δψ$ 的单位是角秒（1 度是 3600 秒），则以时秒(1 小时是 3600 秒)为单位的修正值是：$\frac {Δψ\cos ε}{15}$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Apparent returns apparent sidereal time at Greenwich for the given JD.
+//
+// Apparent is mean plus the nutation in right ascension.
+//
+// The result is in the range [0,86400).
+// 计算格林威治瞬时视恒星时
+func Apparent(jd float64) unit.Time {
+	s := mean(jd)                  // Time
+	n := nutation.NutationInRA(jd) // HourAngle
+	return (s + n.Time()).Mod1()
+}
+
+// Apparent0UT returns apparent sidereal time at Greenwich at 0h UT
+// on the given JD.
+//
+// The result is in the range [0,86400).
+// 计算格林威治0h UT视恒星时
+func Apparent0UT(jd float64) unit.Time {
+	j0, f := math.Modf(jd + .5)
+	cen := (j0 - .5 - base.J2000) / 36525
+	s := unit.Time(base.Horner(cen, iau82...)) +
+		unit.TimeFromDay(f*1.00273790935)
+	n := nutation.NutationInRA(j0) // HourAngle
+	return (s + n.Time()).Mod1()
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法9</title>
       <link>https://mooncaker816.github.io/2018/05/18/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%959/</link>
       <pubDate>Fri, 18 May 2018 15:55:20 +0800</pubDate>
@@ -2946,231 +3086,6 @@ drwxr-xr-x   1 root root  4096 Apr  2 18:38 var
 &lt;p&gt;&lt;/p&gt;
 
 &lt;table&gt;&lt;tr&gt;&lt;td&gt;bytes&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;strings&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;函数签名&lt;/td&gt;&lt;td&gt;功能&lt;/td&gt;&lt;td&gt;函数签名&lt;/td&gt;&lt;td&gt;功能&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func explode(s []byte, n int) [][]byte&lt;/td&gt;&lt;td&gt;以每个utf8字符为单位，将前n个字符对应的[]byte型组成新的slice返回&lt;/td&gt;&lt;td&gt;func explode(s string, n int) []string&lt;/td&gt;&lt;td&gt;以每个utf8字符为单位，将前n个字符对应的string型组成新的slice返回&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func countGeneric(s, sep []byte) int&lt;/td&gt;&lt;td&gt;返回s中有几个sep，若sep为空，则返回sutf8.RuneCount(s) + 1&lt;/td&gt;&lt;td&gt;func countGeneric(s, substr string) int&lt;/td&gt;&lt;td&gt;返回s中有几个substr，若substr为空，则返回sutf8.RuneCount(s) + 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Contains(b, subslice []byte) bool&lt;/td&gt;&lt;td&gt;b中是否含有subslice&lt;/td&gt;&lt;td&gt;func Contains(s, substr string) bool&lt;/td&gt;&lt;td&gt;s中是否含有substr&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ContainsAny(b []byte, chars string) bool&lt;/td&gt;&lt;td&gt;b中是否含有字符串chars&lt;/td&gt;&lt;td&gt;func ContainsAny(s, chars string) bool&lt;/td&gt;&lt;td&gt;s中是否含有字符串chars中的任意一个unicode字符&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ContainsRune(b []byte, r rune) bool&lt;/td&gt;&lt;td&gt;b中是否含有rune r&lt;/td&gt;&lt;td&gt;func ContainsRune(s string, r rune) bool&lt;/td&gt;&lt;td&gt;s中是否含有rune r&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func indexBytePortable(s []byte, c byte) int（并没有导出也没有用于内部）&lt;/td&gt;&lt;td&gt;返回s中c的位置，若不含有c，则返回-1&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndex(s, sep []byte) int&lt;/td&gt;&lt;td&gt;返回s中最后一个sep的位置，若sep为空，返回s的长度，若不含sep，则返回-1&lt;/td&gt;&lt;td&gt;func LastIndex(s, substr string) int&lt;/td&gt;&lt;td&gt;返回s中最后一个substr的位置，若substr为空，返回s的长度，若不含substr，则返回-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndexByte(s []byte, c byte) int&lt;/td&gt;&lt;td&gt;返回最后一个c的位置，没有则返回-1&lt;/td&gt;&lt;td&gt;func LastIndexByte(s string, c byte) int&lt;/td&gt;&lt;td&gt;返回最后一个c的位置，没有则返回-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func IndexRune(s []byte, r rune) int&lt;/td&gt;&lt;td&gt;返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1&lt;/td&gt;&lt;td&gt;func IndexRune(s string, r rune) int&lt;/td&gt;&lt;td&gt;返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func IndexAny(s []byte, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中第一次出现的位置&lt;/td&gt;&lt;td&gt;func IndexAny(s, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中第一次出现的位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndexAny(s []byte, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中最后一次出现的位置&lt;/td&gt;&lt;td&gt;func LastIndexAny(s, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中最后一次出现的位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func genSplit(s, sep []byte, sepSave, n int) [][]byte&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice&lt;/td&gt;&lt;td&gt;func genSplit(s, sep string, sepSave, n int) []string&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func SplitN(s, sep []byte, n int) [][]byte&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的slice组成的slice，每个划分的slice不包含sep，n小于0返回所有划分组成的slice&lt;/td&gt;&lt;td&gt;func SplitN(s, sep string, n int) []string&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的string组成的slice，每个划分的string不包含sep，n小于0返回所有划分组成的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func SplitAfterN(s, sep []byte, n int) [][]byte&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的slice组成slice，每个划分包含sep&lt;/td&gt;&lt;td&gt;func SplitAfterN(s, sep string, n int) []string&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的string组成slice，每个划分包含sep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Split(s, sep []byte) [][]byte&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的slice组成的slice，每个划分不包含sep&lt;/td&gt;&lt;td&gt;func Split(s, sep string) []string&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的string组成的slice，每个划分不包含sep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func SplitAfter(s, sep []byte) [][]byte&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的slice组成的slice，每个划分包含sep&lt;/td&gt;&lt;td&gt;func SplitAfter(s, sep string) []string&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的string组成的slice，每个划分包含sep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Fields(s []byte) [][]byte&lt;/td&gt;&lt;td&gt;按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice&lt;/td&gt;&lt;td&gt;func Fields(s string) []string&lt;/td&gt;&lt;td&gt;按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func FieldsFunc(s []byte, f func(rune) bool) [][]byte&lt;/td&gt;&lt;td&gt;如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子slice的slice&lt;/td&gt;&lt;td&gt;func FieldsFunc(s string, f func(rune) bool) []string&lt;/td&gt;&lt;td&gt;如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子string的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Join(s [][]byte, sep []byte) []byte&lt;/td&gt;&lt;td&gt;将s中的元素用sep拼接起来，返回一个新的slice&lt;/td&gt;&lt;td&gt;func Join(a []string, sep string) string &lt;/td&gt;&lt;td&gt;将s中的元素用sep拼接起来，返回一个新的string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func HasPrefix(s, prefix []byte) bool&lt;/td&gt;&lt;td&gt;判断s是否以prefix开头&lt;/td&gt;&lt;td&gt;func HasPrefix(s, prefix string) bool&lt;/td&gt;&lt;td&gt;判断s是否以prefix开头&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func HasSuffix(s, suffix []byte) bool&lt;/td&gt;&lt;td&gt;判断s是否以suffix结尾&lt;/td&gt;&lt;td&gt;func HasSuffix(s, suffix string) bool&lt;/td&gt;&lt;td&gt;判断s是否以suffix结尾&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Map(mapping func(r rune) rune, s []byte) []byte&lt;/td&gt;&lt;td&gt;将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符转为utf8存储在一个新的slice中返回&lt;/td&gt;&lt;td&gt;func Map(mapping func(rune) rune, s string) string&lt;/td&gt;&lt;td&gt;将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符存储在一个新的string中返回&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Repeat(b []byte, count int) []byte&lt;/td&gt;&lt;td&gt;重复b count次，返回新的slice&lt;/td&gt;&lt;td&gt;func Repeat(s string, count int) string&lt;/td&gt;&lt;td&gt;重复s count次，返回新的string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToUpper(s []byte) []byte&lt;/td&gt;&lt;td&gt;转为大写&lt;/td&gt;&lt;td&gt;func ToUpper(s string) string&lt;/td&gt;&lt;td&gt;转为大写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToLower(s []byte) []byte &lt;/td&gt;&lt;td&gt;转为小写&lt;/td&gt;&lt;td&gt;func ToLower(s string) string&lt;/td&gt;&lt;td&gt;转为小写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToTitle(s []byte) []byte&lt;/td&gt;&lt;td&gt;转为Title&lt;/td&gt;&lt;td&gt;func ToTitle(s string) string&lt;/td&gt;&lt;td&gt;转为Title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToUpperSpecial(c unicode.SpecialCase, s []byte) []byte&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为大写&lt;/td&gt;&lt;td&gt;func ToUpperSpecial(c unicode.SpecialCase, s string) string&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为大写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToLowerSpecial(c unicode.SpecialCase, s []byte) []byte&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为小写&lt;/td&gt;&lt;td&gt;func ToLowerSpecial(c unicode.SpecialCase, s string) string&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为小写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToTitleSpecial(c unicode.SpecialCase, s []byte) []byte&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为Title&lt;/td&gt;&lt;td&gt;func ToTitleSpecial(c unicode.SpecialCase, s string) string&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为Title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func isSeparator(r rune) bool&lt;/td&gt;&lt;td&gt;r是否可以作为一个词（unicode）的分隔符&lt;br&gt;ascii码，数字，字母，下划线不可以&lt;br&gt;非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以&lt;/td&gt;&lt;td&gt;func isSeparator(r rune) bool&lt;/td&gt;&lt;td&gt;r是否可以作为一个词（unicode）的分隔符&lt;br&gt;ascii码，数字，字母，下划线不可以&lt;br&gt;非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Title(s []byte) []byte &lt;/td&gt;&lt;td&gt;调用Map，s中非词分隔符的字符转换为Title&lt;/td&gt;&lt;td&gt;func Title(s string) string&lt;/td&gt;&lt;td&gt;调用Map，s中非词分隔符的字符转换为Title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimLeftFunc(s []byte, f func(r rune) bool) []byte&lt;/td&gt;&lt;td&gt;以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子slice&lt;/td&gt;&lt;td&gt;func TrimLeftFunc(s string, f func(rune) bool) string&lt;/td&gt;&lt;td&gt;以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimRightFunc(s []byte, f func(r rune) bool) []byte&lt;/td&gt;&lt;td&gt;以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子slice&lt;/td&gt;&lt;td&gt;func TrimRightFunc(s string, f func(rune) bool) string&lt;/td&gt;&lt;td&gt;以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimFunc(s []byte, f func(r rune) bool) []byte &lt;/td&gt;&lt;td&gt;去掉左边和去掉右边的结合体&lt;/td&gt;&lt;td&gt;func TrimFunc(s string, f func(rune) bool) string&lt;/td&gt;&lt;td&gt;去掉左边和去掉右边的结合体&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimPrefix(s, prefix []byte) []byte&lt;/td&gt;&lt;td&gt;去掉prefix后的子slice&lt;/td&gt;&lt;td&gt;func TrimPrefix(s, prefix string) string&lt;/td&gt;&lt;td&gt;去掉prefix后的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimSuffix(s, suffix []byte) []byte&lt;/td&gt;&lt;td&gt;去掉suffix后的子slice&lt;/td&gt;&lt;td&gt;func TrimSuffix(s, suffix string) string&lt;/td&gt;&lt;td&gt;去掉suffix后的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func IndexFunc(s []byte, f func(r rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中第一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func IndexFunc(s string, f func(rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中第一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndexFunc(s []byte, f func(r rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func LastIndexFunc(s string, f func(rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func indexFunc(s []byte, f func(r rune) bool, truth bool)&lt;/td&gt;&lt;td&gt;返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func indexFunc(s string, f func(rune) bool, truth bool) int&lt;/td&gt;&lt;td&gt;返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func lastIndexFunc(s []byte, f func(r rune) bool, truth bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func lastIndexFunc(s string, f func(rune) bool, truth bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func makeASCIISet(chars string) (as asciiSet, ok bool)&lt;/td&gt;&lt;td&gt;返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码&lt;br&gt;可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码&lt;br&gt;具体存储：&lt;br&gt;asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，&lt;br&gt;其中元素的位置保存了该字符（uint8）对应的高3位（c&gt;&gt;5）的信息，&lt;br&gt;元素的内容保存了每个字符低5位（1 &lt;&lt; uint(c&amp;31)）的信息，5位最大是31（11111），&lt;br&gt;刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，&lt;br&gt;这样就可以用数组的前4个元素完整表达128个ascii了&lt;/td&gt;&lt;td&gt;func makeASCIISet(chars string) (as asciiSet, ok bool)&lt;/td&gt;&lt;td&gt;返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码&lt;br&gt;可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码&lt;br&gt;具体存储：&lt;br&gt;asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，&lt;br&gt;其中元素的位置保存了该字符（uint8）对应的高3位（c&gt;&gt;5）的信息，&lt;br&gt;元素的内容保存了每个字符低5位（1 &lt;&lt; uint(c&amp;31)）的信息，5位最大是31（11111），&lt;br&gt;刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，&lt;br&gt;这样就可以用数组的前4个元素完整表达128个ascii了&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func (as *asciiSet) contains(c byte) bool&lt;/td&gt;&lt;td&gt;c是否在as中&lt;/td&gt;&lt;td&gt;func (as *asciiSet) contains(c byte) bool&lt;/td&gt;&lt;td&gt;c是否在as中&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func makeCutsetFunc(cutset string) func(r rune) bool&lt;/td&gt;&lt;td&gt;返回一个判断r是否在cutset字符串中的函数&lt;br&gt;若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数&lt;br&gt;根据cutset创建一个ascii码的集合，&lt;br&gt;如果全是ascii，则返回一个用来判断r是否在上述集合中的函数&lt;br&gt;如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数&lt;/td&gt;&lt;td&gt;func makeCutsetFunc(cutset string) func(rune) bool&lt;/td&gt;&lt;td&gt;返回一个判断r是否在cutset字符串中的函数&lt;br&gt;若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数&lt;br&gt;根据cutset创建一个ascii码的集合，&lt;br&gt;如果全是ascii，则返回一个用来判断r是否在上述集合中的函数&lt;br&gt;如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Trim(s []byte, cutset string) []byte&lt;/td&gt;&lt;td&gt;将s左右两端连续属于cutset的rune字符去除，保留中间的子slice&lt;/td&gt;&lt;td&gt;func Trim(s string, cutset string) string&lt;/td&gt;&lt;td&gt;将s左右两端连续属于cutset的rune字符去除，保留中间的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimLeft(s []byte, cutset string) []byte&lt;/td&gt;&lt;td&gt;将s左边连续属于cutset的rune字符去除，返回剩下的子slice&lt;/td&gt;&lt;td&gt;func TrimLeft(s string, cutset string) string&lt;/td&gt;&lt;td&gt;将s左边连续属于cutset的rune字符去除，返回剩下的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimRight(s []byte, cutset string) []byte&lt;/td&gt;&lt;td&gt;将s右边连续属于cutset的rune字符去除，返回剩下的子slice&lt;/td&gt;&lt;td&gt;func TrimRight(s string, cutset string) string&lt;/td&gt;&lt;td&gt;将s右边连续属于cutset的rune字符去除，返回剩下的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimSpace(s []byte) []byte&lt;/td&gt;&lt;td&gt;去除s左右两端的whitespce，保留剩下的子slice&lt;/td&gt;&lt;td&gt;func TrimSpace(s string) string&lt;/td&gt;&lt;td&gt;去除s左右两端的whitespce，保留剩下的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Runes(s []byte) []rune&lt;/td&gt;&lt;td&gt;返回s对应的rune类型的slice&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Replace(s, old, new []byte, n int) []byte&lt;/td&gt;&lt;td&gt;将s中前n个old替换成new，返回一个新的slice，n为负数或者n&gt;old个数时，替换所有old&lt;/td&gt;&lt;td&gt;func Replace(s, old, new string, n int) string&lt;/td&gt;&lt;td&gt;将s中前n个old替换成new，返回一个新的string，n为负数或者n&gt;old个数时，替换所有old&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func EqualFold(s, t []byte) bool&lt;/td&gt;&lt;td&gt;判断s和t在不区分大小写（包括unicode case）的情况下是否相等&lt;/td&gt;&lt;td&gt;func EqualFold(s, t string) bool&lt;/td&gt;&lt;td&gt;判断s和t在不区分大小写（包括unicode case）的情况下是否相等&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func indexRabinKarp(s, sep []byte) int&lt;/td&gt;&lt;td&gt;返回第一个sep在s中的位置&lt;br&gt;Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。&lt;br&gt;Rabin-Karp算法的思想：&lt;br&gt;假设待匹配字符串的长度为M，目标字符串的长度为N（N&gt;M）；&lt;br&gt;首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；&lt;br&gt;比较前面计算的两个hash值，比较次数N-M+1：&lt;br&gt;若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值&lt;br&gt;若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；&lt;/td&gt;&lt;td&gt;func indexRabinKarp(s, substr string) int&lt;/td&gt;&lt;td&gt;返回第一个sep在s中的位置&lt;br&gt;Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。&lt;br&gt;Rabin-Karp算法的思想：&lt;br&gt;假设待匹配字符串的长度为M，目标字符串的长度为N（N&gt;M）；&lt;br&gt;首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；&lt;br&gt;比较前面计算的两个hash值，比较次数N-M+1：&lt;br&gt;若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值&lt;br&gt;若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func hashStr(sep []byte) (uint32, uint32)&lt;/td&gt;&lt;td&gt;计算sep的hash，用于Rabin-Karp算法&lt;/td&gt;&lt;td&gt;func hashStr(sep string) (uint32, uint32)&lt;/td&gt;&lt;td&gt;计算sep的hash，用于Rabin-Karp算法&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;func hashStrRev(sep string) (uint32, uint32)&lt;/td&gt;&lt;td&gt;计算reverse(sep)的hash，用于Rabin-Karp算法&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description>
-    </item>
-    
-    <item>
-      <title>The Go Programming Language Ex（11）</title>
-      <link>https://mooncaker816.github.io/2018/01/04/the-go-programming-language-ex11/</link>
-      <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/01/04/the-go-programming-language-ex11/</guid>
-      <description>&lt;h3 id=&#34;ex-9-1&#34;&gt;Ex 9.1&lt;/h3&gt;
-
-&lt;p&gt;Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The result should indicate whether the transaction succeeded or failed due to insufﬁcient funds. The message sent to the monitor goroutine must contain both the amount to withdraw and a new channel over which the monitor goroutine can send the boolean result back to Withdraw.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-package bank_test
-
-import (
-	&amp;quot;fmt&amp;quot;
-	&amp;quot;testing&amp;quot;
-
-	&amp;quot;The_Go_Programming_Language_Exercises/CH9/ex9.1&amp;quot;
-)
-
-func TestBank(t *testing.T) {
-	done := make(chan struct{})
-
-	// Alice
-	go func() {
-		bank.Deposit(200)
-		fmt.Println(&amp;quot;=&amp;quot;, bank.Balance())
-		done &amp;lt;- struct{}{}
-	}()
-
-	// Bob
-	go func() {
-		bank.Deposit(100)
-		done &amp;lt;- struct{}{}
-	}()
-
-	go func() {
-		fmt.Println(bank.Withdraw(500))
-		done &amp;lt;- struct{}{}
-	}()
-
-	// Wait for both transactions.
-	&amp;lt;-done
-	&amp;lt;-done
-	&amp;lt;-done
-
-	if got, want := bank.Balance(), 300; got != want {
-		t.Errorf(&amp;quot;Balance = %d, want %d&amp;quot;, got, want)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-9-2&#34;&gt;Ex 9.2&lt;/h3&gt;
-
-&lt;p&gt;Rewrite the PopCount example from Section 2.6.2 so that it initializes the l table using sync.Once the ﬁrst time it is needed. (Realistically, the cost of synchronization would be prohibitive for a small and highly optimized function like PopCount.)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 45.
-
-// (Package doc comment intentionally malformed to demonstrate golint.)
-//!+
-package popcount
-
-import &amp;quot;sync&amp;quot;
-
-// pc[i] is the population count of i.
-var pc [256]byte
-var loadpcOnce sync.Once
-
-//func init() {
-//	for i := range pc {
-//		pc[i] = pc[i/2] + byte(i&amp;amp;1)
-//	}
-//}
-
-// PopCount returns the population count (number of set bits) of x.
-func PopCount(x uint64) int {
-	loadpcOnce.Do(loadpc)
-	return int(pc[byte(x&amp;gt;&amp;gt;(0*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(1*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(2*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(3*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(4*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(5*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(6*8))] +
-		pc[byte(x&amp;gt;&amp;gt;(7*8))])
-}
-
-func loadpc() {
-	for i := range pc {
-		pc[i] = pc[i/2] + byte(i&amp;amp;1)
-	}
-}
-
-//!-
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;ex-9-3&#34;&gt;Ex 9.3&lt;/h3&gt;
-
-&lt;p&gt;Extend the Func type and the (*Memo).Get method so that callers may provide an optional done channel through which they can cancel the operation (§8.9). The results of a cancelled Func call should not be cached.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Copyright © 2016 Alan A. A. Donovan &amp;amp; Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 278.
-
-// Package memo provides a concurrency-safe non-blocking memoization
-// of a function.  Requests for different keys proceed in parallel.
-// Concurrent requests for the same key block until the first completes.
-// This implementation uses a monitor goroutine.
-package memo
-
-import &amp;quot;errors&amp;quot;
-import &amp;quot;time&amp;quot;
-
-//!+Func
-
-// Func is the type of the function to memoize.
-type Func func(key string) (interface{}, error)
-
-// A result is the result of calling a Func.
-type result struct {
-	value interface{}
-	err   error
-}
-
-type entry struct {
-	res   result
-	ready chan struct{} // closed when res is ready
-}
-
-//!-Func
-
-//!+get
-
-// A request is a message requesting that the Func be applied to key.
-type request struct {
-	key      string
-	response chan&amp;lt;- result // the client wants a single result
-}
-
-type Memo struct{ requests chan request }
-
-// New returns a memoization of f.  Clients must subsequently call Close.
-func New(f Func) *Memo {
-	memo := &amp;amp;Memo{requests: make(chan request)}
-	go memo.server(f)
-	return memo
-}
-
-func (memo *Memo) Get(key string) (interface{}, error) {
-	response := make(chan result)
-	memo.requests &amp;lt;- request{key, response}
-	res := &amp;lt;-response
-	return res.value, res.err
-}
-
-func (memo *Memo) Close() { close(memo.requests) }
-
-//!-get
-
-//!+monitor
-
-func (memo *Memo) server(f Func) {
-	var done = make(chan struct{})
-	// Cancel traversal when input is detected.
-	go func() {
-		//os.Stdin.Read(make([]byte, 1)) // read a single byte
-		time.Sleep(300 * time.Millisecond)
-		close(done)
-	}()
-	cancelled := func() bool {
-		select {
-		case &amp;lt;-done:
-			return true
-		default:
-			return false
-		}
-	}
-	cache := make(map[string]*entry)
-	for req := range memo.requests {
-		if cancelled() {
-			//close(memo.requests)
-			break
-		}
-		e := cache[req.key]
-		if e == nil {
-			// This is the first request for this key.
-			e = &amp;amp;entry{ready: make(chan struct{})}
-			cache[req.key] = e
-			go e.call(f, req.key) // call f(key)
-			if cancelled() {
-				delete(cache, req.key)
-			}
-		}
-		go e.deliver(req.response, done)
-	}
-}
-
-func (e *entry) call(f Func, key string) {
-	// Evaluate the function.
-	e.res.value, e.res.err = f(key)
-	// Broadcast the ready condition.
-	close(e.ready)
-}
-
-func (e *entry) deliver(response chan&amp;lt;- result, done &amp;lt;-chan struct{}) {
-	// Wait for the ready condition.
-	select {
-	case &amp;lt;-e.ready:
-		response &amp;lt;- e.res
-	case &amp;lt;-done:
-		response &amp;lt;- result{nil, errors.New(&amp;quot;request cancelled&amp;quot;)}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>
