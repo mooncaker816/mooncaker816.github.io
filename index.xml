@@ -11,6 +11,308 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法11</title>
+      <link>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9511/</link>
+      <pubDate>Sat, 19 May 2018 15:04:04 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9511/</guid>
+      <description>&lt;h1 id=&#34;第十三章-坐标的转换-transformation-of-coordinates&#34;&gt;第十三章 坐标的转换 Transformation of Coordinates&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-天球坐标系统&#34;&gt;1. 天球坐标系统&lt;/h2&gt;
+
+&lt;p&gt;　　天球坐标系统，是天文学上用来描绘天体在天球上位置的坐标系统。有许多不同的坐标系统都使用球面坐标投影在天球上，类似于使用在地球表面的地理坐标系统。这些坐标系统的不同处只在用来将天空分割成两个相等半球的大圆，也就是基面的不同。例如，地理坐标系统的基面是地球的赤道。每个坐标系统的命名都是依据其所选择的基面。&lt;/p&gt;
+
+&lt;p&gt;\begin{array}{c|ccc}
+坐标系统 &amp;amp; 基面 &amp;amp; 极 &amp;amp; 坐标 \\&lt;br /&gt;
+\hline
+地平 &amp;amp; 地平面 &amp;amp; 天顶/天底 &amp;amp; 高度（也称为仰角） - 方位 - 子午圈 \\&lt;br /&gt;
+赤道 &amp;amp; 天球赤道 &amp;amp; 天极 &amp;amp; 赤纬 - 赤经或时角 \\&lt;br /&gt;
+黄道 &amp;amp; 黄道 &amp;amp; 黄极 &amp;amp; 黄纬 - 黄经 \\&lt;br /&gt;
+银河 &amp;amp; 银河平面 &amp;amp; 银极 &amp;amp; 银经 - 银纬 \\&lt;br /&gt;
+超星系 &amp;amp; 超星系平面 &amp;amp;  &amp;amp;  \\&lt;br /&gt;
+\end{array}&lt;/p&gt;
+
+&lt;h2 id=&#34;2-地平坐标系&#34;&gt;2. 地平坐标系&lt;/h2&gt;
+
+&lt;p&gt;　　地平坐标系，又作地平座标系，是天球坐标系统中的一种，以观测者所在地为中心点，所在地的地平线作为基础平面，将天球适当的分成能看见的上半球和看不见（被地球本身遮蔽）的下半球。上半球的顶点（最高点）称为天顶，下半球的顶点（最低点）称为地底。&lt;/p&gt;
+
+&lt;p&gt;地平坐标系统是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;高度角（Altitude, Alt）或仰角又称地平纬度，是天体和观测者所在地的地平线的夹角，有时就称为高度或海拔标高（elevation, geometric height）。&lt;/li&gt;
+&lt;li&gt;方位角（Azimuth, Az）又称地平经度，是沿着地平线测量的角度（由正北方为起点向东方测量）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因此地平坐标系有时也被称为高度/方位（Alt/Az）坐标系统。
+&lt;img src=&#34;https://kotobank.jp/image/dictionary/daijisen/media/103135.jpg&#34; alt=&#34;地平坐标系&#34; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注：方位角的测量可以从北点向东测量，也可从南点向西测量，两者相差180°。天文学家习惯从南点开始测量。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;3-赤道坐标系&#34;&gt;3. 赤道坐标系&lt;/h2&gt;
+
+&lt;p&gt;　　赤道坐标系统，又作赤道座标系统，大概是使用得最广泛的天球坐标系统，他的元素是:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;赤纬Declination（ $\delta$ ）&lt;/li&gt;
+&lt;li&gt;赤经Right ascension（ $\alpha$ ）－也记为RA&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　他与地理坐标系统非常相似，因为两者使用相同的基准平面和相同的极点。地球的赤道在天球上的投影就称为天球赤道，相同的，地理极点在天球上的投影就是天极。&lt;/p&gt;
+
+&lt;p&gt;他有两种变化：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;时角系统像地理坐标系统一样，被固定在地球的表面上。&lt;/li&gt;
+&lt;li&gt;赤经系统被固定于恒星上(实际上并非如此，请参考岁差和章动)。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因此，在经过一夜或数个夜晚，就能看出来星星在天空中的位置移动了，当然，这并非恒星在天球上的运动，只是地球运动造成的。因为岁差和章动的影响，在相当长的时间间隔下所做的观测，就必须注明所使用的特殊历元，为行星、恒星、星系等等的位置做记录。现在使用的历元是J2000.0分点，稍早期使用的是B1950.0分点。&lt;/p&gt;
+
+&lt;p&gt;赤道坐标系统中与纬度相似的值是赤纬(缩写为Dec.)，是天体在天球赤道上方或下方的角度。与经度对应的是赤经(缩写为RA)，是与春分点的角度距离，不同于经度的是赤经以时、分、秒为单位，而非度、分、秒。因为地球的运动造成赤道坐标系统的视运动，就会造成恒星时和时角的相对变化。将天球运转一周的时间定为24小时，所以每小时天球会转动15度(360º / 24h = 15)。&lt;/p&gt;
+
+&lt;p&gt;赤道坐标系统也是赤道仪上很普通的设备，也就是定位圈。定位圈与星图或星历表上的位置结合，可以让赤道仪很容易的指向已知天体在天球上的位置。
+&lt;img src=&#34;https://kotobank.jp/image/dictionary/daijisen/media/103123.jpg&#34; alt=&#34;赤道坐标系&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;4-黄道坐标系&#34;&gt;4. 黄道坐标系&lt;/h2&gt;
+
+&lt;p&gt;黄道是由地球上观察太阳一年中在天球上的视运动所通过的路径，若以地球“不动”作参照的话就是太阳绕地球公转的轨道平面（黄道面）在天球上的投影。&lt;/p&gt;
+
+&lt;p&gt;黄道与天赤道相交于两点：春分点与秋分点（这两点称二分点）；而黄道对应的两个几何极是北黄极（在天龙座）、与南黄极 (在剑鱼座)。&lt;/p&gt;
+
+&lt;p&gt;在黄道上与黄道平行的小圆称黄纬，符号β，以由黄道面向北黄极方向为正值（0°至90°），向南黄极方向则为负值。垂直黄道的经度称黄经，符号为λ，由春分点起由西向东量度（0°至360°）。像赤道坐标系中的赤经一样，以春分点做为黄经的起点。&lt;/p&gt;
+
+&lt;p&gt;因为地轴有进动现象，此坐标系的两个黄极亦会因岁差影响而使坐标数值逐渐移动，计算时必须说明坐标系参照的历元。现常采用的是J2000.0历元（之前的出版物多以B1950.0历元），在天文年历这类精度较高的刊物中，则参考当天或当月之瞬时分点计算。&lt;/p&gt;
+
+&lt;p&gt;此坐标系特别适合标示太阳系内天体的位置，大多数行星（水星和冥王星除外）与许多小行星轨道平面与黄道的倾角都很小，故其黄纬值（β）都不大。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://kotobank.jp/image/dictionary/daijisen/media/103079.jpg&#34; alt=&#34;黄道坐标系&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;5-坐标系转换&#34;&gt;5. 坐标系转换&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;$λ$和$β$代表黄经和黄纬&lt;/li&gt;
+&lt;li&gt;$α$和$δ$代表赤经和赤纬&lt;/li&gt;
+&lt;li&gt;$φ,A,h$代表观察者纬度，方位角，和仰角，其中默认A从南点向西测量&lt;/li&gt;
+&lt;li&gt;$ε$黄赤交角&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注：如果给定的为视坐标，在转换为本地地平坐标时要先将视赤经（时角）转换为本地时角。&lt;br /&gt;
+例如：如果θ是本地恒星时，$θ_0$ 是格林尼治恒星时，L 是观者站经度（从格林尼治向西为正，东为负），那么本地时角为$ θ - α 或 θ_0 - L – α$&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;5-1-赤道转黄道-α-δ-rightarrow-λ-β&#34;&gt;5.1 赤道转黄道($α,δ\  \Rightarrow\  λ,β$)&lt;/h3&gt;
+
+&lt;p&gt;\begin{align}
+\sin β &amp;amp;=\cos ε\sin δ-\sin α\cos δ\sin ε\\[2ex]
+\cos λ\cos β &amp;amp;=\cos α\cos δ\\[2ex]
+\sin λ\cos β &amp;amp;=\sin ε\sin δ+\sin α\cos δ\cos ε
+\end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Obliquity represents the obliquity of the ecliptic.
+// 黄赤交角对应的 sin,cos 值
+type Obliquity struct {
+	S, C float64 // sine and cosine of obliquity
+}
+
+// NewObliquity constructs a new Obliquity.
+//
+// Struct members are initialized from the given value ε of the obliquity of
+// the ecliptic.
+// 计算黄赤交角对应的 sin,cos 值
+func NewObliquity(ε unit.Angle) *Obliquity {
+	r := &amp;amp;Obliquity{}
+	r.S, r.C = ε.Sincos()
+	return r
+}
+
+// Ecliptic coordinates are referenced to the plane of the ecliptic.
+// 黄道坐标结构
+type Ecliptic struct {
+	Lon unit.Angle // Longitude (λ)黄经
+	Lat unit.Angle // Latitude (β)黄纬
+}
+
+// EqToEcl converts equatorial coordinates to ecliptic coordinates.
+// 赤道转黄道
+func (ecl *Ecliptic) EqToEcl(eq *Equatorial, ε *Obliquity) *Ecliptic {
+	ecl.Lon, ecl.Lat = EqToEcl(eq.RA, eq.Dec, ε.S, ε.C)
+	return ecl
+}
+
+// EqToEcl converts equatorial coordinates to ecliptic coordinates.
+//
+//	α: right ascension coordinate to transform
+//	δ: declination coordinate to transform
+//	sε: sine of obliquity of the ecliptic
+//	cε: cosine of obliquity of the ecliptic
+//
+// Results:
+//
+//	λ: ecliptic longitude黄经
+//	β: ecliptic latitude黄纬
+//  赤道转黄道
+func EqToEcl(α unit.RA, δ unit.Angle, sε, cε float64) (λ, β unit.Angle) {
+	sα, cα := α.Sincos()
+	sδ, cδ := δ.Sincos()
+	λ = unit.Angle(math.Atan2(sα*cε+(sδ/cδ)*sε, cα)) // (13.1) p. 93
+	β = unit.Angle(math.Asin(sδ*cε - cδ*sε*sα))      // (13.2) p. 93
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-2-黄道转赤道-λ-β-rightarrow-α-δ&#34;&gt;5.2 黄道转赤道($λ,β\  \Rightarrow\  α,δ$)&lt;/h3&gt;
+
+&lt;p&gt;\begin{align}
+\sin δ &amp;amp;=\sin ε\sin λ\cos β+\cos ε\sin β\\[2ex]
+\cos α\cos δ &amp;amp;=\cos λ\cos β\\[2ex]
+\sin α\cos δ &amp;amp;=\cos ε\sin λ\cos β-\sin ε\sin β
+\end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Equatorial coordinates are referenced to the Earth&#39;s rotational axis.
+// 赤道坐标结构
+type Equatorial struct {
+	RA  unit.RA    // Right ascension (α)赤经（时角）
+	Dec unit.Angle // Declination (δ)赤纬
+}
+
+// EclToEq converts ecliptic coordinates to equatorial coordinates.
+// 黄道转赤道
+func (eq *Equatorial) EclToEq(ecl *Ecliptic, ε *Obliquity) *Equatorial {
+	eq.RA, eq.Dec = EclToEq(ecl.Lon, ecl.Lat, ε.S, ε.C)
+	return eq
+}
+
+// EclToEq converts ecliptic coordinates to equatorial coordinates.
+//
+//	λ: ecliptic longitude coordinate to transform
+//	β: ecliptic latitude coordinate to transform
+//	sε: sine of obliquity of the ecliptic
+//	cε: cosine of obliquity of the ecliptic
+//
+// Results:
+//	α: right ascension赤经（时角）
+//	δ: declination赤纬
+// 黄道转赤道
+func EclToEq(λ, β unit.Angle, sε, cε float64) (α unit.RA, δ unit.Angle) {
+	sλ, cλ := λ.Sincos()
+	sβ, cβ := β.Sincos()
+	α = unit.RAFromRad(math.Atan2(sλ*cε-(sβ/cβ)*sε, cλ)) // (13.3) p. 93
+	δ = unit.Angle(math.Asin(sβ*cε + cβ*sε*sλ))          // (13.4) p. 93
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-3-地平转赤道-φ-a-h-rightarrow-α-δ&#34;&gt;5.3 地平转赤道($φ,A,h\  \Rightarrow\  α,δ$)&lt;/h3&gt;
+
+&lt;p&gt;\begin{align}
+\sin δ &amp;amp;=\sin φ\sin h-\cos φ\cos h\cos A\\[2ex]
+\cos δ\cos α &amp;amp;=-\cos φ\sin h-\sin φ\cos h\cos A\\[2ex]
+\cos δ\sin α &amp;amp;=-\sin A\cos h
+\end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// HzToEq transforms horizontal coordinates to equatorial coordinates.
+//
+// Sidereal time st must be consistent with the equatorial coordinates
+// in the sense that if coordinates are apparent, sidereal time must be
+// apparent as well.
+// 地平转赤道
+func (eq *Equatorial) HzToEq(hz *Horizontal, g globe.Coord, st unit.Time) *Equatorial {
+	eq.RA, eq.Dec = HzToEq(hz.Az, hz.Alt, g.Lat, g.Lon, st)
+	return eq
+}
+
+// HzToEq transforms horizontal coordinates to equatorial coordinates.
+//
+//	A: azimuth方位角
+//	h: elevation仰角
+//	φ: latitude of observer on Earth观测纬度
+//	ψ: longitude of observer on Earth观测经度
+//	st: sidereal time at Greenwich at time of observation.恒星时
+//
+// Sidereal time must be consistent with the equatorial coordinates
+// in the sense that tf coordinates are apparent, sidereal time must be
+// apparent as well.
+// 恒星时必须和所给条件保持一致
+//
+// Results:
+//
+//	α: right ascension赤经（时角）
+//	δ: declination赤纬
+// 地平转赤道
+func HzToEq(A, h, φ, ψ unit.Angle, st unit.Time) (α unit.RA, δ unit.Angle) {
+	sA, cA := A.Sincos()
+	sh, ch := h.Sincos()
+	sφ, cφ := φ.Sincos()
+	H := math.Atan2(sA, cA*sφ+sh/ch*cφ)
+	α = unit.RAFromRad(st.Rad() - ψ.Rad() - H)
+	δ = unit.Angle(math.Asin(sφ*sh - cφ*ch*cA))
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-4-赤道转地平-φ-α-δ-rightarrow-a-h&#34;&gt;5.4 赤道转地平($φ,α,δ\  \Rightarrow\  A,h$)&lt;/h3&gt;
+
+&lt;p&gt;\begin{align}
+\sin h &amp;amp;= \sin φ\sin δ+\cos φ\cos δ\cos α\\[2ex]
+\cos A\cos h &amp;amp;=-\cos φ\sin δ+\sin φ\cos δ\cos α\\[2ex]
+\sin A\cos h &amp;amp;=\cos δ\sin α
+\end{align}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Horizontal coordinates are referenced to the local horizon of an observer
+// on the surface of the Earth.
+// 地平坐标结构
+type Horizontal struct {
+	Az  unit.Angle // Azimuth (A)方位角
+	Alt unit.Angle // Altitude (h)仰角
+}
+
+// EqToHz computes Horizontal coordinates from equatorial coordinates.
+//
+// Argument g is the location of the observer on the Earth.  Argument st
+// is the sidereal time at Greenwich.
+//
+// Sidereal time must be consistent with the equatorial coordinates.
+// If coordinates are apparent, sidereal time must be apparent as well.
+// 赤道转地平
+func (hz *Horizontal) EqToHz(eq *Equatorial, g *globe.Coord, st unit.Time) *Horizontal {
+	hz.Az, hz.Alt = EqToHz(eq.RA, eq.Dec, g.Lat, g.Lon, st)
+	return hz
+}
+
+// EqToHz computes Horizontal coordinates from equatorial coordinates.
+//
+//	α: right ascension coordinate to transform
+//	δ: declination coordinate to transform
+//	φ: latitude of observer on Earth
+//	ψ: longitude of observer on Earth
+//	st: sidereal time at Greenwich at time of observation.
+//
+// Sidereal time must be consistent with the equatorial coordinates.
+// If coordinates are apparent, sidereal time must be apparent as well.
+//
+// Results:
+//
+//	A: azimuth of observed point, measured westward from the South.
+//	h: elevation, or height of observed point above horizon.
+// 赤道转地平
+func EqToHz(α unit.RA, δ, φ, ψ unit.Angle, st unit.Time) (A, h unit.Angle) {
+	H := st.Rad() - ψ.Rad() - α.Rad()
+	sH, cH := math.Sincos(H)
+	sφ, cφ := φ.Sincos()
+	sδ, cδ := δ.Sincos()
+	A = unit.Angle(math.Atan2(sH, cH*sφ-(sδ/cδ)*cφ)) // (13.5) p. 93
+	h = unit.Angle(math.Asin(sφ*sδ + cφ*cδ*cH))      // (13.6) p. 93
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法10</title>
       <link>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9510/</link>
       <pubDate>Sat, 19 May 2018 09:20:12 +0800</pubDate>
@@ -3073,19 +3375,6 @@ drwxr-xr-x   1 root root  4096 Apr  2 18:38 var
 &lt;p&gt;权限设置：rwxr-xr-x (拥有者权限 rwx，所属组权限r-x，其他权限r-x)&lt;/p&gt;
 
 &lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177514&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;</description>
-    </item>
-    
-    <item>
-      <title>Go 标准库学习</title>
-      <link>https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/</link>
-      <pubDate>Sun, 14 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/</guid>
-      <description>&lt;h3 id=&#34;bytes和strings函数比对&#34;&gt;bytes和strings函数比对&lt;/h3&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;table&gt;&lt;tr&gt;&lt;td&gt;bytes&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;strings&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;函数签名&lt;/td&gt;&lt;td&gt;功能&lt;/td&gt;&lt;td&gt;函数签名&lt;/td&gt;&lt;td&gt;功能&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func explode(s []byte, n int) [][]byte&lt;/td&gt;&lt;td&gt;以每个utf8字符为单位，将前n个字符对应的[]byte型组成新的slice返回&lt;/td&gt;&lt;td&gt;func explode(s string, n int) []string&lt;/td&gt;&lt;td&gt;以每个utf8字符为单位，将前n个字符对应的string型组成新的slice返回&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func countGeneric(s, sep []byte) int&lt;/td&gt;&lt;td&gt;返回s中有几个sep，若sep为空，则返回sutf8.RuneCount(s) + 1&lt;/td&gt;&lt;td&gt;func countGeneric(s, substr string) int&lt;/td&gt;&lt;td&gt;返回s中有几个substr，若substr为空，则返回sutf8.RuneCount(s) + 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Contains(b, subslice []byte) bool&lt;/td&gt;&lt;td&gt;b中是否含有subslice&lt;/td&gt;&lt;td&gt;func Contains(s, substr string) bool&lt;/td&gt;&lt;td&gt;s中是否含有substr&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ContainsAny(b []byte, chars string) bool&lt;/td&gt;&lt;td&gt;b中是否含有字符串chars&lt;/td&gt;&lt;td&gt;func ContainsAny(s, chars string) bool&lt;/td&gt;&lt;td&gt;s中是否含有字符串chars中的任意一个unicode字符&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ContainsRune(b []byte, r rune) bool&lt;/td&gt;&lt;td&gt;b中是否含有rune r&lt;/td&gt;&lt;td&gt;func ContainsRune(s string, r rune) bool&lt;/td&gt;&lt;td&gt;s中是否含有rune r&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func indexBytePortable(s []byte, c byte) int（并没有导出也没有用于内部）&lt;/td&gt;&lt;td&gt;返回s中c的位置，若不含有c，则返回-1&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndex(s, sep []byte) int&lt;/td&gt;&lt;td&gt;返回s中最后一个sep的位置，若sep为空，返回s的长度，若不含sep，则返回-1&lt;/td&gt;&lt;td&gt;func LastIndex(s, substr string) int&lt;/td&gt;&lt;td&gt;返回s中最后一个substr的位置，若substr为空，返回s的长度，若不含substr，则返回-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndexByte(s []byte, c byte) int&lt;/td&gt;&lt;td&gt;返回最后一个c的位置，没有则返回-1&lt;/td&gt;&lt;td&gt;func LastIndexByte(s string, c byte) int&lt;/td&gt;&lt;td&gt;返回最后一个c的位置，没有则返回-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func IndexRune(s []byte, r rune) int&lt;/td&gt;&lt;td&gt;返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1&lt;/td&gt;&lt;td&gt;func IndexRune(s string, r rune) int&lt;/td&gt;&lt;td&gt;返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func IndexAny(s []byte, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中第一次出现的位置&lt;/td&gt;&lt;td&gt;func IndexAny(s, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中第一次出现的位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndexAny(s []byte, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中最后一次出现的位置&lt;/td&gt;&lt;td&gt;func LastIndexAny(s, chars string) int&lt;/td&gt;&lt;td&gt;返回chars中任意一个unicode字符在s中最后一次出现的位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func genSplit(s, sep []byte, sepSave, n int) [][]byte&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice&lt;/td&gt;&lt;td&gt;func genSplit(s, sep string, sepSave, n int) []string&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func SplitN(s, sep []byte, n int) [][]byte&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的slice组成的slice，每个划分的slice不包含sep，n小于0返回所有划分组成的slice&lt;/td&gt;&lt;td&gt;func SplitN(s, sep string, n int) []string&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的string组成的slice，每个划分的string不包含sep，n小于0返回所有划分组成的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func SplitAfterN(s, sep []byte, n int) [][]byte&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的slice组成slice，每个划分包含sep&lt;/td&gt;&lt;td&gt;func SplitAfterN(s, sep string, n int) []string&lt;/td&gt;&lt;td&gt;按sep划分s，返回前n个划分的string组成slice，每个划分包含sep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Split(s, sep []byte) [][]byte&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的slice组成的slice，每个划分不包含sep&lt;/td&gt;&lt;td&gt;func Split(s, sep string) []string&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的string组成的slice，每个划分不包含sep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func SplitAfter(s, sep []byte) [][]byte&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的slice组成的slice，每个划分包含sep&lt;/td&gt;&lt;td&gt;func SplitAfter(s, sep string) []string&lt;/td&gt;&lt;td&gt;返回所有的由sep划分的string组成的slice，每个划分包含sep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Fields(s []byte) [][]byte&lt;/td&gt;&lt;td&gt;按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice&lt;/td&gt;&lt;td&gt;func Fields(s string) []string&lt;/td&gt;&lt;td&gt;按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func FieldsFunc(s []byte, f func(rune) bool) [][]byte&lt;/td&gt;&lt;td&gt;如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子slice的slice&lt;/td&gt;&lt;td&gt;func FieldsFunc(s string, f func(rune) bool) []string&lt;/td&gt;&lt;td&gt;如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子string的slice&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Join(s [][]byte, sep []byte) []byte&lt;/td&gt;&lt;td&gt;将s中的元素用sep拼接起来，返回一个新的slice&lt;/td&gt;&lt;td&gt;func Join(a []string, sep string) string &lt;/td&gt;&lt;td&gt;将s中的元素用sep拼接起来，返回一个新的string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func HasPrefix(s, prefix []byte) bool&lt;/td&gt;&lt;td&gt;判断s是否以prefix开头&lt;/td&gt;&lt;td&gt;func HasPrefix(s, prefix string) bool&lt;/td&gt;&lt;td&gt;判断s是否以prefix开头&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func HasSuffix(s, suffix []byte) bool&lt;/td&gt;&lt;td&gt;判断s是否以suffix结尾&lt;/td&gt;&lt;td&gt;func HasSuffix(s, suffix string) bool&lt;/td&gt;&lt;td&gt;判断s是否以suffix结尾&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Map(mapping func(r rune) rune, s []byte) []byte&lt;/td&gt;&lt;td&gt;将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符转为utf8存储在一个新的slice中返回&lt;/td&gt;&lt;td&gt;func Map(mapping func(rune) rune, s string) string&lt;/td&gt;&lt;td&gt;将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符存储在一个新的string中返回&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Repeat(b []byte, count int) []byte&lt;/td&gt;&lt;td&gt;重复b count次，返回新的slice&lt;/td&gt;&lt;td&gt;func Repeat(s string, count int) string&lt;/td&gt;&lt;td&gt;重复s count次，返回新的string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToUpper(s []byte) []byte&lt;/td&gt;&lt;td&gt;转为大写&lt;/td&gt;&lt;td&gt;func ToUpper(s string) string&lt;/td&gt;&lt;td&gt;转为大写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToLower(s []byte) []byte &lt;/td&gt;&lt;td&gt;转为小写&lt;/td&gt;&lt;td&gt;func ToLower(s string) string&lt;/td&gt;&lt;td&gt;转为小写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToTitle(s []byte) []byte&lt;/td&gt;&lt;td&gt;转为Title&lt;/td&gt;&lt;td&gt;func ToTitle(s string) string&lt;/td&gt;&lt;td&gt;转为Title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToUpperSpecial(c unicode.SpecialCase, s []byte) []byte&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为大写&lt;/td&gt;&lt;td&gt;func ToUpperSpecial(c unicode.SpecialCase, s string) string&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为大写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToLowerSpecial(c unicode.SpecialCase, s []byte) []byte&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为小写&lt;/td&gt;&lt;td&gt;func ToLowerSpecial(c unicode.SpecialCase, s string) string&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为小写&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func ToTitleSpecial(c unicode.SpecialCase, s []byte) []byte&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为Title&lt;/td&gt;&lt;td&gt;func ToTitleSpecial(c unicode.SpecialCase, s string) string&lt;/td&gt;&lt;td&gt;只将SpecialCase范围里的字符转为Title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func isSeparator(r rune) bool&lt;/td&gt;&lt;td&gt;r是否可以作为一个词（unicode）的分隔符&lt;br&gt;ascii码，数字，字母，下划线不可以&lt;br&gt;非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以&lt;/td&gt;&lt;td&gt;func isSeparator(r rune) bool&lt;/td&gt;&lt;td&gt;r是否可以作为一个词（unicode）的分隔符&lt;br&gt;ascii码，数字，字母，下划线不可以&lt;br&gt;非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Title(s []byte) []byte &lt;/td&gt;&lt;td&gt;调用Map，s中非词分隔符的字符转换为Title&lt;/td&gt;&lt;td&gt;func Title(s string) string&lt;/td&gt;&lt;td&gt;调用Map，s中非词分隔符的字符转换为Title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimLeftFunc(s []byte, f func(r rune) bool) []byte&lt;/td&gt;&lt;td&gt;以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子slice&lt;/td&gt;&lt;td&gt;func TrimLeftFunc(s string, f func(rune) bool) string&lt;/td&gt;&lt;td&gt;以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimRightFunc(s []byte, f func(r rune) bool) []byte&lt;/td&gt;&lt;td&gt;以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子slice&lt;/td&gt;&lt;td&gt;func TrimRightFunc(s string, f func(rune) bool) string&lt;/td&gt;&lt;td&gt;以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimFunc(s []byte, f func(r rune) bool) []byte &lt;/td&gt;&lt;td&gt;去掉左边和去掉右边的结合体&lt;/td&gt;&lt;td&gt;func TrimFunc(s string, f func(rune) bool) string&lt;/td&gt;&lt;td&gt;去掉左边和去掉右边的结合体&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimPrefix(s, prefix []byte) []byte&lt;/td&gt;&lt;td&gt;去掉prefix后的子slice&lt;/td&gt;&lt;td&gt;func TrimPrefix(s, prefix string) string&lt;/td&gt;&lt;td&gt;去掉prefix后的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimSuffix(s, suffix []byte) []byte&lt;/td&gt;&lt;td&gt;去掉suffix后的子slice&lt;/td&gt;&lt;td&gt;func TrimSuffix(s, suffix string) string&lt;/td&gt;&lt;td&gt;去掉suffix后的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func IndexFunc(s []byte, f func(r rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中第一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func IndexFunc(s string, f func(rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中第一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func LastIndexFunc(s []byte, f func(r rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func LastIndexFunc(s string, f func(rune) bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个满足f的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func indexFunc(s []byte, f func(r rune) bool, truth bool)&lt;/td&gt;&lt;td&gt;返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func indexFunc(s string, f func(rune) bool, truth bool) int&lt;/td&gt;&lt;td&gt;返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func lastIndexFunc(s []byte, f func(r rune) bool, truth bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;td&gt;func lastIndexFunc(s string, f func(rune) bool, truth bool) int&lt;/td&gt;&lt;td&gt;返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func makeASCIISet(chars string) (as asciiSet, ok bool)&lt;/td&gt;&lt;td&gt;返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码&lt;br&gt;可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码&lt;br&gt;具体存储：&lt;br&gt;asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，&lt;br&gt;其中元素的位置保存了该字符（uint8）对应的高3位（c&gt;&gt;5）的信息，&lt;br&gt;元素的内容保存了每个字符低5位（1 &lt;&lt; uint(c&amp;31)）的信息，5位最大是31（11111），&lt;br&gt;刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，&lt;br&gt;这样就可以用数组的前4个元素完整表达128个ascii了&lt;/td&gt;&lt;td&gt;func makeASCIISet(chars string) (as asciiSet, ok bool)&lt;/td&gt;&lt;td&gt;返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码&lt;br&gt;可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码&lt;br&gt;具体存储：&lt;br&gt;asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，&lt;br&gt;其中元素的位置保存了该字符（uint8）对应的高3位（c&gt;&gt;5）的信息，&lt;br&gt;元素的内容保存了每个字符低5位（1 &lt;&lt; uint(c&amp;31)）的信息，5位最大是31（11111），&lt;br&gt;刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，&lt;br&gt;这样就可以用数组的前4个元素完整表达128个ascii了&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func (as *asciiSet) contains(c byte) bool&lt;/td&gt;&lt;td&gt;c是否在as中&lt;/td&gt;&lt;td&gt;func (as *asciiSet) contains(c byte) bool&lt;/td&gt;&lt;td&gt;c是否在as中&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func makeCutsetFunc(cutset string) func(r rune) bool&lt;/td&gt;&lt;td&gt;返回一个判断r是否在cutset字符串中的函数&lt;br&gt;若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数&lt;br&gt;根据cutset创建一个ascii码的集合，&lt;br&gt;如果全是ascii，则返回一个用来判断r是否在上述集合中的函数&lt;br&gt;如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数&lt;/td&gt;&lt;td&gt;func makeCutsetFunc(cutset string) func(rune) bool&lt;/td&gt;&lt;td&gt;返回一个判断r是否在cutset字符串中的函数&lt;br&gt;若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数&lt;br&gt;根据cutset创建一个ascii码的集合，&lt;br&gt;如果全是ascii，则返回一个用来判断r是否在上述集合中的函数&lt;br&gt;如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Trim(s []byte, cutset string) []byte&lt;/td&gt;&lt;td&gt;将s左右两端连续属于cutset的rune字符去除，保留中间的子slice&lt;/td&gt;&lt;td&gt;func Trim(s string, cutset string) string&lt;/td&gt;&lt;td&gt;将s左右两端连续属于cutset的rune字符去除，保留中间的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimLeft(s []byte, cutset string) []byte&lt;/td&gt;&lt;td&gt;将s左边连续属于cutset的rune字符去除，返回剩下的子slice&lt;/td&gt;&lt;td&gt;func TrimLeft(s string, cutset string) string&lt;/td&gt;&lt;td&gt;将s左边连续属于cutset的rune字符去除，返回剩下的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimRight(s []byte, cutset string) []byte&lt;/td&gt;&lt;td&gt;将s右边连续属于cutset的rune字符去除，返回剩下的子slice&lt;/td&gt;&lt;td&gt;func TrimRight(s string, cutset string) string&lt;/td&gt;&lt;td&gt;将s右边连续属于cutset的rune字符去除，返回剩下的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func TrimSpace(s []byte) []byte&lt;/td&gt;&lt;td&gt;去除s左右两端的whitespce，保留剩下的子slice&lt;/td&gt;&lt;td&gt;func TrimSpace(s string) string&lt;/td&gt;&lt;td&gt;去除s左右两端的whitespce，保留剩下的子string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Runes(s []byte) []rune&lt;/td&gt;&lt;td&gt;返回s对应的rune类型的slice&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func Replace(s, old, new []byte, n int) []byte&lt;/td&gt;&lt;td&gt;将s中前n个old替换成new，返回一个新的slice，n为负数或者n&gt;old个数时，替换所有old&lt;/td&gt;&lt;td&gt;func Replace(s, old, new string, n int) string&lt;/td&gt;&lt;td&gt;将s中前n个old替换成new，返回一个新的string，n为负数或者n&gt;old个数时，替换所有old&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func EqualFold(s, t []byte) bool&lt;/td&gt;&lt;td&gt;判断s和t在不区分大小写（包括unicode case）的情况下是否相等&lt;/td&gt;&lt;td&gt;func EqualFold(s, t string) bool&lt;/td&gt;&lt;td&gt;判断s和t在不区分大小写（包括unicode case）的情况下是否相等&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func indexRabinKarp(s, sep []byte) int&lt;/td&gt;&lt;td&gt;返回第一个sep在s中的位置&lt;br&gt;Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。&lt;br&gt;Rabin-Karp算法的思想：&lt;br&gt;假设待匹配字符串的长度为M，目标字符串的长度为N（N&gt;M）；&lt;br&gt;首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；&lt;br&gt;比较前面计算的两个hash值，比较次数N-M+1：&lt;br&gt;若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值&lt;br&gt;若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；&lt;/td&gt;&lt;td&gt;func indexRabinKarp(s, substr string) int&lt;/td&gt;&lt;td&gt;返回第一个sep在s中的位置&lt;br&gt;Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。&lt;br&gt;Rabin-Karp算法的思想：&lt;br&gt;假设待匹配字符串的长度为M，目标字符串的长度为N（N&gt;M）；&lt;br&gt;首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；&lt;br&gt;比较前面计算的两个hash值，比较次数N-M+1：&lt;br&gt;若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值&lt;br&gt;若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;func hashStr(sep []byte) (uint32, uint32)&lt;/td&gt;&lt;td&gt;计算sep的hash，用于Rabin-Karp算法&lt;/td&gt;&lt;td&gt;func hashStr(sep string) (uint32, uint32)&lt;/td&gt;&lt;td&gt;计算sep的hash，用于Rabin-Karp算法&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;func hashStrRev(sep string) (uint32, uint32)&lt;/td&gt;&lt;td&gt;计算reverse(sep)的hash，用于Rabin-Karp算法&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description>
     </item>
     
   </channel>
