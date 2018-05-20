@@ -11,6 +11,92 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法12</title>
+      <link>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9512/</link>
+      <pubDate>Sun, 20 May 2018 10:13:34 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9512/</guid>
+      <description>&lt;h1 id=&#34;第十四章-the-parallactic-angle&#34;&gt;第十四章 The Parallactic Angle&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-什么是parallactic-angle&#34;&gt;1. 什么是Parallactic Angle&lt;/h2&gt;
+
+&lt;p&gt;　　&lt;strong&gt;&lt;em&gt;Parallactic is NOT Parallax&lt;/em&gt;&lt;/strong&gt;&lt;br /&gt;
+　　这里所说的 Parallactic Angle 并不是 Parallax，Parallax是从两个不同的视点看同一物体时这两条视线之间的夹角(或半角)，主要用来测定物体的距离，如&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%A7%92%E5%B7%AE%E8%B7%9D&#34; target=&#34;_blank&#34;&gt;秒差距&lt;/a&gt;这一距离单位就是利用视差角来定义的。&lt;br /&gt;
+　　In spherical astronomy, the parallactic angle is the angle between the great circle through a celestial object and the zenith(&lt;strong&gt;天体与天顶所在的大圆，即天球地平经线&lt;/strong&gt;), and the hour circle of the object（&lt;strong&gt;天体的时角，即天球赤道经线&lt;/strong&gt;）.It is usually denoted q. In the triangle zenith—object—celestial pole, the parallactic angle will be the position angle of the zenith at the celestial object. Despite its name, this angle is unrelated with parallax. The parallactic angle is zero when the object crosses the meridian.&lt;br /&gt;
+　　换句话说，就是天体地平经线与天体赤道经线之间的角度。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-计算parallactic-angle&#34;&gt;2. 计算Parallactic Angle&lt;/h2&gt;
+
+&lt;p&gt;$$\tan q=\frac {\sin H}{\tan φ\cos δ -\sin δ\cos H}$$
+　　式中，$φ$是观测站地理纬度,$δ$是天体的赤纬，$H$是该时刻的时角。&lt;/p&gt;
+
+&lt;p&gt;如何推导？&lt;br /&gt;
+&lt;img src=&#34;https://mooncaker816.github.io/img/triangle.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图，P为天球极点，Z为天顶，X为观测目标，此时观测点为球心（地平坐标系），&lt;br /&gt;
+由观测站地理纬度$φ$可知，弧长
+$\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{PZ}= 90°-φ$,&lt;br /&gt;
+由天体的赤纬$δ$可知，弧长
+$\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{PX}= 90°-δ$,&lt;br /&gt;
+由天体的时角$H$可知，球面角
+$\angle ZPX = H$,&lt;br /&gt;
+假设 X 的仰角为$a$,则弧长
+$\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{ZX}= 90°-a$,&lt;br /&gt;
+根据球面余弦公式，我们有
+\begin{cases}
+\cos (90°-a) &amp;amp;= \cos (90°-φ)\cos (90°-δ) + \sin (90°-φ)\sin (90°-δ)\cos H\\[2ex]
+\cos (90°-φ) &amp;amp;= \cos (90°-a)\cos (90°-δ) + \sin (90°-a)\sin (90°-δ)\cos q
+\end{cases}
+即
+\begin{cases}
+\sin a &amp;amp;= \sin φ\sin δ + \cos φ\cos δ\cos H, &amp;amp;(1)\\[2ex]
+\sin φ &amp;amp;= \sin a\sin δ + \cos a\cos δ\cos q, &amp;amp;(2)
+\end{cases}
+根据正弦公式，我们有$$\frac {\sin H}{\cos a} = \frac {\sin q}{\cos φ},\ \ \ (3)$$
+由(2)(3)可得
+\begin{align}
+\tan q &amp;amp;= \frac {\sin q}{\cos q}\\[2ex]
+&amp;amp; = \frac {\frac {\sin H\cos φ}{\cos a}}{\frac {\sin φ-\sin a\sin δ}{\cos a\cos δ}}\\[2ex]
+&amp;amp; = \frac {\sin H\cos φ\cos δ}{\sin φ-\sin a\sin δ}
+\end{align}
+再将(1)代入上式中，
+\begin{align}
+\tan q &amp;amp; = \frac {\sin H\cos φ\cos δ}{\sin φ-\sin δ(\sin φ\sin δ + \cos φ\cos δ\cos H)}\\[2ex]
+&amp;amp; = \frac {\sin H\cos φ\cos δ}{\sin φ\cos^2δ - \cos φ\cos δ\sin δ\cos H}\\[2ex]
+&amp;amp; = \frac {\sin H}{\tan φ\cos δ - \sin δ\cos H}
+\end{align}
+得证&lt;/p&gt;
+
+&lt;p&gt;　　当天体位于中天时恰好与天顶重合，则有$δ=φ$，此时$\tan q = \frac 00$，没有意义，也就是说角度由-90°跳到90°。&lt;br /&gt;
+　　当天体位于地平线上时，即$a=0°$时，由(2)式直接可得$$\cos q = \frac {\sin φ}{\cos δ}$$
+与时角$H$无关&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ParallacticAngle returns parallactic angle of a celestial object.
+//
+//	φ is geographic latitude of observer.观测点地理纬度
+//	δ is declination of observed object.天体赤纬
+//	H is hour angle of observed object.天体赤经（时角）
+//  计算天体的Parallactic Angle
+func ParallacticAngle(φ, δ unit.Angle, H unit.HourAngle) unit.Angle {
+	sδ, cδ := δ.Sincos()
+	sH, cH := H.Sincos()
+	// (14.1) p. 98
+	return unit.Angle(math.Atan2(sH, φ.Tan()*cδ-sδ*cH))
+}
+
+// ParallacticAngleOnHorizon is a special case of ParallacticAngle.
+//
+// The hour angle is not needed as an input and the math inside simplifies.
+// 当天体位于地平线上时，计算Parallactic Angle，与时角无关
+func ParallacticAngleOnHorizon(φ, δ unit.Angle) unit.Angle {
+	return unit.Angle(math.Acos(φ.Sin() / δ.Cos()))
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法11</title>
       <link>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9511/</link>
       <pubDate>Sat, 19 May 2018 15:04:04 +0800</pubDate>
@@ -3212,169 +3298,6 @@ lrwxrwxrwx 1 root root 10 Apr  2 18:38 /var/mail -&amp;gt; spool/mail
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177524&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;</description>
-    </item>
-    
-    <item>
-      <title>Linux Centos 命令之 ls</title>
-      <link>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/</link>
-      <pubDate>Sat, 21 Apr 2018 11:50:00 +0000</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/</guid>
-      <description>&lt;h2 id=&#34;ls-list-列出文件与目录&#34;&gt;ls - list 列出文件与目录&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;usage&#34;&gt;Usage：&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;Usage: ls [OPTION]... [FILE]...
-List information about the FILEs (the current directory by default).
-Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
-
-Mandatory arguments to long options are mandatory for short options too.
-  -a, --all                  do not ignore entries starting with .
-  -A, --almost-all           do not list implied . and ..
-      --author               with -l, print the author of each file
-  -b, --escape               print C-style escapes for nongraphic characters
-      --block-size=SIZE      scale sizes by SIZE before printing them; e.g.,
-                               &#39;--block-size=M&#39; prints sizes in units of
-                               1,048,576 bytes; see SIZE format below
-  -B, --ignore-backups       do not list implied entries ending with ~
-  -c                         with -lt: sort by, and show, ctime (time of last
-                               modification of file status information);
-                               with -l: show ctime and sort by name;
-                               otherwise: sort by ctime, newest first
-  -C                         list entries by columns
-      --color[=WHEN]         colorize the output; WHEN can be &#39;never&#39;, &#39;auto&#39;,
-                               or &#39;always&#39; (the default); more info below
-  -d, --directory            list directories themselves, not their contents
-  -D, --dired                generate output designed for Emacs&#39; dired mode
-  -f                         do not sort, enable -aU, disable -ls --color
-  -F, --classify             append indicator (one of */=&amp;gt;@|) to entries
-      --file-type            likewise, except do not append &#39;*&#39;
-      --format=WORD          across -x, commas -m, horizontal -x, long -l,
-                               single-column -1, verbose -l, vertical -C
-      --full-time            like -l --time-style=full-iso
-  -g                         like -l, but do not list owner
-      --group-directories-first
-                             group directories before files;
-                               can be augmented with a --sort option, but any
-                               use of --sort=none (-U) disables grouping
-  -G, --no-group             in a long listing, don&#39;t print group names
-  -h, --human-readable       with -l, print sizes in human readable format
-                               (e.g., 1K 234M 2G)
-      --si                   likewise, but use powers of 1000 not 1024
-  -H, --dereference-command-line
-                             follow symbolic links listed on the command line
-      --dereference-command-line-symlink-to-dir
-                             follow each command line symbolic link
-                               that points to a directory
-      --hide=PATTERN         do not list implied entries matching shell PATTERN
-                               (overridden by -a or -A)
-      --indicator-style=WORD  append indicator with style WORD to entry names:
-                               none (default), slash (-p),
-                               file-type (--file-type), classify (-F)
-  -i, --inode                print the index number of each file
-  -I, --ignore=PATTERN       do not list implied entries matching shell PATTERN
-  -k, --kibibytes            default to 1024-byte blocks for disk usage
-  -l                         use a long listing format
-  -L, --dereference          when showing file information for a symbolic
-                               link, show information for the file the link
-                               references rather than for the link itself
-  -m                         fill width with a comma separated list of entries
-  -n, --numeric-uid-gid      like -l, but list numeric user and group IDs
-  -N, --literal              print raw entry names (don&#39;t treat e.g. control
-                               characters specially)
-  -o                         like -l, but do not list group information
-  -p, --indicator-style=slash
-                             append / indicator to directories
-  -q, --hide-control-chars   print ? instead of nongraphic characters
-      --show-control-chars   show nongraphic characters as-is (the default,
-                               unless program is &#39;ls&#39; and output is a terminal)
-  -Q, --quote-name           enclose entry names in double quotes
-      --quoting-style=WORD   use quoting style WORD for entry names:
-                               literal, locale, shell, shell-always, c, escape
-  -r, --reverse              reverse order while sorting
-  -R, --recursive            list subdirectories recursively
-  -s, --size                 print the allocated size of each file, in blocks
-  -S                         sort by file size
-      --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
-                               time (-t), version (-v), extension (-X)
-      --time=WORD            with -l, show time as WORD instead of default
-                               modification time: atime or access or use (-u)
-                               ctime or status (-c); also use specified time
-                               as sort key if --sort=time
-      --time-style=STYLE     with -l, show times using style STYLE:
-                               full-iso, long-iso, iso, locale, or +FORMAT;
-                               FORMAT is interpreted like in &#39;date&#39;; if FORMAT
-                               is FORMAT1&amp;lt;newline&amp;gt;FORMAT2, then FORMAT1 applies
-                               to non-recent files and FORMAT2 to recent files;
-                               if STYLE is prefixed with &#39;posix-&#39;, STYLE
-                               takes effect only outside the POSIX locale
-  -t                         sort by modification time, newest first
-  -T, --tabsize=COLS         assume tab stops at each COLS instead of 8
-  -u                         with -lt: sort by, and show, access time;
-                               with -l: show access time and sort by name;
-                               otherwise: sort by access time
-  -U                         do not sort; list entries in directory order
-  -v                         natural sort of (version) numbers within text
-  -w, --width=COLS           assume screen width instead of current value
-  -x                         list entries by lines instead of by columns
-  -X                         sort alphabetically by entry extension
-  -1                         list one file per line
-
-SELinux options:
-
-  --lcontext                 Display security context.   Enable -l. Lines
-                             will probably be too wide for most displays.
-  -Z, --context              Display security context so it fits on most
-                             displays.  Displays only mode, user, group,
-                             security context and file name.
-  --scontext                 Display only security context and file name.
-      --help     display this help and exit
-      --version  output version information and exit
-
-SIZE is an integer and optional unit (example: 10M is 10*1024*1024).  Units
-are K, M, G, T, P, E, Z, Y (powers of 1024) or KB, MB, ... (powers of 1000).
-
-Using color to distinguish file types is disabled both by default and
-with --color=never.  With --color=auto, ls emits color codes only when
-standard output is connected to a terminal.  The LS_COLORS environment
-variable can change the settings.  Use the dircolors command to set it.
-
-Exit status:
- 0  if OK,
- 1  if minor problems (e.g., cannot access subdirectory),
- 2  if serious trouble (e.g., cannot access command-line argument).
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;常用选项&#34;&gt;常用选项：&lt;/h3&gt;
-
-&lt;p&gt;-a：列出所有文件&lt;/p&gt;
-
-&lt;p&gt;-d：列出目录本身，而不是其内容&lt;/p&gt;
-
-&lt;p&gt;-h：以适合人类阅读的格式输出（size 大小转为 K，M，G 等）&lt;/p&gt;
-
-&lt;p&gt;-i：打印出每个文件的 inode编号&lt;/p&gt;
-
-&lt;p&gt;inode 参考：&lt;a href=&#34;http://www.ruanyifeng.com/blog/2011/12/inode.html&#34; target=&#34;_blank&#34;&gt;http://www.ruanyifeng.com/blog/2011/12/inode.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;-l：以长格式显示完整信息&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;drwxr-xr-x   2 root root  4096 Nov  5  2016 srv
-dr-xr-xr-x  13 root root     0 Apr 21 03:02 sys
-drwxrwxrwt   1 root root  4096 Apr 20 21:17 tmp
-drwxr-xr-x   1 root root  4096 Apr  2 18:38 usr
-drwxr-xr-x   1 root root  4096 Apr  2 18:38 var
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;drwxr-xr-x:&lt;/p&gt;
-
-&lt;p&gt;常用文件类型：（-普通文件，d 目录，l 软链接文件）&lt;/p&gt;
-
-&lt;p&gt;权限设置：rwxr-xr-x (拥有者权限 rwx，所属组权限r-x，其他权限r-x)&lt;/p&gt;
-
-&lt;asciinema-player src=&#34;https://mooncaker816.github.io/asciinema/177514&#34; cols=&#34;80&#34; rows=&#34;24&#34;&gt;&lt;/asciinema-player&gt;</description>
     </item>
     
   </channel>
