@@ -69,6 +69,8 @@ $\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{ZX}= 90°-a$,&lt;br /&gt;
 \end{align}
 得证&lt;/p&gt;
 
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/li-hua/p/5663915.html&#34; target=&#34;_blank&#34;&gt;另一种直接证明&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;　　当天体位于中天时恰好与天顶重合，则有$δ=φ$，此时$\tan q = \frac 00$，没有意义，也就是说角度由-90°跳到90°。&lt;br /&gt;
 　　当天体位于地平线上时，即$a=0°$时，由(2)式直接可得$$\cos q = \frac {\sin φ}{\cos δ}$$
 与时角$H$无关&lt;/p&gt;
