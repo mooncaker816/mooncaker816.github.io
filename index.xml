@@ -11,6 +11,224 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法17</title>
+      <link>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9517/</link>
+      <pubDate>Tue, 22 May 2018 10:15:11 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9517/</guid>
+      <description>&lt;h1 id=&#34;第十九章-bodies-in-straight-line&#34;&gt;第十九章 Bodies in Straight Line&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-定义&#34;&gt;1. 定义&lt;/h2&gt;
+
+&lt;p&gt;　　当天体位于同一个天球大圆时，我们称之为天体处在同一&amp;rdquo;直线&amp;rdquo;上。&lt;br /&gt;
+　　假设有三个天体,赤道系坐标分别为$(α_1,δ_1),(α_2,δ_2),(α_3,δ_3)$，当它们&amp;rdquo;共线&amp;rdquo;时，有：$$\tan δ_1\sin (α_2-α_3)+\tan δ_2\sin (α_3-α_1)+\tan δ_3\sin (α_1-α_2)=0$$
+　　上述公式对黄道坐标系同样适用。&lt;/p&gt;
+
+&lt;p&gt;　　利用该公式，我们就可以插值求得共线的时间点&lt;/p&gt;
+
+&lt;h2 id=&#34;2-计算行星与两个恒星共线的时间点&#34;&gt;2. 计算行星与两个恒星共线的时间点&lt;/h2&gt;
+
+&lt;p&gt;　　对于恒星，我们可以认为在一定观测时间范围内是静止的。所以在进行插值计算时，应该当做常数。如$(α_1,δ_1),(α_2,δ_2)$为恒星坐标，则插值时保持不变。&lt;br /&gt;
+　　对于运动的行星，考虑一段时间范围内的坐标，进行插值并求零点。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Time computes the time at which a moving body is on a straight line (great
+// circle) between two fixed points, such as stars.
+//
+// Coordinates may be right ascensions and declinations or longitudes and
+// latitudes.  Fixed points are r1, d1, r2, d2.  Moving body is an ephemeris
+// of 5 rows, r3, d3, starting at time t1 and ending at time t5.  Time scale
+// is arbitrary.
+//
+// Result is time of alignment.
+// 计算一个运动的天体和另外两个在观测时间内默认为不动的天体在一条直线上的时间点
+func Time(r1, d1, r2, d2 unit.Angle, r3, d3 []unit.Angle, t1, t5 float64) (float64, error) {
+	if len(r3) != 5 || len(d3) != 5 {
+		return 0, errors.New(&amp;quot;r3, d3 must be length 5&amp;quot;)
+	}
+	gc := make([]float64, 5)
+	for i, r3i := range r3 {
+		// (19.1) p. 121
+		gc[i] = d1.Tan()*(r2-r3i).Sin() +
+			d2.Tan()*(r3i-r1).Sin() +
+			d3[i].Tan()*(r1-r2).Sin()
+	}
+	l5, err := interp.NewLen5(t1, t5, gc)
+	if err != nil {
+		return 0, err
+	}
+	return l5.Zero(false)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-计算3点-近似共线-时的球面角和离共线大圆的角距离&#34;&gt;3. 计算3点&amp;rdquo;近似共线&amp;rdquo;时的球面角和离共线大圆的角距离&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://mooncaker816.github.io/img/line.png&#34; alt=&#34;&#34; /&gt;
+　　如上图，$S_1,S_2,S_3$为三个天体，此时它们几乎&amp;rdquo;共线&amp;rdquo;,$C_1$为球面角$\angle PS_2S_1$，$C_2$为球面角$\angle PS_2S_3$，我们所求的就是球面角$\angle S_1S_2S_3$以及$S_2$与经过$S_1,S_3$的大圆之间的角距离（可以看作离共线还差多少度）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Meeus 计算三天体球面角$\angle S_1S_2S_3$&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;\begin{cases}
+\tan C_1 &amp;amp;= \frac {\sin (α_2-α_1)}{\cos δ_2\tan δ_1-\sin δ_2\cos (α_2-α_1)}\\[2ex]
+\tan C_2 &amp;amp;= \frac {\sin (α_3-α_2)}{\cos δ_2\tan δ_3-\sin δ_2\cos (α_3-α_2)}
+\end{cases}
+　　$C_1 + C_2$即为所求&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Angle returns the angle between great circles defined by three points.
+//
+// Coordinates may be right ascensions and declinations or longitudes and
+// latitudes.  If r1, d1, r2, d2 defines one line and r2, d2, r3, d3 defines
+// another, the result is the angle between the two lines.
+//
+// Algorithm by Meeus.
+// 计算第一点第二点经过的大圆和第二点第三点经过的大圆之间的角度
+func Angle(r1, d1, r2, d2, r3, d3 unit.Angle) unit.Angle {
+	sd2, cd2 := d2.Sincos()
+	sr21, cr21 := (r2 - r1).Sincos()
+	sr32, cr32 := (r3 - r2).Sincos()
+	C1 := math.Atan2(sr21, cd2*d1.Tan()-sd2*cr21)
+	C2 := math.Atan2(sr32, cd2*d3.Tan()-sd2*cr32)
+	return unit.Angle(C1 + C2)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Meeus 计算$S_2$与经过$S_1,S_3$的大圆之间的角距离&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　先计算：
+\begin{cases}
+X_1 &amp;amp;= \cos δ_1\cos α_1\\[2ex]
+Y_1 &amp;amp;= \cos δ_1\sin α_1\\[2ex]
+Z_1 &amp;amp;= \sin δ_1
+\end{cases}
+\begin{cases}
+X_2 &amp;amp;= \cos δ_2\cos α_2\\[2ex]
+Y_2 &amp;amp;= \cos δ_2\sin α_2\\[2ex]
+Z_2 &amp;amp;= \sin δ_2
+\end{cases}
+\begin{cases}
+A &amp;amp;= Y_1Z_2-Z_1Y_2\\[2ex]
+B &amp;amp;= Z_1X_2-X_1Z_2\\[2ex]
+C &amp;amp;= X_1Y_2-Y_1X_2
+\end{cases}
+$$m = \tan α_0, n = \frac {\tan δ_0}{\cos α_0}$$
+　　则，$$\sin ω = \frac {A+Bm+Cn}{\sqrt {A^2+B^2+C^2}\sqrt{1+m^2+n^2}}$$
+　　ω即为所求&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Error returns an error angle of three nearly co-linear points.
+//
+// For the line defined by r1, d1, r2, d2, the result is the anglular distance
+// between that line and r0, d0.
+//
+// Algorithm by Meeus.
+// 计算一点到由另外两点组成的大圆之间的角距离
+func Error(r1, d1, r2, d2, r0, d0 unit.Angle) unit.Angle {
+	sr1, cr1 := r1.Sincos()
+	sd1, cd1 := d1.Sincos()
+	sr2, cr2 := r2.Sincos()
+	sd2, cd2 := d2.Sincos()
+	X1 := cd1 * cr1
+	X2 := cd2 * cr2
+	Y1 := cd1 * sr1
+	Y2 := cd2 * sr2
+	Z1 := sd1
+	Z2 := sd2
+	A := Y1*Z2 - Z1*Y2
+	B := Z1*X2 - X1*Z2
+	C := X1*Y2 - Y1*X2
+	m := r0.Tan()
+	n := d0.Tan() / r0.Cos()
+	return unit.Angle(math.Asin((A + B*m + C*n) /
+		(math.Sqrt(A*A+B*B+C*C) * math.Sqrt(1+m*m+n*n))))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Pessens 同时计算上述两个量&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;\begin{cases}
+a_1 &amp;amp;= \cos δ_1\cos α_1\\[2ex]
+a_2 &amp;amp;= \cos δ_2\cos α_2\\[2ex]
+a_3 &amp;amp;= \cos δ_3\cos α_3\\[2ex]
+\end{cases}
+\begin{cases}
+b_1 &amp;amp;= \cos δ_1\sin α_1\\[2ex]
+b_2 &amp;amp;= \cos δ_2\sin α_2\\[2ex]
+b_3 &amp;amp;= \cos δ_3\sin α_3\\[2ex]
+\end{cases}
+\begin{cases}
+c_1 &amp;amp;= \sin δ_1\\[2ex]
+c_2 &amp;amp;= \sin δ_2\\[2ex]
+c_3 &amp;amp;= \sin δ_3\\[2ex]
+\end{cases}
+\begin{cases}
+l_1 &amp;amp;= b_1c_2-b_2c_1\\[2ex]
+l_2 &amp;amp;= b_2c_3-b_3c_2\\[2ex]
+l_3 &amp;amp;= b_1c_3-b_3c_1\\[2ex]
+\end{cases}
+\begin{cases}
+m_1 &amp;amp;= c_1a_2-c_2a_1\\[2ex]
+m_2 &amp;amp;= c_2a_3-c_3a_2\\[2ex]
+m_3 &amp;amp;= c_1a_3-c_3a_1\\[2ex]
+\end{cases}
+\begin{cases}
+n_1 &amp;amp;= a_1b_2-a_2b_1\\[2ex]
+n_2 &amp;amp;= a_2b_3-a_3b_2\\[2ex]
+n_3 &amp;amp;= a_1b_3-a_3b_1\\[2ex]
+\end{cases}
+　　则有：
+\begin{cases}
+\cos ψ &amp;amp;= \frac {l_1l_2+m_1m_2+n_1n_2}{\sqrt {l_1^2+m_1^2+n_1^2}\sqrt{l_2^2+m_2^2+n_2^2}}\\[2ex]
+\sin ω &amp;amp;= \frac {a_2l_3+b_2m_3+c_2n_3}{\sqrt {a_2^2+b_2^2+c_2^2}\sqrt {l_3^2+m_3^2+n_3^2}}
+\end{cases}
+　　ψ，ω即为所求。ψ可能与 Meeus 方法求解的值互余180°。（平面的夹角有两个，互余180°）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// AngleError returns both an angle as in the function Angle, and an error
+// as in the function Error.
+//
+// The algorithm is by B. Pessens.
+// Angle和 Error 的合体版
+// Angle 的值可能和之前 Angle 中计算的值互余180°（想象一下两个面的夹角）
+func AngleError(r1, d1, r2, d2, r3, d3 unit.Angle) (ψ, ω unit.Angle) {
+	sr1, cr1 := r1.Sincos()
+	sd1, cd1 := d1.Sincos()
+	sr2, cr2 := r2.Sincos()
+	sd2, cd2 := d2.Sincos()
+	sr3, cr3 := r3.Sincos()
+	sd3, cd3 := d3.Sincos()
+	a1 := cd1 * cr1
+	a2 := cd2 * cr2
+	a3 := cd3 * cr3
+	b1 := cd1 * sr1
+	b2 := cd2 * sr2
+	b3 := cd3 * sr3
+	c1 := sd1
+	c2 := sd2
+	c3 := sd3
+	l1 := b1*c2 - b2*c1
+	l2 := b2*c3 - b3*c2
+	l3 := b1*c3 - b3*c1
+	m1 := c1*a2 - c2*a1
+	m2 := c2*a3 - c3*a2
+	m3 := c1*a3 - c3*a1
+	n1 := a1*b2 - a2*b1
+	n2 := a2*b3 - a3*b2
+	n3 := a1*b3 - a3*b1
+	ψ = unit.Angle(math.Acos((l1*l2 + m1*m2 + n1*n2) /
+		(math.Sqrt(l1*l1+m1*m1+n1*n1) * math.Sqrt(l2*l2+m2*m2+n2*n2))))
+	ω = unit.Angle(math.Asin((a2*l3 + b2*m3 + c2*n3) /
+		(math.Sqrt(a2*a2+b2*b2+c2*c2) * math.Sqrt(l3*l3+m3*m3+n3*n3))))
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法16</title>
       <link>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9516/</link>
       <pubDate>Tue, 22 May 2018 09:37:47 +0800</pubDate>
@@ -2189,322 +2407,6 @@ func BinaryRoot(f RootFunc, lower, upper float64) float64 {
 	return mid
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法2</title>
-      <link>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</link>
-      <pubDate>Sun, 13 May 2018 19:38:14 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</guid>
-      <description>&lt;h1 id=&#34;第四章-拟合-curve-fitting&#34;&gt;第四章 拟合 Curve Fitting&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-什么是拟合&#34;&gt;1. 什么是拟合&lt;/h2&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;曲线拟合(Curve Fitting)的数学定义是指用连续曲线近似地刻画或比拟平面上一组离散点所表示的坐标之间的函数关系，是一种用解析表达式逼近离散数据的方法。曲线拟合通俗的说法就是“拉曲线”，也就是将现有数据透过数学方法来代入一条数学方程式的表示方法。科学和工程遇到的很多问题，往往只能通过诸如采样、实验等方法获得若干离散的数据，根据这些数据，如果能够找到一个连续的函数（也就是曲线）或者更加密集的离散方程，使得实验数据与方程的曲线能够在最大程度上近似吻合，就可以根据曲线方程对数据进行数学计算，对实验结果进行理论分析，甚至对某些不具备测量条件的位置的结果进行估算。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;2-最小二乘拟合&#34;&gt;2. 最小二乘拟合&lt;/h2&gt;
-
-&lt;p&gt;　　考虑 N 个数据点，它们的坐标是$(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$
-假设这些值中的 X 是严格的精确值，Y 的值是测量值(含有一些误差)。
-对于一个给定的 X，如$x_1$，对应的值$y_1$与曲线 C 上对应的 Y 值将存在一个差值$d_1$，我们称这个差值为偏差、误差或残差，它可能是正、负或零。类似的，$x_2,\dots,x_n$,对应的差值为 $d_2,\dots,d_n$。&lt;/p&gt;
-
-&lt;p&gt;　　我们用 $d_1^2+d_2^2+\cdots+d_n^2$ 作为衡量曲线 C 拟合的“最佳”程度，这个值越小越好，越大则越不好。因此，我们做以下定义：任何一种类型的曲线，它们都有一个共同的特性， 当 $$\sum_{i=1}^n d_i^2$$最小时，称为最佳拟合曲线。&lt;/p&gt;
-
-&lt;p&gt;　　一条曲线具有这一特性时，称之为“最小二乘拟合”， 这样的曲线称为“最小二乘曲线”。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-1-线性拟合&#34;&gt;2.1 线性拟合&lt;/h3&gt;
-
-&lt;p&gt;　　&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;线性方程&lt;/p&gt;
-
-&lt;p&gt;假设拟合的曲线为直线$y=ax+b$,则最小二乘差方和为：
-$$\sum_{i=1}^n[y_i-(ax_i+b)]^2$$
-所以问题转化为求解上述关于a,b的二元函数的最小值&lt;/p&gt;
-
-&lt;p&gt;对上式中a求偏导&lt;/p&gt;
-
-&lt;p&gt;\begin{multline}
-\shoveleft
-\begin{aligned}
-\frac \partial {\partial a}\sum_{i=1}^n[y_i-(ax_i+b)]^2 &amp;amp;= -2\sum_{i=1}^n({x_iy_i}-a{x_i^2}-b {x_i})\\[2ex]
-&amp;amp; =-2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)]\\[2ex]
-\end{aligned}
-\end{multline}&lt;/p&gt;
-
-&lt;p&gt;\begin{multline}
-\shoveleft
-\text {由极值的必要条件可知，}\\[2ex]
-\shoveleft
--2\sum_{i=1}^n{x_i}[{y_i}-(a{x_i}+b)] = 0\\[2ex]
-\shoveleft
-\therefore \sum_{i=1}^n{x_iy_i}-a\sum_{i=1}^n{x_i^2}-b\sum_{i=1}^n{x_i}=0
-\end{multline}&lt;/p&gt;
-
-&lt;p&gt;同理对b求偏导可得：
-\begin{align}
-\sum_{i=1}^n{y_i}-a\sum_{i=1}^n{x_i}-bn=0
-\end{align}&lt;/p&gt;
-
-&lt;p&gt;求解关于a,b 的二元一次方程组，
-\begin{cases}
-\sum\limits_{i=1}^n{x_iy_i}-a\sum\limits_{i=1}^n{x_i^2}-b\sum\limits_{i=1}^n{x_i}=0 \\[2ex]
-\sum\limits_{i=1}^n{y_i}-a\sum\limits_{i=1}^n{x_i}-bn=0
-\end{cases}&lt;/p&gt;
-
-&lt;p&gt;得
-\begin{align}
-a &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{y_i}-n\sum\limits_{i=1}^n{x_iy_i}}{  (\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}\\[2ex]
-b &amp;amp;= \frac {\sum\limits_{i=1}^n{x_i}\sum\limits_{i=1}^n{x_iy_i}-\sum\limits_{i=1}^n{y_i} \sum\limits_{i=1}^n{x_i}^2}{(\sum\limits_{i=1}^n{x_i})^2-n\sum\limits_{i=1}^n{x_i}^2}
-\end{align}&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;皮尔逊相关系数r&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%9A%AE%E5%B0%94%E9%80%8A%E7%A7%AF%E7%9F%A9%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0&#34; target=&#34;_blank&#34;&gt;定义&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;由定义可知，
-\begin{align}
-r=\frac {\sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sqrt {\sum\limits_{i=1}^n(x_i-\bar x)^2}\sqrt {\sum\limits_{i=1}^n(y_i-\bar y)^2}}, \\[2ex]
-\text {其中 } \bar x=\frac 1n\sum_{i=1}^nx_i,\bar y=\frac 1n\sum_{i=1}^ny_i
-\end{align}&lt;/p&gt;
-
-&lt;p&gt;\begin{multline}
-\shoveleft
-\begin{aligned}
-化简 \ \  &amp;amp; \sum\limits_{i=1}^n(x_i-\bar x)(y_i-\bar y)\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^n(x_iy_i-x_i\bar y-\bar xy_i+\bar x\bar y)\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_iy_i - \sum\limits_{i=1}^nx_i\bar y - \sum\limits_{i=1}^n\bar xy_i+\sum\limits_{i=1}^n\bar x\bar y\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_iy_i - \frac 1n\sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i - \frac 1n\sum\limits_{i=1}^nx_i\sum\limits_{i=1}^ny_i + \frac 1n\sum\limits_{i=1}^nx_i\sum\limits_{i=1}^ny_i\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_iy_i - \frac 1n\sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i\\[2ex]
-化简 \ \  &amp;amp; \sum\limits_{i=1}^n(x_i-\bar x)^2\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^n(x_i^2-2x_i\bar x+\bar x^2)\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_i^2 - 2\bar x\sum\limits_{i=1}^nx_i + n\bar x^2\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_i^2 - 2n\bar x^2 + n\bar x^2\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_i^2 - n\bar x^2\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^nx_i^2 - \frac 1n(\sum\limits_{i=1}^nx_i)^2\\[2ex]
-同上 \ \  &amp;amp; \sum\limits_{i=1}^n(y_i-\bar y)^2\\[2ex]
-= &amp;amp; \sum\limits_{i=1}^ny_i^2 - \frac 1n(\sum\limits_{i=1}^ny_i)^2\\[2ex]
-\end{aligned}
-\end{multline}
-\begin{multline}
-\shoveleft
-\begin{aligned}
-\therefore \ \ r&amp;amp;=\frac {\sum\limits_{i=1}^nx_iy_i - \frac 1n\sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i}{\sqrt{\sum\limits_{i=1}^nx_i^2 - \frac 1n(\sum\limits_{i=1}^nx_i)^2}\sqrt{\sum\limits_{i=1}^ny_i^2 - \frac 1n(\sum\limits_{i=1}^ny_i)^2}}\\[2ex]
-&amp;amp; =\frac {n\sum\limits_{i=1}^nx_iy_i - \sum\limits_{i=1}^ny_i\sum\limits_{i=1}^nx_i}{\sqrt{n\sum\limits_{i=1}^nx_i^2 - (\sum\limits_{i=1}^nx_i)^2}\sqrt{n\sum\limits_{i=1}^ny_i^2 - (\sum\limits_{i=1}^ny_i)^2}}
-\end{aligned}
-\end{multline}&lt;/p&gt;
-
-&lt;p&gt;　　这个系数介于+1 到-1 之间。如果值为+1 或-1，说明 x 和 y 之间有完全的线性关系，所有的点(x,y)精确的在同一条直线上。如果 r = +1，y 随 x 单调递增，如果 r = -1，y 随 x 单调递减。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;代码&lt;/p&gt;
-
-&lt;p&gt;　　到这里我们就已经推导出求解线性方程和相关系数的公式，再结合代码看看&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Linear fits a line to sample data.
-//
-// Argument p is a list of data points.  Results a and b are coefficients
-// of the best fit line y = ax + b.
-// 求解线性拟合直线
-// sx = ∑x sy = ∑y sxy = ∑xy sx2 = ∑x^2
-func Linear(p []struct{ X, Y float64 }) (a, b float64) {
-    var sx, sy, sx2, sxy float64
-    for i := range p {
-        x := p[i].X
-        y := p[i].Y
-        sx += x
-        sy += y
-        sx2 += x * x
-        sxy += x * y
-    }
-    n := float64(len(p))
-    d := n*sx2 - sx*sx
-    // (4.2) p. 36
-    a = (n*sxy - sx*sy) / d
-    b = (sy*sx2 - sx*sxy) / d
-    return
-}
-
-// CorrelationCoefficient returns a correlation coefficient for sample data.
-// 求解相关系数 r
-func CorrelationCoefficient(p []struct{ X, Y float64 }) float64 {
-    var sx, sy, sx2, sy2, sxy float64
-    for i := range p {
-        x := p[i].X
-        y := p[i].Y
-        sx += x
-        sy += y
-        sx2 += x * x
-        sy2 += y * y
-        sxy += x * y
-    }
-    n := float64(len(p))
-    // (4.3) p. 38
-    return (n*sxy - sx*sy) / (math.Sqrt(n*sx2-sx*sx) * math.Sqrt(n*sy2-sy*sy))
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;2-2-二次曲线拟合&#34;&gt;2.2 二次曲线拟合&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;二次方程$y = ax^2 + bx + c$&lt;/p&gt;
-
-&lt;p&gt;　　假设我们希望画一条逼近 N 个点的最佳二次曲线：$y = ax^2 + bx + c$ 这是一个纵轴的抛物线。同一次直线类似，差方和为$$\sum_{i=1}^n[y_i-(ax_i^2+bx_i+c)]^2$$
-依次对上式中的a,b,c求偏导，得
-\begin{align}
-\sum_{i=1}^n(-2x_i^2y_i+2ax_i^4+2bx_i^3+2cx_i^2) = 0\\[2ex]
-\sum_{i=1}^n(-2x_iy_i+2ax_i^3+2bx_i^2+2cx_i) = 0\\[2ex]
-\sum_{i=1}^n(-2y_i+2ax_i^2+2bx_i+2c) = 0\\[2ex]
-\end{align}
-\begin{multline}
-\begin{aligned}
-\therefore &amp;amp; \sum_{i=1}^nx_i^2y_i=\sum_{i=1}^nax_i^4+\sum_{i=1}^nbx_i^3+\sum_{i=1}^ncx_i^2\\[2ex]
- &amp;amp; \sum_{i=1}^nx_iy_i=\sum_{i=1}^nax_i^3+\sum_{i=1}^nbx_i^2+\sum_{i=1}^ncx_i\\[2ex]
- &amp;amp; \sum_{i=1}^ny_i=\sum_{i=1}^nax_i^2+\sum_{i=1}^nbx_i+nc\\[2ex]
-\end{aligned}
-\end{multline}&lt;/p&gt;
-
-&lt;p&gt;求解以下三元一次方程组
-\begin{cases}
-\sum\limits_{i=1}^nx_i^2y_i=\sum\limits_{i=1}^nax_i^4+\sum\limits_{i=1}^nbx_i^3+\sum\limits_{i=1}^ncx_i^2\\[2ex]
-\sum\limits_{i=1}^nx_iy_i=\sum\limits_{i=1}^nax_i^3+\sum\limits_{i=1}^nbx_i^2+\sum\limits_{i=1}^ncx_i\\[2ex]
-\sum\limits_{i=1}^ny_i=\sum\limits_{i=1}^nax_i^2+\sum\limits_{i=1}^nbx_i+nc\\[2ex]
-\end{cases}&lt;/p&gt;
-
-&lt;p&gt;得
-\begin{multline}
-\shoveleft
-\begin{aligned}
-a &amp;amp;= \frac {NQV+PRT+PQU-Q^2T-P^2V-NRU}{D}\\[2ex]
-b &amp;amp;= \frac {NSU+PQV+QRT-Q^2U-PST-NRV}{D}\\[2ex]
-c &amp;amp;= \frac {QST+QRU+PRV-Q^2V-PSU-R^2T}{D}\\[2ex]
-\end{aligned}
-\end{multline}&lt;/p&gt;
-
-&lt;p&gt;\begin{multline}
-\shoveleft
-\begin{aligned}
-其中\ &amp;amp;P =\sum\limits_{i=1}^nx_i,\ Q=\sum\limits_{i=1}^nx_i^2,\ R=\sum\limits_{i=1}^nx_i^3,\ S=\sum\limits_{i=1}^nx_i^4,\\[2ex]
-&amp;amp;T=\sum\limits_{i=1}^ny_i,\ U=\sum\limits_{i=1}^nx_iy_i,\ V=\sum\limits_{i=1}^nx_i^2y_i,\\[2ex]
-&amp;amp;D = NQS+2PQR-Q^3-P^2S-NR^2
-\end{aligned}
-\end{multline}&lt;/p&gt;
-
-&lt;p&gt;　　至此我们的程序就能很方便的通过上述公式，对这 N 个点进行一次完整的遍历，计算上述 P,Q,R,S,T,U,V,D,即可求得拟合曲线方程。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;代码&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Quadratic fits y = ax² + bx + c to sample data.
-//
-// Argument p is a list of data points.  Results a, b, and c are coefficients
-// of the best fit quadratic y = ax² + bx + c.
-// 求解二次拟合曲线系数
-func Quadratic(p []struct{ X, Y float64 }) (a, b, c float64) {
-    var P, Q, R, S, T, U, V float64
-    for i := range p {
-        x := p[i].X
-        y := p[i].Y
-        x2 := x * x
-        P += x
-        Q += x2
-        R += x * x2
-        S += x2 * x2
-        T += y
-        U += x * y
-        V += x2 * y
-    }
-    N := float64(len(p))
-    // (4.5) p. 43
-    D := N*Q*S + 2*P*Q*R - Q*Q*Q - P*P*S - N*R*R
-    // (4.6) p. 43
-    a = (N*Q*V + P*R*T + P*Q*U - Q*Q*T - P*P*V - N*R*U) / D
-    b = (N*S*U + P*Q*V + Q*R*T - Q*Q*U - P*S*T - N*R*V) / D
-    c = (Q*S*T + Q*R*U + P*R*V - Q*Q*V - P*S*U - R*R*T) / D
-    return
-}   
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;一般曲线拟合（多重线回归）&lt;/p&gt;
-
-&lt;p&gt;　　最佳线性拟合的原理可以被扩展到其它函数，这个函数可以含有超过两个未知的线性系数。
-让我们考虑三个函数的线性组合的情况。 假设我们已知：$$y = af_0(x) + bf_1(x) + cf_2(x)$$
-式中$f_0$、$f_1$ 和 $f_2$ 是三个关于 x 的已知函数，但系数 a、 b 和 c 是未知的。此外，假设已知 3 个 x 对应的 y 值。那么 系数 a、b、c 可按如下得到。
-求和计算：
-\begin{align}
-M &amp;amp;= \sum f_0^2 &amp;amp;U &amp;amp;= \sum yf_0\\[2ex]
-P &amp;amp;= \sum f_0f_1 &amp;amp;V &amp;amp;= \sum yf_1\\[2ex]
-Q &amp;amp;= \sum f_0f_2 &amp;amp;W &amp;amp;= \sum yf_2\\[2ex]
-R &amp;amp;= \sum f_1^2 \\[2ex]
-S &amp;amp;= \sum f_1f_2 \\[2ex]
-T &amp;amp;= \sum f_2^2 \\[2ex]
-\end{align}
-$$D = MRT+2PQS-MS^2-RQ^2-TP^2$$
-那么：
-\begin{align}
-a &amp;amp;= \frac {U(RT-S^2)+V(QS-PT)+W(PS-QR)}{D}\\[2ex]
-b &amp;amp;= \frac {U(SQ-PT)+V(MT-Q^2)+W(PQ-MS)}{D}\\[2ex]
-c &amp;amp;= \frac {U(PS-RQ)+V(PQ-MS)+W(MR-P^2)}{D}
-\end{align}
-另一种特殊情况，考虑 y=af(x)，只有一个未知系数。 我们容易得到：
-$$a = \frac {\sum yf}{\sum f^2}$$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;代码&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Func3 implements multiple linear regression for a linear combination
-// of three functions.
-//
-// Given sample data and three functions in x, Func3 returns coefficients
-// a, b, and c fitting y = aƒ₀(x) + bƒ₁(x) + cƒ₂(x) to sample data.
-// 多重线性回归
-func Func3(p []struct{ X, Y float64 }, f0, f1, f2 func(float64) float64) (a, b, c float64)  {
-    var M, P, Q, R, S, T, U, V, W float64
-    for i := range p {
-        x := p[i].X
-        y := p[i].Y
-        y0 := f0(x)
-        y1 := f1(x)
-        y2 := f2(x)
-        M += y0 * y0
-        P += y0 * y1
-        Q += y0 * y2
-        R += y1 * y1
-        S += y1 * y2
-        T += y2 * y2
-        U += y * y0
-        V += y * y1
-        W += y * y2
-    }
-    // (4.7) p. 44
-    D := M*R*T + 2*P*Q*S - M*S*S - R*Q*Q - T*P*P
-    a = (U*(R*T-S*S) + V*(Q*S-P*T) + W*(P*S-Q*R)) / D
-    b = (U*(S*Q-P*T) + V*(M*T-Q*Q) + W*(P*Q-M*S)) / D
-    c = (U*(P*S-R*Q) + V*(P*Q-M*S) + W*(M*R-P*P)) / D
-    return
-}
-
-// Func1 fits a linear multiple of a function to sample data.
-//
-// Given sample data and a function in x, Func1 returns coefficient
-// a fitting y = aƒ(x).
-func Func1(p []struct{ X, Y float64 }, f func(float64) float64) float64 {
-    var syf, sf2 float64
-    // (4.8) p. 45
-    for i := range p {
-        f := f(p[i].X)
-        y := p[i].Y
-        syf += y * f
-        sf2 += f * f
-    }
-    return syf / sf2
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
     </item>
     
   </channel>
