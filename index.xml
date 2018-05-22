@@ -11,6 +11,103 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法16</title>
+      <link>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9516/</link>
+      <pubDate>Tue, 22 May 2018 09:37:47 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9516/</guid>
+      <description>&lt;h1 id=&#34;第十八章-行星会合-planetary-conjunctions&#34;&gt;第十八章 行星会合 Planetary Conjunctions&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-定义&#34;&gt;1. 定义&lt;/h2&gt;
+
+&lt;p&gt;In astronomy, a conjunction occurs when two astronomical objects or spacecraft have either the same right ascension or the same ecliptic longitude, usually as observed from Earth.&lt;br /&gt;
+当两个天体位于同一赤经（黄经）时，我们称之为会合。会合并不意味着最小角距离。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-计算会合的时间点以及纬度差&#34;&gt;2. 计算会合的时间点以及纬度差&lt;/h2&gt;
+
+&lt;p&gt;由定义可知，当两天体的经度差为0时，我们称之为会合。&lt;br /&gt;
+所以只要根据观测数据对经度差进行插值，再求零值对应的时间点即为会合时间。再根据这个时间点插值计算纬度差即可。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;两个都为移动的天体（行星）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Planetary computes a conjunction between two moving objects, such as planets.
+//
+// Conjunction is found with interpolation against length 5 ephemerides.
+//
+// T1, t5 are times of first and last rows of ephemerides.  The scale is
+// arbitrary.
+//
+// R1, d1 is the ephemeris of the first object.  The columns may be celestial
+// coordinates in right ascension and declination or ecliptic coordinates in
+// longitude and latitude.
+//
+// R2, d2 is the ephemeris of the second object, in the same frame as the first.
+//
+// Return value t is time of conjunction in the scale of t1, t5.
+// Δd is the amount that object 2 was &amp;quot;above&amp;quot; object 1 at the time of
+// conjunction.
+// 计算两个移动的天体赤经（黄经）相同的时间点 t 和该时刻的赤纬（黄纬）差
+func Planetary(t1, t5 float64, r1, d1, r2, d2 []unit.Angle) (t float64, Δd unit.Angle, err error) {
+	if len(r1) != 5 || len(d1) != 5 || len(r2) != 5 || len(d2) != 5 {
+		err = errors.New(&amp;quot;Five rows required in ephemerides&amp;quot;)
+		return
+	}
+	dr := make([]float64, 5, 10)
+	dd := dr[5:10]
+	for i, r := range r1 {
+		dr[i] = (r2[i] - r).Rad()
+		dd[i] = (d2[i] - d1[i]).Rad()
+	}
+	return conj(t1, t5, dr, dd)
+}
+
+func conj(t1, t5 float64, dr, dd []float64) (t float64, Δd unit.Angle, err error) {
+	var l5 *interp.Len5
+	if l5, err = interp.NewLen5(t1, t5, dr); err != nil {
+		return
+	}
+	if t, err = l5.Zero(true); err != nil { // 计算经度重合时的时间点 t
+		return
+	}
+	if l5, err = interp.NewLen5(t1, t5, dd); err != nil {
+		return
+	}
+	ΔdRad, err := l5.InterpolateXStrict(t) // 插值计算经度重合时的纬度差
+	return t, unit.Angle(ΔdRad), err
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个为观测时间范围内默认不动的天体（恒星）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Stellar computes a conjunction between a moving and non-moving object.
+//
+// Arguments and return values same as with Planetary, except the non-moving
+// object is r1, d1.  The ephemeris of the moving object is r2, d2.
+// 计算一个移动的天体和一个在观测时间范围内默认为不动的天体（如恒星）赤经（黄经）相同的时间点 t 和该时刻的赤纬（黄纬）差
+func Stellar(t1, t5 float64, r1, d1 unit.Angle, r2, d2 []unit.Angle) (t float64, Δd unit.Angle, err error) {
+	if len(r2) != 5 || len(d2) != 5 {
+		err = errors.New(&amp;quot;Five rows required in ephemeris&amp;quot;)
+		return
+	}
+	dr := make([]float64, 5, 10)
+	dd := dr[5:10]
+	for i, r := range r2 {
+		dr[i] = (r - r1).Rad()
+		dd[i] = (d2[i] - d1).Rad()
+	}
+	return conj(t1, t5, dr, dd)
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法15</title>
       <link>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9515/</link>
       <pubDate>Mon, 21 May 2018 18:46:37 +0800</pubDate>
@@ -2408,630 +2505,6 @@ func Func1(p []struct{ X, Y float64 }, f func(float64) float64) float64 {
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法1</title>
-      <link>https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/</link>
-      <pubDate>Sat, 12 May 2018 21:43:17 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/</guid>
-      <description>&lt;h2 id=&#34;①背景&#34;&gt;①背景&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;计算精确的农历节气和日月合朔时间点，需要使用天文算法来实现。《Astronomical Algorithms》正是这么一本不那么让人望而生畏的介绍天文算法的书籍，国内比较出名的寿星万年历亦是基于此书中的算法。&lt;/p&gt;
-
-&lt;p&gt;作为一名 Gopher 本想自造轮子来实现，但是万能的 Github 上已有前人身先士卒，直接上地址&lt;a href=&#34;https://github.com/soniakeys/meeus&#34; target=&#34;_blank&#34;&gt;meeus&lt;/a&gt;，该库基本上完整的实现了Astronomical Algorithms中的算法，而且每一章节对应一个 package，浏览起来不会让人感觉没有头绪。&lt;/p&gt;
-
-&lt;p&gt;好了，话不多说，接下来就结合书和代码来学习。&lt;/p&gt;
-
-&lt;h2 id=&#34;②第一章hints-and-tips&#34;&gt;②第一章Hints and Tips&lt;/h2&gt;
-
-&lt;p&gt;略&lt;/p&gt;
-
-&lt;h2 id=&#34;③第二章-about-accuracy&#34;&gt;③第二章 About accuracy&lt;/h2&gt;
-
-&lt;p&gt;略&lt;/p&gt;
-
-&lt;h2 id=&#34;④第三章-interpolation-插值&#34;&gt;④第三章 Interpolation 插值&lt;/h2&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6&#34; target=&#34;_blank&#34;&gt;数学&lt;/a&gt;的&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90&#34; target=&#34;_blank&#34;&gt;数值分析&lt;/a&gt;领域中，&lt;strong&gt;内插&lt;/strong&gt;或称插值（英语：interpolation)是一种通过已知的、&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E9%9B%A2%E6%95%A3&#34; target=&#34;_blank&#34;&gt;离散&lt;/a&gt;的&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE&#34; target=&#34;_blank&#34;&gt;数据&lt;/a&gt;点，在范围内推求新数据点的过程或方法。求解&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%A7%91%E5%AD%A6&#34; target=&#34;_blank&#34;&gt;科学&lt;/a&gt;和&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%B7%A5%E7%A8%8B&#34; target=&#34;_blank&#34;&gt;工程&lt;/a&gt;的问题时，通常有许多数据点借由&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E9%87%87%E6%A0%B7&#34; target=&#34;_blank&#34;&gt;采样&lt;/a&gt;、&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%AE%9E%E9%AA%8C&#34; target=&#34;_blank&#34;&gt;实验&lt;/a&gt;等方法获得，这些数据可能代表了有限个数值函数，其中自变量的值。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;本章主要介绍了低阶等距节点牛顿插值和拉格朗日插值的应用。&lt;/p&gt;
-
-&lt;h3 id=&#34;1-牛顿插值&#34;&gt;1. &lt;strong&gt;牛顿插值&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%89%9B%E9%A1%BF%E5%A4%9A%E9%A1%B9%E5%BC%8F&#34; target=&#34;_blank&#34;&gt;牛顿多项式&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%B7%AE%E5%88%86&#34; target=&#34;_blank&#34;&gt;差分&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;2-三点等距二阶差商的牛顿插值&#34;&gt;2. &lt;strong&gt;三点等距二阶差商的牛顿插值&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;h4 id=&#34;2-1-插值公式&#34;&gt;2.1  插值公式&lt;/h4&gt;
-
-&lt;p&gt;二阶牛顿插值多项式为:
-$N(x) = [y_0] + [y_0,y_1](x-x_0) + [y_0,y_1,y_2](x-x_0)(x-x_1)$，如下图
-&lt;img src=&#34;https://wikimedia.org/api/rest_v1/media/math/render/svg/b8d0bfa61c4977eeaf3022de361f67dd5f4cb8a9&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;假设有三点$(x_0,y_0),(x_1,y_1),(x_2,y_2),x_0,x_1,x_2$等距(单位长度1) ,&lt;/p&gt;
-
-&lt;p&gt;且$n$ 为插值因子,$x$距离$x_1$最近
-\begin{align}
-n&amp;amp;=(x-x_1)/单位长度\\&lt;br /&gt;
-&amp;amp;=x-x1
-\end{align}&lt;/p&gt;
-
-&lt;p&gt;令 $a=y_1-y_0, b=y_2-y_1,c=b-a=y_0+y_2-2y_1$
-则有：
-\begin{align}
-x-x_0 &amp;amp;= x-x_1 + 1\\&lt;br /&gt;
-&amp;amp;= n + 1
-\end{align}
-\begin{align}
-f(x) &amp;amp;= y_0 + a(x-x_0)+(c/(x_2-x_0))(x-x_0)(x-x_1)\\&lt;br /&gt;
-&amp;amp;= y_0 + a(n+1) + 0.5c(n+1)n\\&lt;br /&gt;
-&amp;amp;= y_1-a + an + a + 0.5n(cn+c)\\&lt;br /&gt;
-&amp;amp;= y_1 + 0.5n(cn+b-a+2a)\\&lt;br /&gt;
-&amp;amp;= y_1 + 0.5n(cn+a+b)\\&lt;br /&gt;
-\end{align}&lt;/p&gt;
-
-&lt;p&gt;即为算法中三点插值的公式.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;书中三点从1开始计数，公式为:$y_2+0.5n(cn+a+b)$&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;代码：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Len3 allows second difference interpolation.
-// 等距三点插值结构
-type Len3 struct {
-x1, x3             float64   //x1,x3分别为起始点和终止点，无需给出x2，因为等距
-y                  []float64 //y为x1,x2,x3对应的值的序列
-a, b, c            float64   //a=y2-y1, b=y3-y2, c=b-a=y3+y1-2y2
-abSum, xSum, xDiff float64   //计数插值的中间变量
-}
-
-// NewLen3 prepares a Len3 object from a table of three rows of x and y values.
-//
-// X values must be equally spaced, so only the first and last are supplied.
-// X1 must not equal x3.  Y must be a slice of three y values.
-// 根据上述定义，创建三点插值结构
-func NewLen3(x1, x3 float64, y []float64) (*Len3, error) {
-if len(y) != 3 {
-	return nil, ErrorNot3
-}
-if x3 == x1 {
-	return nil, ErrorNoXRange
-}
-d := &amp;amp;Len3{
-	x1: x1,
-	x3: x3,
-	y:  append([]float64{}, y...),
-}
-// differences. (3.1) p. 23
-d.a = y[1] - y[0]
-d.b = y[2] - y[1]
-d.c = d.b - d.a
-// other intermediate values
-d.abSum = d.a + d.b
-d.xSum = x3 + x1
-d.xDiff = x3 - x1
-return d, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;考虑到实际问题中一般可能多于三点，此时只要选取目标点附近的三点即可，可用以下函数来自动构造&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Len3ForInterpolateX is a special purpose Len3 constructor.
-//
-// Like NewLen3, it takes a table of x and y values, but it is not limited
-// to tables of 3 rows.  An X value is also passed that represents the
-// interpolation target x value.  Len3ForInterpolateX will locate the
-// appropriate three rows of the table for interpolating for x, and initialize
-// the Len3 object for those rows.
-//
-//	x is the target for interpolation
-//	x1 is the x value corresponding to the first y value of the table.
-//	xn is the x value corresponding to the last y value of the table.
-//	y is all y values in the table.  len(y) should be &amp;gt;= 3.
-//
-// 给定n个点，但是我们只需选取离目标点x最接近的三个点来做三点插值，
-// 此时可用以下函数来自动选择最优三点，来构造三点插值
-// 同样，前提是n个点等距，且与y一一对应
-func Len3ForInterpolateX(x, x1, xn float64, y []float64) (*Len3, error) {
-	if len(y) &amp;gt; 3 {
-		interval := (xn - x1) / float64(len(y)-1)
-		if interval == 0 {
-			return nil, ErrorNoXRange
-		}
-		nearestX := int((x-x1)/interval + .5)
-		if nearestX &amp;lt; 1 {
-			nearestX = 1
-		} else if nearestX &amp;gt; len(y)-2 {
-			nearestX = len(y) - 2
-		}
-		y = y[nearestX-1 : nearestX+2]
-		xn = x1 + float64(nearestX+1)*interval
-		x1 = x1 + float64(nearestX-1)*interval
-	}
-	return NewLen3(x1, xn, y)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;插值因子 $n$ 为：目标点 $x$ 与 中间点 $x_2$之差除以实际步长&lt;br /&gt;
-\begin{equation}
-\because n = 2(x - x_2)/(x_3-x_1), x_2 = x_1 + (x_3-x_1)/2\\&lt;br /&gt;
-\therefore n = [2x - (x_1+x_3)]/(x_3-x_1)\\&lt;br /&gt;
-\end{equation}&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// InterpolateX interpolates for a given x value.
-// 计算插值因子n，调用非严格插值计算
-func (d *Len3) InterpolateX(x float64) (y float64) {
-	n := (2*x - d.xSum) / d.xDiff
-	return d.InterpolateN(n)
-}
-
-// InterpolateXStrict interpolates for a given x value,
-// restricting x to the range x1 to x3 given to the constructor NewLen3.
-// 计算插值因子n，调用严格插值计算
-func (d *Len3) InterpolateXStrict(x float64) (y float64, err error) {
-	n := (2*x - d.xSum) / d.xDiff
-	y, err = d.InterpolateNStrict(n)
-	if err == ErrorNOutOfRange {
-		err = ErrorXOutOfRange
-	}
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;通过调用三点插值公式获得目标插值，这里分为严格模式和非严格模式，&lt;/p&gt;
-
-&lt;p&gt;所谓严格模式就是指目标点一定在三点的范围之内且必须离我们选择的三点的中间点最近，确保插值子$|n|&amp;lt;=1$；&lt;/p&gt;
-
-&lt;p&gt;非严格模式就没有上述规定，可能目标点已经超出三点范围，得出的结果也相对不如严格模式精确。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// InterpolateN interpolates for a given interpolating factor n.
-//
-// This is interpolation formula (3.3)
-//
-// The interpolation factor n is x-x2 in units of the tabular x interval.
-// (See Meeus p. 24.)
-// 非严格插值计算，不用保证目标点插值因子绝对值小于等于1，
-// 即不用保证离我们所选三点中点距离小于一个步长
-func (d *Len3) InterpolateN(n float64) (y float64) {
-	return d.y[1] + n*.5*(d.abSum+n*d.c)
-}
-
-// InterpolateNStrict interpolates for a given interpolating factor n.
-//
-// N is restricted to the range [-1..1] corresponding to the range x1 to x3
-// given to the constructor NewLen3.
-// 严格插值计算，必须保证目标点插值因子绝对值小于等于1，
-// 即必须保证离我们所选三点中点距离小于一个步长
-func (d *Len3) InterpolateNStrict(n float64) (y float64, err error) {
-	if n &amp;lt; -1 || n &amp;gt; 1 {
-		return 0, ErrorNOutOfRange
-	}
-	return d.InterpolateN(n), nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;2-2-极值&#34;&gt;2.2 &lt;strong&gt;极值&lt;/strong&gt;：&lt;/h4&gt;
-
-&lt;p&gt;因为 $y_1 + 0.5n(cn+a+b)$是关于 $n$ 的二次函数($c \neq 0$时)，由二次函数的性质可知：&lt;/p&gt;
-
-&lt;p&gt;当 $n=-(a+b)/(2c)$时，有极值$-(a+b)^2/(8c)$&lt;/p&gt;
-
-&lt;p&gt;但是如果插值因子$|n|&amp;gt;1$,则无法取到(已超出插值函数的定义域)&lt;/p&gt;
-
-&lt;p&gt;再由$n = [2x - (x_1+x_3)]/(x_3-x_1)$&lt;/p&gt;
-
-&lt;p&gt;得出此时实际$x = [n(x_3-x_1)+(x_1+x_3)]/2$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Extremum returns the x and y values at the extremum.
-//
-// Results are restricted to the range of the table given to the constructor
-// NewLen3.
-func (d *Len3) Extremum() (x, y float64, err error) {
-	if d.c == 0 {
-		return 0, 0, ErrorNoExtremum
-	}
-	n := d.abSum / (-2 * d.c) // (3.5), p. 25
-	if n &amp;lt; -1 || n &amp;gt; 1 {
-		return 0, 0, ErrorExtremumOutside
-	}
-	x = .5 * (d.xSum + d.xDiff*n)          // 根据实际步长得出极值点x
-	y = d.y[1] - (d.abSum*d.abSum)/(8*d.c) // (3.4), p. 25
-	return x, y, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;2-3-根&#34;&gt;2.3 根&lt;/h4&gt;
-
-&lt;p&gt;和普通方程类似，有时候我们需要求解插值函数的&amp;rdquo;根&amp;rdquo;，即 $y=0$所对应的插值点&lt;/p&gt;
-
-&lt;p&gt;同样借助 $y=y_1+ 0.5n(cn+a+b)$,令 $y=0$&lt;/p&gt;
-
-&lt;p&gt;得$n = -2y_1/(cn+a+b)$&lt;/p&gt;
-
-&lt;p&gt;此时再利用迭代法求解近似根 $n_0$&lt;/p&gt;
-
-&lt;p&gt;当插值曲线曲率比较大时，可采用以下修正量来进行迭代，直到满足精度要求为止&lt;/p&gt;
-
-&lt;p&gt;$Δn_0 = -[ 2y_1 +n_0 (a+b+cn_0 ) ]/(a +b + 2cn_0 )$&lt;/p&gt;
-
-&lt;p&gt;求解得到满足精度要求的 $n$ 后，再根据实际步长得出 $x$，即为&amp;rdquo;根&amp;rdquo;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Len3Zero finds a zero of the quadratic function represented by the table.
-//
-// That is, it returns an x value that yields y=0.
-//
-// Argument strong switches between two strategies for the estimation step.
-// when iterating to converge on the zero.
-//
-// Strong=false specifies a quick and dirty estimate that works well
-// for gentle curves, but can work poorly or fail on more dramatic curves.
-//
-// Strong=true specifies a more sophisticated and thus somewhat more
-// expensive estimate.  However, if the curve has quick changes, This estimate
-// will converge more reliably and in fewer steps, making it a better choice.
-//
-// Results are restricted to the range of the table given to the constructor
-// NewLen3.
-// strong 为考虑修正量的迭代方式，更为精确
-func (d *Len3) Zero(strong bool) (x float64, err error) {
-	var f iterFunc
-	if strong {
-		// (3.7), p. 27
-		f = func(n0 float64) float64 {
-			return n0 - (2*d.y[1]+n0*(d.abSum+d.c*n0))/(d.abSum+2*d.c*n0)
-		}
-	} else {
-		// (3.6), p. 26
-		f = func(n0 float64) float64 {
-			return -2 * d.y[1] / (d.abSum + d.c*n0)
-		}
-	}
-	n0, ok := iterate(0, f)
-	if !ok {
-		return 0, ErrorNoConverge
-	}
-	if n0 &amp;gt; 1 || n0 &amp;lt; -1 {
-		return 0, ErrorZeroOutside
-	}
-	return .5 * (d.xSum + d.xDiff*n0), nil // success
-}
-
-type iterFunc func(n0 float64) (n1 float64)
-
-func iterate(n0 float64, f iterFunc) (n1 float64, ok bool) {
-	for limit := 0; limit &amp;lt; 50; limit++ {
-		n1 = f(n0)
-		if math.IsInf(n1, 0) || math.IsNaN(n1) {
-			break // failure to converge
-		}
-		if math.Abs((n1-n0)/n0) &amp;lt; 1e-15 {
-			return n1, true // success
-		}
-		n0 = n1
-	}
-	return 0, false // failure to converge
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;3-五点等距四阶差商的牛顿插值&#34;&gt;3.  &lt;strong&gt;五点等距四阶差商的牛顿插值&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;h4 id=&#34;3-1-五点插值公式&#34;&gt;3.1 五点插值公式&lt;/h4&gt;
-
-&lt;p&gt;五点和三点类似，这里直接给出公式，不再进行推导&lt;/p&gt;
-
-&lt;p&gt;5点：$(x_1,y_1),(x_2,y_2),(x_3,y_3),(x_4,y_4),(x_5,y_5)$&lt;/p&gt;
-
-&lt;p&gt;$y=y_3+ \frac {n} {2}(b+c)+\frac {n^2} {2}f+\frac{n(n^2-1)}{12}(h+j)+\frac {n^2(n^2-1)}{24k}$&lt;/p&gt;
-
-&lt;p&gt;或者&lt;/p&gt;
-
-&lt;p&gt;$y=y_3+n(\frac {b+c}{2}-\frac {h+j}{12})+n^2(\frac {f}{2}-\frac {k}{24})+n^3(\frac {h+j}{12})+n^4(\frac {k}{24})$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Len5 allows fourth difference interpolation.
-// 五点等距插值结构
-type Len5 struct {
-	x1, x5      float64   // x1为起始点，x5为终止点
-	y           []float64 // y 为x1,x2,x3,x4,x5的一一映射
-	a, b, c, d  float64   // a=y2-y1, b=y3-y2, c=y4-y3, d=y5-y4
-	e, f, g     float64   // e=b-a, f=c-b, g=d-c
-	h, j, k     float64   // h=f-e, j=g-f, k=j-h
-	y3          float64   // y3为中间点的 y 值
-	xSum, xDiff float64   // xSum=x1+x5, xDiff=x5-x1
-	interpCoeff []float64 // 插值函数对应插值因子 n 的各项系数（0-4）
-}
-
-// NewLen5 prepares a Len5 object from a table of five rows of x and y values.
-//
-// X values must be equally spaced, so only the first and last are supplied.
-// X1 must not equal x5.  Y must be a slice of five y values.
-// 构造5点插值结构
-func NewLen5(x1, x5 float64, y []float64) (*Len5, error) {
-	if len(y) != 5 {
-		return nil, ErrorNot5
-	}
-	if x5 == x1 {
-		return nil, ErrorNoXRange
-	}
-	d := &amp;amp;Len5{
-		x1: x1,
-		x5: x5,
-		y:  append([]float64{}, y...),
-		y3: y[2],
-	}
-	// differences
-	d.a = y[1] - y[0]
-	d.b = y[2] - y[1]
-	d.c = y[3] - y[2]
-	d.d = y[4] - y[3]
-	d.e = d.b - d.a
-	d.f = d.c - d.b
-	d.g = d.d - d.c
-	d.h = d.f - d.e
-	d.j = d.g - d.f
-	d.k = d.j - d.h
-	// other intermediate values
-	d.xSum = x5 + x1
-	d.xDiff = x5 - x1
-	d.interpCoeff = []float64{ // (3.8) p. 28
-		d.y3,
-		(d.b+d.c)/2 - (d.h+d.j)/12,
-		d.f/2 - d.k/24,
-		(d.h + d.j) / 12,
-		d.k / 24,
-	}
-	return d, nil
-}
-// InterpolateX interpolates for a given x value.
-func (d *Len5) InterpolateX(x float64) (y float64) {
-	n := (4*x - 2*d.xSum) / d.xDiff
-	return d.InterpolateN(n)
-}
-// InterpolateXStrict interpolates for a given x value,
-// restricting x to the range x1 to x5 given to the the constructor NewLen5.
-func (d *Len5) InterpolateXStrict(x float64) (y float64, err error) {
-	n := (4*x - 2*d.xSum) / d.xDiff
-	y, err = d.InterpolateNStrict(n)
-	if err == ErrorNOutOfRange {
-		err = ErrorXOutOfRange
-	}
-	return
-}
-// InterpolateN interpolates for a given interpolating factor n.
-//
-// The interpolation factor n is x-x3 in units of the tabular x interval.
-// (See Meeus p. 28.)
-// Horner 为工具函数，求解多项式之和，interpCoeff为多项式系数
-func (d *Len5) InterpolateN(n float64) (y float64) {
-	return base.Horner(n, d.interpCoeff...)
-}
-// InterpolateNStrict interpolates for a given interpolating factor n.
-//
-// N is restricted to the range [-1..1].  This is only half the range given
-// to the constructor NewLen5, but is the recommendation given on p. 31.
-func (d *Len5) InterpolateNStrict(n float64) (y float64, err error) {
-	if n &amp;lt; -1 || n &amp;gt; 1 {
-		return 0, ErrorNOutOfRange
-	}
-	return base.Horner(n, d.interpCoeff...), nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;3-2-五点极值&#34;&gt;3.2 五点极值&lt;/h4&gt;
-
-&lt;p&gt;函数的极值对应的插值因子 $n_m$ 可通过解以下方程得到：&lt;/p&gt;
-
-&lt;p&gt;$n_m=\frac {6b+6c-h-j+3n_m^2(h+j)+2n_m^3k}{k-12f}$&lt;/p&gt;
-
-&lt;p&gt;和上面的一样，我们可以执行迭代。首次，把 $n_m=0$代 入方程右边,迭代求得$n_m$&lt;/p&gt;
-
-&lt;p&gt;当我们最后得到$n_m$后，$x_m=\frac {x_1+x_5}{2}+\frac {x_5-x_1}{4}n_m$&lt;/p&gt;
-
-&lt;p&gt;再代入5点插值函数就可以获得极值&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Extremum returns the x and y values at the extremum.
-//
-// Results are restricted to the range of the table given to the constructor
-// NewLen5.  (Meeus actually recommends restricting the range to one unit of
-// the tabular interval, but that seems a little harsh.)
-// 5点插值极值
-func (d *Len5) Extremum() (x, y float64, err error) {
-	// (3.9) p. 29
-	nCoeff := []float64{
-		6*(d.b+d.c) - d.h - d.j,
-		0,
-		3 * (d.h + d.k), // 不应该是 d.h+d.j 吗？
-		2 * d.k,
-	}
-	den := d.k - 12*d.f
-	if den == 0 {
-		return 0, 0, ErrorExtremumOutside
-	}
-	n0, ok := iterate(0, func(n0 float64) float64 {
-		return base.Horner(n0, nCoeff...) / den
-	})
-	if !ok {
-		return 0, 0, ErrorNoConverge
-	}
-	if n0 &amp;lt; -2 || n0 &amp;gt; 2 {
-		return 0, 0, ErrorExtremumOutside
-	}
-	x = .5*d.xSum + .25*d.xDiff*n0
-	y = base.Horner(n0, d.interpCoeff...)
-	return x, y, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;3-3-五点求根&#34;&gt;3.3 五点求根&lt;/h4&gt;
-
-&lt;p&gt;令$y=0$通过以下公式迭代求插值因子$n_0$,起始$n_0=0$&lt;/p&gt;
-
-&lt;p&gt;$n_0=\frac {-24y_3+n_0^2(k-12f)-2n_0^3(h+j)-n_0^4k}{2(6b+6c-h-j)}$&lt;/p&gt;
-
-&lt;p&gt;当曲率比较大时，同样可以加入修正&lt;/p&gt;
-
-&lt;p&gt;$Δn_0 =-\frac {Mn_0^4+Nn_0^3+Pn_0^2+Qn_0+y_3}{4Mn_0^3+3Nn_0^2+2Pn_0+Q},$&lt;/p&gt;
-
-&lt;p&gt;$(M=\frac{k}{24},N=\frac{h+j}{12},P=\frac{f}{2}-M,Q=\frac{b+c}{2}-N)$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Len5Zero finds a zero of the quartic function represented by the table.
-//
-// That is, it returns an x value that yields y=0.
-//
-// Argument strong switches between two strategies for the estimation step.
-// when iterating to converge on the zero.
-//
-// Strong=false specifies a quick and dirty estimate that works well
-// for gentle curves, but can work poorly or fail on more dramatic curves.
-//
-// Strong=true specifies a more sophisticated and thus somewhat more
-// expensive estimate.  However, if the curve has quick changes, This estimate
-// will converge more reliably and in fewer steps, making it a better choice.
-//
-// Results are restricted to the range of the table given to the constructor
-// NewLen5.
-// strong 为带修正模式
-func (d *Len5) Zero(strong bool) (x float64, err error) {
-	var f iterFunc
-	if strong {
-		// (3.11), p. 29
-		M := d.k / 24
-		N := (d.h + d.j) / 12
-		P := d.f/2 - M
-		Q := (d.b+d.c)/2 - N
-		numCoeff := []float64{d.y3, Q, P, N, M}
-		denCoeff := []float64{Q, 2 * P, 3 * N, 4 * M}
-		f = func(n0 float64) float64 {
-			return n0 -
-				base.Horner(n0, numCoeff...)/base.Horner(n0, denCoeff...)
-		}
-	} else {
-		// (3.10), p. 29
-		numCoeff := []float64{
-			-24 * d.y3,
-			0,
-			d.k - 12*d.f,
-			-2 * (d.h + d.j),
-			-d.k,
-		}
-		den := 12*(d.b+d.c) - 2*(d.h+d.j)
-		f = func(n0 float64) float64 {
-			return base.Horner(n0, numCoeff...) / den
-		}
-	}
-	n0, ok := iterate(0, f)
-	if !ok {
-		return 0, ErrorNoConverge
-	}
-	if n0 &amp;gt; 2 || n0 &amp;lt; -2 {
-		return 0, ErrorZeroOutside
-	}
-	x = .5*d.xSum + .25*d.xDiff*n0
-	return x, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;4-四点等距中间点插值&#34;&gt;4. &lt;strong&gt;四点等距中间点插值&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;假设有$(x_1,y_1),(x_2,y_2),(x_3,y_3),(x_4,y_4)$
-那么 $x_2$到 $x_3$ 之间的中点对应的函数值为：
-$y = [ 9(y_2 +y_3 ) - y_1 - y_4 ] / 16$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Len4Half interpolates a center value from a table of four rows.
-func Len4Half(y []float64) (float64, error) {
-	if len(y) != 4 {
-		return 0, ErrorNot4
-	}
-	// (3.12) p. 32
-	return (9*(y[1]+y[2]) - y[0] - y[3]) / 16, nil
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;5-横坐标不等间距插值-拉格朗日插值&#34;&gt;5. &lt;strong&gt;横坐标不等间距插值：拉格朗日插值&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;\begin{align}
-y=y_1L_1+y_2L_2+\cdots+y_nL_n\\[2ex]
-L_i = \prod_{
-\substack{
-i+1\\&lt;br /&gt;
-i \neq j
-}}^n
-\frac {x-x_j}{x_i-x_j}
-\end{align}&lt;/p&gt;
-
-&lt;p&gt;上式是一个 $n-1$ 阶的多项式，这是利用 $y_1,y_2,\dots y_n$ 所能得到的唯一的一个 $n-1$ 阶多项式（注：多项式 插值具有唯一性）。但拉格朗日公式本身有个缺点，就是没有给出所需的数据点数量，以争取达到理想的精度。不过， 当我们希望表达一个函数的明确的插值多项式时，而$x$ 又远离插值节点，那么使用拉格朗日公式是有益的。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Lagrange performs interpolation with unequally-spaced abscissae.
-//
-// Given a table of X and Y values, interpolate a new y value for argument x.
-//
-// X values in the table do not have to be equally spaced; they do not even
-// have to be in order.  They must however, be distinct.
-// table 中包含了 n 个点且xi 必须互异,x 为目标插值点
-func Lagrange(x float64, table []struct{ X, Y float64 }) (y float64) {
-	// method of BASIC program, p. 33.
-	sum := 0.
-	for i := range table {
-		xi := table[i].X
-		prod := 1.
-		for j := range table {
-			if i != j {
-				xj := table[j].X
-				prod *= (x - xj) / (xi - xj)
-			}
-		}
-		sum += table[i].Y * prod
-	}
-	return sum
-}
-// LagrangePoly uses the formula of Lagrange to produce an interpolating
-// polynomial.
-//
-// X values in the table do not have to be equally spaced; they do not even
-// have to be in order.  They must however, be distinct.
-//
-// The returned polynomial will be of degree n-1 where n is the number of rows
-// in the table.  It can be evaluated for x using common.Horner.
-// 构造拉格朗日多项式，返回各项系数(0-n)
-func LagrangePoly(table []struct{ X, Y float64 }) []float64 {
-	// Method not fully described by Meeus, but needed for numerical solution
-	// to Example 3.g.
-	sum := make([]float64, len(table))
-	prod := make([]float64, len(table))
-	last := len(table) - 1
-	for i := range table {
-		xi := table[i].X
-		yi := table[i].Y
-		prod[last] = 1
-		den := 1.
-		n := last
-		for j := range table {
-			if i != j {
-				xj := table[j].X
-				prod[n-1] = prod[n] * -xj
-				for k := n; k &amp;lt; last; k++ {
-					prod[k] -= prod[k+1] * xj
-				}
-				n--
-				den *= (xi - xj)
-			}
-		}
-		for j, pj := range prod {
-			sum[j] += yi * pj / den
-		}
-	}
-	return sum
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>
