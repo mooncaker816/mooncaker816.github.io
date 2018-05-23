@@ -11,6 +11,60 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法18</title>
+      <link>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9518/</link>
+      <pubDate>Wed, 23 May 2018 09:01:52 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9518/</guid>
+      <description>&lt;h1 id=&#34;第二十章-smallest-circle-containing-three-celestial-bodies&#34;&gt;第二十章 Smallest Circle containing three Celestial Bodies&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-问题&#34;&gt;1. 问题&lt;/h2&gt;
+
+&lt;p&gt;设三点为A,B,C,对应三边为a,b,c,其中a为最长边，&lt;br /&gt;
+当$a&amp;gt;\sqrt {b^2+c^2}$,则包含这三点的最小圆直径为a，&lt;br /&gt;
+当$a&amp;lt;\sqrt {b^2+c^2}$,则包含这三点的最小圆直径为$$\frac {2abc}{\sqrt {(a+b+c)(a+b-c)(b+c-a)(a+c-b)}}$$&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://baike.baidu.com/item/外接圆半径公式/14818938?fr=aladdin&#34; target=&#34;_blank&#34;&gt;证明&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;给定三个天体的坐标，求最小圆直径。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Smallest finds the smallest circle containing three points.
+//
+// Arguments should represent coordinates in right ascension and declination
+// or longitude and latitude.  Result Δ is the diameter of the circle, typeI
+// is true if solution is of type I.
+//
+//	type I   Two points on circle, one interior.
+//	type II  All three points on circle.
+// 根据三点坐标，求最小圆直径
+func Smallest(r1, d1, r2, d2, r3, d3 unit.Angle) (Δ unit.Angle, typeI bool) {
+	// Using haversine formula, but reimplementing SepHav here to reuse
+	// the computed cosines.
+	cd1 := d1.Cos()
+	cd2 := d2.Cos()
+	cd3 := d3.Cos()
+	a := 2 * math.Asin(math.Sqrt(base.Hav(d2-d1)+cd1*cd2*base.Hav(r2-r1)))
+	b := 2 * math.Asin(math.Sqrt(base.Hav(d3-d2)+cd2*cd3*base.Hav(r3-r2)))
+	c := 2 * math.Asin(math.Sqrt(base.Hav(d1-d3)+cd3*cd1*base.Hav(r1-r3)))
+	if b &amp;gt; a {
+		a, b = b, a
+	}
+	if c &amp;gt; a {
+		a, c = c, a
+	}
+	if a*a &amp;gt;= b*b+c*c {
+		return unit.Angle(a), true
+	}
+	// (20.1) p. 128
+	return unit.Angle(2 * a * b * c /
+		math.Sqrt((a+b+c)*(a+b-c)*(b+c-a)*(a+c-b))), false
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法17</title>
       <link>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9517/</link>
       <pubDate>Tue, 22 May 2018 10:15:11 +0800</pubDate>
@@ -2289,124 +2343,6 @@ func DayOfYearToCalendar(n int, leap bool) (m, d int) {
 &lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;Go 标准库已经够了，所以就略了&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法3</title>
-      <link>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/</link>
-      <pubDate>Tue, 15 May 2018 13:48:36 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/</guid>
-      <description>&lt;h1 id=&#34;第五章-迭代-iteration&#34;&gt;第五章 迭代 Iteration&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-什么是迭代算法&#34;&gt;1. 什么是迭代算法&lt;/h2&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;　　迭代法（英语：Iterative Method），在计算数学中，迭代是通过从一个初始估计出发寻找一系列近似解来解决问题（一般是解方程或者方程组）的数学过程，为实现这一过程所使用的方法统称。&lt;/p&gt;
-
-&lt;p&gt;　　跟迭代法相对应的是直接法（或者称为一次解法），即一次性解决问题，例如通过开方解决方程 $ x^{2}=4$。一般如果可能，直接解法总是优先考虑的。但当遇到复杂问题时，特别是在未知量很多，方程为非线性时，我们无法找到直接解法（例如五次以及更高次的代数方程没有解析解，参见阿贝尔定理），这时候或许可以通过迭代法寻求方程（组）的近似解。&lt;/p&gt;
-
-&lt;p&gt;　　最常见的迭代法是牛顿法。其他还包括最速下降法、共轭迭代法、变尺度迭代法、最小二乘法、线性规划、非线性规划、单纯型法、惩罚函数法、斜率投影法、遗传算法、模拟退火等等。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　以上是 wiki 上对迭代算法的描述，可以看出，迭代法的主要用途就是求解近似根，这一点我们再第三章插值函数逆推插值点的介绍中已经得到了运用。下面我们主要介绍牛顿迭代法和二分迭代法。&lt;/p&gt;
-
-&lt;h2 id=&#34;2-牛顿迭代法&#34;&gt;2. 牛顿迭代法&lt;/h2&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;　　首先，选择一个接近函数$f(x)$零点的 $x_0$，计算相应的 $f(x_0)$和切线斜率 $f&amp;rsquo;(x_0)$。然后我们计算穿过点 $(x_0,f(x_0))$并且斜率为 $f&amp;rsquo;(x_0)$的直线和 $x$轴的交点的 $x$坐标，也就是求如下方程的解：
-$$0=(x-x_0)f&amp;rsquo;(x_0)+f(x_0)$$
-　　我们将新求得的点的$x$坐标命名为$x_1$，通常$x_1$会比$x_0$更接近方程$f(x)=0$的解。因此我们现在可以利用$x_1$开始下一轮迭代。迭代公式可化简为如下所示：
-$$x_{n+1}=x_n - \frac {f(x_n)}{f&amp;rsquo;(x_n)}$$
-　　已经证明，如果$f&amp;rsquo;$是连续的，并且待求的零点$x$是孤立的，那么在零点$x$周围存在一个区域，只要初始值$x_0$位于这个邻近区域内，那么牛顿法必定收敛。&lt;/p&gt;
-
-&lt;p&gt;　　并且，如果$f&amp;rsquo;(x)\neq 0$，那么牛顿法将具有平方收敛的性能。粗略的说，这意味着每迭代一次，牛顿法结果的有效数字将增加一倍。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/NewtonIteration_Ani.gif/600px-NewtonIteration_Ani.gif&#34; width=400 height=300 /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// BetterFunc is a convience type definition.
-type BetterFunc func(float64) float64
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DecimalPlaces iterates to a fixed number of decimal places.
-//
-// Inputs are an improvement function, a starting value, the number of
-// decimal places desired in the result, and an iteration limit.
-// better 为迭代公式，start 为起始点，places 为视作迭代结束的最大精度值的小数点位数,
-// maxIterations 为迭代最大次数
-func DecimalPlaces(better BetterFunc, start float64, places, maxIterations int) (float64, error) {
-	d := math.Pow(10, float64(-places))
-	for i := 0; i &amp;lt; maxIterations; i++ {
-		n := better(start)
-		if math.Abs(n-start) &amp;lt; d {
-			return n, nil
-		}
-		start = n
-	}
-	return 0, errors.New(&amp;quot;Maximum iterations reached&amp;quot;)
-}
-
-// FullPrecison iterates to (nearly) the full precision of a float64.
-//
-// To allow for a little bit of floating point jitter, FullPrecision iterates
-// to 15 significant figures, which is the maximum number of full significant
-// figures representable in a float64, but still a couple of bits shy of the
-// full representable precision.
-// 和 DecimalPlaces 功能类似，只不过默认迭代结束的标志为小于float64的最大精度15
-func FullPrecision(better BetterFunc, start float64, maxIterations int) (float64, error) {
-	for i := 0; i &amp;lt; maxIterations; i++ {
-		n := better(start)
-		if math.Abs((n-start)/n) &amp;lt; 1e-15 {
-			return n, nil
-		}
-		start = n
-	}
-	return 0, errors.New(&amp;quot;Maximum iterations reached&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;3-二分迭代法&#34;&gt;3. 二分迭代法&lt;/h2&gt;
-
-&lt;p&gt;　　二分迭代法，顾名思义，就是计算中点的函数值，并与当前低值和高值比较，&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;若与低值同号，则把该值作为新的低值，继续迭代&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;若与高值同号，则把该值作为新的高值，继续迭代&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// RootFunc is a convience type definition.
-type RootFunc func(float64) float64
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// BinaryRoot finds a root between given bounds by binary search.
-//
-// Inputs are a function on x and the bounds on x.  A root must exist between
-// the given bounds, otherwise the result is not meaningful.
-// 因为float64 的小数bit位最多为52位(10进制为15位有效数字)，
-// 即每次迭代理论上能提升一位精度，所以最多52次就应该跳出迭代
-func BinaryRoot(f RootFunc, lower, upper float64) float64 {
-	yLower := f(lower)
-	var mid float64
-	for j := 0; j &amp;lt; 52; j++ {
-		mid = (lower + upper) / 2
-		yMid := f(mid)
-		if yMid == 0 {
-			break
-		}
-		if math.Signbit(yLower) == math.Signbit(yMid) { // 与低值同号，替代低值
-			lower = mid
-			yLower = yMid
-		} else {
-			upper = mid //与高值同号，替换高值
-		}
-	}
-	return mid
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>
