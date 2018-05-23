@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/">
+  <meta property="og:title" content="天文算法20 | Mooncaker816">
+  <meta property="og:description" content="第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic
+
+"><meta property="og:image" content="https://mooncaker816.github.io/img/nutation.png">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-05-23T16:58:54&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-05-23T18:18:06&#43;08:00">
+  
+
+  
+  
+
+
+
+
+  <title>天文算法20 | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+<div class="article-header">
+  
+  
+    <img src="/img/nutation.png" class="article-banner" itemprop="image">
+  
+
+  
+</div>
+<br>
+
+
+
+            <div class="article-container">
+              <h1 itemprop="name">天文算法20</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2018-05-23 16:58:54 &#43;0800 CST" itemprop="datePublished dateModified">
+      May 23, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    3 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">golang</a
+    >, 
+    
+    <a href="https://mooncaker816.github.io/categories/%E7%AE%97%E6%B3%95/">算法</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%9520&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f23%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%259520%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f23%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%259520%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f23%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%259520%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%9520"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f23%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%259520%2f&amp;title=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%9520"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=%e5%a4%a9%e6%96%87%e7%ae%97%e6%b3%9520&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f05%2f23%2f%25E5%25A4%25A9%25E6%2596%2587%25E7%25AE%2597%25E6%25B3%259520%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <h1 id=684ae33a97a2bcc250ffcbf40e9b26cb>第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic</h1>
+
+<p></p>
+
+<h2 id=df2adf992744e7e2be4571a538ca03fd>1. 名词解释</h2>
+
+<p><a href="https://zh.wikipedia.org/wiki/%E7%AB%A0%E5%8B%95" target="_blank">章动</a></p>
+
+<h2 id=8f6bc6bcea534a50dbdc75c17aafdda1>2. 章动的分量</h2>
+
+<p>　　章动可以很容易的分解为黄道的水平分量和的垂直分量。黄道上的分量记为$Δψ$，称为黄经章动；它影响了天球上所有天体的经度。黄道的垂直分量记为$Δε$，称为交角章动，它影响了黄赤交角。</p>
+
+<h2 id=d6578da1b2dfeafd25a29b3c68a548a5>3. 较精确计算章动</h2>
+
+<pre><code class="language-go">// Nutation returns nutation in longitude (Δψ) and nutation in obliquity (Δε)
+// for a given JDE.
+//
+// JDE = UT + ΔT, see package deltat.
+//
+// Computation is by 1980 IAU theory, with terms < .0003″ neglected.
+// 计算 jde 对应的章动
+func Nutation(jde float64) (Δψ, Δε unit.Angle) {
+	T := base.J2000Century(jde)
+	D := base.Horner(T,
+		297.85036, 445267.11148, -0.0019142, 1./189474) * math.Pi / 180
+	M := base.Horner(T,
+		357.52772, 35999.050340, -0.0001603, -1./300000) * math.Pi / 180
+	N := base.Horner(T,
+		134.96298, 477198.867398, 0.0086972, 1./56250) * math.Pi / 180
+	F := base.Horner(T,
+		93.27191, 483202.017538, -0.0036825, 1./327270) * math.Pi / 180
+	Ω := base.Horner(T,
+		125.04452, -1934.136261, 0.0020708, 1./450000) * math.Pi / 180
+	// sum in reverse order to accumulate smaller terms first
+	var Δψs, Δεs float64
+	for i := len(table22A) - 1; i >= 0; i-- {
+		row := table22A[i]
+		arg := row.d*D + row.m*M + row.n*N + row.f*F + row.ω*Ω
+		s, c := math.Sincos(arg)
+		Δψs += s * (row.s0 + row.s1*T)
+		Δεs += c * (row.c0 + row.c1*T)
+	}
+	Δψ = unit.AngleFromSec(Δψs * .0001)
+	Δε = unit.AngleFromSec(Δεs * .0001)
+	return
+}
+</code></pre>
+
+<h2 id=8f6d94452228cb24394c0b5561d096e1>4. 粗略计算章动</h2>
+
+<p>Δψ精度为0.5″,Δε精度为0.1″</p>
+
+<pre><code class="language-go">// ApproxNutation returns a fast approximation of nutation in longitude (Δψ)
+// and nutation in obliquity (Δε) for a given JDE.
+//
+// Accuracy is 0.5″ in Δψ, 0.1″ in Δε.
+// 精度要求为0.5″ in Δψ, 0.1″ in Δε
+func ApproxNutation(jde float64) (Δψ, Δε unit.Angle) {
+	T := (jde - base.J2000) / 36525
+	Ω := (125.04452 - 1934.136261*T) * math.Pi / 180
+	L := (280.4665 + 36000.7698*T) * math.Pi / 180
+	N := (218.3165 + 481267.8813*T) * math.Pi / 180
+	sΩ, cΩ := math.Sincos(Ω)
+	s2L, c2L := math.Sincos(2 * L)
+	s2N, c2N := math.Sincos(2 * N)
+	s2Ω, c2Ω := math.Sincos(2 * Ω)
+	Δψ = unit.AngleFromSec(-17.2*sΩ - 1.32*s2L - 0.23*s2N + 0.21*s2Ω)
+	Δε = unit.AngleFromSec(9.2*cΩ + 0.57*c2L + 0.1*c2N - 0.09*c2Ω)
+	return
+}
+</code></pre>
+
+<h2 id=76dc59170d90cb05397a6870182c9f87>5. 黄赤交角</h2>
+
+<ul>
+<li><p>平黄赤交角$ε_0$：黄道与平赤道的夹角</p>
+
+<p>$$ε_0 = 23°26’21”.448 - 46”.8150T - 0”.00059T^2 + 0”.001813T^3$$</p>
+
+<p>T是J2000.0起算的儒略世纪数</p>
+
+<p>　　当时间范围很长，上述公式的精度并不令人满意：2000年误差1”，4000误差为10”。Laskar提供了以下改良的的公式，式中U是J2000.0起算的儒略万年数，即U=T/100：
+\begin{align}
+ε_0 =& 23°26’21”.448 - 4680”.93U - 1.55U^2 + 1999.25U^3 - 51.38U^4 - 249.67U^5 \\[2ex]
+&-39.05U^6 + 7.12U^7 + 27.87U^8 + 5.79U^9 + 2.45U^{10}
+\end{align}
+　　该表达式的精度是：1000年后误差0”.01(公元 1000 到 3000)，10000年后误差数个角秒。<br />
+　　<strong>该表达式适用于|U|<1，即 J2000.0 起算前后各 10000 年的范围内。</strong></p>
+
+<pre><code class="language-go">// MeanObliquity returns mean obliquity (ε₀) following the IAU 1980
+// polynomial.
+//
+// Accuracy is 1″ over the range 1000 to 3000 years and 10″ over the range
+// 0 to 4000 years.
+// 平黄赤交角 - 精度一般，2000年误差 1"，4000年误差为 10"
+func MeanObliquity(jde float64) unit.Angle {
+    // (22.2) p. 147
+    return unit.AngleFromSec(base.Horner(base.J2000Century(jde),
+        unit.FromSexaSec(' ', 23, 26, 21.448),
+        -46.815,
+        -0.00059,
+        0.001813))
+}
+
+// MeanObliquityLaskar returns mean obliquity (ε₀) following the Laskar
+// 1986 polynomial.
+//
+// Accuracy over the range 1000 to 3000 years is .01″.
+//
+// Accuracy over the valid date range of -8000 to +12000 years is
+// "a few seconds."
+// 平黄赤交角 - 精度较好，1000年后误差0".01(公元 1000 到 3000)，10000年后误差数个角秒
+// 适用范围：J2000.0 起算前后各10000年的范围内。
+func MeanObliquityLaskar(jde float64) unit.Angle {
+    // (22.3) p. 147
+    return unit.AngleFromSec(base.Horner(base.J2000Century(jde)*.01,
+        unit.FromSexaSec(' ', 23, 26, 21.448),
+        -4680.93,
+        -1.55,
+        1999.25,
+        -51.38,
+        -249.67,
+        -39.05,
+        7.12,
+        27.87,
+        5.79,
+        2.45))
+}
+</code></pre></li>
+
+<li><p>真黄赤交角：黄道与真赤道的夹角</p>
+
+<p>$$ε = ε_0 + Δε$$</p></li>
+</ul>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%95/">天文算法</a>
+  
+</div>
+
+
+
+
+              
+              
+              <div class="article-widget">
+                <div class="hr-light"></div>
+                <h3>相关</h3>
+                <ul>
+                  
+                  <li><a href="/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9519/">天文算法19</a></li>
+                  
+                  <li><a href="/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9518/">天文算法18</a></li>
+                  
+                  <li><a href="/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9517/">天文算法17</a></li>
+                  
+                  <li><a href="/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9516/">天文算法16</a></li>
+                  
+                  <li><a href="/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9515/">天文算法15</a></li>
+                  
+                </ul>
+              </div>
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9519/" rel="prev">天文算法19</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 May 23, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#684ae33a97a2bcc250ffcbf40e9b26cb">第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#df2adf992744e7e2be4571a538ca03fd">1. 名词解释</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8f6bc6bcea534a50dbdc75c17aafdda1">2. 章动的分量</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#d6578da1b2dfeafd25a29b3c68a548a5">3. 较精确计算章动</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8f6d94452228cb24394c0b5561d096e1">4. 粗略计算章动</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#76dc59170d90cb05397a6870182c9f87">5. 黄赤交角</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+    
+    
+    
+
+  </body>
+</html>
+

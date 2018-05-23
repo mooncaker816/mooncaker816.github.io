@@ -11,6 +11,148 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法20</title>
+      <link>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/</link>
+      <pubDate>Wed, 23 May 2018 16:58:54 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/</guid>
+      <description>&lt;h1 id=&#34;第二十二章-章动和黄赤交角-nutation-and-the-obliquity-of-the-ecliptic&#34;&gt;第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-名词解释&#34;&gt;1. 名词解释&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%AB%A0%E5%8B%95&#34; target=&#34;_blank&#34;&gt;章动&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;2-章动的分量&#34;&gt;2. 章动的分量&lt;/h2&gt;
+
+&lt;p&gt;　　章动可以很容易的分解为黄道的水平分量和的垂直分量。黄道上的分量记为$Δψ$，称为黄经章动；它影响了天球上所有天体的经度。黄道的垂直分量记为$Δε$，称为交角章动，它影响了黄赤交角。&lt;/p&gt;
+
+&lt;h2 id=&#34;3-较精确计算章动&#34;&gt;3. 较精确计算章动&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Nutation returns nutation in longitude (Δψ) and nutation in obliquity (Δε)
+// for a given JDE.
+//
+// JDE = UT + ΔT, see package deltat.
+//
+// Computation is by 1980 IAU theory, with terms &amp;lt; .0003″ neglected.
+// 计算 jde 对应的章动
+func Nutation(jde float64) (Δψ, Δε unit.Angle) {
+	T := base.J2000Century(jde)
+	D := base.Horner(T,
+		297.85036, 445267.11148, -0.0019142, 1./189474) * math.Pi / 180
+	M := base.Horner(T,
+		357.52772, 35999.050340, -0.0001603, -1./300000) * math.Pi / 180
+	N := base.Horner(T,
+		134.96298, 477198.867398, 0.0086972, 1./56250) * math.Pi / 180
+	F := base.Horner(T,
+		93.27191, 483202.017538, -0.0036825, 1./327270) * math.Pi / 180
+	Ω := base.Horner(T,
+		125.04452, -1934.136261, 0.0020708, 1./450000) * math.Pi / 180
+	// sum in reverse order to accumulate smaller terms first
+	var Δψs, Δεs float64
+	for i := len(table22A) - 1; i &amp;gt;= 0; i-- {
+		row := table22A[i]
+		arg := row.d*D + row.m*M + row.n*N + row.f*F + row.ω*Ω
+		s, c := math.Sincos(arg)
+		Δψs += s * (row.s0 + row.s1*T)
+		Δεs += c * (row.c0 + row.c1*T)
+	}
+	Δψ = unit.AngleFromSec(Δψs * .0001)
+	Δε = unit.AngleFromSec(Δεs * .0001)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-粗略计算章动&#34;&gt;4. 粗略计算章动&lt;/h2&gt;
+
+&lt;p&gt;Δψ精度为0.5″,Δε精度为0.1″&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ApproxNutation returns a fast approximation of nutation in longitude (Δψ)
+// and nutation in obliquity (Δε) for a given JDE.
+//
+// Accuracy is 0.5″ in Δψ, 0.1″ in Δε.
+// 精度要求为0.5″ in Δψ, 0.1″ in Δε
+func ApproxNutation(jde float64) (Δψ, Δε unit.Angle) {
+	T := (jde - base.J2000) / 36525
+	Ω := (125.04452 - 1934.136261*T) * math.Pi / 180
+	L := (280.4665 + 36000.7698*T) * math.Pi / 180
+	N := (218.3165 + 481267.8813*T) * math.Pi / 180
+	sΩ, cΩ := math.Sincos(Ω)
+	s2L, c2L := math.Sincos(2 * L)
+	s2N, c2N := math.Sincos(2 * N)
+	s2Ω, c2Ω := math.Sincos(2 * Ω)
+	Δψ = unit.AngleFromSec(-17.2*sΩ - 1.32*s2L - 0.23*s2N + 0.21*s2Ω)
+	Δε = unit.AngleFromSec(9.2*cΩ + 0.57*c2L + 0.1*c2N - 0.09*c2Ω)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;5-黄赤交角&#34;&gt;5. 黄赤交角&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;平黄赤交角$ε_0$：黄道与平赤道的夹角&lt;/p&gt;
+
+&lt;p&gt;$$ε_0 = 23°26&amp;rsquo;21&amp;rdquo;.448 - 46&amp;rdquo;.8150T - 0&amp;rdquo;.00059T^2 + 0&amp;rdquo;.001813T^3$$&lt;/p&gt;
+
+&lt;p&gt;T是J2000.0起算的儒略世纪数&lt;/p&gt;
+
+&lt;p&gt;　　当时间范围很长，上述公式的精度并不令人满意：2000年误差1&amp;rdquo;，4000误差为10&amp;rdquo;。Laskar提供了以下改良的的公式，式中U是J2000.0起算的儒略万年数，即U=T/100：
+\begin{align}
+ε_0 =&amp;amp; 23°26&amp;rsquo;21&amp;rdquo;.448 - 4680&amp;rdquo;.93U - 1.55U^2 + 1999.25U^3 - 51.38U^4 - 249.67U^5 \\[2ex]
+&amp;amp;-39.05U^6 + 7.12U^7 + 27.87U^8 + 5.79U^9 + 2.45U^{10}
+\end{align}
+　　该表达式的精度是：1000年后误差0&amp;rdquo;.01(公元 1000 到 3000)，10000年后误差数个角秒。&lt;br /&gt;
+　　&lt;strong&gt;该表达式适用于|U|&amp;lt;1，即 J2000.0 起算前后各 10000 年的范围内。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// MeanObliquity returns mean obliquity (ε₀) following the IAU 1980
+// polynomial.
+//
+// Accuracy is 1″ over the range 1000 to 3000 years and 10″ over the range
+// 0 to 4000 years.
+// 平黄赤交角 - 精度一般，2000年误差 1&amp;quot;，4000年误差为 10&amp;quot;
+func MeanObliquity(jde float64) unit.Angle {
+    // (22.2) p. 147
+    return unit.AngleFromSec(base.Horner(base.J2000Century(jde),
+        unit.FromSexaSec(&#39; &#39;, 23, 26, 21.448),
+        -46.815,
+        -0.00059,
+        0.001813))
+}
+
+// MeanObliquityLaskar returns mean obliquity (ε₀) following the Laskar
+// 1986 polynomial.
+//
+// Accuracy over the range 1000 to 3000 years is .01″.
+//
+// Accuracy over the valid date range of -8000 to +12000 years is
+// &amp;quot;a few seconds.&amp;quot;
+// 平黄赤交角 - 精度较好，1000年后误差0&amp;quot;.01(公元 1000 到 3000)，10000年后误差数个角秒
+// 适用范围：J2000.0 起算前后各10000年的范围内。
+func MeanObliquityLaskar(jde float64) unit.Angle {
+    // (22.3) p. 147
+    return unit.AngleFromSec(base.Horner(base.J2000Century(jde)*.01,
+        unit.FromSexaSec(&#39; &#39;, 23, 26, 21.448),
+        -4680.93,
+        -1.55,
+        1999.25,
+        -51.38,
+        -249.67,
+        -39.05,
+        7.12,
+        27.87,
+        5.79,
+        2.45))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;真黄赤交角：黄道与真赤道的夹角&lt;/p&gt;
+
+&lt;p&gt;$$ε = ε_0 + Δε$$&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法19</title>
       <link>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9519/</link>
       <pubDate>Wed, 23 May 2018 14:36:29 +0800</pubDate>
@@ -2267,453 +2409,6 @@ func Julian(y int) (m, d int) {
 	f := d + e + 114
 	f, g := f/31, f%31
 	return f, g + 1
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法5</title>
-      <link>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</link>
-      <pubDate>Wed, 16 May 2018 09:27:51 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</guid>
-      <description>&lt;h1 id=&#34;第七章-儒略日-julian-day&#34;&gt;第七章 儒略日 Julian Day&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-儒略历和格里高利历&#34;&gt;1. 儒略历和格里高利历&lt;/h2&gt;
-
-&lt;h3 id=&#34;1-1-定义&#34;&gt;1.1 定义&lt;/h3&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;儒略历，是格里历的前身，由罗马共和国独裁官儒略·凯撒采纳埃及亚历山大的希腊数学家兼天文学家索西琴尼计算的历法，在公元前45年1月1日起执行，取代旧罗马历历法的历法。一年设12个月，大小月交替，四年一闰，平年365日，闰年于二月底增加一闰日，年平均长度为365.25日。由于累积误差随着时间越来越大，1582年后由教皇格里高利十三世改良，变为格里历，即沿用至今的公历。但大英帝国、北美十三州等直到1752年才从儒略历改用格里历。现今儒略历只有苏格兰昔德兰群岛之富拉岛、阿索斯神权共和国和一些北非的柏柏尔人使用。&lt;/p&gt;
-
-&lt;p&gt;格里历（拉丁语：Calendarium Gregorianum，又译、国瑞历、额我略历、格列高利历、格里高利历、葛瑞格里历、格列高历，也称基督历[1]），是由意大利医生兼哲学家阿洛伊修斯·里利乌斯改革儒略历制定的历法，由罗马大公教会教宗格列高利十三世在1582年颁行。公历是阳历的一种，于1912年在中国引进采用，因农历等中国传统历法是阴阳历，故公历在中文中又称阳历、西历、新历、公历。格里历与儒略历一样，格里历也是每四年在2月底置一闰日，但格里历特别规定，除非能被400整除，所有的世纪年（能被100整除）都不设闰日；如此，每四百年，格里历仅有97个闰年，比儒略历减少3个闰年 [注 1]。 格里历的历年平均长度为365.2425日，接近平均回归年的365.242199074日，即约每3300年误差一日，也更接近春分点回归年的365.24237日，即约每8000年误差一日；而儒略历的历年为365.25日，约每128年就误差一日[注 1]。到1582年时，儒略历的春分日（3月21日）与地球公转到春分点的实际时间已相差10天。因此，格里历开始实行时，将儒略历1582年10月4日星期四的次日，为格里历1582年10月15日星期五，即有10天被删除，但原星期的周期保持不变。格里历的纪年沿用儒略历，自传统的耶稣诞生年开始，称为“公元”，亦称“西元”。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&#34;1-2-区别&#34;&gt;1.2 区别&lt;/h3&gt;
-
-&lt;p&gt;　　由定义可见，儒略历和格里高利历都属于阳历，后者是以太阳回归年为基础，对前者置润误差进行调整后的历法。所以两者之间最大的不同就是置润规则。&lt;/p&gt;
-
-&lt;h4 id=&#34;1-2-1-置润规则&#34;&gt;1.2.1 置润规则&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略历&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;能被4整除的年份为闰年（产生多润的原因，从而使儒略历在日期上落后于格里历）&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;格里历&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;能被4整除但不能被100整除的非世纪年 + 能被400整除的世纪年，即要在儒略历闰年中扣除那些不能被400整除的世纪年（如1600，1700等）&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LeapYearJulian returns true if year y in the Julian calendar is a leap year.
-// 儒略历闰年判断
-func LeapYearJulian(y int) bool {
-	return y%4 == 0
-}
-
-// LeapYearGregorian returns true if year y in the Gregorian calendar is a leap year.
-// 格里历闰年判断
-func LeapYearGregorian(y int) bool {
-	return (y%4 == 0 &amp;amp;&amp;amp; y%100 != 0) || y%400 == 0
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;1-2-2-转换&#34;&gt;1.2.2 转换&lt;/h4&gt;
-
-&lt;p&gt;　　知道了这个不同，我们就能推导出两种历法之间实际的相差天数，如下：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;1582年：&lt;br /&gt;
-格里历10月15日，合儒略历10月5日，或之后的日期：格里历日期减10日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1583年——1699年：&lt;br /&gt;
-格里历日期减10日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1700年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
-格里历2月28日，合儒略历2月18日，或之前的日期：格里历日期减10日等于儒略历日期。&lt;br /&gt;
-格里历3月1日，合儒略历2月19日，或之后的日期：格里历日期减11日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1701年——1799年：&lt;br /&gt;
-格里历日期减11日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1800年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
-格里历2月28日，合儒略历2月17日，或之前的日期：格里历日期减11日等于儒略历日期。&lt;br /&gt;
-格里历3月1日，合儒略历2月18日，或之后的日期：格里历日期减12日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1801年——1899年：&lt;br /&gt;
-格里历日期减12日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1900年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
-格里历2月28日，合儒略历2月16日，或之前的日期：格里历日期减12日等于儒略历日期。&lt;br /&gt;
-格里历3月1日，合儒略历2月17日，或之后的日期：格里历日期减13日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;1901年——2099年：&lt;br /&gt;
-格里历日期减13日等于儒略历日期。&lt;/li&gt;
-&lt;li&gt;2100年（格里历没有闰日，但儒略历有）：&lt;br /&gt;
-格里历2月28日，合儒略历2月15日，或之前的日期：格里历日期减13日等于儒略历日期。&lt;br /&gt;
-格里历3月1日，合儒略历2月16日，或之后的日期：格里历日期减14日等于儒略历日期。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;2-儒略日-julian-day&#34;&gt;2. 儒略日 Julian Day&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日（Julian Day）&lt;/strong&gt;&lt;br /&gt;
-儒略日是在儒略周期内以连续的日数计算时间的计时法，主要是天文学家在使用。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日数（Julian Day Number，JDN）&lt;/strong&gt;&lt;br /&gt;
-儒略日数的计算是从格林威治标准时间的中午开始，包含一个整天的时间，起点的时间（0日）回溯至儒略历的公元前4713年1月1日中午12点（在格里历是公元前4714年11月24日），这个日期是三种多年周期的共同起点，且是历史上最接近现代的一个起点。例如，2000年1月1日的UT12:00是儒略日2,451,545。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日期（Julian date，JD）&lt;/strong&gt;&lt;br /&gt;
-儒略日期是以格林威治标准时中午12:00的儒略日加上那一天的瞬时时间的分数。儒略日期是儒略日添加小数部分所表示的儒略日数。例如，2013年1月1日00:30:00（UT）是儒略日期2,456,293.520833。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略周期（Julian Period）&lt;/strong&gt;&lt;br /&gt;
-儒略周期是开始于公元前4713年，长达7980年的纪年法，被用于历史上各种不同历法的日期转换。公元2018年是儒略周期的6731年，下一个儒略周期将开始于公元3268年。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;儒略日起点&lt;/strong&gt;&lt;br /&gt;
-儒略日的起点订在西元前4713年（天文学上记为 -4712年）1月1日格林威治时间平午（世界时12:00），即JD 0指定为UT时间B.C.4713年1月1日12:00到UC时间B.C.4713年1月2日12:00的24小时。每一天赋予了一个唯一的数字，顺数而下，如：1996年1月1日12:00:00的儒略日是2450084。这个日期是考虑了太阳、月亮的轨道运行周期，以及当时收税的间隔而订出来的。Joseph Scaliger定义儒略周期为7980年，是因28、19、15的最小公倍数为28×19×15=7980。其中：&lt;/p&gt;
-
-&lt;p&gt;28年为一太阳周期（solar cycle），经过一太阳周期，则星期的日序与月的日序会重复。&lt;/p&gt;
-
-&lt;p&gt;19年为一太阴周期，或称默冬章（Metonic cycle），因235朔望月=19回归年，经过一太阴周期则阴历月年的日序重复。&lt;/p&gt;
-
-&lt;p&gt;15年为一小纪（indiction cycle），此为罗马皇帝君士坦丁一世所颁，每15年评定财产价值以供课税，成为古罗马用的一个纪元单位，&lt;/p&gt;
-
-&lt;p&gt;故以7980年为一儒略周期，而所选的起点公元前4713年，则是这三个循环周期同时开始的最近年份。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;简化儒略日（MJD）&lt;/strong&gt;&lt;br /&gt;
-由于儒略日数字位数太多，国际天文学联合会于1973年采用简化儒略日（MJD），其定义为MJD = JD - 2400000.5。MJD相应的起点是1858年11月17日世界时0时。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　算法中主要用的是 &lt;strong&gt;儒略日期（Julian date，JD）&lt;/strong&gt;，后续简称为&lt;strong&gt;儒略日&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;3-儒略日和阳历日期-格里历-儒略历日期-的转换&#34;&gt;3. 儒略日和阳历日期（格里历、儒略历日期）的转换&lt;/h2&gt;
-
-&lt;h3 id=&#34;3-1-阳历日期-y-m-d-rightarrow-儒略日-jd&#34;&gt;3.1 阳历日期$(Y,M,D)$ $\Rightarrow$ 儒略日$(JD)$&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;设$Y$为给定年份，$M$为月份，$D$为该月日期（可以带小数）。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;若 $M &amp;gt; 2$，$Y$和$M$不变，&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;若 $M =1或2$，以$Y–1$代$Y$，以$M+12$代$M$，换句话说，如果日期在1月或2月，则被看作是在前一年的13月或14月。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;对格里历有 ：$A = \lfloor \frac {Y}{100}\rfloor$ $B = 2 - A + \lfloor \frac{A}{4}\rfloor$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;对儒略历，取 $B = 0$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;要求的儒略日即为：$$JD = \lfloor 365.25(Y+4716)\rfloor+\lfloor30.6001(M+1)\rfloor+D+B-1524.5$$&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;此处作对30.6001取值的解释是为了确保小数在运算时的准确性，如30.6 * 5 应该等于153，但是很多计算机得出的结果是152.999 9998。&lt;/p&gt;
-
-&lt;p&gt;另一种方式就是用306代替，最后再除以10取整&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// FloorDiv returns the integer floor of the fractional value (x / y).
-//
-// It uses integer math only, so is more efficient than using floating point
-// intermediate values.  This function can be used in many places where INT()
-// appears in AA.  As with built in integer division, it panics with y == 0.
-func FloorDiv(x, y int) (q int) {
-	q = x / y
-	if (x &amp;lt; 0) != (y &amp;lt; 0) &amp;amp;&amp;amp; x%y != 0 {
-		q--
-	}
-	return
-}
-
-// FloorDiv64 returns the integer floor of the fractional value (x / y).
-//
-// It uses integer math only, so is more efficient than using floating point
-// intermediate values.  This function can be used in many places where INT()
-// appears in AA.  As with built in integer division, it panics with y == 0.
-func FloorDiv64(x, y int64) (q int64) {
-	q = x / y
-	if (x &amp;lt; 0) != (y &amp;lt; 0) &amp;amp;&amp;amp; x%y != 0 {
-		q--
-	}
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// CalendarGregorianToJD converts a Gregorian year, month, and day of month
-// to Julian day.
-//
-// Negative years are valid, back to JD 0.  The result is not valid for
-// dates before JD 0.
-// 格里历日期转儒略日
-func CalendarGregorianToJD(y, m int, d float64) float64 {
-	switch m {
-	case 1, 2:
-		y--
-		m += 12
-	}
-	a := base.FloorDiv(y, 100)
-	b := 2 - a + base.FloorDiv(a, 4)
-	// (7.1) p. 61
-	return float64(base.FloorDiv64(36525*(int64(y+4716)), 100)) +
-		float64(base.FloorDiv(306*(m+1), 10)+b) + d - 1524.5
-}
-
-// CalendarJulianToJD converts a Julian year, month, and day of month to Julian day.
-//
-// Negative years are valid, back to JD 0.  The result is not valid for
-// dates before JD 0.
-// 儒略历日期转儒略日
-func CalendarJulianToJD(y, m int, d float64) float64 {
-	switch m {
-	case 1, 2:
-		y--
-		m += 12
-	}
-	return float64(base.FloorDiv64(36525*(int64(y+4716)), 100)) +
-		float64(base.FloorDiv(306*(m+1), 10)) + d - 1524.5
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;3-2-儒略日-jd-rightarrow-阳历日期-y-m-d&#34;&gt;3.2 儒略日$(JD)$ $\Rightarrow$ 阳历日期$(y,m,d)$&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;将 $JD$ 加上 0.5，令$Z$为其整数部分，$F$ 为尾数（小数）部分。&lt;/li&gt;
-&lt;li&gt;若 $Z$ &amp;lt; 2299161，取 $A$ = $Z$;&lt;br /&gt;
-若 $Z$ 大于等于 2299161，计算
-\begin{align}
-α &amp;amp;=\lfloor \frac {Z-1867216.25}{36524.25}\rfloor\\[2ex]
-A &amp;amp;=Z+1+α-\lfloor \frac α4\rfloor
-\end{align}&lt;/li&gt;
-&lt;li&gt;然后计算
-\begin{align}
-B &amp;amp;= A+1524\\[2ex]
-C &amp;amp;= \lfloor \frac {B-122.1}{365.25}\rfloor\\[2ex]
-D &amp;amp;= \lfloor 365.25C\rfloor\\[2ex]
-E &amp;amp;= \lfloor \frac {B-D}{30.6001}\rfloor\\[2ex]
-\end{align}&lt;/li&gt;
-&lt;li&gt;该月日期（带小数部分）则为：$$d = B - D - \lfloor 30.6001E\rfloor + F$$&lt;/li&gt;
-&lt;li&gt;月份 m 为：
-\begin{cases}
-m = E – 1 ;&amp;amp;  \text {if $E$ &amp;lt; 14}\\[2ex]
-m = E – 13 ;&amp;amp;  \text {if $E$ $\geq$ 14}
-\end{cases}&lt;/li&gt;
-&lt;li&gt;年份为 y：
-\begin{cases}
-y = C – 4716 ;&amp;amp;  \text {if $m$ &amp;gt; 2}\\[2ex]
-y = C – 4715 ;&amp;amp;  \text {if $m$ $\leq$ 2}
-\end{cases}&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// JDToCalendar returns the calendar date for the given jd.
-//
-// Note that this function returns a date in either the Julian or Gregorian
-// Calendar, as appropriate.
-// 儒略日转公历日期
-// 如果儒略日对应的格里历时间点在1582-10-15 12点之前，则转为儒略历日期
-// 如果儒略日对应的格里历时间点在1582-10-15 12点之后，则转为格里历日期
-func JDToCalendar(jd float64) (year, month int, day float64) {
-	zf, f := math.Modf(jd + .5)
-	z := int64(zf)
-	a := z
-	// if z &amp;gt;= 2299151 { // typo 应该是2299161对应于现实格里历起始日1582-10-15中午12点
-	if z &amp;gt;= 2299161 { // typo 应该是2299161对应于现实格里历起始日1582-10-15中午12点
-		α := base.FloorDiv64(z*100-186721625, 3652425)
-		a = z + 1 + α - base.FloorDiv64(α, 4)
-	}
-	b := a + 1524
-	c := base.FloorDiv64(b*100-12210, 36525)
-	d := base.FloorDiv64(36525*c, 100)
-	e := int(base.FloorDiv64((b-d)*1e4, 306001))
-	// compute return values
-	day = float64(int(b-d)-base.FloorDiv(306001*e, 1e4)) + f
-	switch e {
-	default:
-		month = e - 1
-	case 14, 15:
-		month = e - 13
-	}
-	switch month {
-	default:
-		year = int(c) - 4716
-	case 1, 2:
-		year = int(c) - 4715
-	}
-	return
-}
-
-// jdToCalendarGregorian returns the Gregorian calendar date for the given jd.
-//
-// Note that it returns a Gregorian date even for dates before the start of
-// the Gregorian calendar.  The function is useful when working with Go
-// time.Time values because they are always based on the Gregorian calendar.
-// 始终转为格里历，忽略儒略历转格里历被扣除的那10天，即把1582-10-15 12点之前的日期也当成格里历算
-func jdToCalendarGregorian(jd float64) (year, month int, day float64) {
-	zf, f := math.Modf(jd + .5)
-	z := int64(zf)
-	α := base.FloorDiv64(z*100-186721625, 3652425)
-	a := z + 1 + α - base.FloorDiv64(α, 4)
-	b := a + 1524
-	c := base.FloorDiv64(b*100-12210, 36525)
-	d := base.FloorDiv64(36525*c, 100)
-	e := int(base.FloorDiv64((b-d)*1e4, 306001))
-	// compute return values
-	day = float64(int(b-d)-base.FloorDiv(306001*e, 1e4)) + f
-	switch e {
-	default:
-		month = e - 1
-	case 14, 15:
-		month = e - 13
-	}
-	switch month {
-	default:
-		year = int(c) - 4716
-	case 1, 2:
-		year = int(c) - 4715
-	}
-	return
-}
-
-// JDToTime takes a JD and returns a Go time.Time value.
-// 儒略历转为格里历日期对应的 Go Time 类型
-func JDToTime(jd float64) time.Time {
-	// time.Time is always Gregorian
-	y, m, d := jdToCalendarGregorian(jd)
-	t := time.Date(y, time.Month(m), 0, 0, 0, 0, 0, time.UTC)
-	return t.Add(time.Duration(d * 24 * float64(time.Hour)))
-}
-
-// TimeToJD takes a Go time.Time and returns a JD as float64.
-//
-// Any time zone offset in the time.Time is ignored and the time is
-// treated as UTC.
-// Go Time 类型转为儒略日（默认日期为格里历）
-func TimeToJD(t time.Time) float64 {
-	ut := t.UTC()
-	y, m, _ := ut.Date()
-	d := ut.Sub(time.Date(y, m, 0, 0, 0, 0, 0, time.UTC))
-	// time.Time is always Gregorian
-	return CalendarGregorianToJD(y, int(m), float64(d)/float64(24*time.Hour))
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;3-3-儒略日-jd-rightarrow-星期几&#34;&gt;3.3 儒略日$(JD)$ $\Rightarrow$ 星期几&lt;/h3&gt;
-
-&lt;p&gt;　　因为儒略日0.0(-4712-1-1 12:00) 是星期一，往后7天一循环就能得出星期几了&lt;br /&gt;
-　　计算该日0时的儒略日，加上1.5，再除以7，所得余数将指示出星期几：&lt;br /&gt;
-若余数为0，则为星期日，1为星期一，2为星期二，3为星期三，4为星期四，5为星期五，6为星期六。&lt;br /&gt;
-　　儒略历到格里高利历的换算并不影响星期。 因而，在1582年10月4日星期四接下来的一天便是10月15日星期五。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DayOfWeek determines the day of the week for a given JD.
-//
-// The value returned is an integer in the range 0 to 6, where 0 represents
-// Sunday.  This is the same convention followed in the time package of the
-// Go standard library.
-// 儒略日0.0为-4712-1-1 12:00 星期一，往后7天一循环就能得出星期几了
-func DayOfWeek(jd float64) int {
-	return int(jd+1.5) % 7
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;3-4-日阳历日期-y-m-d-rightarrow-年内序数日-n&#34;&gt;3.4 日阳历日期$(Y,M,D)$ $\Rightarrow$ 年内序数日$(N)$&lt;/h3&gt;
-
-&lt;p&gt;　　年内的序数日$N$可由以下公式得出：$$N = \lfloor \frac {275M}{9}\rfloor - K\lfloor \frac {M+9}{12}\rfloor + D - 30 $$
-　　此处$M$为月份，$D$为该月日期，闰年$K = 1$，平年$K = 2$&lt;br /&gt;
-　　$N$ 取整数，自1月1日开始取值1，直至12月31日取值365（或闰年取值366）。&lt;/p&gt;
-
-&lt;p&gt;　　&lt;strong&gt;如何推导出这个公式？&lt;/strong&gt;&lt;br /&gt;
-　　乍一看挺没头绪的，我们先来看一个数列$$ a_m = \lfloor \frac {5(m+1)}{9}\rfloor, (m=0,1,2,\dots,12)$$&lt;/p&gt;
-
-&lt;p&gt;\begin{array}{c|ccl}
-m &amp;amp; a_m &amp;amp; a_m - a_{m-1} &amp;amp; 当月天数 \\&lt;br /&gt;
-\hline
-0 &amp;amp; 0 &amp;amp; - &amp;amp; - \\&lt;br /&gt;
-1 &amp;amp; 1 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
-2 &amp;amp; 1 &amp;amp; 0 &amp;amp; 30(看做30) \\&lt;br /&gt;
-3 &amp;amp; 2 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
-4 &amp;amp; 2 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
-5 &amp;amp; 3 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
-6 &amp;amp; 3 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
-7 &amp;amp; 4 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
-8 &amp;amp; 5 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
-9 &amp;amp; 5 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
-10 &amp;amp; 6 &amp;amp; 1 &amp;amp; 31 \\&lt;br /&gt;
-11 &amp;amp; 6 &amp;amp; 0 &amp;amp; 30 \\&lt;br /&gt;
-12 &amp;amp; 7 &amp;amp; 1 &amp;amp; 31
-\end{array}&lt;/p&gt;
-
-&lt;p&gt;　　如果把$m$看成是月份，并且暂时把二月看成是30天，那么第二列恰好是$当月天数-30$，所以我们就可以用以下公式来表示每个月的天数。
-$$D_m = 30 + a_m - a_{m-1}$$&lt;/p&gt;
-
-&lt;p&gt;　　所以从1月到m月的总天数：
-\begin{align}
-S_m = &amp;amp; D_1+D_2+,\dots,+D_m\\[2ex]
-= &amp;amp; 30 + a_m - a_{m-1} + \\[2ex]
-&amp;amp; 30 + a_{m-1} - a_{m-2} + \\[2ex]
-&amp;amp; \cdots \\[2ex]
-&amp;amp; 30 + a_2 - a_1 + \\[2ex]
-&amp;amp; 30 + a_1 - a_0 \\[2ex]
-= &amp;amp; 30m + a_m - a_0\\[2ex]
-= &amp;amp; 30m + \lfloor \frac {5(m+1)}{9}\rfloor
-\end{align}&lt;/p&gt;
-
-&lt;p&gt;　　由于上述表达式只有在2月等于30天的情况下才成立，所以当$m\geq 2$时还要根据平年、闰年分别减去相应的天数2，1，得到1月到$m$月的总天数和为：
-\begin{align}
-S_m=30m + \lfloor \frac {5(m+1)}{9}\rfloor - \lfloor \frac {m+10}{12}\rfloor k,\ 其中
-\end{align}
-\begin{cases}
-k = 1 , \ 闰年\\[2ex]
-k = 2 , \ 平年
-\end{cases}&lt;/p&gt;
-
-&lt;p&gt;　　所以$M$月$D$日的年内序数$N$为：
-\begin{align}
-N &amp;amp;= S_{M-1} + D\\[2ex]
-&amp;amp;= 30(M-1) + \lfloor \frac {5M}{9}\rfloor - \lfloor \frac {M+9}{12}\rfloor k + D\\[2ex]
-&amp;amp;= \lfloor \frac {275M}{9}\rfloor - \lfloor \frac {M+9}{12}\rfloor k -30 + D\\[2ex]
-\end{align}&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DayOfYearGregorian computes the day number within the year of the Gregorian
-// calendar.
-// 格里历年内序数
-func DayOfYearGregorian(y, m, d int) int {
-	return DayOfYear(y, m, d, LeapYearGregorian(y))
-}
-
-// DayOfYearJulian computes the day number within the year of the Julian
-// calendar.
-// 儒略历年内序数
-func DayOfYearJulian(y, m, d int) int {
-	return DayOfYear(y, m, d, LeapYearJulian(y))
-}
-
-// DayOfYear computes the day number within the year.
-//
-// This form of the function is not specific to the Julian or Gregorian
-// calendar, but you must tell it whether the year is a leap year.
-// 输入闰年标识，计算年内序数
-func DayOfYear(y, m, d int, leap bool) int {
-	k := 2
-	if leap {
-		k--
-	}
-	return wholeMonths(m, k) + d
-}
-
-// m月之前的所有月份天数之和
-func wholeMonths(m, k int) int {
-	return 275*m/9 - k*((m+9)/12) - 30
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;3-5-年内序数日-n-rightarrow-阳历日期-m-d&#34;&gt;3.5 年内序数日$(N)$  $\Rightarrow$ 阳历日期$(M,D)$&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DayOfYearToCalendar returns the calendar month and day for a given
-// day of year and leap year status.
-// 年内序数求对应的日期
-func DayOfYearToCalendar(n int, leap bool) (m, d int) {
-	k := 2
-	if leap {
-		k--
-	}
-	if n &amp;lt; 32 {
-		m = 1
-	} else {
-		m = (900*(k+n) + 98*275) / 27500
-	}
-	return m, n - wholeMonths(m, k)
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
