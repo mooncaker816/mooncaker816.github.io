@@ -11,6 +11,348 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法21</title>
+      <link>https://mooncaker816.github.io/2018/05/24/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9521/</link>
+      <pubDate>Thu, 24 May 2018 20:01:23 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/24/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9521/</guid>
+      <description>&lt;h1 id=&#34;第二十三章-apparent-place-of-a-star&#34;&gt;第二十三章 Apparent Place of a Star&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-平-视位置&#34;&gt;1. 平，视位置&lt;/h2&gt;
+
+&lt;p&gt;任意时刻恒星的平位置是：当观测者站在不动的太阳上（严格的说是太阳系的质心）看到它在天球上的视位置，并且，它的位置坐标涉及 Date 黄道平分点（或 Date 赤道平分点）。&lt;/p&gt;
+
+&lt;p&gt;任意时刻恒星的视位置是：当观测者站在移动着的地心看到它在天球上的位置，其视坐标涉及瞬时赤道、黄道及分点&lt;/p&gt;
+
+&lt;h2 id=&#34;2-平转视的影响因素&#34;&gt;2. 平转视的影响因素&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;恒星的自行运动&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第二十一章已经给出计算方法&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;岁差&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第二十一章已经给出计算方法&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;章动&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;赤经章动和赤纬章动&lt;/p&gt;
+
+&lt;p&gt;\begin{cases}
+Δα_1=(\cos ε+\sin ε\sin α\tan δ)Δψ-\cos α\tan δΔε\\[2ex]
+Δδ_1 = \sin ε\cos αΔψ + \sin αΔε
+\end{cases}
+其中$Δψ,Δε$可以使用章动章节给出的方法计算，$ε$是平黄赤交角&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Nutation returns corrections due to nutation for equatorial coordinates
+// of an object.
+//
+// Results are invalid for objects very near the celestial poles.
+// 章动导致的赤道坐标修正
+func Nutation(α unit.RA, δ unit.Angle, jd float64) (Δα1 unit.HourAngle, Δδ1 unit.Angle) {
+	ε := nutation.MeanObliquity(jd)
+	sε, cε := ε.Sincos()
+	Δψ, Δε := nutation.Nutation(jd)
+	sα, cα := α.Sincos()
+	tδ := δ.Tan()
+	// (23.1) p. 151
+	Δα1 = unit.HourAngle((cε+sε*sα*tδ)*Δψ.Rad() - cα*tδ*Δε.Rad())
+	Δδ1 = Δψ.Mul(sε*cα) + Δε.Mul(sα)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;周年光行差&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;黄道周年光行差：&lt;br /&gt;
+$λ,β$是恒星的黄经和黄纬，$K$是光行差常数（20&amp;rdquo;.49552），$Θ$是太阳真黄经(也叫几何黄经)，$e$是地球 轨道的离心率，$π$轨道近日点经度&lt;br /&gt;
+\begin{cases}
+Θ 可使用后续章节的方法计算\\[2ex]
+e = 0.016708617 - 0.000042037T - 0.0000001236T^2\\[2ex]
+π = 102°.93735 + 1°.71953T + 0°.00046T^2
+\end{cases}
+$T$是J2000.0起算的儒略世纪数
+则
+\begin{cases}
+Δλ &amp;amp;= \frac {-K\cos (Θ-λ)+eK\cos (π-λ)}{\cos β}\\[2ex]
+Δβ &amp;amp;= -K\sin β(\sin (Θ-λ)-e\sin (π-λ))
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// κ is the constnt of aberration in radians.
+var κ = unit.AngleFromSec(20.49552)
+
+// longitude of perihelian of Earth&#39;s orbit.
+// 近日点经度
+func perihelion(T float64) unit.Angle {
+	return unit.AngleFromDeg(base.Horner(T, 102.93735, 1.71946, .00046))
+}
+// EclipticAberration returns corrections due to aberration for ecliptic
+// coordinates of an object.
+// 光行差导致的黄道坐标的修正
+func EclipticAberration(λ, β unit.Angle, jd float64) (Δλ, Δβ unit.Angle) {
+	T := base.J2000Century(jd)
+	s, _ := solar.True(T)      //太阳真黄经
+	e := solar.Eccentricity(T) //地球轨道离心率
+	π := perihelion(T)         //地球近日点经度
+	sβ, cβ := β.Sincos()
+	ssλ, csλ := (s - λ).Sincos()
+	sπλ, cπλ := (π - λ).Sincos()
+	// (23.2) p. 151
+	Δλ = κ.Mul((e*cπλ - csλ) / cβ)
+	Δβ = -κ.Mul(sβ * (ssλ - e*sπλ))
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;赤道周年光行差：
+\begin{cases}
+Δα_2 &amp;amp;= -K\frac {\cos α\cos Θ\cos ε + \sin α\sin Θ}{\cos δ} + eK\frac {\cos α\cos π\cos ε + \sin α\sin π}{\cos δ}\\[2ex]
+Δδ_2 &amp;amp;= -K(\cos Θ\cos ε(\tan ε\cos δ - \sin α\sin δ)+\cos α\sin δ\sin Θ)\\[2ex]
+&amp;amp;+eK(\cos π\cos ε(\tan ε\cos δ - \sin α\sin δ)+\cos α\sin δ\sin π)
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Aberration returns corrections due to aberration for equatorial
+// coordinates of an object.
+// 光行差导致的赤道坐标的修正
+func Aberration(α unit.RA, δ unit.Angle, jd float64) (Δα2 unit.HourAngle, Δδ2 unit.Angle) {
+	ε := nutation.MeanObliquity(jd)
+	T := base.J2000Century(jd)
+	s, _ := solar.True(T)
+	e := solar.Eccentricity(T)
+	π := perihelion(T)
+	sα, cα := α.Sincos()
+	sδ, cδ := δ.Sincos()
+	ss, cs := s.Sincos()
+	sπ, cπ := π.Sincos()
+	cε := ε.Cos()
+	tε := ε.Tan()
+	q1 := cα * cε
+	// (23.3) p. 152
+	Δα2 = unit.HourAngle(κ.Rad() * (e*(q1*cπ+sα*sπ) - (q1*cs + sα*ss)) / cδ)
+	q2 := cε * (tε*cδ - sα*sδ)
+	q3 := cα * sδ
+	Δδ2 = κ.Mul(e*(cπ*q2+sπ*q3) - (cs*q2 + ss*q3))
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ron_Vondrak法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// AberrationRonVondrak uses the Ron-Vondrák expression to compute corrections
+// due to aberration for equatorial coordinates of an object.
+// RonVondrak方法计算光行差引起的赤道坐标的修正
+func AberrationRonVondrak(α unit.RA, δ unit.Angle, jd float64) (Δα unit.HourAngle, Δδ unit.Angle) {
+	T := base.J2000Century(jd)
+	r := &amp;amp;rv{
+		T:  T,
+		L2: 3.1761467 + 1021.3285546*T,
+		L3: 1.7534703 + 628.3075849*T,
+		L4: 6.2034809 + 334.0612431*T,
+		L5: 0.5995465 + 52.9690965*T,
+		L6: 0.8740168 + 21.3299095*T,
+		L7: 5.4812939 + 7.4781599*T,
+		L8: 5.3118863 + 3.8133036*T,
+		Lp: 3.8103444 + 8399.6847337*T,
+		D:  5.1984667 + 7771.3771486*T,
+		Mp: 2.3555559 + 8328.6914289*T,
+		F:  1.6279052 + 8433.4661601*T,
+	}
+	var Xp, Yp, Zp float64
+	// sum smaller terms first
+	for i := 35; i &amp;gt;= 0; i-- {
+		x, y, z := rvTerm[i](r)
+		Xp += x
+		Yp += y
+		Zp += z
+	}
+	sα, cα := α.Sincos()
+	sδ, cδ := δ.Sincos()
+	// (23.4) p. 156
+	Δα = unit.HourAngle((Yp*cα - Xp*sα) / (c * cδ))
+	Δδ = unit.Angle(-((Xp*cα+Yp*sα)*sδ - Zp*cδ) / c)
+	return
+}
+
+const c = 17314463350 // unit is 1e-8 AU / day
+
+type rv struct {
+	T, L2, L3, L4, L5, L6, L7, L8, Lp, D, Mp, F float64
+}
+
+type rvFunc func(*rv) (x, y, z float64)
+
+var rvTerm = [36]rvFunc{
+	func(r *rv) (x, y, z float64) { // 1
+		sA, cA := math.Sincos(r.L3)
+		return (-1719914-2*r.T)*sA - 25*cA,
+			(25-13*r.T)*sA + (1578089+156*r.T)*cA,
+			(10+32*r.T)*sA + (684185-358*r.T)*cA
+	},
+	func(r *rv) (x, y, z float64) { // 2
+		sA, cA := math.Sincos(2 * r.L3)
+		return (6434+141*r.T)*sA + (28007-107*r.T)*cA,
+			(25697-95*r.T)*sA + (-5904-130*r.T)*cA,
+			(11141-48*r.T)*sA + (-2559-55*r.T)*cA
+	},
+	func(r *rv) (x, y, z float64) { // 3
+		sA, cA := math.Sincos(r.L5)
+		return 715 * sA, 6*sA - 657*cA, -15*sA - 282*cA
+	},
+	func(r *rv) (x, y, z float64) { // 4
+		sA, cA := math.Sincos(r.Lp)
+		return 715 * sA, -656 * cA, -285 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 5
+		sA, cA := math.Sincos(3 * r.L3)
+		return (486-5*r.T)*sA + (-236-4*r.T)*cA,
+			(-216-4*r.T)*sA + (-446+5*r.T)*cA,
+			-94*sA - 193*cA
+	},
+	func(r *rv) (x, y, z float64) { // 6
+		sA, cA := math.Sincos(r.L6)
+		return 159 * sA, 2*sA - 147*cA, -6*sA - 61*cA
+	},
+	func(r *rv) (x, y, z float64) { // 7
+		cA := math.Cos(r.F)
+		return 0, 26 * cA, -59 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 8
+		sA, cA := math.Sincos(r.Lp + r.Mp)
+		return 39 * sA, -36 * cA, -16 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 9
+		sA, cA := math.Sincos(2 * r.L5)
+		return 33*sA - 10*cA, -9*sA - 30*cA, -5*sA - 13*cA
+	},
+	func(r *rv) (x, y, z float64) { // 10
+		sA, cA := math.Sincos(2*r.L3 - r.L5)
+		return 31*sA + cA, sA - 28*cA, -12 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 11
+		sA, cA := math.Sincos(3*r.L3 - 8*r.L4 + 3*r.L5)
+		return 8*sA - 28*cA, 25*sA + 8*cA, 11*sA + 3*cA
+	},
+	func(r *rv) (x, y, z float64) { // 12
+		sA, cA := math.Sincos(5*r.L3 - 8*r.L4 + 3*r.L5)
+		return 8*sA - 28*cA, -25*sA - 8*cA, -11*sA + -3*cA
+	},
+	func(r *rv) (x, y, z float64) { // 13
+		sA, cA := math.Sincos(2*r.L2 - r.L3)
+		return 21 * sA, -19 * cA, -8 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 14
+		sA, cA := math.Sincos(r.L2)
+		return -19 * sA, 17 * cA, 8 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 15
+		sA, cA := math.Sincos(r.L7)
+		return 17 * sA, -16 * cA, -7 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 16
+		sA, cA := math.Sincos(r.L3 - 2*r.L5)
+		return 16 * sA, 15 * cA, sA + 7*cA
+	},
+	func(r *rv) (x, y, z float64) { // 17
+		sA, cA := math.Sincos(r.L8)
+		return 16 * sA, sA - 15*cA, -3*sA - 6*cA
+	},
+	func(r *rv) (x, y, z float64) { // 18
+		sA, cA := math.Sincos(r.L3 + r.L5)
+		return 11*sA - cA, -sA - 10*cA, -sA - 5*cA
+	},
+	func(r *rv) (x, y, z float64) { // 19
+		sA, cA := math.Sincos(2*r.L2 - 2*r.L3)
+		return -11 * cA, -10 * sA, -4 * sA
+	},
+	func(r *rv) (x, y, z float64) { // 20
+		sA, cA := math.Sincos(r.L3 - r.L5)
+		return -11*sA - 2*cA, -2*sA + 9*cA, -sA + 4*cA
+	},
+	func(r *rv) (x, y, z float64) { // 21
+		sA, cA := math.Sincos(4 * r.L3)
+		return -7*sA - 8*cA, -8*sA + 6*cA, -3*sA + 3*cA
+	},
+	func(r *rv) (x, y, z float64) { // 22
+		sA, cA := math.Sincos(3*r.L3 - 2*r.L5)
+		return -10 * sA, 9 * cA, 4 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 23
+		sA, cA := math.Sincos(r.L2 - 2*r.L3)
+		return -9 * sA, -9 * cA, -4 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 24
+		sA, cA := math.Sincos(2*r.L2 - 3*r.L3)
+		return -9 * sA, -8 * cA, -4 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 25
+		sA, cA := math.Sincos(2 * r.L6)
+		return -9 * cA, -8 * sA, -3 * sA
+	},
+	func(r *rv) (x, y, z float64) { // 26
+		sA, cA := math.Sincos(2*r.L2 - 4*r.L3)
+		return -9 * cA, 8 * sA, 3 * sA
+	},
+	func(r *rv) (x, y, z float64) { // 27
+		sA, cA := math.Sincos(3*r.L3 - 2*r.L4)
+		return 8 * sA, -8 * cA, -3 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 28
+		sA, cA := math.Sincos(r.Lp + 2*r.D - r.Mp)
+		return 8 * sA, -7 * cA, -3 * cA
+	},
+	func(r *rv) (x, y, z float64) { // 29
+		sA, cA := math.Sincos(8*r.L2 - 12*r.L3)
+		return -4*sA - 7*cA, -6*sA + 4*cA, -3*sA + 2*cA
+	},
+	func(r *rv) (x, y, z float64) { // 30
+		sA, cA := math.Sincos(8*r.L2 - 14*r.L3)
+		return -4*sA - 7*cA, 6*sA - 4*cA, 3*sA - 2*cA
+	},
+	func(r *rv) (x, y, z float64) { // 31
+		sA, cA := math.Sincos(2 * r.L4)
+		return -6*sA - 5*cA, -4*sA + 5*cA, -2*sA + 2*cA
+	},
+	func(r *rv) (x, y, z float64) { // 32
+		sA, cA := math.Sincos(3*r.L2 - 4*r.L3)
+		return -sA - cA, -2*sA - 7*cA, sA - 4*cA
+	},
+	func(r *rv) (x, y, z float64) { // 33
+		sA, cA := math.Sincos(2*r.L3 - 2*r.L5)
+		return 4*sA - 6*cA, -5*sA - 4*cA, -2*sA - 2*cA
+	},
+	func(r *rv) (x, y, z float64) { // 34
+		sA, cA := math.Sincos(3*r.L2 - 3*r.L3)
+		return -7 * cA, -6 * sA, -3 * sA
+	},
+	func(r *rv) (x, y, z float64) { // 35
+		sA, cA := math.Sincos(2*r.L3 - 2*r.L4)
+		return 5*sA - 5*cA, -4*sA - 5*cA, -2*sA - 2*cA
+	},
+	func(r *rv) (x, y, z float64) { // 36
+		sA, cA := math.Sincos(r.Lp - 2*r.D)
+		return 5 * sA, -5 * cA, -2 * cA
+	},
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;周年视差&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;该算法忽略&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法20</title>
       <link>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/</link>
       <pubDate>Wed, 23 May 2018 16:58:54 +0800</pubDate>
@@ -2332,85 +2674,6 @@ func Poly1900to1997(jde float64) (ΔT unit.Time) {
 &lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;略&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法6</title>
-      <link>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%956/</link>
-      <pubDate>Thu, 17 May 2018 07:40:44 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%956/</guid>
-      <description>&lt;h1 id=&#34;第八章-复活节日-date-of-easter&#34;&gt;第八章 复活节日 Date of Easter&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;　　对西方的节日没有多少了解，这里就直接给出书中的算法吧~&lt;/p&gt;
-
-&lt;h2 id=&#34;1-格里历复活节算法&#34;&gt;1. 格里历复活节算法&lt;/h2&gt;
-
-&lt;p&gt;\begin{array}{l|ccc}
-被除数 &amp;amp; 除数 &amp;amp; 商 &amp;amp; 余数 \\&lt;br /&gt;
-\hline
-年份y &amp;amp; 19 &amp;amp; - &amp;amp; a \\&lt;br /&gt;
-年份y &amp;amp; 100 &amp;amp; b &amp;amp; c \\&lt;br /&gt;
-b &amp;amp; 4 &amp;amp; d &amp;amp; e \\&lt;br /&gt;
-b+8 &amp;amp; 25 &amp;amp; f &amp;amp; - \\&lt;br /&gt;
-b-f+1 &amp;amp; 3 &amp;amp; g &amp;amp; - \\&lt;br /&gt;
-19a+b-d-g+15 &amp;amp; 30 &amp;amp; - &amp;amp; h \\&lt;br /&gt;
-c &amp;amp; 4 &amp;amp; i &amp;amp; k \\&lt;br /&gt;
-32+2e+2i-h-k &amp;amp; 7 &amp;amp; - &amp;amp; l \\&lt;br /&gt;
-a+11h+22l &amp;amp; 451 &amp;amp; m &amp;amp; - \\&lt;br /&gt;
-h+l-7m+114 &amp;amp; 31 &amp;amp; n &amp;amp; p \\&lt;br /&gt;
-\end{array}&lt;/p&gt;
-
-&lt;p&gt;得 $$n = 月份, \ p+1 = 日期$$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Gregorian returns month and day of Easter in the Gregorian calendar.
-// 格里历复活节日算法
-func Gregorian(y int) (m, d int) {
-	a := y % 19
-	b, c := y/100, y%100
-	d, e := b/4, b%4
-	f := (b + 8) / 25
-	g := (b - f + 1) / 3
-	h := (19*a + b - d - g + 15) % 30
-	i, k := c/4, c%4
-	l := (32 + 2*e + 2*i - h - k) % 7
-	m = (a + 11*h + 22*l) / 451
-	n := h + l - 7*m + 114
-	n, p := n/31, n%31
-	return n, p + 1
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;2-儒略历复活节算法&#34;&gt;2. 儒略历复活节算法&lt;/h2&gt;
-
-&lt;p&gt;\begin{array}{l|ccc}
-被除数 &amp;amp; 除数 &amp;amp; 商 &amp;amp; 余数 \\&lt;br /&gt;
-\hline
-年份y &amp;amp; 4 &amp;amp; - &amp;amp; a \\&lt;br /&gt;
-年份y &amp;amp; 7 &amp;amp; - &amp;amp; b \\&lt;br /&gt;
-年份y &amp;amp; 19 &amp;amp; - &amp;amp; c \\&lt;br /&gt;
-19c+15 &amp;amp; 30 &amp;amp; - &amp;amp; d \\&lt;br /&gt;
-2a+4b-d+34 &amp;amp; 7 &amp;amp; - &amp;amp; e \\&lt;br /&gt;
-d+e+114 &amp;amp; 31 &amp;amp; f &amp;amp; g \\&lt;br /&gt;
-\end{array}&lt;/p&gt;
-
-&lt;p&gt;得 $$f = 月份, \ g+1 = 日期$$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Julian returns month and day of Easter in the Julian calendar.
-// 儒略历复活节日算法
-func Julian(y int) (m, d int) {
-	a := y % 4
-	b := y % 7
-	c := y % 19
-	d = (19*c + 15) % 30
-	e := (2*a + 4*b - d + 34) % 7
-	f := d + e + 114
-	f, g := f/31, f%31
-	return f, g + 1
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>
