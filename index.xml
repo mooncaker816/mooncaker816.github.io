@@ -11,6 +11,162 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法24</title>
+      <link>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9524/</link>
+      <pubDate>Fri, 25 May 2018 13:59:39 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9524/</guid>
+      <description>&lt;h1 id=&#34;第二十六章-太阳直角坐标-rectangular-coordinates-of-the-sun&#34;&gt;第二十六章 太阳直角坐标 Rectangular Coordinates of the Sun&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;　　太阳的地心赤道直角坐标$X,Y,Z$。原点在地心。$X$轴的方向指向春分点（经度为0），$Y$轴平放在赤道面上， 经度是90°，$Z$轴方向是北极。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-date-平分点参考系&#34;&gt;1. Date 平分点参考系&lt;/h2&gt;
+
+&lt;p&gt;\begin{cases}
+X &amp;amp;= R\cos β\cos ☉\\[2ex]
+Y &amp;amp;= R(\cos β\sin ☉\cos ε - \sin β\sin ε)\\[2ex]
+Z &amp;amp;= R(\cos β\sin ☉\sin ε + \sin β\cos ε)
+\end{cases}
+其中$☉,β,R$是太阳的地心几何黄经,黄纬,日地距离（可由&lt;code&gt;solar.TrueVSOP87&lt;/code&gt;求出），$ε$是平黄赤交角。&lt;br /&gt;
+因为 Date 黄道坐标中，太阳的纬度不超过 1.2 角秒， 所以可以看成$\cos β=1$&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Position returns rectangular coordinates referenced to the mean equinox
+// of date.
+// Date 平分点太阳地心直角坐标
+func Position(e *pp.V87Planet, jde float64) (x, y, z float64) {
+	// (26.1) p. 171
+	s, β, R := solar.TrueVSOP87(e, jde)
+	sε, cε := nutation.MeanObliquity(jde).Sincos()
+	ss, cs := s.Sincos()
+	sβ := β.Sin()
+	x = R * cs
+	y = R * (ss*cε - sβ*sε)
+	z = R * (ss*sε + sβ*cε)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-j2000标准分点参考系和b1950平分点参考系&#34;&gt;2. J2000标准分点参考系和B1950平分点参考系&lt;/h2&gt;
+
+&lt;p&gt;通过VSOP87计算给定时刻地球的相对于 J2000.0 分点的日心黄经$L$和黄纬$B$，及距离$R$
+$$☉ = L + 180°， β = -B$$
+计算
+\begin{cases}
+X &amp;amp;= R\cos β*cos ☉\\[2ex]
+Y &amp;amp;= R\cos β*sin ☉\\[2ex]
+Z &amp;amp;= R\sin β
+\end{cases}&lt;/p&gt;
+
+&lt;p&gt;上述坐标仍是黄道坐标，J2000参考系的赤道坐标为：
+\begin{cases}
+X_0 &amp;amp;= 1.000000000000X+0.000000440360Y-0.000000190919Z\\[2ex]
+Y_0 &amp;amp;= -0.000000479966X+0.917482137087Y-0.397776982902Z\\[2ex]
+Z_0 &amp;amp;= 0.000000000000X+0.397776982902Y+0.917482137087Z
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// PositionJ2000 returns rectangular coordinates referenced to equinox J2000.
+// J2000太阳直角坐标
+func PositionJ2000(e *pp.V87Planet, jde float64) (x, y, z float64) {
+	x, y, z = xyz(e, jde)
+	// (26.3) p. 174
+	return x + .00000044036*y - .000000190919*z,
+		-.000000479966*x + .917482137087*y - .397776982902*z,
+		.397776982902*y + .917482137087*z
+}
+
+func xyz(e *pp.V87Planet, jde float64) (x, y, z float64) {
+	l, b, r := e.Position2000(jde)
+	s := l + math.Pi
+	β := -b
+	ss, cs := s.Sincos()
+	sβ, cβ := β.Sincos()
+	// (26.2) p. 172
+	x = r * cβ * cs
+	y = r * cβ * ss
+	z = r * sβ
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;B1950平分点参考系坐标：
+\begin{cases}
+X_0 &amp;amp;=0.999925702634X+0.012189716217Y+0.000011134016Z\\[2ex]
+Y_0 &amp;amp;=-0.011179418036X+0.917413998946Y-0.397777041885Z\\[2ex]
+Z_0 &amp;amp;=-0.004859003787X+0.397747363646Y+0.917482111428Z
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// PositionB1950 returns rectangular coordinates referenced to B1950.
+// B1950 平分点参考系太阳直角坐标
+//
+// Results are referenced to the mean equator and equinox of the epoch B1950
+// in the FK5 system, not FK4.
+func PositionB1950(e *pp.V87Planet, jde float64) (x, y, z float64) {
+	x, y, z = xyz(e, jde)
+	return .999925702634*x + .012189716217*y + .000011134016*z,
+		-.011179418036*x + .917413998946*y - .397777041885*z,
+		-.004859003787*x + .397747363646*y + .917482111428*z
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-任意其它平分点参考系&#34;&gt;3. 任意其它平分点参考系&lt;/h2&gt;
+
+&lt;p&gt;　　先计算出J2000标准分点标准$X_0,Y_0,Z_0$&lt;br /&gt;
+　　然后按岁差计算中的方法计算出$ζ,z,θ$,&lt;br /&gt;
+\begin{cases}
+X_x &amp;amp;= \cos ζ\cos z\cos θ - \sin ζ\sin z\\[2ex]
+X_y &amp;amp;= \sin ζ\cos z + \cos ζ\sin z\cos θ\\[2ex]
+X_z &amp;amp;= \cos ζ\sin θ\\[2ex]
+\end{cases}
+\begin{cases}
+Y_x &amp;amp;= -\cos ζ\sin z - \sin ζ\cos z\cos θ\\[2ex]
+Y_y &amp;amp;= \cos ζ\cos z - \sin ζ\sin z\cos θ\\[2ex]
+Y_z &amp;amp;= -\sin ζ\sin θ\\[2ex]
+\end{cases}
+\begin{cases}
+Z_x &amp;amp;= -\cos z\sin θ\\[2ex]
+Z_y &amp;amp;= -\sin z\sin θ\\[2ex]
+Z_z &amp;amp;= \cos θ
+\end{cases}
+　　那么
+\begin{cases}
+X′ &amp;amp;= X_xX_0 + Y_xY_0 + Z_xZ_0\\[2ex]
+Y′ &amp;amp;= X_yX_0 + Y_yY_0 + Z_yZ_0\\[2ex]
+Z′ &amp;amp;= X_zX_0 + Y_zY_0 + Z_zZ_0
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// PositionEquinox returns rectangular coordinates referenced to an arbitrary epoch.
+// 任意其它平分点参考系太阳直角坐标
+//
+// Position will be computed for given Julian day &amp;quot;jde&amp;quot; but referenced to mean
+// equinox &amp;quot;epoch&amp;quot; (year).
+func PositionEquinox(e *pp.V87Planet, jde, epoch float64) (xp, yp, zp float64) {
+	x0, y0, z0 := PositionJ2000(e, jde)
+	t := (epoch - 2000) * .01
+	ζ := base.Horner(t, ζt...) * t * math.Pi / 180 / 3600
+	z := base.Horner(t, zt...) * t * math.Pi / 180 / 3600
+	θ := base.Horner(t, θt...) * t * math.Pi / 180 / 3600
+	sζ, cζ := math.Sincos(ζ)
+	sz, cz := math.Sincos(z)
+	sθ, cθ := math.Sincos(θ)
+	xx := cζ*cz*cθ - sζ*sz
+	xy := sζ*cz + cζ*sz*cθ
+	xz := cζ * sθ
+	yx := -cζ*sz - sζ*cz*cθ
+	yy := cζ*cz - sζ*sz*cθ
+	yz := -sζ * sθ
+	zx := -cz * sθ
+	zy := -sz * sθ
+	zz := cθ
+	return xx*x0 + yx*y0 + zx*z0,
+		xy*x0 + yy*y0 + zy*z0,
+		xz*x0 + yz*y0 + zz*z0
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法23</title>
       <link>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9523/</link>
       <pubDate>Fri, 25 May 2018 08:06:54 +0800</pubDate>
@@ -2572,212 +2728,6 @@ func Apparent0UT(jd float64) unit.Time {
 		unit.TimeFromDay(f*1.00273790935)
 	n := nutation.NutationInRA(j0) // HourAngle
 	return (s + n.Time()).Mod1()
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法9</title>
-      <link>https://mooncaker816.github.io/2018/05/18/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%959/</link>
-      <pubDate>Fri, 18 May 2018 15:55:20 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/18/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%959/</guid>
-      <description>&lt;h1 id=&#34;第十一章-地球球体-the-earth-s-globe&#34;&gt;第十一章 地球球体 The Earth&amp;rsquo;s Globe&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-椭球体&#34;&gt;1. 椭球体&lt;/h2&gt;
-
-&lt;p&gt;　　天文学上，通常我们将地球看做一个近似的椭球体。如下图，&lt;img src=&#34;http://www.tleer.cn/uploads/allimg/170224/2-1F224111032348.jpg&#34; alt=&#34;&#34; /&gt;
-所以子午圈截面为一个椭圆。如下图，&lt;img src=&#34;https://mooncaker816.github.io/img/tuoyuan.png&#34; alt=&#34;&#34; /&gt;
-　　假设上图中$C$为地心，$N$为北极，$S$为南极，$CF$为赤道半径，$NC = b, CF = a$,$O$为观察点，$HK$为地平面，$OP\perp HK$,$OM//SN$，$OM$与$OH$的夹角是$φ$，$CF$与$CO$的夹角是$φ&amp;rsquo;$，$CO$的长度为$\rho$&lt;br /&gt;
-　　则$φ$为$O$点的&lt;strong&gt;地理纬度&lt;/strong&gt;，$\angle OPF = φ$，$φ&amp;rsquo;$为$O$点的&lt;strong&gt;地心纬度&lt;/strong&gt;,$\rho$为$O$点的&lt;strong&gt;地心半径&lt;/strong&gt;,在极点和赤道上$φ=φ′$，在其它纬度上$|φ′|&amp;lt;|φ|$&lt;br /&gt;
-　　地心纬度$φ&amp;rsquo;$与地理纬度$φ$的关系为：$\tan φ′=\frac {b^2}{a^2} \tan φ，$(&lt;a href=&#34;https://baike.baidu.com/item/地心纬度&#34; target=&#34;_blank&#34;&gt;推导&lt;/a&gt;)&lt;br /&gt;
-　　由椭球体扁率$f=\frac {a-b}a$,可知$b=a(1-f)$,子午圈椭圆离心率
-\begin{align}
-e &amp;amp;= \frac ca\\[2ex]
-&amp;amp; = \frac {\sqrt {a^2-b^2}}{a}\\[2ex]
-&amp;amp; = \sqrt {2f-f^2}
-\end{align}
-　　地心纬度$φ&amp;rsquo;$对应的归化纬度$u$,有
-\begin{cases}
-\tan φ&amp;rsquo; = \frac ba \tan u\\[2ex]
-\tan u = \frac ba \tan φ\\[2ex]
-\end{cases}
-且
-\begin{cases}
-\rho \cos φ&amp;rsquo; = a\cos u, \ (相当于子午圈椭圆上观察点O的x坐标)\\[2ex]
-\rho \sin φ&amp;rsquo; = b\sin u, \ (相当于子午圈椭圆上观察点O的y坐标)
-\end{cases}
-　　如果观察点的海拔高度为$H$,且$\rho$以赤道半径$a$为单位，则有
-\begin{cases}
-\rho \cos φ&amp;rsquo; = cos u + \frac Ha\cos φ\\[2ex]
-\rho \sin φ&amp;rsquo; = \frac ba\sin u + \frac Ha\sin φ
-\end{cases}&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Ellipsoid represents an ellipsoid of revolution.
-//
-// Typical unit for Er is Km.
-// 地球椭球体
-type Ellipsoid struct {
-	Er float64 // equatorial radius 赤道半径
-	Fl float64 // flattening 地球扁率
-}
-
-// IAU 1976 values.  Radius in Km.
-var Earth76 = Ellipsoid{Er: 6378.14, Fl: 1 / 298.257}
-
-// A returns equatorial radius in units of e.Er.
-//
-// A is a common identifier for equatorial radius.
-// 子午圈椭圆长半轴（赤道半径）
-func (e Ellipsoid) A() float64 {
-	return e.Er
-}
-
-// B returns polar radius in units of e.ER.
-//
-// B is a common identifier for polar radius.
-//
-// 子午圈椭圆短半轴（地心到极点的距离）
-func (e Ellipsoid) B() float64 {
-	return e.Er * (1 - e.Fl)
-}
-
-// Eccentricity of a meridian.
-// 子午圈椭圆离心率
-func (e Ellipsoid) Eccentricity() float64 {
-	return math.Sqrt((2 - e.Fl) * e.Fl)
-}
-
-// ParallaxConstants computes parallax constants ρ sin φ′ and ρ cos φ′.
-//
-// Arguments are geographic latitude φ and height h above the ellipsoid.
-// For e.Er in Km, h must be in meters.
-// 海拔为h的观察点对应的ρ sin φ′，ρ cos φ′
-func (e Ellipsoid) ParallaxConstants(φ unit.Angle, h float64) (s, c float64) {
-	boa := 1 - e.Fl
-	su, cu := math.Sincos(math.Atan(boa * φ.Tan()))
-	s, c = φ.Sincos()
-	hoa := h * 1e-3 / e.Er
-	return su*boa + hoa*s, cu + hoa*c
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;2-其他椭球公式&#34;&gt;2. 其他椭球公式&lt;/h2&gt;
-
-&lt;p&gt;　　在椭球上给定的一点，地理纬度与地心纬度的差值为：$φ - φ′ = 692&amp;rdquo;.73sin(2φ) - 1&amp;rdquo;.16sin(4φ)$&lt;br /&gt;
-　　当$u=45°$时，$φ-φ′$达到最大值。 如果$φ_0$和$φ_0′$是此时相应的地理纬度和地心纬度，我们有：$$tan(φ_0) = a/b，tan(φ_0′) = b/a， φ_0+φ_0′=90°$$
-对于&lt;strong&gt;&lt;em&gt;IAU1976&lt;/em&gt;&lt;/strong&gt;($a = 6378.14km,b = 6356.755km,f=\frac {1}{298.257}$)
-有
-\begin{align}
-φ_0 = 45°05′46&amp;rdquo;.36,\\[2ex]
-φ_0′ = 44°54′13&amp;rdquo;.64,\\[2ex]
-φ_0 - φ_0′ = 11′32&amp;rdquo;.73
-\end{align}
-　　海平面上，$$\rho =0.9983271+0.0016764\cos {2φ}-0.0000035\cos {4φ}$$
-　　同纬度$φ$的圆的半径：$$R_p = \frac {a\cos φ}{\sqrt{(1-e^2\sin^2φ)}}$$
-　　因此，在同一纬度$φ$上，经度变化1度，相应的长度变化为$(π/180)R_p$,线速度为$ωR_p$,其中$ω = 7.292114992*10^{-5}(弧度/秒)$&lt;br /&gt;
-　　地球子午圈的曲率半径，在纬度$φ$：$$R_m=\frac {a(1-e^2)}{(1-e^2\sin ^2 φ)^{\frac 32}}$$
-且纬度变化1度，相应的长度变化：$(π/180)R_m$,在赤道时，$R_m$达到最小值，值为$a(1-e^2)=6335.44km$， 在极点时达到最大值，值为$\frac {a}{\sqrt {1-e^2}}=6399.60km$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Rho is distance from Earth center to a point on the ellipsoid at latitude φ.
-//
-// Result unit is fraction of the equatorial radius.
-// 海平面上，ρ值计算
-func Rho(φ unit.Angle) float64 {
-	// Magic numbers...
-	return .9983271 + .0016764*φ.Mul(2).Cos() - .0000035*φ.Mul(4).Cos()
-}
-
-// RadiusAtLatitude returns the radius of the circle that is the parallel of
-// latitude φ.
-//
-// Result unit is same as e.Er (typically Km.)
-// 同纬度圆半径
-func (e Ellipsoid) RadiusAtLatitude(φ unit.Angle) float64 {
-	s, c := φ.Sincos()
-	return e.A() * c / math.Sqrt(1-(2-e.Fl)*e.Fl*s*s)
-}
-
-// OneDegreeOfLongitude returns the length of one degree of longitude.
-//
-// Argument rp is the radius of a circle that is a parallel of latitude
-// (as returned by Ellipsoid.RadiusAtLatitude.)
-//
-// Result is distance along one degree of the circle, in same units as rp.
-// 同纬度，计算经度变化1度时长度变化的值
-func OneDegreeOfLongitude(rp float64) float64 {
-	return rp * math.Pi / 180
-}
-
-// RotationRate1996_5 is the rotational angular velocity of the Earth
-// with respect to the stars at the epoch 1996.5.
-//
-// Unit is radian/second.
-const RotationRate1996_5 = 7.292114992e-5
-
-// RadiusOfCurvature of meridian at latitude φ.
-//
-// Result in units of e.ER, typically Km.
-// 纬度为φ，子午圈曲率半径
-func (e Ellipsoid) RadiusOfCurvature(φ unit.Angle) float64 {
-	s := φ.Sin()
-	e2 := (2 - e.Fl) * e.Fl
-	return e.A() * (1 - e2) / math.Pow(1-e2*s*s, 1.5)
-}
-
-// OneDegreeOfLatitude returns the length of one degree of latitude.
-//
-// Argument rm is the radius of curvature along a meridian.
-// (as returned by Ellipsoid.RadiusOfCurvature.)
-// Result is distance in units of rm along one degree of the meridian.
-// 同经度，计算纬度变化1度时长度变化的值
-func OneDegreeOfLatitude(rm float64) float64 {
-	return rm * math.Pi / 180
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;3-地表两点间的距离&#34;&gt;3. 地表两点间的距离&lt;/h2&gt;
-
-&lt;p&gt;　　假设经纬度是分别是$(L_1,φ_1),(L_2,φ_2)$，且这两点在海平面。
-　　如果精度要求不高，可以把地球看作球形，平均半径为6371km。使用下式可得到两点间的角距离：$$\cos d=\sin φ_1\sin φ_2 +\cos φ_1\cos φ_2\cos(L_1-L_2)$$
-那么$$s = \frac {6371πd}{180}$$
-　　高精度计算可使用以下方法：
-$$F=\frac {φ_1+φ_2}{2},G=\frac {φ_1-φ_2}{2},\lambda = \frac {L_1-L_2}{2}$$
-$$S = \sin^2G\cos^2\lambda+\cos^2F\sin^2\lambda$$
-$$C = \cos^2G\cos^2\lambda+\sin^2F\sin^2\lambda$$
-$$\tan ω = \sqrt{\frac SC}$$
-$$R=\frac{\sqrt{SC}}{ω}$$
-$$D=2ωa,H_1=\frac{3R-1}{2C},H_2=\frac{3R+1}{2S}$$
-$$s=D(1+fH_1\sin^2F\cos^2G-fH_2\cos^2F\sin^2G)$$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Distance is distance between two points measured along the surface
-// of an ellipsoid.
-//
-// Accuracy is much better than that of ApproxAngularDistance or
-// ApproxLinearDistance.
-//
-// Result unit is units of e.Er, typically Km.
-// 地表两点距离
-func (e Ellipsoid) Distance(c1, c2 Coord) float64 {
-	// From AA, ch 11, p 84.
-	s2f, c2f := sincos2((c1.Lat + c2.Lat) / 2)
-	s2g, c2g := sincos2((c1.Lat - c2.Lat) / 2)
-	s2λ, c2λ := sincos2((c1.Lon - c2.Lon) / 2)
-	s := s2g*c2λ + c2f*s2λ
-	c := c2g*c2λ + s2f*s2λ
-	ω := math.Atan(math.Sqrt(s / c))
-	r := math.Sqrt(s*c) / ω
-	d := 2 * ω * e.Er
-	h1 := (3*r - 1) / (2 * c)
-	h2 := (3*r + 1) / (2 * s)
-	return d * (1 + e.Fl*(h1*s2f*c2g-h2*c2f*s2g))
-}
-
-func sincos2(x unit.Angle) (s2, c2 float64) {
-	s, c := x.Sincos()
-	return s * s, c * c
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
