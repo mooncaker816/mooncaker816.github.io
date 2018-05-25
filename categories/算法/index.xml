@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
-    <lastBuildDate>Thu, 24 May 2018 20:01:23 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 25 May 2018 08:06:54 +0800</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>天文算法23</title>
+      <link>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9523/</link>
+      <pubDate>Fri, 25 May 2018 08:06:54 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9523/</guid>
+      <description>&lt;h1 id=&#34;第二十五章-太阳坐标-solar-coordinates&#34;&gt;第二十五章 太阳坐标 Solar Coordinates&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>天文算法22</title>
+      <link>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9522/</link>
+      <pubDate>Fri, 25 May 2018 08:04:20 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9522/</guid>
+      <description>&lt;h1 id=&#34;第二十四章-reduction-of-ecliptical-elements-from-one-equinox-to-another-one&#34;&gt;第二十四章 Reduction of Ecliptical Elements from one Equinox to another one&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>天文算法21</title>
