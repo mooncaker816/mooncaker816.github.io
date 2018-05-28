@@ -11,6 +11,86 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>天文算法27</title>
+      <link>https://mooncaker816.github.io/2018/05/28/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9527/</link>
+      <pubDate>Mon, 28 May 2018 10:35:29 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/05/28/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9527/</guid>
+      <description>&lt;h1 id=&#34;第二十九章-ephemeris-for-physical-observations-of-the-sun&#34;&gt;第二十九章 Ephemeris for Physical Observations of the Sun&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;1-日面计算&#34;&gt;1. 日面计算&lt;/h2&gt;
+
+&lt;p&gt;$P$ 为日轴方位角，自日面北点量起的太阳自转轴北端的方位角，向东为正&lt;br /&gt;
+$B_0$ 为日面中心的日面纬度&lt;br /&gt;
+$L_0$ 为日面中心的日面经度&lt;/p&gt;
+
+&lt;p&gt;根据之前章节的算法，先计算太阳视黄经$λ$(包含光行差修正)，$λ&amp;rsquo;$为$λ$的黄经章动修正值，$ε$为真黄赤交角&lt;br /&gt;
+再计算
+\begin{cases}
+θ = (JD - 2398220)\frac {360°}{25.38}\\[2ex]
+I = 7°.25,(太阳赤道与黄道的倾角)\\[2ex]
+K = 73°.6667 + 1°.3958333\frac {JD - 2396758}{36525},(太阳赤道与黄道的升交点的黄经)\\[2ex]
+\tan x = -\cos λ&amp;rsquo;\tan ε\\[2ex]
+\tan y = -\cos (λ - K)\tan I
+\end{cases}
+那么
+\begin{cases}
+P = x+y\\[2ex]
+\sin B_0 = \sin(λ - K)\sin I\\[2ex]
+\tan η = \frac {-\sin(λ - K)\cos I}{-\cos (λ - K)}\\[2ex]
+L_0 = η-θ
+\end{cases}&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Ephemeris returns the apparent orientation of the sun at the given jd.
+// 计算日面参数
+//
+// Results:
+//	P:  Position angle of the solar north pole.
+//	B0: Heliographic latitude of the center of the solar disk.
+//	L0: Heliographic longitude of the center of the solar disk.
+func Ephemeris(jd float64, e *pp.V87Planet) (P, B0, L0 unit.Angle) {
+	θ := unit.Angle((jd - 2398220) * 2 * math.Pi / 25.38)
+	I := unit.AngleFromDeg(7.25)
+	K := unit.AngleFromDeg(73.6667) +
+		unit.AngleFromDeg(1.3958333).Mul((jd-2396758)/base.JulianCentury)
+
+	L, _, R := solar.TrueVSOP87(e, jd)
+	Δψ, Δε := nutation.Nutation(jd)
+	ε0 := nutation.MeanObliquity(jd)
+	ε := ε0 + Δε
+	λ := L - unit.AngleFromSec(20.4898).Div(R)
+	λp := λ + Δψ
+
+	sλK, cλK := (λ - K).Sincos()
+	sI, cI := I.Sincos()
+
+	tx := -(λp.Cos() * ε.Tan())
+	ty := -(cλK * I.Tan())
+	P = unit.Angle(math.Atan(tx) + math.Atan(ty))
+	B0 = unit.Angle(math.Asin(sλK * sI))
+	η := unit.Angle(math.Atan2(-sλK*cI, -cλK))
+	L0 = (η - θ).Mod1()
+	return
+}
+
+// Cycle returns the jd of the start of the given synodic rotation.
+//
+// Argument c is the &amp;quot;Carrington&amp;quot; cycle number.
+//
+// Result is a dynamical time (not UT).
+func Cycle(c int) (jde float64) {
+	cf := float64(c)
+	jde = 2398140.227 + 27.2752316*cf
+	m := 281.96*math.Pi/180 + 26.882476*math.Pi/180*cf
+	s2m, c2m := math.Sincos(2 * m)
+	return jde + .1454*math.Sin(m) - .0085*s2m - .0141*c2m
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>天文算法26</title>
       <link>https://mooncaker816.github.io/2018/05/28/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9526/</link>
       <pubDate>Mon, 28 May 2018 09:25:36 +0800</pubDate>
@@ -2543,94 +2623,6 @@ func Times(p globe.Coord, ΔT unit.Time, h0 unit.Angle, Th0 unit.Time, α3 []uni
 	}
 	tSet, err = adjustRS(tSet)
 	return
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法12</title>
-      <link>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9512/</link>
-      <pubDate>Sun, 20 May 2018 10:13:34 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9512/</guid>
-      <description>&lt;h1 id=&#34;第十四章-the-parallactic-angle&#34;&gt;第十四章 The Parallactic Angle&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-什么是parallactic-angle&#34;&gt;1. 什么是Parallactic Angle&lt;/h2&gt;
-
-&lt;p&gt;　　&lt;strong&gt;&lt;em&gt;Parallactic is NOT Parallax&lt;/em&gt;&lt;/strong&gt;&lt;br /&gt;
-　　这里所说的 Parallactic Angle 并不是 Parallax，Parallax是从两个不同的视点看同一物体时这两条视线之间的夹角(或半角)，主要用来测定物体的距离，如&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%A7%92%E5%B7%AE%E8%B7%9D&#34; target=&#34;_blank&#34;&gt;秒差距&lt;/a&gt;这一距离单位就是利用视差角来定义的。&lt;br /&gt;
-　　In spherical astronomy, the parallactic angle is the angle between the great circle through a celestial object and the zenith(&lt;strong&gt;天体与天顶所在的大圆，即天球地平经线&lt;/strong&gt;), and the hour circle of the object（&lt;strong&gt;天体的时角，即天球赤道经线&lt;/strong&gt;）.It is usually denoted q. In the triangle zenith—object—celestial pole, the parallactic angle will be the position angle of the zenith at the celestial object. Despite its name, this angle is unrelated with parallax. The parallactic angle is zero when the object crosses the meridian.&lt;br /&gt;
-　　换句话说，就是天体地平经线与天体赤道经线之间的角度。&lt;/p&gt;
-
-&lt;h2 id=&#34;2-计算parallactic-angle&#34;&gt;2. 计算Parallactic Angle&lt;/h2&gt;
-
-&lt;p&gt;$$\tan q=\frac {\sin H}{\tan φ\cos δ -\sin δ\cos H}$$
-　　式中，$φ$是观测站地理纬度,$δ$是天体的赤纬，$H$是该时刻的时角。&lt;/p&gt;
-
-&lt;p&gt;如何推导？&lt;br /&gt;
-&lt;img src=&#34;https://mooncaker816.github.io/img/triangle.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;如上图，P为天球极点，Z为天顶，X为观测目标，此时观测点为球心（地平坐标系），&lt;br /&gt;
-由观测站地理纬度$φ$可知，弧长
-$\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{PZ}= 90°-φ$,&lt;br /&gt;
-由天体的赤纬$δ$可知，弧长
-$\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{PX}= 90°-δ$,&lt;br /&gt;
-由天体的时角$H$可知，球面角
-$\angle ZPX = H$,&lt;br /&gt;
-假设 X 的仰角为$a$,则弧长
-$\newcommand{arc}[1]{\stackrel{\Large\frown}{#1}}\arc{ZX}= 90°-a$,&lt;br /&gt;
-根据球面余弦公式，我们有
-\begin{cases}
-\cos (90°-a) &amp;amp;= \cos (90°-φ)\cos (90°-δ) + \sin (90°-φ)\sin (90°-δ)\cos H\\[2ex]
-\cos (90°-φ) &amp;amp;= \cos (90°-a)\cos (90°-δ) + \sin (90°-a)\sin (90°-δ)\cos q
-\end{cases}
-即
-\begin{cases}
-\sin a &amp;amp;= \sin φ\sin δ + \cos φ\cos δ\cos H, &amp;amp;(1)\\[2ex]
-\sin φ &amp;amp;= \sin a\sin δ + \cos a\cos δ\cos q, &amp;amp;(2)
-\end{cases}
-根据正弦公式，我们有$$\frac {\sin H}{\cos a} = \frac {\sin q}{\cos φ},\ \ \ (3)$$
-由(2)(3)可得
-\begin{align}
-\tan q &amp;amp;= \frac {\sin q}{\cos q}\\[2ex]
-&amp;amp; = \frac {\frac {\sin H\cos φ}{\cos a}}{\frac {\sin φ-\sin a\sin δ}{\cos a\cos δ}}\\[2ex]
-&amp;amp; = \frac {\sin H\cos φ\cos δ}{\sin φ-\sin a\sin δ}
-\end{align}
-再将(1)代入上式中，
-\begin{align}
-\tan q &amp;amp; = \frac {\sin H\cos φ\cos δ}{\sin φ-\sin δ(\sin φ\sin δ + \cos φ\cos δ\cos H)}\\[2ex]
-&amp;amp; = \frac {\sin H\cos φ\cos δ}{\sin φ\cos^2δ - \cos φ\cos δ\sin δ\cos H}\\[2ex]
-&amp;amp; = \frac {\sin H}{\tan φ\cos δ - \sin δ\cos H}
-\end{align}
-得证&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/li-hua/p/5663915.html&#34; target=&#34;_blank&#34;&gt;另一种直接证明&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;　　当天体位于中天时恰好与天顶重合，则有$δ=φ$，此时$\tan q = \frac 00$，没有意义，也就是说角度由-90°跳到90°。&lt;br /&gt;
-　　当天体位于地平线上时，即$a=0°$时，由(2)式直接可得$$\cos q = \frac {\sin φ}{\cos δ}$$
-与时角$H$无关&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ParallacticAngle returns parallactic angle of a celestial object.
-//
-//	φ is geographic latitude of observer.观测点地理纬度
-//	δ is declination of observed object.天体赤纬
-//	H is hour angle of observed object.天体赤经（时角）
-//  计算天体的Parallactic Angle
-func ParallacticAngle(φ, δ unit.Angle, H unit.HourAngle) unit.Angle {
-	sδ, cδ := δ.Sincos()
-	sH, cH := H.Sincos()
-	// (14.1) p. 98
-	return unit.Angle(math.Atan2(sH, φ.Tan()*cδ-sδ*cH))
-}
-
-// ParallacticAngleOnHorizon is a special case of ParallacticAngle.
-//
-// The hour angle is not needed as an input and the math inside simplifies.
-// 当天体位于地平线上时，计算Parallactic Angle，与时角无关
-func ParallacticAngleOnHorizon(φ, δ unit.Angle) unit.Angle {
-	return unit.Angle(math.Acos(φ.Sin() / δ.Cos()))
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
