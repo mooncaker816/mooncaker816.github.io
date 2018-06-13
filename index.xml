@@ -16,9 +16,9 @@
       <pubDate>Wed, 13 Jun 2018 15:02:12 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</guid>
-      <description>
+      <description>&lt;h1 id=&#34;or-channel&#34;&gt;Or-Channel&lt;/h1&gt;
 
-&lt;h1 id=&#34;or-channel&#34;&gt;Or-Channel&lt;/h1&gt;
+&lt;p&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;使用场景：&lt;br /&gt;
@@ -91,8 +91,7 @@ closing after 12 seconds!
 closing after 10 seconds!
 closed after 3.005237401s seconds!
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>

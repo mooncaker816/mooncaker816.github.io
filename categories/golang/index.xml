@@ -7,23 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
-    <lastBuildDate>Wed, 23 Sep 2015 16:30:37 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 13 Jun 2018 15:02:12 +0800</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>你好，Hugo</title>
-      <link>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</link>
-      <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
+      <title>Go并发模式1</title>
+      <link>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</link>
+      <pubDate>Wed, 13 Jun 2018 15:02:12 +0800</pubDate>
       
-      <guid>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</guid>
-      <description>&lt;p&gt;这是使用Hugo创建的站点中的第一篇文章。
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>任一个信号，就认为信号接收成功，需要进行下一步处理 代码： func or(channels ...&amp;lt;-chan interface{}) &amp;lt;-chan interface{} { switch len(channels) { case 0: return nil case</description>
+      <guid>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</guid>
+      <description>&lt;h1 id=&#34;or-channel&#34;&gt;Or-Channel&lt;/h1&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
