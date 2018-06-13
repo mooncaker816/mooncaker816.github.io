@@ -6,7 +6,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</loc>
-      <lastmod>2018-06-13T16:47:41+08:00</lastmod>
+      <lastmod>2018-06-13T16:48:54+08:00</lastmod>
     </url>
     
   
@@ -792,6 +792,16 @@
     
     <url>
     
+      <loc>https://mooncaker816.github.io/tags/go-patterns/</loc>
+      <lastmod>2018-06-13T16:48:54+08:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>https://mooncaker816.github.io/tags/go-select/</loc>
       <lastmod>2018-04-26T03:16:53+08:00</lastmod>
       <priority>0</priority>
@@ -863,7 +873,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
+      <lastmod>2018-06-13T16:48:54+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -873,7 +883,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-04-26T03:16:53+08:00</lastmod>
+      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
     
