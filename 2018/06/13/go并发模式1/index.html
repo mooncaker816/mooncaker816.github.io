@@ -101,7 +101,7 @@
   
   <meta property="article:published_time" content="2018-06-13T15:02:12&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-06-13T16:50:05&#43;08:00">
+  <meta property="article:modified_time" content="2018-06-13T17:08:18&#43;08:00">
   
 
   
@@ -449,16 +449,16 @@
         randSig(r),
         randSig(r),
     )
-    fmt.Printf("closed after %v seconds!\n", time.Now().Sub(st))
+    fmt.Printf("closed after %v!\n", time.Since(st))
 }
 
 func randSig(r *rand.Rand) <-chan interface{} {
     ch := make(chan interface{})
     go func() {
         defer close(ch)
-        sec := time.Duration(r.Int63n(10) + 3)
-        fmt.Printf("closing after %d seconds!\n", sec)
-        time.Sleep(sec * time.Second)
+        sec := time.Duration(r.Int63n(10)+3) * time.Second
+        fmt.Printf("closing after %v!\n", sec)
+        time.Sleep(sec)
     }()
     return ch
 }
@@ -466,12 +466,12 @@ func randSig(r *rand.Rand) <-chan interface{} {
 
 <p>结果：</p>
 
-<pre><code class="language-bash">closing after 7 seconds!
-closing after 5 seconds!
-closing after 3 seconds!
-closing after 12 seconds!
-closing after 10 seconds!
-closed after 3.005237401s seconds!
+<pre><code class="language-bash">closing after 4s!
+closing after 10s!
+closing after 3s!
+closing after 9s!
+closing after 11s!
+closed after 3.001062582s!
 </code></pre></li>
 </ul>
               </div>

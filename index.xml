@@ -67,16 +67,16 @@
         randSig(r),
         randSig(r),
     )
-    fmt.Printf(&amp;quot;closed after %v seconds!\n&amp;quot;, time.Now().Sub(st))
+    fmt.Printf(&amp;quot;closed after %v!\n&amp;quot;, time.Since(st))
 }
 
 func randSig(r *rand.Rand) &amp;lt;-chan interface{} {
     ch := make(chan interface{})
     go func() {
         defer close(ch)
-        sec := time.Duration(r.Int63n(10) + 3)
-        fmt.Printf(&amp;quot;closing after %d seconds!\n&amp;quot;, sec)
-        time.Sleep(sec * time.Second)
+        sec := time.Duration(r.Int63n(10)+3) * time.Second
+        fmt.Printf(&amp;quot;closing after %v!\n&amp;quot;, sec)
+        time.Sleep(sec)
     }()
     return ch
 }
@@ -84,12 +84,12 @@ func randSig(r *rand.Rand) &amp;lt;-chan interface{} {
 
 &lt;p&gt;结果：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;closing after 7 seconds!
-closing after 5 seconds!
-closing after 3 seconds!
-closing after 12 seconds!
-closing after 10 seconds!
-closed after 3.005237401s seconds!
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;closing after 4s!
+closing after 10s!
+closing after 3s!
+closing after 9s!
+closing after 11s!
+closed after 3.001062582s!
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ul&gt;</description>
     </item>
