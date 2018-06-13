@@ -11,6 +11,91 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Go并发模式1</title>
+      <link>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</link>
+      <pubDate>Wed, 13 Jun 2018 15:02:12 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</guid>
+      <description>
+
+&lt;h1 id=&#34;or-channel&#34;&gt;Or-Channel&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;使用场景：&lt;br /&gt;
+当你需要同时监测多个信号时，只要接收到其中任一个信号，就认为信号接收成功，需要进行下一步处理&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func or(channels ...&amp;lt;-chan interface{}) &amp;lt;-chan interface{} {
+    switch len(channels) {
+    case 0:
+        return nil
+    case 1:
+        return channels[0]
+    }
+    orDone := make(chan interface{})
+    go func() {
+        defer close(orDone)
+        switch len(channels) {
+        case 2:
+            select {
+            case &amp;lt;-channels[0]:
+            case &amp;lt;-channels[1]:
+            }
+        default:
+            select {
+            case &amp;lt;-channels[0]:
+            case &amp;lt;-channels[1]:
+            case &amp;lt;-channels[2]:
+            case &amp;lt;-or(append(channels[3:], orDone)...):
+            }
+        }
+    }()
+    return orDone
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;测试：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func TestOr(t *testing.T) {
+    st := time.Now()
+    r := rand.New(rand.NewSource(time.Now().Unix()))
+    &amp;lt;-or(
+        randSig(r),
+        randSig(r),
+        randSig(r),
+        randSig(r),
+        randSig(r),
+    )
+    fmt.Printf(&amp;quot;closed after %v seconds!\n&amp;quot;, time.Now().Sub(st))
+}
+
+func randSig(r *rand.Rand) &amp;lt;-chan interface{} {
+    ch := make(chan interface{})
+    go func() {
+        defer close(ch)
+        sec := time.Duration(r.Int63n(10) + 3)
+        fmt.Printf(&amp;quot;closing after %d seconds!\n&amp;quot;, sec)
+        time.Sleep(sec * time.Second)
+    }()
+    return ch
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;closing after 7 seconds!
+closing after 5 seconds!
+closing after 3 seconds!
+closing after 12 seconds!
+closing after 10 seconds!
+closed after 3.005237401s seconds!
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>天文算法27</title>
       <link>https://mooncaker816.github.io/2018/05/28/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9527/</link>
       <pubDate>Mon, 28 May 2018 10:35:29 +0800</pubDate>
@@ -2459,172 +2544,6 @@ func Saemundsson(h unit.Angle) unit.Angle {
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法13</title>
-      <link>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9513/</link>
-      <pubDate>Sun, 20 May 2018 20:50:07 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9513/</guid>
-      <description>&lt;h1 id=&#34;第十五章-升-中天-降-rising-transit-setting&#34;&gt;第十五章 升，中天，降 Rising,Transit,Setting&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-升-中天-降的概念&#34;&gt;1. 升，中天，降的概念&lt;/h2&gt;
-
-&lt;p&gt;　　升就是天体位于观测点地平线上即将升起的位置，由于大气的折射，当我们看到天体位于地平线上时，天体的真实位置在地平线之下 0°34′。而对于太阳，视升降一般指太阳圆盘上边缘的升与降，因此需加上16′的太阳半径进行计算。&lt;br /&gt;
-　　降与升类似，只是运动方向相反。&lt;br /&gt;
-　　中天是指天体位于本地子午圈上时的位置，即离天顶最近的位置。&lt;/p&gt;
-
-&lt;h2 id=&#34;2-计算升-中天-降的时刻&#34;&gt;2. 计算升，中天，降的时刻&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;根据第十三章中计算本地仰角的公式计算时角H$$\sin h = \sin φ\sin δ+\cos φ\cos δ\cos H$$
-令$h_0=0$，则$$\cos H_0=-\tan φ\tan δ$$
-但这只是理想状态，由于大气折射，我们要令$h_0=-0°34′$，对于太阳，令$h_0=-0°50′$，对于月亮，这个问题更复杂，因为$h_0$不是常数。考虑半径变化及地平视差，我们得到月亮的：$h_0 = 0.7275π - 0°34′$ 式中 $π$是月亮的地平视差（不是上章所说的视差角）。如果精度要球不高，$h_0$可以取均值$h_0 = 0°.125$，则$$\cos H_0 = \frac {\sin h_0 - \sin φ\sin δ}{\cos φ\cos δ}$$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;计算格林尼治D日0h（UT时）的视恒星时$θ_0$，并转为度单位,本地恒星时$θ=θ_0-L$,$L$为观测点经度，从格林尼治测量，向西为正，向东为负&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;天体的视赤经及视赤纬（单位是度）：
-\begin{cases}
-α_1 和 δ_1， 在力学时 D-1 日 0h\\[2ex]
-α_2 和 δ_2， 在力学时 D 日 0h\\[2ex]
-α_3 和 δ_3， 在力学时 D+1 日 0h\\[2ex]
-\end{cases}
-我们先使用下式估算时间： $$\cos H_0 = \frac {\sin h_0 - \sin φ\sin δ_2}{\cos φ\cos δ_2}$$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;估算中天，升起，降落时间点，单位为日（带小数）&lt;/p&gt;
-
-&lt;p&gt;$H_0$单位是度，$H_0$应转换到 0 度到 180 度。那么我们有：
-\begin{cases}
-中天：m_0 = (α_2 + L - θ_0)/360 \\[2ex]
-升起：m_1 = m_0 - H_0 /360 \\[2ex]
-降落：m_2 = m_0 + H_0 /360\\[2ex]
-\end{cases}
-式中$m$是$D$日的时间（即$D$日$m$时），单位是日。因此 $m$ 的值在 0 到 1，如果$m$的值超过这个范围，那么应加 1 或减 1。例如：m = 0.3744，则不用变；m = -0.1709，则应加 1 变为+0.8291；m = +1.1853 则应减 1 变 为+0.1853。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;根据上一步求得的m,分别计算三个时刻点的格林威治恒星时$θ = θ_0 + 360.985647m$，式中$m$是$m_0、m_1、m_2$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;考虑ΔT，得到一个$m_0+ΔT/86400$的时刻点，对该时刻点在所给的视赤经，视赤纬数据中插值求解得到新的中天时刻对应的天体视赤经α，视赤纬δ（单单求解中天用不着视赤纬数据，但升降需要）&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;计算中天时本地时角$H= θ - L - α$，新的中天即为$m_0 = m_0-\frac{H}{360}$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;同上，对升，降估计时间考虑$ΔT$并插值求解对应的视赤经$α$，视赤纬$δ$，再根据地平坐标转换公式，求得地平仰角$h$&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;再求分别对应的本地时角$H$,则新的升,降即为$$m= m + \frac {h-h_0}{360\cos δ\cos φ\sin H}$$&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ApproxTimes computes approximate UT rise, transit and set times for
-// a celestial object on a day of interest.
-//
-// The function argurments do not actually include the day, but do include
-// values computed from the day.
-//
-//	p is geographic coordinates of observer. p 为地平坐标（仰角，方位角）
-//	h0 is &amp;quot;standard altitude&amp;quot; of the body. h0 为天体升，降时实际地平线纬度
-//	Th0 is apparent sidereal time at 0h UT at Greenwich. Th0 为格林威治0h UT视恒星时
-//	α, δ are right ascension and declination of the body. α, δ为天体0h DT视赤经，视赤纬
-//
-// Th0 must be the time on the day of interest.
-// See sidereal.Apparent0UT.
-//
-// α, δ must be values at 0h dynamical time for the day of interest.
-// 近似计算升，中天，降时间
-func ApproxTimes(p globe.Coord, h0 unit.Angle, Th0 unit.Time, α unit.RA, δ unit.Angle) (tRise, tTransit, tSet unit.Time, err error) {
-	// approximate local hour angle
-	sLat, cLat := p.Lat.Sincos()
-	sδ1, cδ1 := δ.Sincos()
-	cH0 := (h0.Sin() - sLat*sδ1) / (cLat * cδ1) // (15.1) p. 102
-	if cH0 &amp;lt; -1 || cH0 &amp;gt; 1 {
-		err = ErrorCircumpolar
-		return
-	}
-	H0 := unit.TimeFromRad(math.Acos(cH0))
-
-	// approximate transit, rise, set times.
-	// (15.2) p. 102.
-	mt := unit.TimeFromRad(α.Rad()+p.Lon.Rad()) - Th0
-	tTransit = mt.Mod1()
-	tRise = (mt - H0).Mod1()
-	tSet = (mt + H0).Mod1()
-	return
-}
-
-// Times computes UT rise, transit and set times for a celestial object on
-// a day of interest.
-//
-// The function argurments do not actually include the day, but do include
-// a number of values computed from the day.
-//
-//	p is geographic coordinates of observer.
-//	ΔT is delta T.
-//	h0 is &amp;quot;standard altitude&amp;quot; of the body.
-//	Th0 is apparent sidereal time at 0h UT at Greenwich.
-//	α3, δ3 are slices of three right ascensions and declinations.
-//
-// h0 unit is radians.
-//
-// Th0 must be the time on the day of interest, in seconds.
-// See sidereal.Apparent0UT.
-//
-// α3, δ3 must be values at 0h dynamical time for the day before, the day of,
-// and the day after the day of interest.  Units are radians.
-//
-// Result units are seconds of day and are in the range [0,86400).
-// 对近似计算结果迭代，得到精确升，中天，降时间
-func Times(p globe.Coord, ΔT unit.Time, h0 unit.Angle, Th0 unit.Time, α3 []unit.RA, δ3 []unit.Angle) (tRise, tTransit, tSet unit.Time, err error) {
-	tRise, tTransit, tSet, err = ApproxTimes(p, h0, Th0, α3[1], δ3[1])
-	if err != nil {
-		return
-	}
-	αf := make([]float64, 3)
-	for i, α := range α3 {
-		αf[i] = α.Rad()
-	}
-	δf := make([]float64, 3)
-	for i, δ := range δ3 {
-		δf[i] = δ.Rad()
-	}
-	var d3α, d3δ *interp.Len3
-	d3α, err = interp.NewLen3(-86400, 86400, αf)
-	if err != nil {
-		return
-	}
-	d3δ, err = interp.NewLen3(-86400, 86400, δf)
-	if err != nil {
-		return
-	}
-	// adjust tTransit
-	{
-		th0 := (Th0 + tTransit.Mul(360.985647/360)).Mod1()
-		α := d3α.InterpolateX((tTransit + ΔT).Sec())
-		// local hour angle as Time
-		H := th0 - unit.TimeFromRad(p.Lon.Rad()+α)
-		tTransit -= H
-	}
-	// adjust tRise, tSet
-	sLat, cLat := p.Lat.Sincos()
-	adjustRS := func(m unit.Time) (unit.Time, error) {
-		th0 := (Th0 + m.Mul(360.985647/360)).Mod1()
-		ut := (m + ΔT).Sec()
-		α := d3α.InterpolateX(ut)
-		δ := d3δ.InterpolateX(ut)
-		Hrad := th0.Rad() - p.Lon.Rad() - α
-		sδ, cδ := math.Sincos(δ)
-		sH, cH := math.Sincos(Hrad)
-		h := math.Asin(sLat*sδ + cLat*cδ*cH)
-		md := (unit.TimeFromRad(h) - h0.Time()).Div(cδ * cLat * sH)
-		return m + md, nil
-	}
-	tRise, err = adjustRS(tRise)
-	if err != nil {
-		return
-	}
-	tSet, err = adjustRS(tSet)
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>
