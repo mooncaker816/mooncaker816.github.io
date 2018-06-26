@@ -120,7 +120,7 @@ system, see the path package.&lt;/p&gt;
 	// Combinations
 	{&amp;quot;abc/./../def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;},
 	{&amp;quot;abc//./../def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;},
-    {&amp;quot;abc/../../././../def&amp;quot; =&amp;gt; &amp;quot;../../def&amp;quot;},
+	{&amp;quot;abc/../../././../def&amp;quot; =&amp;gt; &amp;quot;../../def&amp;quot;},
 
 	{`c:` =&amp;gt; `c:.`},
 	{`c:\` =&amp;gt; `c:\`},
@@ -164,7 +164,7 @@ system, see the path package.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;&amp;quot;, []string{}},
 	{string([]byte{&#39;a&#39;, lsep, &#39;b&#39;}), []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}},
-    {string([]byte{lsep, &#39;a&#39;, lsep, &#39;b&#39;}), []string{&amp;quot;&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}},
+	{string([]byte{lsep, &#39;a&#39;, lsep, &#39;b&#39;}), []string{&amp;quot;&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}},
     
 	// quoted
 	{`&amp;quot;a&amp;quot;`, []string{`a`}},
@@ -199,7 +199,7 @@ system, see the path package.&lt;/p&gt;
 	{&amp;quot;a/b/&amp;quot;, &amp;quot;a/b/&amp;quot;, &amp;quot;&amp;quot;},
 	{&amp;quot;a/&amp;quot;, &amp;quot;a/&amp;quot;, &amp;quot;&amp;quot;},
 	{&amp;quot;a&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;a&amp;quot;},
-    {&amp;quot;/&amp;quot;, &amp;quot;/&amp;quot;, &amp;quot;&amp;quot;},
+	{&amp;quot;/&amp;quot;, &amp;quot;/&amp;quot;, &amp;quot;&amp;quot;},
 
 	{`c:`, `c:`, ``},
 	{`c:/`, `c:/`, ``},
@@ -243,7 +243,7 @@ system, see the path package.&lt;/p&gt;
 	{[]string{&amp;quot;&amp;quot;, &amp;quot;&amp;quot;}, &amp;quot;&amp;quot;},
 
 	// three parameters
-    {[]string{&amp;quot;/&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;/a/b&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;/a/b&amp;quot;},
 
 	{[]string{`directory`, `file`}, `directory\file`},
 	{[]string{`C:\Windows\`, `System32`}, `C:\Windows\System32`},
@@ -348,7 +348,7 @@ system, see the path package.&lt;/p&gt;
 	{&amp;quot;..&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;err&amp;quot;},
 	{&amp;quot;../..&amp;quot;, &amp;quot;..&amp;quot;, &amp;quot;err&amp;quot;},
 	{&amp;quot;a&amp;quot;, &amp;quot;/a&amp;quot;, &amp;quot;err&amp;quot;},
-    {&amp;quot;/a&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;err&amp;quot;},
+	{&amp;quot;/a&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;err&amp;quot;},
 
 	{`C:a\b\c`, `C:a/b/d`, `..\d`},
 	{`C:\`, `D:\`, `err`},
@@ -396,7 +396,7 @@ system, see the path package.&lt;/p&gt;
 	{&amp;quot;abc/def&amp;quot;, &amp;quot;def&amp;quot;},
 	{&amp;quot;a/b/.x&amp;quot;, &amp;quot;.x&amp;quot;},
 	{&amp;quot;a/b/c.&amp;quot;, &amp;quot;c.&amp;quot;},
-    {&amp;quot;a/b/c.x&amp;quot;, &amp;quot;c.x&amp;quot;},
+	{&amp;quot;a/b/c.x&amp;quot;, &amp;quot;c.x&amp;quot;},
 
 	{`c:\`, `\`},
 	{`c:.`, `.`},
@@ -427,7 +427,7 @@ system, see the path package.&lt;/p&gt;
 	{&amp;quot;abc/def&amp;quot;, &amp;quot;abc&amp;quot;},
 	{&amp;quot;a/b/.x&amp;quot;, &amp;quot;a/b&amp;quot;},
 	{&amp;quot;a/b/c.&amp;quot;, &amp;quot;a/b&amp;quot;},
-    {&amp;quot;a/b/c.x&amp;quot;, &amp;quot;a/b&amp;quot;},
+	{&amp;quot;a/b/c.x&amp;quot;, &amp;quot;a/b&amp;quot;},
 
 	{`c:\`, `c:\`},
 	{`c:.`, `c:.`},
