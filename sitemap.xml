@@ -5,6 +5,15 @@
     
     <url>
     
+      <loc>https://mooncaker816.github.io/2018/06/26/path/</loc>
+      <lastmod>2018-06-26T15:33:27+08:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</loc>
       <lastmod>2018-06-13T17:08:18+08:00</lastmod>
     </url>
@@ -873,7 +882,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
+      <lastmod>2018-06-26T15:33:27+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -883,7 +892,7 @@
     <url>
     
       <loc>https://mooncaker816.github.io/categories/golang/</loc>
-      <lastmod>2018-06-13T17:08:18+08:00</lastmod>
+      <lastmod>2018-04-29T13:07:31+08:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -914,6 +923,16 @@
     
       <loc>https://mooncaker816.github.io/tags/npm/</loc>
       <lastmod>2018-04-26T03:16:53+08:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>https://mooncaker816.github.io/tags/path/</loc>
+      <lastmod>2018-06-26T15:33:27+08:00</lastmod>
       <priority>0</priority>
     </url>
     

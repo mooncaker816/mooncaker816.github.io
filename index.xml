@@ -11,6 +11,312 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Path</title>
+      <link>https://mooncaker816.github.io/2018/06/26/path/</link>
+      <pubDate>Tue, 26 Jun 2018 12:45:39 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/06/26/path/</guid>
+      <description>&lt;h1 id=&#34;1-path包概要&#34;&gt;1. Path包概要&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Package path implements utility routines for manipulating slash-separated paths.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　&lt;code&gt;path&lt;/code&gt; 包实现了对以&lt;code&gt;/&lt;/code&gt;为分隔的路径的操作&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The path package should only be used for paths separated by forward
+slashes, such as the paths in URLs. This package does not deal with
+Windows paths with drive letters or backslashes; to manipulate
+operating system paths, use the path/filepath package.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　该包只能用于对以正斜杠&lt;code&gt;/&lt;/code&gt;为分隔的路径的处理，比如 URL，而不能处理带有windows中的盘符或者反斜杠&lt;code&gt;\&lt;/code&gt;的路径，对于这类路径的处理需要使用 &lt;code&gt;path/filepath&lt;/code&gt; 包&lt;/p&gt;
+
+&lt;h2 id=&#34;1-2-包结构&#34;&gt;1.2 包结构&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;├── example_test.go
+├── match.go
+├── match_test.go
+├── path.go
+└── path_test.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;2-深入-path-包&#34;&gt;2. 深入&lt;code&gt;path&lt;/code&gt;包&lt;/h1&gt;
+
+&lt;h2 id=&#34;2-1-path-go-path-test-go&#34;&gt;2.1 &lt;code&gt;path.go&lt;/code&gt; &amp;amp; &lt;code&gt;path_test.go&lt;/code&gt;&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-1-clean&#34;&gt;2.1.1 &lt;code&gt;Clean&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Clean(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：&lt;code&gt;Clean&lt;/code&gt;函数主要是对给定路径进行以下格式化：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;替换多个斜杠&lt;code&gt;//&lt;/code&gt;为单个斜杠&lt;code&gt;/&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;消除&lt;code&gt;.&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;消除&lt;code&gt;..&lt;/code&gt;当且仅当前一个元素不是&lt;code&gt;..&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;替换绝对路径开头的&lt;code&gt;/..&lt;/code&gt;为&lt;code&gt;/&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;格式化后的路径不以&lt;code&gt;/&lt;/code&gt;结尾，除非该路径就是根路径&lt;code&gt;/&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若格式化后路径为空，则返回&lt;code&gt;.&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/Ya85iuk0uMU&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/Ya85iuk0uMU&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;    // Already clean
+	&amp;quot;&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;
+	&amp;quot;abc&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;
+	&amp;quot;abc/def&amp;quot; =&amp;gt; &amp;quot;abc/def&amp;quot;
+	&amp;quot;a/b/c&amp;quot; =&amp;gt; &amp;quot;a/b/c&amp;quot;
+	&amp;quot;.&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;
+	&amp;quot;..&amp;quot; =&amp;gt; &amp;quot;..&amp;quot;
+	&amp;quot;../..&amp;quot; =&amp;gt; &amp;quot;../..&amp;quot;
+	&amp;quot;../../abc&amp;quot; =&amp;gt; &amp;quot;../../abc&amp;quot;
+	&amp;quot;/abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;
+	&amp;quot;/&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;
+
+    // Remove trailing slash
+	&amp;quot;abc/&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;
+	&amp;quot;abc/def/&amp;quot; =&amp;gt; &amp;quot;abc/def&amp;quot;
+	&amp;quot;a/b/c/&amp;quot; =&amp;gt; &amp;quot;a/b/c&amp;quot;
+	&amp;quot;./&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;
+	&amp;quot;../&amp;quot; =&amp;gt; &amp;quot;..&amp;quot;
+	&amp;quot;../../&amp;quot; =&amp;gt; &amp;quot;../..&amp;quot;
+	&amp;quot;/abc/&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;
+
+    // Remove doubled slash
+	&amp;quot;abc//def//ghi&amp;quot; =&amp;gt; &amp;quot;abc/def/ghi&amp;quot;
+	&amp;quot;//abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;
+	&amp;quot;///abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;
+	&amp;quot;//abc//&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;
+	&amp;quot;abc//&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;
+
+	&amp;quot;abc/./def&amp;quot; =&amp;gt; &amp;quot;abc/def&amp;quot;
+	&amp;quot;/./abc/def&amp;quot; =&amp;gt; &amp;quot;/abc/def&amp;quot;
+	&amp;quot;abc/.&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;
+
+    // Remove .. elements
+	&amp;quot;abc/def/ghi/../jkl&amp;quot; =&amp;gt; &amp;quot;abc/def/jkl&amp;quot;
+	&amp;quot;abc/def/../ghi/../jkl&amp;quot; =&amp;gt; &amp;quot;abc/jkl&amp;quot;
+	&amp;quot;abc/def/..&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;
+	&amp;quot;abc/def/../..&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;
+	&amp;quot;/abc/def/../..&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;
+	&amp;quot;abc/def/../../..&amp;quot; =&amp;gt; &amp;quot;..&amp;quot;
+	&amp;quot;/abc/def/../../..&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;
+	&amp;quot;abc/def/../../../ghi/jkl/../../../mno&amp;quot; =&amp;gt; &amp;quot;../../mno&amp;quot;
+
+    // Combinations
+	&amp;quot;abc/./../def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;
+	&amp;quot;abc//./../def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;
+	&amp;quot;abc/../../././../def&amp;quot; =&amp;gt; &amp;quot;../../def&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-2-split&#34;&gt;2.1.2 &lt;code&gt;Split&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Split(path string) (dir, file string)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：拆分路径为目录+文件，目录保留&lt;code&gt;/&lt;/code&gt;，若路径中没有&lt;code&gt;/&lt;/code&gt;，则目录为空&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/DG8QjjWdkuq&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/DG8QjjWdkuq&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	&amp;quot;a/b&amp;quot; =&amp;gt; &amp;quot;a/&amp;quot; + &amp;quot;b&amp;quot;
+	&amp;quot;a/b/&amp;quot; =&amp;gt; &amp;quot;a/b/&amp;quot; + &amp;quot;&amp;quot;
+	&amp;quot;a/&amp;quot; =&amp;gt; &amp;quot;a/&amp;quot; + &amp;quot;&amp;quot;
+	&amp;quot;a&amp;quot; =&amp;gt; &amp;quot;&amp;quot; + &amp;quot;a&amp;quot;
+	&amp;quot;/&amp;quot; =&amp;gt; &amp;quot;/&amp;quot; + &amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-3-join&#34;&gt;2.1.3 &lt;code&gt;Join&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;Join(elem ...string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：把所有元素按顺序拼接为路径，并对路径格式化&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/jxcwt_fgUpt&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/jxcwt_fgUpt&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	// zero parameters
+	{[]string{} =&amp;gt; &amp;quot;&amp;quot;},
+
+	// one parameter
+	{[]string{&amp;quot;&amp;quot;} =&amp;gt; &amp;quot;&amp;quot;},
+	{[]string{&amp;quot;a&amp;quot;} =&amp;gt; &amp;quot;a&amp;quot;},
+
+	// two parameters
+	{[]string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;} =&amp;gt; &amp;quot;a/b&amp;quot;},
+	{[]string{&amp;quot;a&amp;quot;, &amp;quot;&amp;quot;} =&amp;gt; &amp;quot;a&amp;quot;},
+	{[]string{&amp;quot;&amp;quot;, &amp;quot;b&amp;quot;} =&amp;gt; &amp;quot;b&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;, &amp;quot;a&amp;quot;} =&amp;gt; &amp;quot;/a&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;, &amp;quot;&amp;quot;} =&amp;gt; &amp;quot;/&amp;quot;},
+	{[]string{&amp;quot;a/&amp;quot;, &amp;quot;b&amp;quot;} =&amp;gt; &amp;quot;a/b&amp;quot;},
+	{[]string{&amp;quot;a/&amp;quot;, &amp;quot;&amp;quot;} =&amp;gt; &amp;quot;a&amp;quot;},
+	{[]string{&amp;quot;&amp;quot;, &amp;quot;&amp;quot;} =&amp;gt; &amp;quot;&amp;quot;},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-4-ext&#34;&gt;2.1.4 &lt;code&gt;Ext&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;Ext(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：根据&lt;code&gt;.&lt;/code&gt;返回路径中文件的扩展名，若没有&lt;code&gt;.&lt;/code&gt;则返回空&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/VxIO_oewphL&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/VxIO_oewphL&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	{&amp;quot;path.go&amp;quot; =&amp;gt; &amp;quot;.go&amp;quot;},
+	{&amp;quot;path.pb.go&amp;quot; =&amp;gt; &amp;quot;.go&amp;quot;},
+	{&amp;quot;a.dir/b&amp;quot; =&amp;gt; &amp;quot;&amp;quot;},
+	{&amp;quot;a.dir/b.go&amp;quot; =&amp;gt; &amp;quot;.go&amp;quot;},
+	{&amp;quot;a.dir/&amp;quot; =&amp;gt; &amp;quot;&amp;quot;},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-5-base&#34;&gt;2.1.5 &lt;code&gt;Base&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;Base(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：先清除路径末尾的&lt;code&gt;/&lt;/code&gt;（如果有的话），再根据最后一个&lt;code&gt;/&lt;/code&gt;，返回该元素，若没有&lt;code&gt;/&lt;/code&gt;，则返回&lt;code&gt;.&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/bW-KYszq1fE&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/bW-KYszq1fE&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	{&amp;quot;&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;.&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;/.&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;/&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;////&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;x/&amp;quot; =&amp;gt; &amp;quot;x&amp;quot;},
+	{&amp;quot;abc&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+	{&amp;quot;abc/def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;},
+	{&amp;quot;a/b/.x&amp;quot; =&amp;gt; &amp;quot;.x&amp;quot;},
+	{&amp;quot;a/b/c.&amp;quot; =&amp;gt; &amp;quot;c.&amp;quot;},
+	{&amp;quot;a/b/c.x&amp;quot; =&amp;gt; &amp;quot;c.x&amp;quot;},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-6-isabs&#34;&gt;2.1.6 &lt;code&gt;IsAbs&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;IsAbs(path string) bool&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：判断路径是否为绝对路径，即以&lt;code&gt;/&lt;/code&gt;开头&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/MWv0m9Q8I-J&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/MWv0m9Q8I-J&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	{&amp;quot;&amp;quot; =&amp;gt; false},
+	{&amp;quot;/&amp;quot; =&amp;gt; true},
+	{&amp;quot;/usr/bin/gcc&amp;quot; =&amp;gt; true},
+	{&amp;quot;..&amp;quot; =&amp;gt; false},
+	{&amp;quot;/a/../bb&amp;quot; =&amp;gt; true},
+	{&amp;quot;.&amp;quot; =&amp;gt; false},
+	{&amp;quot;./&amp;quot; =&amp;gt; false},
+	{&amp;quot;lala&amp;quot; =&amp;gt; false},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-7-dir&#34;&gt;2.1.7 &lt;code&gt;Dir&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;Dir(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：返回去除最后一项后的目录路径,并格式化&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/DBULKf343C6&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/DBULKf343C6&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	{&amp;quot;&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;.&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;/.&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;/&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;////&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;/foo&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;x/&amp;quot; =&amp;gt; &amp;quot;x&amp;quot;},
+	{&amp;quot;abc&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;abc/def&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+	{&amp;quot;abc////def&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+	{&amp;quot;a/b/.x&amp;quot; =&amp;gt; &amp;quot;a/b&amp;quot;},
+	{&amp;quot;a/b/c.&amp;quot; =&amp;gt; &amp;quot;a/b&amp;quot;},
+	{&amp;quot;a/b/c.x&amp;quot; =&amp;gt; &amp;quot;a/b&amp;quot;},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-2-match-go-match-test-go&#34;&gt;2.2 &lt;code&gt;match.go&lt;/code&gt; &amp;amp; &lt;code&gt;match_test.go&lt;/code&gt;&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-2-1-match&#34;&gt;2.2.1 &lt;code&gt;Match&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Match(pattern, name string) (matched bool, err error)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：根据给定的模式对路径进行匹配，模式如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;	pattern:
+		{ term }
+	term:
+		&#39;*&#39;         matches any sequence of non-/ characters 匹配任意数量的所有非/字符
+		&#39;?&#39;         matches any single non-/ character 匹配所有单个非/字符
+		&#39;[&#39; [ &#39;^&#39; ] { character-range } &#39;]&#39; 区间匹配，^表示除了该区间，匹配不能为空，至少需要一个
+		            character class (must be non-empty)
+		c           matches character c (c != &#39;*&#39;, &#39;?&#39;, &#39;\\&#39;, &#39;[&#39;) 匹配单个确定字符，除&#39;*&#39;, &#39;?&#39;, &#39;\\&#39;, &#39;[&#39;
+		&#39;\\&#39; c      matches character c 可以看作转义匹配&#39;*&#39;, &#39;?&#39;, &#39;\\&#39;, &#39;[&#39;
+
+	character-range:
+		c           matches character c (c != &#39;\\&#39;, &#39;-&#39;, &#39;]&#39;) 在区间匹配中匹配单个确定字符，除&#39;\\&#39;, &#39;-&#39;, &#39;]&#39;
+		&#39;\\&#39; c      matches character c 可以看作在区间匹配中转义匹配&#39;\\&#39;, &#39;-&#39;, &#39;]&#39;
+		lo &#39;-&#39; hi   matches character c for lo &amp;lt;= c &amp;lt;= hi 区间范围
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/yhfME8jBmn1&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/yhfME8jBmn1&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;abc&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;*&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;*c&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;a*&amp;quot;, &amp;quot;a&amp;quot;, true, nil},
+	{&amp;quot;a*&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;a*&amp;quot;, &amp;quot;ab/c&amp;quot;, false, nil},
+	{&amp;quot;a*/b&amp;quot;, &amp;quot;abc/b&amp;quot;, true, nil},
+	{&amp;quot;a*/b&amp;quot;, &amp;quot;a/c/b&amp;quot;, false, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxe/f&amp;quot;, true, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxexxx/f&amp;quot;, true, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxe/xxx/f&amp;quot;, false, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxexxx/fff&amp;quot;, false, nil},
+	{&amp;quot;a*b?c*x&amp;quot;, &amp;quot;abxbbxdbxebxczzx&amp;quot;, true, nil},
+	{&amp;quot;a*b?c*x&amp;quot;, &amp;quot;abxbbxdbxebxczzy&amp;quot;, false, nil},
+	{&amp;quot;ab[c]&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;ab[b-d]&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;ab[e-g]&amp;quot;, &amp;quot;abc&amp;quot;, false, nil},
+	{&amp;quot;ab[^c]&amp;quot;, &amp;quot;abc&amp;quot;, false, nil},
+	{&amp;quot;ab[^b-d]&amp;quot;, &amp;quot;abc&amp;quot;, false, nil},
+	{&amp;quot;ab[^e-g]&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;a\\*b&amp;quot;, &amp;quot;a*b&amp;quot;, true, nil},
+	{&amp;quot;a\\*b&amp;quot;, &amp;quot;ab&amp;quot;, false, nil},
+	{&amp;quot;a?b&amp;quot;, &amp;quot;a☺b&amp;quot;, true, nil},
+	{&amp;quot;a[^a]b&amp;quot;, &amp;quot;a☺b&amp;quot;, true, nil},
+	{&amp;quot;a???b&amp;quot;, &amp;quot;a☺b&amp;quot;, false, nil},
+	{&amp;quot;a[^a][^a][^a]b&amp;quot;, &amp;quot;a☺b&amp;quot;, false, nil},
+	{&amp;quot;[a-ζ]*&amp;quot;, &amp;quot;α&amp;quot;, true, nil},
+	{&amp;quot;*[a-ζ]&amp;quot;, &amp;quot;A&amp;quot;, false, nil},
+	{&amp;quot;a?b&amp;quot;, &amp;quot;a/b&amp;quot;, false, nil},
+	{&amp;quot;a*b&amp;quot;, &amp;quot;a/b&amp;quot;, false, nil},
+	{&amp;quot;[\\]a]&amp;quot;, &amp;quot;]&amp;quot;, true, nil},
+	{&amp;quot;[\\-]&amp;quot;, &amp;quot;-&amp;quot;, true, nil},
+	{&amp;quot;[x\\-]&amp;quot;, &amp;quot;x&amp;quot;, true, nil},
+	{&amp;quot;[x\\-]&amp;quot;, &amp;quot;-&amp;quot;, true, nil},
+	{&amp;quot;[x\\-]&amp;quot;, &amp;quot;z&amp;quot;, false, nil},
+	{&amp;quot;[\\-x]&amp;quot;, &amp;quot;x&amp;quot;, true, nil},
+	{&amp;quot;[\\-x]&amp;quot;, &amp;quot;-&amp;quot;, true, nil},
+	{&amp;quot;[\\-x]&amp;quot;, &amp;quot;a&amp;quot;, false, nil},
+	{&amp;quot;[]a]&amp;quot;, &amp;quot;]&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-]&amp;quot;, &amp;quot;-&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[x-]&amp;quot;, &amp;quot;x&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[x-]&amp;quot;, &amp;quot;-&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[x-]&amp;quot;, &amp;quot;z&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-x]&amp;quot;, &amp;quot;x&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-x]&amp;quot;, &amp;quot;-&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-x]&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;\\&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[a-b-c]&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[^&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[^bc&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;a[&amp;quot;, &amp;quot;a&amp;quot;, false, nil},
+	{&amp;quot;a[&amp;quot;, &amp;quot;ab&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;*x&amp;quot;, &amp;quot;xxx&amp;quot;, true, nil},
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>Go并发模式1</title>
       <link>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</link>
       <pubDate>Wed, 13 Jun 2018 15:02:12 +0800</pubDate>
@@ -2406,143 +2712,6 @@ func RelativePosition(r1, d1, r2, d2 unit.Angle) unit.Angle {
 	return unit.Angle(math.Atan2(sΔr, cd2*d1.Tan()-sd2*cΔr))
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法14</title>
-      <link>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9514/</link>
-      <pubDate>Mon, 21 May 2018 12:29:48 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9514/</guid>
-      <description>&lt;h1 id=&#34;第十六章-大气折射-atmospheric-refraction&#34;&gt;第十六章 大气折射 Atmospheric Refraction&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-大气折射&#34;&gt;1. 大气折射&lt;/h2&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;大气折射（又称：蒙气差（蒙气即行星的大气）、折光差）即原本直线前进的光或其它电磁波在穿越大气层时，因为空气密度随着高度变化所产生的偏折。这种折射是光通过空气时因为密度的增加使速度降低（折射率增加）。大气折射在近地面时会产生海市蜃楼，让远方的物体出现或荡漾，和非幻觉的升高或降低，伸长或缩短。这个词也适用于声音的折射。无论是天体或地面上物体位置的测量都需要考虑大气折射。&lt;/p&gt;
-
-&lt;p&gt;对天文或天体的折射，导致天体在天空中的位置看起来比实际为高。大地折射通常导致物体出现在比实际高的位置上，然而在靠近地面的空气被加热的下午，光线的曲折向上会使物体看似出现在比实际位置低的地方。&lt;/p&gt;
-
-&lt;p&gt;折射不仅影响可见光，还包括所有的电磁波，然而在程度上不尽相同（见光的色散）。例如在可见光，蓝色受到的影响大于红色。这会对天体光谱在展开时的高解析图像造成影响。&lt;/p&gt;
-
-&lt;p&gt;只要有可能，天文学家会安排在天体在天空中接近高度最高的顶点时才要观测。同样的，水手也不会观测一颗高度低于20°或更低恒星的位置。如果不能避免靠近地平线的观测，有可能使用具有修正系统，以弥补这种折射造成的影响。如果色散也是一个问题（如果是宽频的高解析观测），大气折射可以使用成对的旋转玻璃棱镜处理掉。但是当大气折射的总量是温度梯度、温度、压力和湿度（特别是在中红外波长时的水蒸气总量）的函数时，成功补偿这些修正量的工作可以让人为之望而却步。另一方面，测量师经常都会将他们的工作安排在下午折射程度最低的时候。&lt;/p&gt;
-
-&lt;p&gt;在有很强的温度梯度、大气不均匀和空气动荡的时候，大气折射会变得很严重。这是造成恒星闪烁和日出与日落时太阳各种不同变形的原因。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/5/5d/Refracci%C3%B3n.png&#34; alt=&#34;太阳在日出和日落时位移的图&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;2-真纬度-视纬度&#34;&gt;2. 真纬度，视纬度&lt;/h2&gt;
-
-&lt;p&gt;　　真纬度即为天体的真实地平纬度(仰角)$h$，视纬度即为经过大气折射后观测到的纬度$h_0$。&lt;br /&gt;
-　　当已知真纬度$h$，&lt;strong&gt;可以由该$h$推算出一个矫正量R&lt;/strong&gt;，视纬度$h_0 = h + R$&lt;br /&gt;
-　　当已知视纬度$h_0$，&lt;strong&gt;可以由该$h_0$推算出一个矫正量R&lt;/strong&gt;，真纬度$h = h_0 - R$&lt;/p&gt;
-
-&lt;h2 id=&#34;3-矫正量r-单位角分&#34;&gt;3. 矫正量R&amp;ndash;单位角分&lt;/h2&gt;
-
-&lt;h3 id=&#34;3-1-h-0-rightarrow-r-h&#34;&gt;3.1 $h_0 \Rightarrow R,h$&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;$h_0&amp;gt;15°$时：
-$$R=58&amp;rdquo;.294\tan(90-h_0)-0&amp;rdquo;.0668\tan^3(90°-h_0)$$
-$$h = h_0 - R$$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Gt15True returns refraction for obtaining true altitude when altitude
-// is greater than 15 degrees (about .26 radians.)
-//
-// h0 must be a measured apparent altitude of a celestial body.
-//
-// Result is refraction to be subtracted from h0 to obtain the true altitude
-// of the body.
-// 纬度大于15度时，由视纬度求真纬度的矫正量R
-func Gt15True(h0 unit.Angle) unit.Angle {
-    // (16.1) p. 105
-    t := (math.Pi/2 - h0).Tan()
-    return gt15true1.Mul(t) - gt15true2.Mul(t*t*t)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Bennett公式，当$h\in [0,90°]$时：
-$$R = \frac {1}{\tan(h_0 +\frac {7.31}{h_0 +4.4})}$$
-$$ΔR = -0.06sin(14.7R+13)$$
-对于任意$h_0$，这个公式的精度是$0.07′=4.2&amp;rdquo;$，最大误差发生在$h_0 =12°$。&lt;br /&gt;
-应当注意的是：当$h_0 =90°$时，$R=-0&amp;rdquo;.08$，理论上天顶应该不受折射影响，可以加上0.0013515′，从而为0。&lt;br /&gt;
-若考虑修正量，即$R=R+ΔR$，最大误差为$0.015′=0.9&amp;rdquo;$。&lt;br /&gt;
-当$h_0 =90°$时，计算的结果是$R=-0.89&amp;rdquo;$，不作第二项修正反而更好。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Bennett returns refraction for obtaining true altitude.
-//
-// h0 must be a measured apparent altitude of a celestial body in radians.
-//
-// Results are accurate to .07 arc min from horizon to zenith.
-//
-// Result is refraction to be subtracted from h0 to obtain the true altitude
-// of the body.
-// Bennett 公式，由视纬度求真纬度矫正量 R
-func Bennett(h0 unit.Angle) unit.Angle {
-    // (16.3) p. 106
-    hd := h0.Deg()
-    return unit.AngleFromMin(1 / math.Tan((hd+7.31/(hd+4.4))*math.Pi/180))
-}
-
-// Bennett2 returns refraction for obtaining true altitude.
-//
-// Similar to Bennett, but a correction is applied to give a more accurate
-// result.
-//
-// Results are accurate to .015 arc min.  Result unit is radians.
-// 带矫正量的Bennett公式
-func Bennett2(h0 unit.Angle) unit.Angle {
-    R := Bennett(h0).Min()
-    return unit.AngleFromMin(R - .06*math.Sin((14.7*R+13)*math.Pi/180))
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;3-2-h-rightarrow-r-h-0&#34;&gt;3.2 $h \Rightarrow R,h_0$&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;$h&amp;gt;15°$时：
-$$R=58&amp;rdquo;.276\tan(90°-h) -0&amp;rdquo;.0824\tan^3(90°-h)$$
-$$h_0 = h + R$$&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Gt15Apparent returns refraction for obtaining apparent altitude when
-// altitude is greater than 15 degrees (about .26 radians.)
-//
-// h must be a computed true &amp;quot;airless&amp;quot; altitude of a celestial body.
-//
-// Result is refraction to be added to h to obtain the apparent altitude
-// of the body.
-// 纬度大于15度时，由真纬度求视纬度的矫正量R
-func Gt15Apparent(h unit.Angle) unit.Angle {
-    // (16.2) p. 105
-    t := (math.Pi/2 - h).Tan()
-    return gt15app1.Mul(t) - gt15app2.Mul(t*t*t)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;类Bennett公式
-$$R = \frac {1.02}{\tan(h+\frac{10.3}{h+5.11})}$$
-同样，$h=90°$时，该式算得$R$不等于零,差值是 0.0019279。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Saemundsson returns refraction for obtaining apparent altitude.
-//
-// h must be a computed true &amp;quot;airless&amp;quot; altitude of a celestial body in radians.
-//
-// Result is refraction to be added to h to obtain the apparent altitude
-// of the body.
-//
-// Results are consistent with Bennett to within 4 arc sec.
-// 由真纬度求视纬度矫正量，与Bennett公式对应
-func Saemundsson(h unit.Angle) unit.Angle {
-    // (16.4) p. 106
-    hd := h.Deg()
-    return unit.AngleFromMin(1.02 / math.Tan((hd+10.3/(hd+5.11))*math.Pi/180))
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
     </item>
     
   </channel>

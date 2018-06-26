@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
-    <lastBuildDate>Wed, 13 Jun 2018 15:02:12 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 26 Jun 2018 12:45:39 +0800</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Path</title>
+      <link>https://mooncaker816.github.io/2018/06/26/path/</link>
+      <pubDate>Tue, 26 Jun 2018 12:45:39 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/06/26/path/</guid>
+      <description>&lt;h1 id=&#34;1-path包概要&#34;&gt;1. Path包概要&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Go并发模式1</title>
