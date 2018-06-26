@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="1. Filepath包概要
+
+1.1 概述
+
+">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/06/26/filepath/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/06/26/filepath/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/06/26/filepath/">
+  <meta property="og:title" content="Filepath | Mooncaker816">
+  <meta property="og:description" content="1. Filepath包概要
+
+1.1 概述
+
+">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-06-26T15:39:18&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-06-26T19:49:05&#43;08:00">
+  
+
+  
+  
+
+
+
+
+  <title>Filepath | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+            <div class="article-container">
+              <h1 itemprop="name">Filepath</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2018-06-26 15:39:18 &#43;0800 CST" itemprop="datePublished dateModified">
+      Jun 26, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    6 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2018/06/26/filepath/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">Golang</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Filepath&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f06%2f26%2ffilepath%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f06%2f26%2ffilepath%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f06%2f26%2ffilepath%2f&amp;title=Filepath"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f06%2f26%2ffilepath%2f&amp;title=Filepath"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Filepath&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f06%2f26%2ffilepath%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <h1 id=c04c205f84d4ec5eb4b9a5871a4a9abc>1. Filepath包概要</h1>
+
+<h2 id=06148eb6885fc954af776fe7b67196ad>1.1 概述</h2>
+
+<p></p>
+
+<blockquote>
+<p>Package filepath implements utility routines for manipulating filename paths
+in a way compatible with the target operating system-defined file paths.</p>
+</blockquote>
+
+<p>　　<code>filepath</code>包实现了对不同操作系统的文件路径的统一操作</p>
+
+<blockquote>
+<p>The filepath package uses either forward slashes or backslashes,
+depending on the operating system. To process paths such as URLs
+that always use forward slashes regardless of the operating
+system, see the path package.</p>
+</blockquote>
+
+<p>　　根据不同的操作系统，该包既可以处理以正斜杠<code>/</code>为分隔的路径，也可以处理以反斜杠<code>\</code>为分隔的路径。对于 URL 的处理，总是使用正斜杠<code>/</code>，无关操作系统。</p>
+
+<!--more-->
+
+<h2 id=57d35a8018557b304f3fb60ba1458fe1>1.2 包结构</h2>
+
+<pre><code class="language-bash">├── example_test.go
+├── example_unix_test.go
+├── export_test.go
+├── export_windows_test.go
+├── match.go
+├── match_test.go
+├── path.go
+├── path_plan9.go
+├── path_test.go
+├── path_unix.go
+├── path_windows.go
+├── path_windows_test.go
+├── symlink.go
+├── symlink_unix.go
+└── symlink_windows.go
+</code></pre>
+
+<h1 id=4b2f134b5fbe4ac684624a5367271b3c>2. 深入<code>filepath</code>包</h1>
+
+<h2 id="2-1-path-go-path-test-go">2.1 <code>path.go</code> & <code>path_test.go</code></h2>
+
+<h3 id=19da673dadea820fbcc037c0637d95d6>2.1.1 <code>Clean</code></h3>
+
+<p>签名：<code>func Clean(path string) string</code></p>
+
+<p>用途：对路径进行格式化，与<code>path.Clean</code>基本一致，windows 系统的根目录为<code>C:\</code></p>
+
+<p>示例：<a href="https://play.golang.org/p/UZqq84JBFet" target="_blank">https://play.golang.org/p/UZqq84JBFet</a></p>
+
+<pre><code class="language-go">	// Already clean
+	{"abc" => "abc"},
+	{"abc/def" => "abc/def"},
+	{"a/b/c" => "a/b/c"},
+	{"." => "."},
+	{".." => ".."},
+	{"../.." => "../.."},
+	{"../../abc" => "../../abc"},
+	{"/abc" => "/abc"},
+	{"/" => "/"},
+
+	// Empty is current dir
+	{"" => "."},
+
+	// Remove trailing slash
+	{"abc/" => "abc"},
+	{"abc/def/" => "abc/def"},
+	{"a/b/c/" => "a/b/c"},
+	{"./" => "."},
+	{"../" => ".."},
+	{"../../" => "../.."},
+	{"/abc/" => "/abc"},
+
+	// Remove doubled slash
+	{"abc//def//ghi" => "abc/def/ghi"},
+	{"//abc" => "/abc"},
+	{"///abc" => "/abc"},
+	{"//abc//" => "/abc"},
+	{"abc//" => "abc"},
+
+	// Remove . elements
+	{"abc/./def" => "abc/def"},
+	{"/./abc/def" => "/abc/def"},
+	{"abc/." => "abc"},
+
+	// Remove .. elements
+	{"abc/def/ghi/../jkl" => "abc/def/jkl"},
+	{"abc/def/../ghi/../jkl" => "abc/jkl"},
+	{"abc/def/.." => "abc"},
+	{"abc/def/../.." => "."},
+	{"/abc/def/../.." => "/"},
+	{"abc/def/../../.." => ".."},
+	{"/abc/def/../../.." => "/"},
+	{"abc/def/../../../ghi/jkl/../../../mno" => "../../mno"},
+	{"/../abc" => "/abc"},
+
+	// Combinations
+	{"abc/./../def" => "def"},
+	{"abc//./../def" => "def"},
+    {"abc/../../././../def" => "../../def"},
+    
+	{`c:` => `c:.`},
+	{`c:\` => `c:\`},
+	{`c:\abc` => `c:\abc`},
+	{`c:abc\..\..\.\.\..\def` => `c:..\..\def`},
+	{`c:\abc\def\..\..` => `c:\`},
+	{`c:\..\abc` => `c:\abc`},
+	{`c:..\abc` => `c:..\abc`},
+	{`\` => `\`},
+	{`/` => `\`},
+	{`\\i\..\c$` => `\c$`},
+	{`\\i\..\i\c$` => `\i\c$`},
+	{`\\i\..\I\c$` => `\I\c$`},
+	{`\\host\share\foo\..\bar` => `\\host\share\bar`},
+	{`//host/share/foo/../baz` => `\\host\share\baz`},
+	{`\\a\b\..\c` => `\\a\b\c`},
+	{`\\a\b` => `\\a\b`},
+</code></pre>
+
+<h3 id="2-1-2-toslash-fromslash">2.1.2 <code>ToSlash</code> & <code>FromSlash</code></h3>
+
+<p>签名：<code>func ToSlash(path string) string</code> & <code>func FromSlash(path string) string</code></p>
+
+<p>用途：将路径中的分隔符替换为<code>/</code> & 将路径中的<code>/</code>分隔符替换为系统对应的分隔符</p>
+
+<p>示例：<a href="https://play.golang.org/p/FB-HZSqbuSd" target="_blank">https://play.golang.org/p/FB-HZSqbuSd</a></p>
+
+<pre><code class="language-go">	{"", ""},
+	{"/", string(sep)},
+	{"/a/b", string([]byte{sep, 'a', sep, 'b'})},
+	{"a//b", string([]byte{'a', sep, sep, 'b'})},
+</code></pre>
+
+<h3 id=270af7f74f5681ba9d4194cc7a1c4b7a>2.1.3 <code>SplitList</code></h3>
+
+<p>签名：<code>func SplitList(path string) []string</code></p>
+
+<p>用途：根据系统的 List分隔符（如环境变量<code>PATH</code>中包含的多个路径之间的<code>:</code> <code>;</code>）,将List路径拆分成单个路径组成的 slice，若List路径为空，则返回空 slice</p>
+
+<p>示例：<a href="https://play.golang.org/p/bQOhCR4kvFq" target="_blank">https://play.golang.org/p/bQOhCR4kvFq</a></p>
+
+<pre><code class="language-go">	{"", []string{}},
+	{string([]byte{'a', lsep, 'b'}), []string{"a", "b"}},
+    {string([]byte{lsep, 'a', lsep, 'b'}), []string{"", "a", "b"}},
+    
+	// quoted
+	{`"a"`, []string{`a`}},
+
+	// semicolon
+	{`";"`, []string{`;`}},
+	{`"a;b"`, []string{`a;b`}},
+	{`";";`, []string{`;`, ``}},
+	{`;";"`, []string{``, `;`}},
+
+	// partially quoted
+	{`a";"b`, []string{`a;b`}},
+	{`a; ""b`, []string{`a`, ` b`}},
+	{`"a;b`, []string{`a;b`}},
+	{`""a;b`, []string{`a`, `b`}},
+	{`"""a;b`, []string{`a;b`}},
+	{`""""a;b`, []string{`a`, `b`}},
+	{`a";b`, []string{`a;b`}},
+	{`a;b";c`, []string{`a`, `b;c`}},
+	{`"a";b";c`, []string{`a`, `b;c`}},
+</code></pre>
+
+<h3 id=9c7dc1f55932f33fa7ab0b5c4391809c>2.1.4 <code>Split</code></h3>
+
+<p>签名：<code>func Split(path string) (dir, file string)</code></p>
+
+<p>用途：拆分路径为目录+文件名</p>
+
+<p>示例：<a href="https://play.golang.org/p/ABl-Ph464rW" target="_blank">https://play.golang.org/p/ABl-Ph464rW</a></p>
+
+<pre><code class="language-go">	{"a/b", "a/", "b"},
+	{"a/b/", "a/b/", ""},
+	{"a/", "a/", ""},
+	{"a", "", "a"},
+    {"/", "/", ""},
+    
+	{`c:`, `c:`, ``},
+	{`c:/`, `c:/`, ``},
+	{`c:/foo`, `c:/`, `foo`},
+	{`c:/foo/bar`, `c:/foo/`, `bar`},
+	{`//host/share`, `//host/share`, ``},
+	{`//host/share/`, `//host/share/`, ``},
+	{`//host/share/foo`, `//host/share/`, `foo`},
+	{`\\host\share`, `\\host\share`, ``},
+	{`\\host\share\`, `\\host\share\`, ``},
+	{`\\host\share\foo`, `\\host\share\`, `foo`},
+</code></pre>
+
+<h3 id=b1dc870e810d95e145c255c7c582af46>2.1.5 <code>Join</code></h3>
+
+<p>签名：<code>func Join(elem ...string) string</code></p>
+
+<p>用途：拼接路径</p>
+
+<p>示例：<a href="https://play.golang.org/p/RRhT3gH_SCJ" target="_blank">https://play.golang.org/p/RRhT3gH_SCJ</a></p>
+
+<pre><code class="language-go">	// zero parameters
+	{[]string{}, ""},
+
+	// one parameter
+	{[]string{""}, ""},
+	{[]string{"/"}, "/"},
+	{[]string{"a"}, "a"},
+
+	// two parameters
+	{[]string{"a", "b"}, "a/b"},
+	{[]string{"a", ""}, "a"},
+	{[]string{"", "b"}, "b"},
+	{[]string{"/", "a"}, "/a"},
+	{[]string{"/", "a/b"}, "/a/b"},
+	{[]string{"/", ""}, "/"},
+	{[]string{"//", "a"}, "/a"},
+	{[]string{"/a", "b"}, "/a/b"},
+	{[]string{"a/", "b"}, "a/b"},
+	{[]string{"a/", ""}, "a"},
+	{[]string{"", ""}, ""},
+
+	// three parameters
+    {[]string{"/", "a", "b"}, "/a/b"},
+    
+	{[]string{`directory`, `file`}, `directory\file`},
+	{[]string{`C:\Windows\`, `System32`}, `C:\Windows\System32`},
+	{[]string{`C:\Windows\`, ``}, `C:\Windows`},
+	{[]string{`C:\`, `Windows`}, `C:\Windows`},
+	{[]string{`C:`, `a`}, `C:a`},
+	{[]string{`C:`, `a\b`}, `C:a\b`},
+	{[]string{`C:`, `a`, `b`}, `C:a\b`},
+	{[]string{`C:.`, `a`}, `C:a`},
+	{[]string{`C:a`, `b`}, `C:a\b`},
+	{[]string{`C:a`, `b`, `d`}, `C:a\b\d`},
+	{[]string{`\\host\share`, `foo`}, `\\host\share\foo`},
+	{[]string{`\\host\share\foo`}, `\\host\share\foo`},
+	{[]string{`//host/share`, `foo/bar`}, `\\host\share\foo\bar`},
+	{[]string{`\`}, `\`},
+	{[]string{`\`, ``}, `\`},
+	{[]string{`\`, `a`}, `\a`},
+	{[]string{`\\`, `a`}, `\a`},
+	{[]string{`\`, `a`, `b`}, `\a\b`},
+	{[]string{`\\`, `a`, `b`}, `\a\b`},
+	{[]string{`\`, `\\a\b`, `c`}, `\a\b\c`},
+	{[]string{`\\a`, `b`, `c`}, `\a\b\c`},
+	{[]string{`\\a\`, `b`, `c`}, `\a\b\c`},
+</code></pre>
+
+<h3 id=d43b0e6534a194fbe317bf015fa095bc>2.1.6 <code>Ext</code></h3>
+
+<p>签名：<code>func Ext(path string) string</code></p>
+
+<p>用途：根据最后一个元素中的最后一个<code>.</code>，返回路径中文件的扩展名，若没有<code>.</code>，返回空</p>
+
+<p>示例：<a href="https://play.golang.org/p/K5TZl6W-ByS" target="_blank">https://play.golang.org/p/K5TZl6W-ByS</a></p>
+
+<pre><code class="language-go">	{"path.go", ".go"},
+	{"path.pb.go", ".go"},
+	{"a.dir/b", ""},
+	{"a.dir/b.go", ".go"},
+	{"a.dir/", ""},
+</code></pre>
+
+<h3 id=5cb9707c8726ff380f2b79b049d0272f>2.1.7 <code>EvalSymlinks</code></h3>
+
+<p>签名：<code>func EvalSymlinks(path string) (string, error)</code></p>
+
+<p>用途：对symlink文件解引用，并对结果路径格式化</p>
+
+<p>示例：<a href="https://play.golang.org/p/3RwUZ9tfHos" target="_blank">https://play.golang.org/p/3RwUZ9tfHos</a> (run local)</p>
+
+<h3 id=8a3c348e94705d0c97c51b1b124253c6>2.1.8 <code>Abs</code></h3>
+
+<p>签名：<code>func Abs(path string) (string, error)</code></p>
+
+<p>用途：返回绝对路径并格式化，如果给定的路径不是绝对路径，则会加上当前目录形成绝对路径</p>
+
+<p>示例：<a href="https://play.golang.org/p/UMr9_z4AsWR" target="_blank">https://play.golang.org/p/UMr9_z4AsWR</a></p>
+
+<h3 id=1897936c8d02d9da92b91709a4b3658f>2.1.9 <code>Rel</code></h3>
+
+<p>签名：<code>func Rel(basepath, targpath string) (string, error)</code></p>
+
+<p>用途：根据 basepath 将 targpath 以相对路径的方式返回，并格式化</p>
+
+<p>示例：<a href="https://play.golang.org/p/KFoNtsbW68D" target="_blank">https://play.golang.org/p/KFoNtsbW68D</a></p>
+
+<pre><code class="language-go">	{"a/b", "a/b", "."},
+	{"a/b/.", "a/b", "."},
+	{"a/b", "a/b/.", "."},
+	{"./a/b", "a/b", "."},
+	{"a/b", "./a/b", "."},
+	{"ab/cd", "ab/cde", "../cde"},
+	{"ab/cd", "ab/c", "../c"},
+	{"a/b", "a/b/c/d", "c/d"},
+	{"a/b", "a/b/../c", "../c"},
+	{"a/b/../c", "a/b", "../b"},
+	{"a/b/c", "a/c/d", "../../c/d"},
+	{"a/b", "c/d", "../../c/d"},
+	{"a/b/c/d", "a/b", "../.."},
+	{"a/b/c/d", "a/b/", "../.."},
+	{"a/b/c/d/", "a/b", "../.."},
+	{"a/b/c/d/", "a/b/", "../.."},
+	{"../../a/b", "../../a/b/c/d", "c/d"},
+	{"/a/b", "/a/b", "."},
+	{"/a/b/.", "/a/b", "."},
+	{"/a/b", "/a/b/.", "."},
+	{"/ab/cd", "/ab/cde", "../cde"},
+	{"/ab/cd", "/ab/c", "../c"},
+	{"/a/b", "/a/b/c/d", "c/d"},
+	{"/a/b", "/a/b/../c", "../c"},
+	{"/a/b/../c", "/a/b", "../b"},
+	{"/a/b/c", "/a/c/d", "../../c/d"},
+	{"/a/b", "/c/d", "../../c/d"},
+	{"/a/b/c/d", "/a/b", "../.."},
+	{"/a/b/c/d", "/a/b/", "../.."},
+	{"/a/b/c/d/", "/a/b", "../.."},
+	{"/a/b/c/d/", "/a/b/", "../.."},
+	{"/../../a/b", "/../../a/b/c/d", "c/d"},
+	{".", "a/b", "a/b"},
+	{".", "..", ".."},
+
+	// can't do purely lexically
+	{"..", ".", "err"},
+	{"..", "a", "err"},
+	{"../..", "..", "err"},
+	{"a", "/a", "err"},
+    {"/a", "a", "err"},
+    
+	{`C:a\b\c`, `C:a/b/d`, `..\d`},
+	{`C:\`, `D:\`, `err`},
+	{`C:`, `D:`, `err`},
+	{`C:\Projects`, `c:\projects\src`, `src`},
+	{`C:\Projects`, `c:\projects`, `.`},
+	{`C:\Projects\a\..`, `c:\projects`, `.`},
+</code></pre>
+
+<h3 id=8658ef54d5d4d1613d9c147833299bef>2.1.10 <code>Walk</code></h3>
+
+<p>签名：<code>func Walk(root string, walkFn WalkFunc) error</code></p>
+
+<p>用途：用于遍历目录树</p>
+
+<p>示例：<a href="https://play.golang.org/p/1fYRtezNBX-" target="_blank">https://play.golang.org/p/1fYRtezNBX-</a></p>
+
+<p><code>type WalkFunc func(path string, info os.FileInfo, err error) error</code>
+<code>WalkFunc</code> 函数一般是一个闭包，用于处理目录树中的每个文件/目录，如：</p>
+
+<pre><code class="language-go">	errors := make([]error, 0, 10)
+	clear := true
+	markFn := func(path string, info os.FileInfo, err error) error {
+		return mark(info, err, &errors, clear)
+	}
+	// Expect no errors.
+	err := filepath.Walk(tree.name, markFn)
+</code></pre>
+
+<h3 id=171049f08b8f1b069f47f3c677122783>2.1.11 <code>Base</code></h3>
+
+<p>签名：<code>func Base(path string) string</code></p>
+
+<p>用途：返回最后一个元素，如果路径为空，则返回<code>.</code>，如果路径全是分隔符，则返回单个分隔符</p>
+
+<p>示例：<a href="https://play.golang.org/p/0F6PSQjwOTX" target="_blank">https://play.golang.org/p/0F6PSQjwOTX</a></p>
+
+<pre><code class="language-go">	{"", "."},
+	{".", "."},
+	{"/.", "."},
+	{"/", "/"},
+	{"////", "/"},
+	{"x/", "x"},
+	{"abc", "abc"},
+	{"abc/def", "def"},
+	{"a/b/.x", ".x"},
+	{"a/b/c.", "c."},
+    {"a/b/c.x", "c.x"},
+    
+	{`c:\`, `\`},
+	{`c:.`, `.`},
+	{`c:\a\b`, `b`},
+	{`c:a\b`, `b`},
+	{`c:a\b\c`, `c`},
+	{`\\host\share\`, `\`},
+	{`\\host\share\a`, `a`},
+	{`\\host\share\a\b`, `b`},
+</code></pre>
+
+<h3 id=bd48598f0930937bda6f20601410b947>2.1.12 <code>Dir</code></h3>
+
+<p>签名：<code>func Dir(path string) string</code></p>
+
+<p>用途：返回除去最后一个元素的路径，并格式化。如果路径为空，返回.，如果路径全是分隔符，返回单个分隔符，返回的路径不以分隔符结尾，除非该路径为根目录</p>
+
+<p>示例：<a href="https://play.golang.org/p/-6CrUtV9_CO" target="_blank">https://play.golang.org/p/-6CrUtV9_CO</a></p>
+
+<pre><code class="language-go">	{"", "."},
+	{".", "."},
+	{"/.", "/"},
+	{"/", "/"},
+	{"////", "/"},
+	{"/foo", "/"},
+	{"x/", "x"},
+	{"abc", "."},
+	{"abc/def", "abc"},
+	{"a/b/.x", "a/b"},
+	{"a/b/c.", "a/b"},
+    {"a/b/c.x", "a/b"},
+    
+	{`c:\`, `c:\`},
+	{`c:.`, `c:.`},
+	{`c:\a\b`, `c:\a`},
+	{`c:a\b`, `c:a`},
+	{`c:a\b\c`, `c:a\b`},
+	{`\\host\share`, `\\host\share`},
+	{`\\host\share\`, `\\host\share\`},
+	{`\\host\share\a`, `\\host\share\`},
+	{`\\host\share\a\b`, `\\host\share\a`},
+</code></pre>
+
+<h3 id=969878d52d3eeb344c7dfe6755efd3cc>2.1.13 <code>VolumeName</code></h3>
+
+<p>签名：<code>func VolumeName(path string) string</code></p>
+
+<p>用途：Windows系统返回卷名，其他系统返回空</p>
+
+<p>示例：<a href="https://play.golang.org/p/uxvpRgAy9Lg" target="_blank">https://play.golang.org/p/uxvpRgAy9Lg</a></p>
+
+<pre><code class="language-go">    	{`c:/foo/bar`, `c:`},
+    	{`c:`, `c:`},
+    	{`2:`, ``},
+    	{``, ``},
+    	{`\\\host`, ``},
+    	{`\\\host\`, ``},
+    	{`\\\host\share`, ``},
+    	{`\\\host\\share`, ``},
+    	{`\\host`, ``},
+    	{`//host`, ``},
+        {`\\host\`, ``},
+        {`//host/`, ``},
+        {`\\host\share`, `\\host\share`},
+        {`//host/share`, `//host/share`},
+        {`\\host\share\`, `\\host\share`},
+        {`//host/share/`, `//host/share`},
+        {`\\host\share\foo`, `\\host\share`},
+        {`//host/share/foo`, `//host/share`},
+        {`\\host\share\\foo\\\bar\\\\baz`, `\\host\share`},
+        {`//host/share//foo///bar////baz`, `//host/share`},
+        {`\\host\share\foo\..\bar`, `\\host\share`},
+        {`//host/share/foo/../bar`, `//host/share`},
+</code></pre>
+
+<h3 id=e1e86caa53de9059c5ec1f50864b3b78>2.1.14 <code>IsAbs</code></h3>
+
+<p>签名：<code>func IsAbs(path string) bool</code></p>
+
+<p>用途：判断是否为绝对路径，在 Unix 中，以<code>/</code>开始；在 Windows 中以某个盘符开始</p>
+
+<p>示例：<a href="https://play.golang.org/p/JV2dVvYUaYP" target="_blank">https://play.golang.org/p/JV2dVvYUaYP</a></p>
+
+<pre><code class="language-go">	{"", false},
+	{"/", true},
+	{"/usr/bin/gcc", true},
+	{"..", false},
+	{"/a/../bb", true},
+	{".", false},
+	{"./", false},
+	{"lala", false},
+</code></pre>
+
+<h2 id="2-2-match-go-match-test-go">2.2 <code>match.go</code> & <code>match_test.go</code></h2>
+
+<h3 id=9e6e96cca30c505f01dd80432d6c50ec>2.2.1 <code>Match</code></h3>
+
+<p>签名：<code>func Match(pattern, name string) (matched bool, err error)</code></p>
+
+<p>用途：同<code>path.Match</code></p>
+
+<p>示例：<a href="https://play.golang.org/p/N5knl-o3yWM" target="_blank">https://play.golang.org/p/N5knl-o3yWM</a></p>
+
+<pre><code class="language-go">	{"abc", "abc", true, nil},
+	{"*", "abc", true, nil},
+	{"*c", "abc", true, nil},
+	{"a*", "a", true, nil},
+	{"a*", "abc", true, nil},
+	{"a*", "ab/c", false, nil},
+	{"a*/b", "abc/b", true, nil},
+	{"a*/b", "a/c/b", false, nil},
+	{"a*b*c*d*e*/f", "axbxcxdxe/f", true, nil},
+	{"a*b*c*d*e*/f", "axbxcxdxexxx/f", true, nil},
+	{"a*b*c*d*e*/f", "axbxcxdxe/xxx/f", false, nil},
+	{"a*b*c*d*e*/f", "axbxcxdxexxx/fff", false, nil},
+	{"a*b?c*x", "abxbbxdbxebxczzx", true, nil},
+	{"a*b?c*x", "abxbbxdbxebxczzy", false, nil},
+	{"ab[c]", "abc", true, nil},
+	{"ab[b-d]", "abc", true, nil},
+	{"ab[e-g]", "abc", false, nil},
+	{"ab[^c]", "abc", false, nil},
+	{"ab[^b-d]", "abc", false, nil},
+	{"ab[^e-g]", "abc", true, nil},
+	{"a\\*b", "a*b", true, nil},
+	{"a\\*b", "ab", false, nil},
+	{"a?b", "a☺b", true, nil},
+	{"a[^a]b", "a☺b", true, nil},
+	{"a???b", "a☺b", false, nil},
+	{"a[^a][^a][^a]b", "a☺b", false, nil},
+	{"[a-ζ]*", "α", true, nil},
+	{"*[a-ζ]", "A", false, nil},
+	{"a?b", "a/b", false, nil},
+	{"a*b", "a/b", false, nil},
+	{"[\\]a]", "]", true, nil},
+	{"[\\-]", "-", true, nil},
+	{"[x\\-]", "x", true, nil},
+	{"[x\\-]", "-", true, nil},
+	{"[x\\-]", "z", false, nil},
+	{"[\\-x]", "x", true, nil},
+	{"[\\-x]", "-", true, nil},
+	{"[\\-x]", "a", false, nil},
+	{"[]a]", "]", false, ErrBadPattern},
+	{"[-]", "-", false, ErrBadPattern},
+	{"[x-]", "x", false, ErrBadPattern},
+	{"[x-]", "-", false, ErrBadPattern},
+	{"[x-]", "z", false, ErrBadPattern},
+	{"[-x]", "x", false, ErrBadPattern},
+	{"[-x]", "-", false, ErrBadPattern},
+	{"[-x]", "a", false, ErrBadPattern},
+	{"\\", "a", false, ErrBadPattern},
+	{"[a-b-c]", "a", false, ErrBadPattern},
+	{"[", "a", false, ErrBadPattern},
+	{"[^", "a", false, ErrBadPattern},
+	{"[^bc", "a", false, ErrBadPattern},
+	{"a[", "a", false, nil},
+	{"a[", "ab", false, ErrBadPattern},
+	{"*x", "xxx", true, nil},
+</code></pre>
+
+<h3 id=f07b92bffcc913e5682c0903b4caa2fb>2.2.2 <code>Glob</code></h3>
+
+<p>签名：<code>func Glob(pattern string) (matches []string, err error)</code></p>
+
+<p>用途：列出与指定的模式 pattern 完全匹配的文件或目录（匹配原则同<code>Match</code>）</p>
+
+<p>示例：<a href="https://play.golang.org/p/GxqJkYQp_xm" target="_blank">https://play.golang.org/p/GxqJkYQp_xm</a> (run local)</p>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/filepath/">Filepath</a>
+  
+</div>
+
+
+
+
+              
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/06/26/path/" rel="prev">Path</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 Jun 26, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#c04c205f84d4ec5eb4b9a5871a4a9abc">1. Filepath包概要</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#06148eb6885fc954af776fe7b67196ad">1.1 概述</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#57d35a8018557b304f3fb60ba1458fe1">1.2 包结构</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#4b2f134b5fbe4ac684624a5367271b3c">2. 深入filepath包</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#6964711b61fdfc7fde7972a36994fd8b">2.1 path.go &amp; path_test.go</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#19da673dadea820fbcc037c0637d95d6">2.1.1 Clean</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#de7bd8ae1a3c0a48b1c6b95f25520248">2.1.2 ToSlash &amp; FromSlash</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#270af7f74f5681ba9d4194cc7a1c4b7a">2.1.3 SplitList</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#9c7dc1f55932f33fa7ab0b5c4391809c">2.1.4 Split</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#b1dc870e810d95e145c255c7c582af46">2.1.5 Join</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#d43b0e6534a194fbe317bf015fa095bc">2.1.6 Ext</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#5cb9707c8726ff380f2b79b049d0272f">2.1.7 EvalSymlinks</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8a3c348e94705d0c97c51b1b124253c6">2.1.8 Abs</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#1897936c8d02d9da92b91709a4b3658f">2.1.9 Rel</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8658ef54d5d4d1613d9c147833299bef">2.1.10 Walk</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#171049f08b8f1b069f47f3c677122783">2.1.11 Base</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#bd48598f0930937bda6f20601410b947">2.1.12 Dir</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#969878d52d3eeb344c7dfe6755efd3cc">2.1.13 VolumeName</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e1e86caa53de9059c5ec1f50864b3b78">2.1.14 IsAbs</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#693cb2b217e61eb7e8233ae406352f07">2.2 match.go &amp; match_test.go</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#9e6e96cca30c505f01dd80432d6c50ec">2.2.1 Match</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#f07b92bffcc913e5682c0903b4caa2fb">2.2.2 Glob</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+    
+    
+    
+
+  </body>
+</html>
+

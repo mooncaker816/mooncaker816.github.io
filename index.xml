@@ -11,6 +11,561 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Filepath</title>
+      <link>https://mooncaker816.github.io/2018/06/26/filepath/</link>
+      <pubDate>Tue, 26 Jun 2018 15:39:18 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/06/26/filepath/</guid>
+      <description>&lt;h1 id=&#34;1-filepath包概要&#34;&gt;1. Filepath包概要&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Package filepath implements utility routines for manipulating filename paths
+in a way compatible with the target operating system-defined file paths.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　&lt;code&gt;filepath&lt;/code&gt;包实现了对不同操作系统的文件路径的统一操作&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The filepath package uses either forward slashes or backslashes,
+depending on the operating system. To process paths such as URLs
+that always use forward slashes regardless of the operating
+system, see the path package.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　根据不同的操作系统，该包既可以处理以正斜杠&lt;code&gt;/&lt;/code&gt;为分隔的路径，也可以处理以反斜杠&lt;code&gt;\&lt;/code&gt;为分隔的路径。对于 URL 的处理，总是使用正斜杠&lt;code&gt;/&lt;/code&gt;，无关操作系统。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&#34;1-2-包结构&#34;&gt;1.2 包结构&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;├── example_test.go
+├── example_unix_test.go
+├── export_test.go
+├── export_windows_test.go
+├── match.go
+├── match_test.go
+├── path.go
+├── path_plan9.go
+├── path_test.go
+├── path_unix.go
+├── path_windows.go
+├── path_windows_test.go
+├── symlink.go
+├── symlink_unix.go
+└── symlink_windows.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;2-深入-filepath-包&#34;&gt;2. 深入&lt;code&gt;filepath&lt;/code&gt;包&lt;/h1&gt;
+
+&lt;h2 id=&#34;2-1-path-go-path-test-go&#34;&gt;2.1 &lt;code&gt;path.go&lt;/code&gt; &amp;amp; &lt;code&gt;path_test.go&lt;/code&gt;&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-1-clean&#34;&gt;2.1.1 &lt;code&gt;Clean&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Clean(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：对路径进行格式化，与&lt;code&gt;path.Clean&lt;/code&gt;基本一致，windows 系统的根目录为&lt;code&gt;C:\&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/UZqq84JBFet&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/UZqq84JBFet&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// Already clean
+	{&amp;quot;abc&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+	{&amp;quot;abc/def&amp;quot; =&amp;gt; &amp;quot;abc/def&amp;quot;},
+	{&amp;quot;a/b/c&amp;quot; =&amp;gt; &amp;quot;a/b/c&amp;quot;},
+	{&amp;quot;.&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;..&amp;quot; =&amp;gt; &amp;quot;..&amp;quot;},
+	{&amp;quot;../..&amp;quot; =&amp;gt; &amp;quot;../..&amp;quot;},
+	{&amp;quot;../../abc&amp;quot; =&amp;gt; &amp;quot;../../abc&amp;quot;},
+	{&amp;quot;/abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;},
+	{&amp;quot;/&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+
+	// Empty is current dir
+	{&amp;quot;&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+
+	// Remove trailing slash
+	{&amp;quot;abc/&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+	{&amp;quot;abc/def/&amp;quot; =&amp;gt; &amp;quot;abc/def&amp;quot;},
+	{&amp;quot;a/b/c/&amp;quot; =&amp;gt; &amp;quot;a/b/c&amp;quot;},
+	{&amp;quot;./&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;../&amp;quot; =&amp;gt; &amp;quot;..&amp;quot;},
+	{&amp;quot;../../&amp;quot; =&amp;gt; &amp;quot;../..&amp;quot;},
+	{&amp;quot;/abc/&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;},
+
+	// Remove doubled slash
+	{&amp;quot;abc//def//ghi&amp;quot; =&amp;gt; &amp;quot;abc/def/ghi&amp;quot;},
+	{&amp;quot;//abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;},
+	{&amp;quot;///abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;},
+	{&amp;quot;//abc//&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;},
+	{&amp;quot;abc//&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+
+	// Remove . elements
+	{&amp;quot;abc/./def&amp;quot; =&amp;gt; &amp;quot;abc/def&amp;quot;},
+	{&amp;quot;/./abc/def&amp;quot; =&amp;gt; &amp;quot;/abc/def&amp;quot;},
+	{&amp;quot;abc/.&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+
+	// Remove .. elements
+	{&amp;quot;abc/def/ghi/../jkl&amp;quot; =&amp;gt; &amp;quot;abc/def/jkl&amp;quot;},
+	{&amp;quot;abc/def/../ghi/../jkl&amp;quot; =&amp;gt; &amp;quot;abc/jkl&amp;quot;},
+	{&amp;quot;abc/def/..&amp;quot; =&amp;gt; &amp;quot;abc&amp;quot;},
+	{&amp;quot;abc/def/../..&amp;quot; =&amp;gt; &amp;quot;.&amp;quot;},
+	{&amp;quot;/abc/def/../..&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;abc/def/../../..&amp;quot; =&amp;gt; &amp;quot;..&amp;quot;},
+	{&amp;quot;/abc/def/../../..&amp;quot; =&amp;gt; &amp;quot;/&amp;quot;},
+	{&amp;quot;abc/def/../../../ghi/jkl/../../../mno&amp;quot; =&amp;gt; &amp;quot;../../mno&amp;quot;},
+	{&amp;quot;/../abc&amp;quot; =&amp;gt; &amp;quot;/abc&amp;quot;},
+
+	// Combinations
+	{&amp;quot;abc/./../def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;},
+	{&amp;quot;abc//./../def&amp;quot; =&amp;gt; &amp;quot;def&amp;quot;},
+    {&amp;quot;abc/../../././../def&amp;quot; =&amp;gt; &amp;quot;../../def&amp;quot;},
+    
+	{`c:` =&amp;gt; `c:.`},
+	{`c:\` =&amp;gt; `c:\`},
+	{`c:\abc` =&amp;gt; `c:\abc`},
+	{`c:abc\..\..\.\.\..\def` =&amp;gt; `c:..\..\def`},
+	{`c:\abc\def\..\..` =&amp;gt; `c:\`},
+	{`c:\..\abc` =&amp;gt; `c:\abc`},
+	{`c:..\abc` =&amp;gt; `c:..\abc`},
+	{`\` =&amp;gt; `\`},
+	{`/` =&amp;gt; `\`},
+	{`\\i\..\c$` =&amp;gt; `\c$`},
+	{`\\i\..\i\c$` =&amp;gt; `\i\c$`},
+	{`\\i\..\I\c$` =&amp;gt; `\I\c$`},
+	{`\\host\share\foo\..\bar` =&amp;gt; `\\host\share\bar`},
+	{`//host/share/foo/../baz` =&amp;gt; `\\host\share\baz`},
+	{`\\a\b\..\c` =&amp;gt; `\\a\b\c`},
+	{`\\a\b` =&amp;gt; `\\a\b`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-2-toslash-fromslash&#34;&gt;2.1.2 &lt;code&gt;ToSlash&lt;/code&gt; &amp;amp; &lt;code&gt;FromSlash&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func ToSlash(path string) string&lt;/code&gt; &amp;amp; &lt;code&gt;func FromSlash(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：将路径中的分隔符替换为&lt;code&gt;/&lt;/code&gt; &amp;amp; 将路径中的&lt;code&gt;/&lt;/code&gt;分隔符替换为系统对应的分隔符&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/FB-HZSqbuSd&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/FB-HZSqbuSd&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;&amp;quot;, &amp;quot;&amp;quot;},
+	{&amp;quot;/&amp;quot;, string(sep)},
+	{&amp;quot;/a/b&amp;quot;, string([]byte{sep, &#39;a&#39;, sep, &#39;b&#39;})},
+	{&amp;quot;a//b&amp;quot;, string([]byte{&#39;a&#39;, sep, sep, &#39;b&#39;})},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-3-splitlist&#34;&gt;2.1.3 &lt;code&gt;SplitList&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func SplitList(path string) []string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：根据系统的 List分隔符（如环境变量&lt;code&gt;PATH&lt;/code&gt;中包含的多个路径之间的&lt;code&gt;:&lt;/code&gt; &lt;code&gt;;&lt;/code&gt;）,将List路径拆分成单个路径组成的 slice，若List路径为空，则返回空 slice&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/bQOhCR4kvFq&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/bQOhCR4kvFq&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;&amp;quot;, []string{}},
+	{string([]byte{&#39;a&#39;, lsep, &#39;b&#39;}), []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}},
+    {string([]byte{lsep, &#39;a&#39;, lsep, &#39;b&#39;}), []string{&amp;quot;&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}},
+    
+	// quoted
+	{`&amp;quot;a&amp;quot;`, []string{`a`}},
+
+	// semicolon
+	{`&amp;quot;;&amp;quot;`, []string{`;`}},
+	{`&amp;quot;a;b&amp;quot;`, []string{`a;b`}},
+	{`&amp;quot;;&amp;quot;;`, []string{`;`, ``}},
+	{`;&amp;quot;;&amp;quot;`, []string{``, `;`}},
+
+	// partially quoted
+	{`a&amp;quot;;&amp;quot;b`, []string{`a;b`}},
+	{`a; &amp;quot;&amp;quot;b`, []string{`a`, ` b`}},
+	{`&amp;quot;a;b`, []string{`a;b`}},
+	{`&amp;quot;&amp;quot;a;b`, []string{`a`, `b`}},
+	{`&amp;quot;&amp;quot;&amp;quot;a;b`, []string{`a;b`}},
+	{`&amp;quot;&amp;quot;&amp;quot;&amp;quot;a;b`, []string{`a`, `b`}},
+	{`a&amp;quot;;b`, []string{`a;b`}},
+	{`a;b&amp;quot;;c`, []string{`a`, `b;c`}},
+	{`&amp;quot;a&amp;quot;;b&amp;quot;;c`, []string{`a`, `b;c`}},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-4-split&#34;&gt;2.1.4 &lt;code&gt;Split&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Split(path string) (dir, file string)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：拆分路径为目录+文件名&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/ABl-Ph464rW&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/ABl-Ph464rW&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;a/b&amp;quot;, &amp;quot;a/&amp;quot;, &amp;quot;b&amp;quot;},
+	{&amp;quot;a/b/&amp;quot;, &amp;quot;a/b/&amp;quot;, &amp;quot;&amp;quot;},
+	{&amp;quot;a/&amp;quot;, &amp;quot;a/&amp;quot;, &amp;quot;&amp;quot;},
+	{&amp;quot;a&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;a&amp;quot;},
+    {&amp;quot;/&amp;quot;, &amp;quot;/&amp;quot;, &amp;quot;&amp;quot;},
+    
+	{`c:`, `c:`, ``},
+	{`c:/`, `c:/`, ``},
+	{`c:/foo`, `c:/`, `foo`},
+	{`c:/foo/bar`, `c:/foo/`, `bar`},
+	{`//host/share`, `//host/share`, ``},
+	{`//host/share/`, `//host/share/`, ``},
+	{`//host/share/foo`, `//host/share/`, `foo`},
+	{`\\host\share`, `\\host\share`, ``},
+	{`\\host\share\`, `\\host\share\`, ``},
+	{`\\host\share\foo`, `\\host\share\`, `foo`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-5-join&#34;&gt;2.1.5 &lt;code&gt;Join&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Join(elem ...string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：拼接路径&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/RRhT3gH_SCJ&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/RRhT3gH_SCJ&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// zero parameters
+	{[]string{}, &amp;quot;&amp;quot;},
+
+	// one parameter
+	{[]string{&amp;quot;&amp;quot;}, &amp;quot;&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;}, &amp;quot;/&amp;quot;},
+	{[]string{&amp;quot;a&amp;quot;}, &amp;quot;a&amp;quot;},
+
+	// two parameters
+	{[]string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;a/b&amp;quot;},
+	{[]string{&amp;quot;a&amp;quot;, &amp;quot;&amp;quot;}, &amp;quot;a&amp;quot;},
+	{[]string{&amp;quot;&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;b&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;, &amp;quot;a&amp;quot;}, &amp;quot;/a&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;, &amp;quot;a/b&amp;quot;}, &amp;quot;/a/b&amp;quot;},
+	{[]string{&amp;quot;/&amp;quot;, &amp;quot;&amp;quot;}, &amp;quot;/&amp;quot;},
+	{[]string{&amp;quot;//&amp;quot;, &amp;quot;a&amp;quot;}, &amp;quot;/a&amp;quot;},
+	{[]string{&amp;quot;/a&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;/a/b&amp;quot;},
+	{[]string{&amp;quot;a/&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;a/b&amp;quot;},
+	{[]string{&amp;quot;a/&amp;quot;, &amp;quot;&amp;quot;}, &amp;quot;a&amp;quot;},
+	{[]string{&amp;quot;&amp;quot;, &amp;quot;&amp;quot;}, &amp;quot;&amp;quot;},
+
+	// three parameters
+    {[]string{&amp;quot;/&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;}, &amp;quot;/a/b&amp;quot;},
+    
+	{[]string{`directory`, `file`}, `directory\file`},
+	{[]string{`C:\Windows\`, `System32`}, `C:\Windows\System32`},
+	{[]string{`C:\Windows\`, ``}, `C:\Windows`},
+	{[]string{`C:\`, `Windows`}, `C:\Windows`},
+	{[]string{`C:`, `a`}, `C:a`},
+	{[]string{`C:`, `a\b`}, `C:a\b`},
+	{[]string{`C:`, `a`, `b`}, `C:a\b`},
+	{[]string{`C:.`, `a`}, `C:a`},
+	{[]string{`C:a`, `b`}, `C:a\b`},
+	{[]string{`C:a`, `b`, `d`}, `C:a\b\d`},
+	{[]string{`\\host\share`, `foo`}, `\\host\share\foo`},
+	{[]string{`\\host\share\foo`}, `\\host\share\foo`},
+	{[]string{`//host/share`, `foo/bar`}, `\\host\share\foo\bar`},
+	{[]string{`\`}, `\`},
+	{[]string{`\`, ``}, `\`},
+	{[]string{`\`, `a`}, `\a`},
+	{[]string{`\\`, `a`}, `\a`},
+	{[]string{`\`, `a`, `b`}, `\a\b`},
+	{[]string{`\\`, `a`, `b`}, `\a\b`},
+	{[]string{`\`, `\\a\b`, `c`}, `\a\b\c`},
+	{[]string{`\\a`, `b`, `c`}, `\a\b\c`},
+	{[]string{`\\a\`, `b`, `c`}, `\a\b\c`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-6-ext&#34;&gt;2.1.6 &lt;code&gt;Ext&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Ext(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：根据最后一个元素中的最后一个&lt;code&gt;.&lt;/code&gt;，返回路径中文件的扩展名，若没有&lt;code&gt;.&lt;/code&gt;，返回空&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/K5TZl6W-ByS&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/K5TZl6W-ByS&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;path.go&amp;quot;, &amp;quot;.go&amp;quot;},
+	{&amp;quot;path.pb.go&amp;quot;, &amp;quot;.go&amp;quot;},
+	{&amp;quot;a.dir/b&amp;quot;, &amp;quot;&amp;quot;},
+	{&amp;quot;a.dir/b.go&amp;quot;, &amp;quot;.go&amp;quot;},
+	{&amp;quot;a.dir/&amp;quot;, &amp;quot;&amp;quot;},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-7-evalsymlinks&#34;&gt;2.1.7 &lt;code&gt;EvalSymlinks&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func EvalSymlinks(path string) (string, error)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：对symlink文件解引用，并对结果路径格式化&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/3RwUZ9tfHos&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/3RwUZ9tfHos&lt;/a&gt; (run local)&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-8-abs&#34;&gt;2.1.8 &lt;code&gt;Abs&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Abs(path string) (string, error)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：返回绝对路径并格式化，如果给定的路径不是绝对路径，则会加上当前目录形成绝对路径&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/UMr9_z4AsWR&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/UMr9_z4AsWR&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-9-rel&#34;&gt;2.1.9 &lt;code&gt;Rel&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Rel(basepath, targpath string) (string, error)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：根据 basepath 将 targpath 以相对路径的方式返回，并格式化&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/KFoNtsbW68D&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/KFoNtsbW68D&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;a/b&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;a/b/.&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;a/b&amp;quot;, &amp;quot;a/b/.&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;./a/b&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;a/b&amp;quot;, &amp;quot;./a/b&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;ab/cd&amp;quot;, &amp;quot;ab/cde&amp;quot;, &amp;quot;../cde&amp;quot;},
+	{&amp;quot;ab/cd&amp;quot;, &amp;quot;ab/c&amp;quot;, &amp;quot;../c&amp;quot;},
+	{&amp;quot;a/b&amp;quot;, &amp;quot;a/b/c/d&amp;quot;, &amp;quot;c/d&amp;quot;},
+	{&amp;quot;a/b&amp;quot;, &amp;quot;a/b/../c&amp;quot;, &amp;quot;../c&amp;quot;},
+	{&amp;quot;a/b/../c&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;../b&amp;quot;},
+	{&amp;quot;a/b/c&amp;quot;, &amp;quot;a/c/d&amp;quot;, &amp;quot;../../c/d&amp;quot;},
+	{&amp;quot;a/b&amp;quot;, &amp;quot;c/d&amp;quot;, &amp;quot;../../c/d&amp;quot;},
+	{&amp;quot;a/b/c/d&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;a/b/c/d&amp;quot;, &amp;quot;a/b/&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;a/b/c/d/&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;a/b/c/d/&amp;quot;, &amp;quot;a/b/&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;../../a/b&amp;quot;, &amp;quot;../../a/b/c/d&amp;quot;, &amp;quot;c/d&amp;quot;},
+	{&amp;quot;/a/b&amp;quot;, &amp;quot;/a/b&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;/a/b/.&amp;quot;, &amp;quot;/a/b&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;/a/b&amp;quot;, &amp;quot;/a/b/.&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;/ab/cd&amp;quot;, &amp;quot;/ab/cde&amp;quot;, &amp;quot;../cde&amp;quot;},
+	{&amp;quot;/ab/cd&amp;quot;, &amp;quot;/ab/c&amp;quot;, &amp;quot;../c&amp;quot;},
+	{&amp;quot;/a/b&amp;quot;, &amp;quot;/a/b/c/d&amp;quot;, &amp;quot;c/d&amp;quot;},
+	{&amp;quot;/a/b&amp;quot;, &amp;quot;/a/b/../c&amp;quot;, &amp;quot;../c&amp;quot;},
+	{&amp;quot;/a/b/../c&amp;quot;, &amp;quot;/a/b&amp;quot;, &amp;quot;../b&amp;quot;},
+	{&amp;quot;/a/b/c&amp;quot;, &amp;quot;/a/c/d&amp;quot;, &amp;quot;../../c/d&amp;quot;},
+	{&amp;quot;/a/b&amp;quot;, &amp;quot;/c/d&amp;quot;, &amp;quot;../../c/d&amp;quot;},
+	{&amp;quot;/a/b/c/d&amp;quot;, &amp;quot;/a/b&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;/a/b/c/d&amp;quot;, &amp;quot;/a/b/&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;/a/b/c/d/&amp;quot;, &amp;quot;/a/b&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;/a/b/c/d/&amp;quot;, &amp;quot;/a/b/&amp;quot;, &amp;quot;../..&amp;quot;},
+	{&amp;quot;/../../a/b&amp;quot;, &amp;quot;/../../a/b/c/d&amp;quot;, &amp;quot;c/d&amp;quot;},
+	{&amp;quot;.&amp;quot;, &amp;quot;a/b&amp;quot;, &amp;quot;a/b&amp;quot;},
+	{&amp;quot;.&amp;quot;, &amp;quot;..&amp;quot;, &amp;quot;..&amp;quot;},
+
+	// can&#39;t do purely lexically
+	{&amp;quot;..&amp;quot;, &amp;quot;.&amp;quot;, &amp;quot;err&amp;quot;},
+	{&amp;quot;..&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;err&amp;quot;},
+	{&amp;quot;../..&amp;quot;, &amp;quot;..&amp;quot;, &amp;quot;err&amp;quot;},
+	{&amp;quot;a&amp;quot;, &amp;quot;/a&amp;quot;, &amp;quot;err&amp;quot;},
+    {&amp;quot;/a&amp;quot;, &amp;quot;a&amp;quot;, &amp;quot;err&amp;quot;},
+    
+	{`C:a\b\c`, `C:a/b/d`, `..\d`},
+	{`C:\`, `D:\`, `err`},
+	{`C:`, `D:`, `err`},
+	{`C:\Projects`, `c:\projects\src`, `src`},
+	{`C:\Projects`, `c:\projects`, `.`},
+	{`C:\Projects\a\..`, `c:\projects`, `.`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-10-walk&#34;&gt;2.1.10 &lt;code&gt;Walk&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Walk(root string, walkFn WalkFunc) error&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：用于遍历目录树&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/1fYRtezNBX-&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/1fYRtezNBX-&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;type WalkFunc func(path string, info os.FileInfo, err error) error&lt;/code&gt;
+&lt;code&gt;WalkFunc&lt;/code&gt; 函数一般是一个闭包，用于处理目录树中的每个文件/目录，如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	errors := make([]error, 0, 10)
+	clear := true
+	markFn := func(path string, info os.FileInfo, err error) error {
+		return mark(info, err, &amp;amp;errors, clear)
+	}
+	// Expect no errors.
+	err := filepath.Walk(tree.name, markFn)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-11-base&#34;&gt;2.1.11 &lt;code&gt;Base&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Base(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：返回最后一个元素，如果路径为空，则返回&lt;code&gt;.&lt;/code&gt;，如果路径全是分隔符，则返回单个分隔符&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/0F6PSQjwOTX&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/0F6PSQjwOTX&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;.&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;/.&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;/&amp;quot;, &amp;quot;/&amp;quot;},
+	{&amp;quot;////&amp;quot;, &amp;quot;/&amp;quot;},
+	{&amp;quot;x/&amp;quot;, &amp;quot;x&amp;quot;},
+	{&amp;quot;abc&amp;quot;, &amp;quot;abc&amp;quot;},
+	{&amp;quot;abc/def&amp;quot;, &amp;quot;def&amp;quot;},
+	{&amp;quot;a/b/.x&amp;quot;, &amp;quot;.x&amp;quot;},
+	{&amp;quot;a/b/c.&amp;quot;, &amp;quot;c.&amp;quot;},
+    {&amp;quot;a/b/c.x&amp;quot;, &amp;quot;c.x&amp;quot;},
+    
+	{`c:\`, `\`},
+	{`c:.`, `.`},
+	{`c:\a\b`, `b`},
+	{`c:a\b`, `b`},
+	{`c:a\b\c`, `c`},
+	{`\\host\share\`, `\`},
+	{`\\host\share\a`, `a`},
+	{`\\host\share\a\b`, `b`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-12-dir&#34;&gt;2.1.12 &lt;code&gt;Dir&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Dir(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：返回除去最后一个元素的路径，并格式化。如果路径为空，返回.，如果路径全是分隔符，返回单个分隔符，返回的路径不以分隔符结尾，除非该路径为根目录&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/-6CrUtV9_CO&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/-6CrUtV9_CO&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;.&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;/.&amp;quot;, &amp;quot;/&amp;quot;},
+	{&amp;quot;/&amp;quot;, &amp;quot;/&amp;quot;},
+	{&amp;quot;////&amp;quot;, &amp;quot;/&amp;quot;},
+	{&amp;quot;/foo&amp;quot;, &amp;quot;/&amp;quot;},
+	{&amp;quot;x/&amp;quot;, &amp;quot;x&amp;quot;},
+	{&amp;quot;abc&amp;quot;, &amp;quot;.&amp;quot;},
+	{&amp;quot;abc/def&amp;quot;, &amp;quot;abc&amp;quot;},
+	{&amp;quot;a/b/.x&amp;quot;, &amp;quot;a/b&amp;quot;},
+	{&amp;quot;a/b/c.&amp;quot;, &amp;quot;a/b&amp;quot;},
+    {&amp;quot;a/b/c.x&amp;quot;, &amp;quot;a/b&amp;quot;},
+    
+	{`c:\`, `c:\`},
+	{`c:.`, `c:.`},
+	{`c:\a\b`, `c:\a`},
+	{`c:a\b`, `c:a`},
+	{`c:a\b\c`, `c:a\b`},
+	{`\\host\share`, `\\host\share`},
+	{`\\host\share\`, `\\host\share\`},
+	{`\\host\share\a`, `\\host\share\`},
+	{`\\host\share\a\b`, `\\host\share\a`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-13-volumename&#34;&gt;2.1.13 &lt;code&gt;VolumeName&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func VolumeName(path string) string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：Windows系统返回卷名，其他系统返回空&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/uxvpRgAy9Lg&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/uxvpRgAy9Lg&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    	{`c:/foo/bar`, `c:`},
+    	{`c:`, `c:`},
+    	{`2:`, ``},
+    	{``, ``},
+    	{`\\\host`, ``},
+    	{`\\\host\`, ``},
+    	{`\\\host\share`, ``},
+    	{`\\\host\\share`, ``},
+    	{`\\host`, ``},
+    	{`//host`, ``},
+        {`\\host\`, ``},
+        {`//host/`, ``},
+        {`\\host\share`, `\\host\share`},
+        {`//host/share`, `//host/share`},
+        {`\\host\share\`, `\\host\share`},
+        {`//host/share/`, `//host/share`},
+        {`\\host\share\foo`, `\\host\share`},
+        {`//host/share/foo`, `//host/share`},
+        {`\\host\share\\foo\\\bar\\\\baz`, `\\host\share`},
+        {`//host/share//foo///bar////baz`, `//host/share`},
+        {`\\host\share\foo\..\bar`, `\\host\share`},
+        {`//host/share/foo/../bar`, `//host/share`},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-1-14-isabs&#34;&gt;2.1.14 &lt;code&gt;IsAbs&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func IsAbs(path string) bool&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：判断是否为绝对路径，在 Unix 中，以&lt;code&gt;/&lt;/code&gt;开始；在 Windows 中以某个盘符开始&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/JV2dVvYUaYP&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/JV2dVvYUaYP&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;&amp;quot;, false},
+	{&amp;quot;/&amp;quot;, true},
+	{&amp;quot;/usr/bin/gcc&amp;quot;, true},
+	{&amp;quot;..&amp;quot;, false},
+	{&amp;quot;/a/../bb&amp;quot;, true},
+	{&amp;quot;.&amp;quot;, false},
+	{&amp;quot;./&amp;quot;, false},
+	{&amp;quot;lala&amp;quot;, false},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-2-match-go-match-test-go&#34;&gt;2.2 &lt;code&gt;match.go&lt;/code&gt; &amp;amp; &lt;code&gt;match_test.go&lt;/code&gt;&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-2-1-match&#34;&gt;2.2.1 &lt;code&gt;Match&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Match(pattern, name string) (matched bool, err error)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：同&lt;code&gt;path.Match&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/N5knl-o3yWM&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/N5knl-o3yWM&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	{&amp;quot;abc&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;*&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;*c&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;a*&amp;quot;, &amp;quot;a&amp;quot;, true, nil},
+	{&amp;quot;a*&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;a*&amp;quot;, &amp;quot;ab/c&amp;quot;, false, nil},
+	{&amp;quot;a*/b&amp;quot;, &amp;quot;abc/b&amp;quot;, true, nil},
+	{&amp;quot;a*/b&amp;quot;, &amp;quot;a/c/b&amp;quot;, false, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxe/f&amp;quot;, true, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxexxx/f&amp;quot;, true, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxe/xxx/f&amp;quot;, false, nil},
+	{&amp;quot;a*b*c*d*e*/f&amp;quot;, &amp;quot;axbxcxdxexxx/fff&amp;quot;, false, nil},
+	{&amp;quot;a*b?c*x&amp;quot;, &amp;quot;abxbbxdbxebxczzx&amp;quot;, true, nil},
+	{&amp;quot;a*b?c*x&amp;quot;, &amp;quot;abxbbxdbxebxczzy&amp;quot;, false, nil},
+	{&amp;quot;ab[c]&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;ab[b-d]&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;ab[e-g]&amp;quot;, &amp;quot;abc&amp;quot;, false, nil},
+	{&amp;quot;ab[^c]&amp;quot;, &amp;quot;abc&amp;quot;, false, nil},
+	{&amp;quot;ab[^b-d]&amp;quot;, &amp;quot;abc&amp;quot;, false, nil},
+	{&amp;quot;ab[^e-g]&amp;quot;, &amp;quot;abc&amp;quot;, true, nil},
+	{&amp;quot;a\\*b&amp;quot;, &amp;quot;a*b&amp;quot;, true, nil},
+	{&amp;quot;a\\*b&amp;quot;, &amp;quot;ab&amp;quot;, false, nil},
+	{&amp;quot;a?b&amp;quot;, &amp;quot;a☺b&amp;quot;, true, nil},
+	{&amp;quot;a[^a]b&amp;quot;, &amp;quot;a☺b&amp;quot;, true, nil},
+	{&amp;quot;a???b&amp;quot;, &amp;quot;a☺b&amp;quot;, false, nil},
+	{&amp;quot;a[^a][^a][^a]b&amp;quot;, &amp;quot;a☺b&amp;quot;, false, nil},
+	{&amp;quot;[a-ζ]*&amp;quot;, &amp;quot;α&amp;quot;, true, nil},
+	{&amp;quot;*[a-ζ]&amp;quot;, &amp;quot;A&amp;quot;, false, nil},
+	{&amp;quot;a?b&amp;quot;, &amp;quot;a/b&amp;quot;, false, nil},
+	{&amp;quot;a*b&amp;quot;, &amp;quot;a/b&amp;quot;, false, nil},
+	{&amp;quot;[\\]a]&amp;quot;, &amp;quot;]&amp;quot;, true, nil},
+	{&amp;quot;[\\-]&amp;quot;, &amp;quot;-&amp;quot;, true, nil},
+	{&amp;quot;[x\\-]&amp;quot;, &amp;quot;x&amp;quot;, true, nil},
+	{&amp;quot;[x\\-]&amp;quot;, &amp;quot;-&amp;quot;, true, nil},
+	{&amp;quot;[x\\-]&amp;quot;, &amp;quot;z&amp;quot;, false, nil},
+	{&amp;quot;[\\-x]&amp;quot;, &amp;quot;x&amp;quot;, true, nil},
+	{&amp;quot;[\\-x]&amp;quot;, &amp;quot;-&amp;quot;, true, nil},
+	{&amp;quot;[\\-x]&amp;quot;, &amp;quot;a&amp;quot;, false, nil},
+	{&amp;quot;[]a]&amp;quot;, &amp;quot;]&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-]&amp;quot;, &amp;quot;-&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[x-]&amp;quot;, &amp;quot;x&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[x-]&amp;quot;, &amp;quot;-&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[x-]&amp;quot;, &amp;quot;z&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-x]&amp;quot;, &amp;quot;x&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-x]&amp;quot;, &amp;quot;-&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[-x]&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;\\&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[a-b-c]&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[^&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;[^bc&amp;quot;, &amp;quot;a&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;a[&amp;quot;, &amp;quot;a&amp;quot;, false, nil},
+	{&amp;quot;a[&amp;quot;, &amp;quot;ab&amp;quot;, false, ErrBadPattern},
+	{&amp;quot;*x&amp;quot;, &amp;quot;xxx&amp;quot;, true, nil},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-2-glob&#34;&gt;2.2.2 &lt;code&gt;Glob&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;签名：&lt;code&gt;func Glob(pattern string) (matches []string, err error)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;用途：列出与指定的模式 pattern 完全匹配的文件或目录（匹配原则同&lt;code&gt;Match&lt;/code&gt;）&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;a href=&#34;https://play.golang.org/p/GxqJkYQp_xm&#34; target=&#34;_blank&#34;&gt;https://play.golang.org/p/GxqJkYQp_xm&lt;/a&gt; (run local)&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Path</title>
       <link>https://mooncaker816.github.io/2018/06/26/path/</link>
       <pubDate>Tue, 26 Jun 2018 12:45:39 +0800</pubDate>
@@ -2512,204 +3067,6 @@ func Stellar(t1, t5 float64, r1, d1 unit.Angle, r2, d2 []unit.Angle) (t float64,
 		dd[i] = (d2[i] - d1).Rad()
 	}
 	return conj(t1, t5, dr, dd)
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法15</title>
-      <link>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9515/</link>
-      <pubDate>Mon, 21 May 2018 18:46:37 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9515/</guid>
-      <description>&lt;h1 id=&#34;第十七章-角距离-angular-separation&#34;&gt;第十七章 角距离 Angular Separation&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-定义&#34;&gt;1. 定义&lt;/h2&gt;
-
-&lt;p&gt;　　角距离，也称为角分离、视距离、或视分离，在数学(特别是几何学和三角学)和自然科学(包括天文学、地质学等等)，从不同于两个点物体的位置（即第三点）观察这两个物体，由观测者指向这两个物体的直线之间所夹角度的大小。角距离(或分离)与角度本身是同义的，但意义却是对两个天体(对恒星，是当从地球观测)之间线距离的建议(通常是很大或未知的)。&lt;/p&gt;
-
-&lt;h2 id=&#34;2-计算&#34;&gt;2. 计算&lt;/h2&gt;
-
-&lt;h3 id=&#34;2-1-余弦公式直接计算&#34;&gt;2.1 余弦公式直接计算&lt;/h3&gt;
-
-&lt;p&gt;$$\cos d=\sin δ_1 \sin δ_2 + \cos δ_1 \cos δ_2 \cos (α_1 -α_2)$$
-式中$α_1,δ_1,α_2,δ_2$分别对应两个天体的赤经和赤纬。&lt;br /&gt;
-当$d$接近于0或180度时，$\left|\cos d\right|$接近于1，并且其值随$d$变化很小，所以得到的$d$不精确。此时需用以下公式计算：$$d = \sqrt {(Δα\cos δ)^2+(Δδ)^2}$$
-式中$Δα$是两个赤经的差，$Δδ$是两个赤纬的差，$δ$是两个赤纬的平均值。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Sep returns the angular separation between two celestial bodies.
-//
-// The algorithm is numerically naïve, and while patched up a bit for
-// small separations, remains unstable for separations near π.
-// 计算两天体之间的角距，r为赤经，d为赤纬
-func Sep(r1, d1, r2, d2 unit.Angle) unit.Angle {
-	sd1, cd1 := d1.Sincos()
-	sd2, cd2 := d2.Sincos()
-	cd := sd1*sd2 + cd1*cd2*(r1-r2).Cos() // (17.1) p. 109
-	if cd &amp;lt; base.CosSmallAngle {
-		return unit.Angle(math.Acos(cd))
-	}
-	// (17.2) p. 109
-	dm := (d1 + d2) / 2
-	return unit.Angle(math.Hypot((r2-r1).Rad()*dm.Cos(), (d2 - d1).Rad()))
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;2-2-根据观测数据插值计算最小角距离&#34;&gt;2.2 根据观测数据插值计算最小角距离&lt;/h3&gt;
-
-&lt;p&gt;注意，不能先计算出各组数据点的角距离，再对角距离插值计算。因为当两个天体很近时，两天体间是线性的靠近再线性的离开。此时需要先对数据点插值，再把得出的数据套用2.1的方法进行计算。或者引入 u,v 坐标，先将原始数据转为 u,v 坐标，然后对 u,v 坐标点进行插值计算，得出最小值&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// MinSep returns the minimum separation between two moving objects.
-//
-// The motion is represented as an ephemeris of three rows, equally spaced
-// in time.  Jd1, jd3 are julian day times of the first and last rows.
-// R1, d1, r2, d2 are coordinates at the three times.  They must each be
-// slices of length 3.
-//
-// Result is obtained by computing separation at each of the three times
-// and interpolating a minimum.  This may be invalid for sufficiently close
-// approaches.
-//
-// 计算两个天体之间的最小角距
-// 此方法是将数据点计算成角距，然后直接对角距3点插值，求取最小值，
-// 当两个天体十分接近时，这个结果是不准确的，要使用方法MinSepRect
-func MinSep(jd1, jd3 float64, r1, d1, r2, d2 []unit.Angle) (unit.Angle, error) {
-	if len(r1) != 3 || len(d1) != 3 || len(r2) != 3 || len(d2) != 3 {
-		return 0, interp.ErrorNot3
-	}
-	y := make([]float64, 3)
-	for x, r := range r1 {
-		y[x] = Sep(r, d1[x], r2[x], d2[x]).Rad()
-	}
-	d3, err := interp.NewLen3(jd1, jd3, y)
-	if err != nil {
-		return 0, err
-	}
-	_, dMin, err := d3.Extremum()
-	return unit.Angle(dMin), err
-}
-
-// MinSepRect returns the minimum separation between two moving objects.
-//
-// Like MinSep, but using a method of rectangular coordinates that gives
-// accurate results even for close approaches.
-// 计算两个天体之间的最小角距
-// 此方法是引入直角坐标 u,v,先将数据点转换成u,v 表达，然后对u,v插值，求取最小值，
-func MinSepRect(jd1, jd3 float64, r1, d1, r2, d2 []unit.Angle) (unit.Angle, error) {
-	if len(r1) != 3 || len(d1) != 3 || len(r2) != 3 || len(d2) != 3 {
-		return 0, interp.ErrorNot3
-	}
-	uv := func(r1, d1, r2, d2 unit.Angle) (u, v float64) {
-		sd1, cd1 := d1.Sincos()
-		Δr := r2 - r1
-		tΔr := Δr.Tan()
-		thΔr := (Δr / 2).Tan()
-		K := 1 / (1 + sd1*sd1*tΔr*thΔr)
-		sΔd := (d2 - d1).Sin()
-		u = -K * (1 - (sd1/cd1)*sΔd) * cd1 * tΔr
-		v = K * (sΔd + sd1*cd1*tΔr*thΔr)
-		return
-	}
-	us := make([]float64, 3, 6)
-	vs := us[3:6]
-	for x, r := range r1 {
-		us[x], vs[x] = uv(r, d1[x], r2[x], d2[x])
-	}
-	u3, err := interp.NewLen3(-1, 1, us)
-	if err != nil {
-		panic(err) // bug not caller&#39;s fault.
-	}
-	v3, err := interp.NewLen3(-1, 1, vs)
-	if err != nil {
-		panic(err) // bug not caller&#39;s fault.
-	}
-	up0 := (us[2] - us[0]) / 2
-	vp0 := (vs[2] - vs[0]) / 2
-	up1 := us[0] + us[2] - 2*us[1]
-	vp1 := vs[0] + vs[2] - 2*vs[1]
-	up := up0
-	vp := vp0
-	dn := -(us[1]*up + vs[1]*vp) / (up*up + vp*vp)
-	n := dn
-	var u, v float64
-	for limit := 0; limit &amp;lt; 10; limit++ {
-		u = u3.InterpolateN(n)
-		v = v3.InterpolateN(n)
-		if math.Abs(dn) &amp;lt; 1e-5 {
-			return unit.Angle(math.Hypot(u, v)), nil // success
-		}
-		up := up0 + n*up1
-		vp := vp0 + n*vp1
-		dn = -(u*up + v*vp) / (up*up + vp*vp)
-		n += dn
-	}
-	return 0, errors.New(&amp;quot;MinSepRect: failure to converge&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;2-3-利用半正矢的特点提高当角距很小时的精确程度&#34;&gt;2.3 利用半正矢的特点提高当角距很小时的精确程度&lt;/h3&gt;
-
-&lt;p&gt;根据半正矢公式$hav(d) = hav(Δδ) + \cos δ_1 \cos δ_2 hav(Δα)$,式中 $Δα = α_1 - α_2，Δδ = δ_1 - δ_2$，
-又由$hav(d)=\frac {1-\cos d}{2}=\sin^2(\frac d2)$,可以有效的在0，180°附近提高计算机的精度。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// SepHav returns the angular separation between two celestial bodies.
-//
-// The algorithm uses the haversine function and is superior to the naïve
-// algorithm of the Sep function.
-// 利用半正矢的特点提高当角距很小时的精确程度
-func SepHav(r1, d1, r2, d2 unit.Angle) unit.Angle {
-	// using (17.5) p. 115
-	return unit.Angle(2 * math.Asin(math.Sqrt(base.Hav(d2-d1)+
-		d1.Cos()*d2.Cos()*base.Hav(r2-r1))))
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;2-4-pauwels公式&#34;&gt;2.4 Pauwels公式&lt;/h3&gt;
-
-&lt;p&gt;令
-\begin{cases}
-x &amp;amp;= \cos δ_1\sin δ_2 - \sin δ_1\cos δ_2\cos (α_2-α_1)\\[2ex]
-x &amp;amp;= \cos δ_2\sin (α_2-α_1)\\[2ex]
-z &amp;amp;= \sin δ_1\sin δ_2 + \cos δ_1\cos δ_2\cos (α_2-α_1)\\[2ex]
-\end{cases}
-则有：$$d=\arctan (\frac {\sqrt {x^2+y^2}}{z})$$&lt;/p&gt;
-
-&lt;p&gt;数学上来说，这与余弦定理完全等价，只不过是巧妙的将余弦转化为正切，而对于计算机来说，
-反正切比反正弦能获得更高的精确度&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// SepPauwels returns the angular separation between two celestial bodies.
-//
-// The algorithm is a numerically stable form of that used in Sep.
-// 当z小于0时，返回值应该在90-180度之间
-// 该方法与直接余弦定理求角距在数学上是等价的，
-// 但是对于计算机来说，arctan 比 arcsin能获得更高的精度
-func SepPauwels(r1, d1, r2, d2 unit.Angle) unit.Angle {
-	sd1, cd1 := d1.Sincos()
-	sd2, cd2 := d2.Sincos()
-	cdr := (r2 - r1).Cos()
-	x := cd1*sd2 - sd1*cd2*cdr
-	y := cd2 * (r2 - r1).Sin()
-	z := sd1*sd2 + cd1*cd2*cdr
-	return unit.Angle(math.Atan2(math.Hypot(x, y), z))
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;2-5-relative-position-angle&#34;&gt;2.5 Relative Position Angle&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Position_angle&#34; target=&#34;_blank&#34;&gt;定义即相关信息&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// RelativePosition returns the position angle of one body with respect to
-// another.
-//
-// The position angle result is measured counter-clockwise from North.
-// 1相对2的角距，从2的正北到1的角度
-// https://en.wikipedia.org/wiki/Position_angle
-func RelativePosition(r1, d1, r2, d2 unit.Angle) unit.Angle {
-	sΔr, cΔr := (r1 - r2).Sincos()
-	sd2, cd2 := d2.Sincos()
-	return unit.Angle(math.Atan2(sΔr, cd2*d1.Tan()-sd2*cΔr))
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
