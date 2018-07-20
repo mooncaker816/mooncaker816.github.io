@@ -165,6 +165,12 @@
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+&lt;p&gt;注：对于 MD5 来说，如果根据最后一个分块末尾用来记录源数据字节长度的空间大小（8个字节）来看，其最大输入长度应该为2^64 - 1，但是在 MD5 的算法中，指明了此处的值是对 2^64 取余,所以 MD5 的输入没有限制。（但是 Go 中并没有取余）&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The remaining bits are filled up with 64 bits representing the length of the original message, modulo 264.&lt;/p&gt;
+&lt;/blockquote&gt;
+
 &lt;h1 id=&#34;2-md5&#34;&gt;2 MD5&lt;/h1&gt;
 
 &lt;h2 id=&#34;2-1-预备函数&#34;&gt;2.1 预备函数&lt;/h2&gt;
