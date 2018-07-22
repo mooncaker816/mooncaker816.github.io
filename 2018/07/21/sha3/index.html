@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.39" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/07/21/sha3/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/07/21/sha3/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/07/21/sha3/">
+  <meta property="og:title" content="SHA3 | Mooncaker816">
+  <meta property="og:description" content="">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-07-21T08:52:27&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-07-22T12:13:06&#43;08:00">
+  
+
+  
+  
+
+
+
+
+  <title>SHA3 | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+        
+        
+            
+        
+        
+                
+                        
+        
+        
+    
+
+
+<div class="container body-content tocpost">
+  <div class="row">
+
+      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+
+          <ul id="tocpost-main-nav">
+
+          </ul>
+      </nav>
+      <div class="col-md-2">
+          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+            
+          </nav>
+      </div>
+
+      <div class="col-sm-9 col-md-8 body">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+            <div class="article-container">
+              <h1 itemprop="name">SHA3</h1>
+
+              
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <time datetime="2018-07-21 08:52:27 &#43;0800 CST" itemprop="datePublished dateModified">
+      Jul 22, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    14 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="https://mooncaker816.github.io/2018/07/21/sha3/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://mooncaker816.github.io/categories/golang/">Golang</a
+    >, 
+    
+    <a href="https://mooncaker816.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=SHA3&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f21%2fsha3%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f21%2fsha3%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f21%2fsha3%2f&amp;title=SHA3"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f21%2fsha3%2f&amp;title=SHA3"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=SHA3&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f21%2fsha3%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+
+              <div class="article-style" itemprop="articleBody">
+                <p></p>
+
+<h1 id=11e0493a5f839035831d757aa845f91b>1 什么是SHA-3</h1>
+
+<p>　　SHA-3是一种作为新标准发布的单向散列函数算法，用来替代在理论上已被找出攻击方法的SHA-1算法。全世界的企业和密码学家提交了很多SHA-3的候选方案，经过长达5年的选拔，最终于2012年正式确定将Kececak算法作为SHA-3标准。<br />
+　　Keccak的以下几大特点，是其成为SHA-3标准的重要原因：</p>
+
+<ul>
+<li>采用了与SHA-2完全不同的结构</li>
+<li>结构清晰，易于分析</li>
+<li>能够适用于各种设备，也适用于嵌入式应用</li>
+<li>在硬件上的实现显示出了很高的性能</li>
+<li>比其他最终候选算法安全性边际更大</li>
+</ul>
+
+<p>　　Keccak可以生成任意长度的散列值，但为了配合SHA-2的散列值长度，SHA-3标准中共规定了SHA3-224，SHA3-256，SHA3-384，SHA3-512这4种版本。在输入数据的长度上限方面，SHA-1为2^64 - 1，SHA-2为2^128 - 1，而SHA-3则没有长度限制。<br />
+　　此外，SHA3还有两个可以输出任意长度散列值的函数：SHAKE128,SHAKE256，在 Go 的SHA3文档中，推荐使用SHAKE256。</p>
+
+<blockquote>
+<p>// Guidance<br />
+//<br />
+// If you aren’t sure what function you need, use SHAKE256 with at least 64<br />
+// bytes of output. The SHAKE instances are faster than the SHA3 instances;<br />
+// the latter have to allocate memory to conform to the hash.Hash interface.<br />
+//<br />
+// If you need a secret-key MAC (message authentication code), prepend the<br />
+// secret key to the input, hash with SHAKE256 and read at least 32 bytes of<br />
+// output.</p>
+</blockquote>
+
+<h1 id=eb997849fc1032488a1968b30ba395a7>2 Keccak</h1>
+
+<h2 id=e6a480c18e2a9dd9ef0488806e2cfef3>2.1 Keccak的结构</h2>
+
+<p>　　Keccak采用了与SHA-1，SHA-2完全不同的海绵结构。顾名思义，海绵最大的特点就是其吸水性，用在此处想必也是有此寓意。在Keccak的海绵结构中，输入数据在进行分组以及相应的填充之后，要经过吸收阶段和挤出阶段，最终生成输出的散列值。<br />
+　　吸收阶段中，源数据按一定大小分组，最后一组会进行填充补足。依次将每一分组的数据与Keccak中内部状态作XOR操作，从而将分组数据吸收入Keccak结构中，再将XOR之后的数据按一定算法进行搅拌，此时内部状态中的数据为该分组数据搅拌后的数据，再在此状态下用相同的方法吸入下一组数据并再次搅拌，循环往复，直至最后一组数据搅拌成功，完成吸收阶段。<br />
+　　挤出阶段中，在完成对最后一组数据的搅拌后，直接按分组大小将内部状态中的数据输出到最终输出中，如果达不到输出的长度要求，则再次执行同样的搅拌，每次从内部状态中挤出最多分组大小的数据，循环往复，直至达到输出长度的要求。</p>
+
+<p><img src="http://oumnldfwl.bkt.clouddn.com/keccak结构流程图.png" alt="Keccak 结构流程图" /></p>
+
+<h2 id=0fdee9da5d2c7a3fa0a8eba06e5a1e30>2.2 Keccak的内部状态</h2>
+
+<p>　　Keccak的内部状态可以看成是一个5*5*w的三维立方体，每一个单位元素代表一个比特位。根据设计规格，Keccak的内部状态大小可以为25，50，100，200，400，800，1600共7种，分别对应的w为1，2，4，8，16，32，64。SHA3 采用了最大的规格，用以提升安全等级，所以SHA3的内部状态实际是一个5*5*64大小的比特流。将这个比特流映射到具体的数据结构上，可以表述为一个由25个无符号64位整数组成的数组。<br />
+　　更具体的内部状态信息，可以参考以下官方文档中的3.1小节。
+<a href="https://csrc.nist.gov/csrc/media/publications/fips/202/final/documents/fips_202_draft.pdf" target="_blank">https://csrc.nist.gov/csrc/media/publications/fips/202/final/documents/fips_202_draft.pdf</a></p>
+
+<h2 id=7148dc1da750eafe6e84abce90c9d6a2>2.3 搅拌方法</h2>
+
+<p>　　Keccak最重要的就是他的“搅拌函数”，用来在原数据的基础上对其进行一系列复杂的运算，最后生成摘要信息。搅拌的过程一共可以分为5个步骤，θ，ρ，π，χ，ι，共计24轮计算。每一个步骤都是对这个5*5*64的状态矩阵进行相应的计算，移位，旋转等操作。
+　　具体步骤可以参考上文链接中的3.2小节，此处不再赘述。</p>
+
+<h2 id=86a4643c14733664f46463a5e9c6879f>2.4 搅拌方法的实现</h2>
+
+<p>　　在Keccak官网上，给出了许多有趣的实现方法，以下是参考链接：
+<a href="https://keccak.team/files/Keccak-implementation-3.2.pdf" target="_blank">https://keccak.team/files/Keccak-implementation-3.2.pdf</a><br />
+而 Go 的 x/crypto/sha3 包采用的是其中的 Efficient in-place implementations。</p>
+
+<pre><code class="language-go">// Copyright 2014 The Go Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+//  +build !amd64 appengine gccgo
+
+package sha3
+
+// rc stores the round constants for use in the ι step.
+var rc = [24]uint64{
+	0x0000000000000001,
+	0x0000000000008082,
+	0x800000000000808A,
+	0x8000000080008000,
+	0x000000000000808B,
+	0x0000000080000001,
+	0x8000000080008081,
+	0x8000000000008009,
+	0x000000000000008A,
+	0x0000000000000088,
+	0x0000000080008009,
+	0x000000008000000A,
+	0x000000008000808B,
+	0x800000000000008B,
+	0x8000000000008089,
+	0x8000000000008003,
+	0x8000000000008002,
+	0x8000000000000080,
+	0x000000000000800A,
+	0x800000008000000A,
+	0x8000000080008081,
+	0x8000000000008080,
+	0x0000000080000001,
+	0x8000000080008008,
+}
+
+// keccakF1600 applies the Keccak permutation to a 1600b-wide
+// state represented as a slice of 25 uint64s.
+// [Min] 对已经吸收到 a 中的一个分组的数据进行处理
+func keccakF1600(a *[25]uint64) {
+	// Implementation translated from Keccak-inplace.c
+	// in the keccak reference code.
+	var t, bc0, bc1, bc2, bc3, bc4, d0, d1, d2, d3, d4 uint64
+
+	/* [Min]
+		共计24轮计算，每四轮一循环，所有涉及A,B,C,D索引的计算都是mod 5，对a的索引计算都是 mod 25
+	已知	N = 1 0
+				1 2
+	N^i的值每4轮一循环（元素值 mod5 相同）
+	A[x,y] = a[5y+x], 此处小a就是函数的输入
+	r[x,y] 值如下表，代表循环左移的位数
+		x=3 x=4 x=0 x=1 x=2
+	y=2 25	39  3   10  43
+	y=1 55  20  36  44  6
+	y=0 28  27  0   1   62
+	y=4 56  14  18  2   61
+	y=3 21  8   41  45  15
+
+		对第i轮进行计算：
+		1. C[x] = A[N^i(x,0)T]⊕A[N^i(x,1)T]⊕A[N^i(x,2)T]⊕A[N^i(x,3)T]⊕A[N^i(x,4)T], x = 0...4
+		2. D[x] = C[x−1]⊕ROT(C[x+1],1), x = 0...4
+		for y=0...4
+		3. B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		4. A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		end
+		5. A[0,0] = A[0,0] ⊕ RC[i]
+	*/
+	for i := 0; i < 24; i += 4 {
+		// Combines the 5 steps in each round into 2 steps.
+		// Unrolls 4 rounds per loop and spreads some steps across rounds.
+
+		// Round 1
+		/* [Min]
+		i = 0, N^0 = 单位矩阵
+		C[0] = A[0,0]⊕A[0,1]⊕A[0,2]⊕A[0,3]⊕A[0,4]
+		     = a[0] ^ a[5] ^ a[10] ^ a[15] ^ a[20]
+		C[1] = A[1,0]⊕A[1,1]⊕A[1,2]⊕A[1,3]⊕A[1,4]
+			 = a[1] ^ a[6] ^ a[11] ^ a[16] ^ a[21]
+		...
+		*/
+		// [Min] C[x] = A[N^i(x,0)T]⊕A[N^i(x,1)T]⊕A[N^i(x,2)T]⊕A[N^i(x,3)T]⊕A[N^i(x,4)T]
+		bc0 = a[0] ^ a[5] ^ a[10] ^ a[15] ^ a[20]
+		bc1 = a[1] ^ a[6] ^ a[11] ^ a[16] ^ a[21]
+		bc2 = a[2] ^ a[7] ^ a[12] ^ a[17] ^ a[22]
+		bc3 = a[3] ^ a[8] ^ a[13] ^ a[18] ^ a[23]
+		bc4 = a[4] ^ a[9] ^ a[14] ^ a[19] ^ a[24]
+		// [Min] D[x] = C[x−1]⊕ROT(C[x+1],1), x = 0...4
+		d0 = bc4 ^ (bc1<<1 | bc1>>63)
+		d1 = bc0 ^ (bc2<<1 | bc2>>63)
+		d2 = bc1 ^ (bc3<<1 | bc3>>63)
+		d3 = bc2 ^ (bc4<<1 | bc4>>63)
+		d4 = bc3 ^ (bc0<<1 | bc0>>63)
+
+		// [Min] y = 0
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		// [Min] A[0,0] = A[0,0] ⊕ RC[i]
+		bc0 = a[0] ^ d0
+		t = a[6] ^ d1
+		bc1 = t<<44 | t>>(64-44)
+		t = a[12] ^ d2
+		bc2 = t<<43 | t>>(64-43)
+		t = a[18] ^ d3
+		bc3 = t<<21 | t>>(64-21)
+		t = a[24] ^ d4
+		bc4 = t<<14 | t>>(64-14)
+		a[0] = bc0 ^ (bc2 &^ bc1) ^ rc[i]
+		a[6] = bc1 ^ (bc3 &^ bc2)
+		a[12] = bc2 ^ (bc4 &^ bc3)
+		a[18] = bc3 ^ (bc0 &^ bc4)
+		a[24] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 1
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[10] ^ d0
+		bc2 = t<<3 | t>>(64-3)
+		t = a[16] ^ d1
+		bc3 = t<<45 | t>>(64-45)
+		t = a[22] ^ d2
+		bc4 = t<<61 | t>>(64-61)
+		t = a[3] ^ d3
+		bc0 = t<<28 | t>>(64-28)
+		t = a[9] ^ d4
+		bc1 = t<<20 | t>>(64-20)
+		a[10] = bc0 ^ (bc2 &^ bc1)
+		a[16] = bc1 ^ (bc3 &^ bc2)
+		a[22] = bc2 ^ (bc4 &^ bc3)
+		a[3] = bc3 ^ (bc0 &^ bc4)
+		a[9] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 2
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[20] ^ d0
+		bc4 = t<<18 | t>>(64-18)
+		t = a[1] ^ d1
+		bc0 = t<<1 | t>>(64-1)
+		t = a[7] ^ d2
+		bc1 = t<<6 | t>>(64-6)
+		t = a[13] ^ d3
+		bc2 = t<<25 | t>>(64-25)
+		t = a[19] ^ d4
+		bc3 = t<<8 | t>>(64-8)
+		a[20] = bc0 ^ (bc2 &^ bc1)
+		a[1] = bc1 ^ (bc3 &^ bc2)
+		a[7] = bc2 ^ (bc4 &^ bc3)
+		a[13] = bc3 ^ (bc0 &^ bc4)
+		a[19] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 3
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[5] ^ d0
+		bc1 = t<<36 | t>>(64-36)
+		t = a[11] ^ d1
+		bc2 = t<<10 | t>>(64-10)
+		t = a[17] ^ d2
+		bc3 = t<<15 | t>>(64-15)
+		t = a[23] ^ d3
+		bc4 = t<<56 | t>>(64-56)
+		t = a[4] ^ d4
+		bc0 = t<<27 | t>>(64-27)
+		a[5] = bc0 ^ (bc2 &^ bc1)
+		a[11] = bc1 ^ (bc3 &^ bc2)
+		a[17] = bc2 ^ (bc4 &^ bc3)
+		a[23] = bc3 ^ (bc0 &^ bc4)
+		a[4] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 4
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[15] ^ d0
+		bc3 = t<<41 | t>>(64-41)
+		t = a[21] ^ d1
+		bc4 = t<<2 | t>>(64-2)
+		t = a[2] ^ d2
+		bc0 = t<<62 | t>>(64-62)
+		t = a[8] ^ d3
+		bc1 = t<<55 | t>>(64-55)
+		t = a[14] ^ d4
+		bc2 = t<<39 | t>>(64-39)
+		a[15] = bc0 ^ (bc2 &^ bc1)
+		a[21] = bc1 ^ (bc3 &^ bc2)
+		a[2] = bc2 ^ (bc4 &^ bc3)
+		a[8] = bc3 ^ (bc0 &^ bc4)
+		a[14] = bc4 ^ (bc1 &^ bc0)
+
+		// Round 2
+		/* [Min]
+		i = 1, N^i将 (x,y) 映射成 (x,x+2y)
+		C[0] = A[0,0]⊕A[0,2]⊕A[0,4]⊕A[0,1]⊕A[0,3]
+		     = a[0] ^ a[10] ^ a[20] ^ a[5] ^ a[15]
+		C[1] = A[1,1]⊕A[1,3]⊕A[1,0]⊕A[1,2]⊕A[1,4]
+			 = a[6] ^ a[16] ^ a[1] ^ a[11] ^ a[21]
+		...
+		*/
+		// [Min] C[x] = A[N^i(x,0)T]⊕A[N^i(x,1)T]⊕A[N^i(x,2)T]⊕A[N^i(x,3)T]⊕A[N^i(x,4)T]
+		bc0 = a[0] ^ a[5] ^ a[10] ^ a[15] ^ a[20]
+		bc1 = a[1] ^ a[6] ^ a[11] ^ a[16] ^ a[21]
+		bc2 = a[2] ^ a[7] ^ a[12] ^ a[17] ^ a[22]
+		bc3 = a[3] ^ a[8] ^ a[13] ^ a[18] ^ a[23]
+		bc4 = a[4] ^ a[9] ^ a[14] ^ a[19] ^ a[24]
+		// [Min] D[x] = C[x−1]⊕ROT(C[x+1],1), x = 0...4
+		d0 = bc4 ^ (bc1<<1 | bc1>>63)
+		d1 = bc0 ^ (bc2<<1 | bc2>>63)
+		d2 = bc1 ^ (bc3<<1 | bc3>>63)
+		d3 = bc2 ^ (bc4<<1 | bc4>>63)
+		d4 = bc3 ^ (bc0<<1 | bc0>>63)
+
+		// [Min] y = 0
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		// [Min] A[0,0] = A[0,0] ⊕ RC[i]
+		bc0 = a[0] ^ d0
+		t = a[16] ^ d1
+		bc1 = t<<44 | t>>(64-44)
+		t = a[7] ^ d2
+		bc2 = t<<43 | t>>(64-43)
+		t = a[23] ^ d3
+		bc3 = t<<21 | t>>(64-21)
+		t = a[14] ^ d4
+		bc4 = t<<14 | t>>(64-14)
+		a[0] = bc0 ^ (bc2 &^ bc1) ^ rc[i+1]
+		a[16] = bc1 ^ (bc3 &^ bc2)
+		a[7] = bc2 ^ (bc4 &^ bc3)
+		a[23] = bc3 ^ (bc0 &^ bc4)
+		a[14] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 1
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[20] ^ d0
+		bc2 = t<<3 | t>>(64-3)
+		t = a[11] ^ d1
+		bc3 = t<<45 | t>>(64-45)
+		t = a[2] ^ d2
+		bc4 = t<<61 | t>>(64-61)
+		t = a[18] ^ d3
+		bc0 = t<<28 | t>>(64-28)
+		t = a[9] ^ d4
+		bc1 = t<<20 | t>>(64-20)
+		a[20] = bc0 ^ (bc2 &^ bc1)
+		a[11] = bc1 ^ (bc3 &^ bc2)
+		a[2] = bc2 ^ (bc4 &^ bc3)
+		a[18] = bc3 ^ (bc0 &^ bc4)
+		a[9] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 2
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[15] ^ d0
+		bc4 = t<<18 | t>>(64-18)
+		t = a[6] ^ d1
+		bc0 = t<<1 | t>>(64-1)
+		t = a[22] ^ d2
+		bc1 = t<<6 | t>>(64-6)
+		t = a[13] ^ d3
+		bc2 = t<<25 | t>>(64-25)
+		t = a[4] ^ d4
+		bc3 = t<<8 | t>>(64-8)
+		a[15] = bc0 ^ (bc2 &^ bc1)
+		a[6] = bc1 ^ (bc3 &^ bc2)
+		a[22] = bc2 ^ (bc4 &^ bc3)
+		a[13] = bc3 ^ (bc0 &^ bc4)
+		a[4] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 3
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[10] ^ d0
+		bc1 = t<<36 | t>>(64-36)
+		t = a[1] ^ d1
+		bc2 = t<<10 | t>>(64-10)
+		t = a[17] ^ d2
+		bc3 = t<<15 | t>>(64-15)
+		t = a[8] ^ d3
+		bc4 = t<<56 | t>>(64-56)
+		t = a[24] ^ d4
+		bc0 = t<<27 | t>>(64-27)
+		a[10] = bc0 ^ (bc2 &^ bc1)
+		a[1] = bc1 ^ (bc3 &^ bc2)
+		a[17] = bc2 ^ (bc4 &^ bc3)
+		a[8] = bc3 ^ (bc0 &^ bc4)
+		a[24] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 4
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[5] ^ d0
+		bc3 = t<<41 | t>>(64-41)
+		t = a[21] ^ d1
+		bc4 = t<<2 | t>>(64-2)
+		t = a[12] ^ d2
+		bc0 = t<<62 | t>>(64-62)
+		t = a[3] ^ d3
+		bc1 = t<<55 | t>>(64-55)
+		t = a[19] ^ d4
+		bc2 = t<<39 | t>>(64-39)
+		a[5] = bc0 ^ (bc2 &^ bc1)
+		a[21] = bc1 ^ (bc3 &^ bc2)
+		a[12] = bc2 ^ (bc4 &^ bc3)
+		a[3] = bc3 ^ (bc0 &^ bc4)
+		a[19] = bc4 ^ (bc1 &^ bc0)
+
+		// Round 3
+		/* [Min]
+		i = 2, N^i将 (x,y) 映射成 (x,3x+4y)
+		C[0] = A[0,0]⊕A[0,4]⊕A[0,3]⊕A[0,2]⊕A[0,1]
+		     = a[0] ^ a[20] ^ a[15] ^ a[10] ^ a[5]
+		C[1] = A[1,3]⊕A[1,2]⊕A[1,1]⊕A[1,0]⊕A[1,4]
+			 = a[16] ^ a[11] ^ a[6] ^ a[1] ^ a[21]
+		...
+		*/
+		// [Min] C[x] = A[N^i(x,0)T]⊕A[N^i(x,1)T]⊕A[N^i(x,2)T]⊕A[N^i(x,3)T]⊕A[N^i(x,4)T]
+		bc0 = a[0] ^ a[5] ^ a[10] ^ a[15] ^ a[20]
+		bc1 = a[1] ^ a[6] ^ a[11] ^ a[16] ^ a[21]
+		bc2 = a[2] ^ a[7] ^ a[12] ^ a[17] ^ a[22]
+		bc3 = a[3] ^ a[8] ^ a[13] ^ a[18] ^ a[23]
+		bc4 = a[4] ^ a[9] ^ a[14] ^ a[19] ^ a[24]
+		// [Min] D[x] = C[x−1]⊕ROT(C[x+1],1), x = 0...4
+		d0 = bc4 ^ (bc1<<1 | bc1>>63)
+		d1 = bc0 ^ (bc2<<1 | bc2>>63)
+		d2 = bc1 ^ (bc3<<1 | bc3>>63)
+		d3 = bc2 ^ (bc4<<1 | bc4>>63)
+		d4 = bc3 ^ (bc0<<1 | bc0>>63)
+
+		// [Min] y = 0
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		// [Min] A[0,0] = A[0,0] ⊕ RC[i]
+		bc0 = a[0] ^ d0
+		t = a[11] ^ d1
+		bc1 = t<<44 | t>>(64-44)
+		t = a[22] ^ d2
+		bc2 = t<<43 | t>>(64-43)
+		t = a[8] ^ d3
+		bc3 = t<<21 | t>>(64-21)
+		t = a[19] ^ d4
+		bc4 = t<<14 | t>>(64-14)
+		a[0] = bc0 ^ (bc2 &^ bc1) ^ rc[i+2]
+		a[11] = bc1 ^ (bc3 &^ bc2)
+		a[22] = bc2 ^ (bc4 &^ bc3)
+		a[8] = bc3 ^ (bc0 &^ bc4)
+		a[19] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 1
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[15] ^ d0
+		bc2 = t<<3 | t>>(64-3)
+		t = a[1] ^ d1
+		bc3 = t<<45 | t>>(64-45)
+		t = a[12] ^ d2
+		bc4 = t<<61 | t>>(64-61)
+		t = a[23] ^ d3
+		bc0 = t<<28 | t>>(64-28)
+		t = a[9] ^ d4
+		bc1 = t<<20 | t>>(64-20)
+		a[15] = bc0 ^ (bc2 &^ bc1)
+		a[1] = bc1 ^ (bc3 &^ bc2)
+		a[12] = bc2 ^ (bc4 &^ bc3)
+		a[23] = bc3 ^ (bc0 &^ bc4)
+		a[9] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 2
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[5] ^ d0
+		bc4 = t<<18 | t>>(64-18)
+		t = a[16] ^ d1
+		bc0 = t<<1 | t>>(64-1)
+		t = a[2] ^ d2
+		bc1 = t<<6 | t>>(64-6)
+		t = a[13] ^ d3
+		bc2 = t<<25 | t>>(64-25)
+		t = a[24] ^ d4
+		bc3 = t<<8 | t>>(64-8)
+		a[5] = bc0 ^ (bc2 &^ bc1)
+		a[16] = bc1 ^ (bc3 &^ bc2)
+		a[2] = bc2 ^ (bc4 &^ bc3)
+		a[13] = bc3 ^ (bc0 &^ bc4)
+		a[24] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 3
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[20] ^ d0
+		bc1 = t<<36 | t>>(64-36)
+		t = a[6] ^ d1
+		bc2 = t<<10 | t>>(64-10)
+		t = a[17] ^ d2
+		bc3 = t<<15 | t>>(64-15)
+		t = a[3] ^ d3
+		bc4 = t<<56 | t>>(64-56)
+		t = a[14] ^ d4
+		bc0 = t<<27 | t>>(64-27)
+		a[20] = bc0 ^ (bc2 &^ bc1)
+		a[6] = bc1 ^ (bc3 &^ bc2)
+		a[17] = bc2 ^ (bc4 &^ bc3)
+		a[3] = bc3 ^ (bc0 &^ bc4)
+		a[14] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 4
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[10] ^ d0
+		bc3 = t<<41 | t>>(64-41)
+		t = a[21] ^ d1
+		bc4 = t<<2 | t>>(64-2)
+		t = a[7] ^ d2
+		bc0 = t<<62 | t>>(64-62)
+		t = a[18] ^ d3
+		bc1 = t<<55 | t>>(64-55)
+		t = a[4] ^ d4
+		bc2 = t<<39 | t>>(64-39)
+		a[10] = bc0 ^ (bc2 &^ bc1)
+		a[21] = bc1 ^ (bc3 &^ bc2)
+		a[7] = bc2 ^ (bc4 &^ bc3)
+		a[18] = bc3 ^ (bc0 &^ bc4)
+		a[4] = bc4 ^ (bc1 &^ bc0)
+
+		// Round 4
+		/* [Min]
+		i = 3, N^i将 (x,y) 映射成 (x,7x+8y)
+		C[0] = A[0,0]⊕A[0,3]⊕A[0,1]⊕A[0,4]⊕A[0,2]
+		     = a[0] ^ a[15] ^ a[5] ^ a[20] ^ a[10]
+		C[1] = A[1,2]⊕A[1,0]⊕A[1,3]⊕A[1,1]⊕A[1,4]
+			 = a[11] ^ a[1] ^ a[16] ^ a[6] ^ a[21]
+		...
+		*/
+		// [Min] C[x] = A[N^i(x,0)T]⊕A[N^i(x,1)T]⊕A[N^i(x,2)T]⊕A[N^i(x,3)T]⊕A[N^i(x,4)T]
+		bc0 = a[0] ^ a[5] ^ a[10] ^ a[15] ^ a[20]
+		bc1 = a[1] ^ a[6] ^ a[11] ^ a[16] ^ a[21]
+		bc2 = a[2] ^ a[7] ^ a[12] ^ a[17] ^ a[22]
+		bc3 = a[3] ^ a[8] ^ a[13] ^ a[18] ^ a[23]
+		bc4 = a[4] ^ a[9] ^ a[14] ^ a[19] ^ a[24]
+		// [Min] D[x] = C[x−1]⊕ROT(C[x+1],1), x = 0...4
+		d0 = bc4 ^ (bc1<<1 | bc1>>63)
+		d1 = bc0 ^ (bc2<<1 | bc2>>63)
+		d2 = bc1 ^ (bc3<<1 | bc3>>63)
+		d3 = bc2 ^ (bc4<<1 | bc4>>63)
+		d4 = bc3 ^ (bc0<<1 | bc0>>63)
+
+		// [Min] y = 0
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		// [Min] A[0,0] = A[0,0] ⊕ RC[i]
+		bc0 = a[0] ^ d0
+		t = a[1] ^ d1
+		bc1 = t<<44 | t>>(64-44)
+		t = a[2] ^ d2
+		bc2 = t<<43 | t>>(64-43)
+		t = a[3] ^ d3
+		bc3 = t<<21 | t>>(64-21)
+		t = a[4] ^ d4
+		bc4 = t<<14 | t>>(64-14)
+		a[0] = bc0 ^ (bc2 &^ bc1) ^ rc[i+3]
+		a[1] = bc1 ^ (bc3 &^ bc2)
+		a[2] = bc2 ^ (bc4 &^ bc3)
+		a[3] = bc3 ^ (bc0 &^ bc4)
+		a[4] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 1
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[5] ^ d0
+		bc2 = t<<3 | t>>(64-3)
+		t = a[6] ^ d1
+		bc3 = t<<45 | t>>(64-45)
+		t = a[7] ^ d2
+		bc4 = t<<61 | t>>(64-61)
+		t = a[8] ^ d3
+		bc0 = t<<28 | t>>(64-28)
+		t = a[9] ^ d4
+		bc1 = t<<20 | t>>(64-20)
+		a[5] = bc0 ^ (bc2 &^ bc1)
+		a[6] = bc1 ^ (bc3 &^ bc2)
+		a[7] = bc2 ^ (bc4 &^ bc3)
+		a[8] = bc3 ^ (bc0 &^ bc4)
+		a[9] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 2
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[10] ^ d0
+		bc4 = t<<18 | t>>(64-18)
+		t = a[11] ^ d1
+		bc0 = t<<1 | t>>(64-1)
+		t = a[12] ^ d2
+		bc1 = t<<6 | t>>(64-6)
+		t = a[13] ^ d3
+		bc2 = t<<25 | t>>(64-25)
+		t = a[14] ^ d4
+		bc3 = t<<8 | t>>(64-8)
+		a[10] = bc0 ^ (bc2 &^ bc1)
+		a[11] = bc1 ^ (bc3 &^ bc2)
+		a[12] = bc2 ^ (bc4 &^ bc3)
+		a[13] = bc3 ^ (bc0 &^ bc4)
+		a[14] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 3
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[15] ^ d0
+		bc1 = t<<36 | t>>(64-36)
+		t = a[16] ^ d1
+		bc2 = t<<10 | t>>(64-10)
+		t = a[17] ^ d2
+		bc3 = t<<15 | t>>(64-15)
+		t = a[18] ^ d3
+		bc4 = t<<56 | t>>(64-56)
+		t = a[19] ^ d4
+		bc0 = t<<27 | t>>(64-27)
+		a[15] = bc0 ^ (bc2 &^ bc1)
+		a[16] = bc1 ^ (bc3 &^ bc2)
+		a[17] = bc2 ^ (bc4 &^ bc3)
+		a[18] = bc3 ^ (bc0 &^ bc4)
+		a[19] = bc4 ^ (bc1 &^ bc0)
+
+		// [Min] y = 4
+		// [Min]    B[x+2y] = ROT((A[N^(i+1)(x,y)T]⊕D[x]),r[N(x,y)T]), x=0...4
+		// [Min]    A[N^(i+1)(x,y)T]=B[x]⊕((NOT B[x+1]) AND B[x+2]), x=0...4
+		t = a[20] ^ d0
+		bc3 = t<<41 | t>>(64-41)
+		t = a[21] ^ d1
+		bc4 = t<<2 | t>>(64-2)
+		t = a[22] ^ d2
+		bc0 = t<<62 | t>>(64-62)
+		t = a[23] ^ d3
+		bc1 = t<<55 | t>>(64-55)
+		t = a[24] ^ d4
+		bc2 = t<<39 | t>>(64-39)
+		a[20] = bc0 ^ (bc2 &^ bc1)
+		a[21] = bc1 ^ (bc3 &^ bc2)
+		a[22] = bc2 ^ (bc4 &^ bc3)
+		a[23] = bc3 ^ (bc0 &^ bc4)
+		a[24] = bc4 ^ (bc1 &^ bc0)
+	}
+}
+
+</code></pre>
+
+<h1 id=d90dc7dc8005bc272b69741f30bbae35>3 Go 具体运用</h1>
+
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+
+	"golang.org/x/crypto/sha3"
+)
+
+func main() {
+	h := sha3.New512()
+	// [Min] 连续写入并即时计算当前SHA3
+	h.Write([]byte{'a'})
+	ha := h.Sum(nil)
+	h.Write([]byte{'b'})
+	hab := h.Sum(nil)
+	h.Write([]byte{'c'})
+	habc := h.Sum(nil)
+	// [Min] 阶段性SHA3和直接计算对应数据的SHA3完全相同
+	fmt.Printf("%x\n", ha)
+	fmt.Printf("%x\n", sha3.Sum512([]byte{'a'}))
+	fmt.Printf("%x\n", hab)
+	fmt.Printf("%x\n", sha3.Sum512([]byte{'a', 'b'}))
+	fmt.Printf("%x\n", habc)
+	fmt.Printf("%x\n", sha3.Sum512([]byte{'a', 'b', 'c'}))
+
+	// [Min] Sum256和ShakeSum256在相同输出长度情况下，摘要是不同的，因为他们的填充首字节不同
+	s256 := sha3.Sum256([]byte{'a'})
+	shake256 := make([]byte, 32)
+	sha3.ShakeSum256(shake256, []byte{'a'})
+	fmt.Printf("%x\n", s256)
+	fmt.Printf("%x\n", shake256)
+}
+</code></pre>
+
+<p>结果：</p>
+
+<pre><code class="language-bash">$ go run main.go
+697f2d856172cb8309d6b8b97dac4de344b549d4dee61edfb4962d8698b7fa803f4f93ff24393586e28b5b957ac3d1d369420ce53332712f997bd336d09ab02a
+697f2d856172cb8309d6b8b97dac4de344b549d4dee61edfb4962d8698b7fa803f4f93ff24393586e28b5b957ac3d1d369420ce53332712f997bd336d09ab02a
+01c87b5e8f094d8725ed47be35430de40f6ab6bd7c6641a4ecf0d046c55cb468453796bb61724306a5fb3d90fbe3726a970e5630ae6a9cf9f30d2aa062a0175e
+01c87b5e8f094d8725ed47be35430de40f6ab6bd7c6641a4ecf0d046c55cb468453796bb61724306a5fb3d90fbe3726a970e5630ae6a9cf9f30d2aa062a0175e
+b751850b1a57168a5693cd924b6b096e08f621827444f70d884f5d0240d2712e10e116e9192af3c91a7ec57647e3934057340b4cf408d5a56592f8274eec53f0
+b751850b1a57168a5693cd924b6b096e08f621827444f70d884f5d0240d2712e10e116e9192af3c91a7ec57647e3934057340b4cf408d5a56592f8274eec53f0
+80084bf2fba02475726feb2cab2d8215eab14bc6bdd8bfb2c8151257032ecd8b
+867e2cb04f5a04dcbd592501a5e8fe9ceaafca50255626ca736c138042530ba4
+</code></pre>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/sha3/">SHA3</a>
+  
+</div>
+
+
+
+
+              
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row">
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/07/19/%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/" rel="prev">单向散列函数</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 Jul 22, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+      </div>
+
+
+      <div class="hidden-xs col-sm-3 col-md-2">
+          <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#11e0493a5f839035831d757aa845f91b">1 什么是SHA-3</a>
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#eb997849fc1032488a1968b30ba395a7">2 Keccak</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#e6a480c18e2a9dd9ef0488806e2cfef3">2.1 Keccak的结构</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#0fdee9da5d2c7a3fa0a8eba06e5a1e30">2.2 Keccak的内部状态</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#7148dc1da750eafe6e84abce90c9d6a2">2.3 搅拌方法</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#86a4643c14733664f46463a5e9c6879f">2.4 搅拌方法的实现</a>
+
+        
+
+      
+    
+      
+      
+
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#d90dc7dc8005bc272b69741f30bbae35">3 Go 具体运用</a>
+
+        
+          
+          </li></ul></li>
+          
+        
+
+      
+    
+
+    
+    
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2018-Present &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+    
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">引用</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+    
+    
+    
+
+  </body>
+</html>
+
