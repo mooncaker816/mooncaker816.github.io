@@ -97,7 +97,7 @@
   
   <meta property="article:published_time" content="2018-08-03T07:24:15&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-08-03T15:24:56&#43;08:00">
+  <meta property="article:modified_time" content="2018-08-03T15:32:24&#43;08:00">
   
 
   
@@ -1360,8 +1360,7 @@ func (hs *serverHandshakeState) checkForResumption() bool {
 　　　　5.1.1.10 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg</p>
 </blockquote>
 
-<pre><code>```go
-// [Min] 完整的 handshake
+<pre><code class="language-go">// [Min] 完整的 handshake
 func (hs *serverHandshakeState) doFullHandshake() error {
     c := hs.c
 
@@ -1465,11 +1464,12 @@ func (hs *serverHandshakeState) doFullHandshake() error {
         return err
     }
 
-    // [Min] 从缓存中将累积的消息推送到客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg
+    // [Min] 从缓存中将累积的消息推送到客户端，依次包括：
+    // [Min] serverHelloMsg，certificateMsg，certificateStatusMsg（可选），
+    // [Min] serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg
     if _, err := c.flush(); err != nil {
         return err
     }
-```
 </code></pre>
 
 <blockquote>
@@ -1649,7 +1649,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
 </code></pre></li>
 </ol>
 
-<h1 id=08222bc1a19e6a5942bb464f62b3f788>4. 小结</h1>
+<h1 id=fa4274b4bc7c814d8889122b603cc376>4. 阶段小结</h1>
 
 <p>　　至此，我们完成了：<br />
     1. 客户端从正式发送 clinetHelloMsg 到正式接收 serverHelloMsg（第一次正式发送，第一次正式接收）<br />
@@ -2003,7 +2003,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
         
 
         <li>
-          <a href="#08222bc1a19e6a5942bb464f62b3f788">4. 小结</a>
+          <a href="#fa4274b4bc7c814d8889122b603cc376">4. 阶段小结</a>
 
         
           

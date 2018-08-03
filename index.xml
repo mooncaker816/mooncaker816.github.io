@@ -916,8 +916,7 @@ func (hs *serverHandshakeState) checkForResumption() bool {
 　　　　5.1.1.10 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;pre&gt;&lt;code&gt;```go
-// [Min] 完整的 handshake
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 完整的 handshake
 func (hs *serverHandshakeState) doFullHandshake() error {
     c := hs.c
 
@@ -1021,11 +1020,12 @@ func (hs *serverHandshakeState) doFullHandshake() error {
         return err
     }
 
-    // [Min] 从缓存中将累积的消息推送到客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg
+    // [Min] 从缓存中将累积的消息推送到客户端，依次包括：
+    // [Min] serverHelloMsg，certificateMsg，certificateStatusMsg（可选），
+    // [Min] serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg
     if _, err := c.flush(); err != nil {
         return err
     }
-```
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;blockquote&gt;
@@ -1205,7 +1205,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h1 id=&#34;4-小结&#34;&gt;4. 小结&lt;/h1&gt;
+&lt;h1 id=&#34;4-阶段小结&#34;&gt;4. 阶段小结&lt;/h1&gt;
 
 &lt;p&gt;　　至此，我们完成了：&lt;br /&gt;
     1. 客户端从正式发送 clinetHelloMsg 到正式接收 serverHelloMsg（第一次正式发送，第一次正式接收）&lt;br /&gt;
