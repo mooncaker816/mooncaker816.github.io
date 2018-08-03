@@ -97,7 +97,7 @@
   
   <meta property="article:published_time" content="2018-08-03T07:24:15&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-08-03T15:22:31&#43;08:00">
+  <meta property="article:modified_time" content="2018-08-03T15:24:56&#43;08:00">
   
 
   
@@ -644,7 +644,7 @@
 
 <h2 id="3-1-clienthello-serverhello-阶段">3.1 ClientHello & ServerHello 阶段</h2>
 
-<h3 id=b6736007e04261334928111853b5ddca>3.1.1 客户端从正式发送 ClientHelloMsg 到接受 ServerHelloMsg</h3>
+<h3 id=ef6c5593bfb7ba9a44dfb2bb54e6ec27>3.1.1 客户端从正式发送 ClientHelloMsg 到接收 ServerHelloMsg</h3>
 
 <ol>
 <li><p>客户端设置超时，并通过 Dial 的方式获得可用的 TCPConn，同时初始化<code>tls.Config</code>，主要是<code>config.ServerName</code></p>
@@ -949,7 +949,7 @@ c.buffering = true
 </code></pre></li>
 </ol>
 
-<h3 id=f562830d459ec40760df2e1f8258f877>3.1.2  服务端从接受 ClientHelloMsg 到正式发送 ServerHelloMsg</h3>
+<h3 id=52d24491831ba50656f44e5d412a1700>3.1.2  服务端从接收 ClientHelloMsg 到正式发送 ServerHelloMsg</h3>
 
 <ol>
 <li><p>与客户端类似，服务端也是在获得一个可用 TCPConn 之后，对其进行封装，得到tls.Conn，此时 config 已经初始化且包含了服务端的证书</p>
@@ -1490,7 +1490,7 @@ func (hs *serverHandshakeState) doFullHandshake() error {
 　　　　5.2.3.2 构造 newSessionTicketMsg，完成该消息并写入 c.sendBuf 中等待正式发送<br />
 　　5.2.4 调用hs.sendFinished 发送finishedMsg<br />
 　　　　5.2.4.1 发送切换信号，通知客户端此信号之后的消息都为加密消息，服务端将 c.out 切换为加密模式。注意，此信号不写入 finishedHash。<br />
-　　　　5.2.4.2 构造 finishedMsg，finishedMsg.verifyData 是通过密码套件决定的伪随机数算法计算的伪随机数（func(result, secret, label, seed []byte)），其中secret为主密钥，label是固定的字符串，seed是到目前为止，双方所有的发送以及接受到的消息按先后顺序累积计算的 hash 值。然后完成该消息并写入 c.sendBuf 中等待正式发送，最后将 verifyData 写入c.serverFinished。<br />
+　　　　5.2.4.2 构造 finishedMsg，finishedMsg.verifyData 是通过密码套件决定的伪随机数算法计算的伪随机数（func(result, secret, label, seed []byte)），其中secret为主密钥，label是固定的字符串，seed是到目前为止，双方所有的发送以及接收到的消息按先后顺序累积计算的 hash 值。然后完成该消息并写入 c.sendBuf 中等待正式发送，最后将 verifyData 写入c.serverFinished。<br />
 　　　　5.2.4.3 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，newSessionTicketMsg（可选），切换信号，finishedMsg。</p>
 </blockquote>
 
@@ -1945,7 +1945,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
         
 
         <li>
-          <a href="#b6736007e04261334928111853b5ddca">3.1.1 客户端从正式发送 ClientHelloMsg 到接受 ServerHelloMsg</a>
+          <a href="#ef6c5593bfb7ba9a44dfb2bb54e6ec27">3.1.1 客户端从正式发送 ClientHelloMsg 到接收 ServerHelloMsg</a>
 
         
 
@@ -1972,7 +1972,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
         
 
         <li>
-          <a href="#f562830d459ec40760df2e1f8258f877">3.1.2 服务端从接受 ClientHelloMsg 到正式发送 ServerHelloMsg</a>
+          <a href="#52d24491831ba50656f44e5d412a1700">3.1.2 服务端从接收 ClientHelloMsg 到正式发送 ServerHelloMsg</a>
 
         
 
