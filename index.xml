@@ -11,6 +11,1496 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>TLS（二）</title>
+      <link>https://mooncaker816.github.io/2018/08/03/tls%E4%BA%8C/</link>
+      <pubDate>Fri, 03 Aug 2018 19:30:38 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/08/03/tls%E4%BA%8C/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;　　书接上回，客户端在完成 clientHelloMsg 和 serverHelloMsg 后，开启缓存写入模式，也分为重用 session 和非重用 session 两种情况。服务端在发送完第一批次消息后，等待客户端的回应。&lt;/p&gt;
+
+&lt;h1 id=&#34;1-客户端&#34;&gt;1. 客户端&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-1-重用-session&#34;&gt;1.1 重用 session&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-2-调用-establishkeys-由主密钥衍生出各种实际秘钥-等待切换&#34;&gt;1.1.2 调用 establishKeys()，由主密钥衍生出各种实际秘钥，等待切换&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;通过主密钥生成一系列计算 hmac，加解密需要使用到的 key，和初始化向量，客户端服务端各不相同&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;根据密码套件，将这些 key，iv 组合成客户端，服务端各自用于加密和计算 hmac 的 cipher，hmac&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;更新到对应的 halfConn 中的预备字段中，等待正式切换&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 根据主密钥建立加密通讯需要的 cipher，hash，更新到客户端和服务端各自对应的 halfConn 的预备字段中，等待切换
+func (hs *clientHandshakeState) establishKeys() error {
+	c := hs.c
+
+	// [Min] 通过主密钥生成一系列计算 mac，加解密需要使用到的 key，和初始化向量
+	clientMAC, serverMAC, clientKey, serverKey, clientIV, serverIV :=
+		keysFromMasterSecret(c.vers, hs.suite, hs.masterSecret, hs.hello.random, hs.serverHello.random, hs.suite.macLen, hs.suite.keyLen, hs.suite.ivLen)
+	var clientCipher, serverCipher interface{}
+	var clientHash, serverHash macFunction
+	if hs.suite.cipher != nil {
+		clientCipher = hs.suite.cipher(clientKey, clientIV, false /* not for reading */)
+		clientHash = hs.suite.mac(c.vers, clientMAC)
+		serverCipher = hs.suite.cipher(serverKey, serverIV, true /* for reading */)
+		serverHash = hs.suite.mac(c.vers, serverMAC)
+	} else {
+		clientCipher = hs.suite.aead(clientKey, clientIV)
+		serverCipher = hs.suite.aead(serverKey, serverIV)
+	}
+
+	// [Min] 将 server 的 cipher，hash 算法更新到 in 的预备字段中，等待正式切换
+	// [Min] 将 client 的 cipher，hash 算法更新到 out 的预备字段中，等待正式切换
+	c.in.prepareCipherSpec(c.vers, serverCipher, serverHash)
+	c.out.prepareCipherSpec(c.vers, clientCipher, clientHash)
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-1-3-调用-readsessionticket-读取-ticket-并保存其中-session-的状态&#34;&gt;1.1.3 调用 readSessionTicket()，读取 ticket 并保存其中 session 的状态&lt;/h3&gt;
+
+&lt;p&gt;　　注意，在重用 session 模式下，hs.serverHello.ticketSupported 只有在 ticket 需要重新加密的情况下才会设置为真，也就是说，如果该值为真，就说明服务端会发送 newSessionTicketMsg。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 重用 session 的 handshake，返回 helloMsg，告知 session 重用，验证客户端证书并恢复主密钥
+func (hs *serverHandshakeState) doResumeHandshake() error {
+	c := hs.c
+
+	hs.hello.cipherSuite = hs.suite.id
+	// We echo the client&#39;s session ID in the ServerHello to let it know
+	// that we&#39;re doing a resumption.
+	// [Min] 重用 session 的情况下，sessionId 和客户端发过来的保持一致，
+	// [Min] 这样客户端就可以通过 sessionId 没有变化来判断 session 的重用
+	hs.hello.sessionId = hs.clientHello.sessionId
+	// [Min] 表明客户端提供的 ticket 是否可以恢复成 sessionState 使用
+	// [Min] 同时也记录 sessionTicket 是否需要以最新的 key 重制生成 ticket 来刷新（实际内容不变）
+	hs.hello.ticketSupported = hs.sessionState.usedOldKey
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　读取并完成newSessionTicketMsg，保存 ticket 以及 session 状态&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 读取 newSessionTicketMsg，保存 ticket 中 session 的状态
+func (hs *clientHandshakeState) readSessionTicket() error {
+	// [Min] 注意此处 ticketSupported 是指服务端有没有发送 ticket 过来
+	// [Min] 如果是 fullhandshake，那么只要双方都支持，服务端就会发送
+	// [Min] 如果是重用 session，那么只有在 ticket 需要重制的情况下（加密 ticket 的 key 不是最新的），才会发送
+	if !hs.serverHello.ticketSupported {
+		return nil
+	}
+
+	c := hs.c
+	// [Min] 读取 newSessionTicketMsg
+	msg, err := c.readHandshake()
+	if err != nil {
+		return err
+	}
+	sessionTicketMsg, ok := msg.(*newSessionTicketMsg)
+	if !ok {
+		c.sendAlert(alertUnexpectedMessage)
+		return unexpectedMessageError(sessionTicketMsg, msg)
+	}
+	hs.finishedHash.Write(sessionTicketMsg.marshal())
+
+	// [Min] 保存 ticket 中 session 对应的状态
+	hs.session = &amp;amp;ClientSessionState{
+        sessionTicket:      sessionTicketMsg.ticket,
+		vers:               c.vers,
+        cipherSuite:        hs.suite.id, 
+		masterSecret:       hs.masterSecret,
+		serverCertificates: c.peerCertificates,
+		verifiedChains:     c.verifiedChains,
+	}
+
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-1-4-调用-hs-readfinished&#34;&gt;1.1.4 调用 hs.readFinished&lt;/h3&gt;
+
+&lt;p&gt;　　注意，如果是重用 session，是由服务端先发起 finshedMsg 的，设置clientFinishedIsFirst为假。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先读取切换信号，将客户端 c.in 切换为加密模式&lt;/li&gt;
+&lt;li&gt;再读取服务端 finishedMsg&lt;/li&gt;
+&lt;li&gt;通过相同的主密钥，相同的算法，以及截止目前双方理应相同的所有握手信息的 hash 值，计算本地的服务端 verify，再与服务端发送过来的 verifyData 比较，应该保持一致，否则报警&lt;/li&gt;
+&lt;li&gt;finishedHash 中完成此 finishedMsg&lt;/li&gt;
+&lt;li&gt;将服务端 verifyData 保存到 c.serverFinished&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 切换输入通道为加密模式，读取服务端 finishedMsg，并验证 verfiyData
+func (hs *clientHandshakeState) readFinished(out []byte) error {
+	c := hs.c
+
+	// [Min] 首先读取切换信号，将 c.in 切换为加密模式
+	c.readRecord(recordTypeChangeCipherSpec)
+	if c.in.err != nil {
+		return c.in.err
+	}
+
+	// [Min] 再读取 finishedMsg
+	msg, err := c.readHandshake()
+	if err != nil {
+		return err
+	}
+	serverFinished, ok := msg.(*finishedMsg)
+	if !ok {
+		c.sendAlert(alertUnexpectedMessage)
+		return unexpectedMessageError(serverFinished, msg)
+	}
+
+	// [Min] 通过相同的主密钥，相同的算法，截止目前双方理应相同的所有握手信息的 hash 值，
+	// [Min] 计算本地的 verify，再与服务端发送过来的 verifyData 比较，
+	// [Min] 如果不相同，报警
+	verify := hs.finishedHash.serverSum(hs.masterSecret)
+	if len(verify) != len(serverFinished.verifyData) ||
+		subtle.ConstantTimeCompare(verify, serverFinished.verifyData) != 1 {
+		c.sendAlert(alertHandshakeFailure)
+		return errors.New(&amp;quot;tls: server&#39;s Finished message was incorrect&amp;quot;)
+	}
+	// [Min] 完成该 finishedMsg，并存储 verifyData 到 out 中
+	hs.finishedHash.Write(serverFinished.marshal())
+	copy(out, verify)
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-1-5-调用客户端-sendfinished&#34;&gt;1.1.5 调用客户端 sendFinished&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;通知服务端切换其输入通道为加密模式&lt;/li&gt;
+&lt;li&gt;如果是 NPN 模式，协商协议，构造并完成nextProtoMsg，然后发送至 sendBuf，等待正式推送&lt;/li&gt;
+&lt;li&gt;构造客户端 finishedMsg，完成并发送至 sendBuf，等待正式推送&lt;/li&gt;
+&lt;li&gt;保存客户端 verifyData&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 客户端通知服务端切换加密模式，完成 NPN 协议协商，发送 finishedMsg
+func (hs *clientHandshakeState) sendFinished(out []byte) error {
+	c := hs.c
+
+	// [Min] 通知服务端切换其输入通道为加密模式
+	if _, err := c.writeRecord(recordTypeChangeCipherSpec, []byte{1}); err != nil {
+		return err
+	}
+	// [Min] 如果是 NPN 模式，协商协议，构造并完成nextProtoMsg，然后发送至 sendBuf，等待正式推送
+	if hs.serverHello.nextProtoNeg {
+		nextProto := new(nextProtoMsg)
+		proto, fallback := mutualProtocol(c.config.NextProtos, hs.serverHello.nextProtos)
+		nextProto.proto = proto
+		c.clientProtocol = proto
+		c.clientProtocolFallback = fallback
+
+		hs.finishedHash.Write(nextProto.marshal())
+		if _, err := c.writeRecord(recordTypeHandshake, nextProto.marshal()); err != nil {
+			return err
+		}
+	}
+
+	// [Min] 构造客户端 finishedMsg，完成并发送至 sendBuf，等待正式推送
+	finished := new(finishedMsg)
+	finished.verifyData = hs.finishedHash.clientSum(hs.masterSecret)
+	hs.finishedHash.Write(finished.marshal())
+	if _, err := c.writeRecord(recordTypeHandshake, finished.marshal()); err != nil {
+		return err
+	}
+	// [Min] 保存客户端 verifyData 到 c.clientFinished
+	copy(out, finished.verifyData)
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-1-6-推送累积的消息到服务端&#34;&gt;1.1.6 推送累积的消息到服务端&lt;/h3&gt;
+
+&lt;p&gt;　　nextProtoMsg（可选），切换信号，finishedMsg&lt;/p&gt;
+
+&lt;h2 id=&#34;1-2-非重用-session&#34;&gt;1.2 非重用 session&lt;/h2&gt;
+
+&lt;p&gt;　　完成 serverHelloMsg 的处理后，在 fullhandshake 模式下，需要对服务端依次发送的 certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg（非 RSA 秘钥交换），certificateRequestMsg（可选），serverHelloDoneMsg 进行处理。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-1-dofullhandshake&#34;&gt;1.2.1 doFullHandshake&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;读取服务端证书信息certificateMsg，并完成&lt;/li&gt;
+&lt;li&gt;如果是首次握手，则解析证书，验证证书，保存有效证书到c.peerCertificates；如果不是首次握手，检查消息中的证书与之前存储在c.peerCertificates的证书是否相同&lt;/li&gt;
+&lt;li&gt;按需读取certificateStatusMsg（可选），并完成，存储证书状态到c.ocspResponse&lt;/li&gt;
+&lt;li&gt;读取serverKeyExchangeMsg（非 RSA 秘钥交换），完成消息，调用 processServerKeyExchange，从中获取服务端秘钥交换的公钥点，椭圆曲线，以及服务端用其证书私钥对椭圆曲线公钥信息的签名。客户端用服务端证书公钥对此签名进行认证。&lt;/li&gt;
+&lt;li&gt;读取 certificateRequestMsg（可选），按需获取客户端证书，完成该消息。&lt;/li&gt;
+&lt;li&gt;读取并完成 serverHelloDoneMsg&lt;/li&gt;
+&lt;li&gt;如果需要发送客户端证书信息，构造并完成 certificateMsg ，写入 sendBuf，等待推送&lt;/li&gt;
+&lt;li&gt;调用 generateClientKeyExchange，&lt;br /&gt;
+　　如果是 RSA 秘钥交换，生成46字节随机数，加上头两个字节的TLS版本值，就是预备主密钥，用服务端证书公钥对此预备主密钥加密，构造clientKeyExchangeMsg。&lt;br /&gt;
+　　如果是 ECDHE 秘钥交换，随机生成客户端秘钥交换私钥，和客户端秘钥交换公钥，构造clientKeyExchangeMsg，生成客户端秘钥交换公钥信息。再根据之前获得的服务端秘钥交换公钥，生成客户端预备主密钥。&lt;br /&gt;
+　　完成clientKeyExchangeMsg，写入 sendBuf，等待推送&lt;/li&gt;
+&lt;li&gt;如果之前发送了客户端的证书，也要发送签名消息 certificateVerifyMsg，签名的对象是 finishedHash 中所有的握手消息（finishedHash.buffer）的 hash 值。完成该消息，写入 sendBuf，等待推送。从这里也就说明了为什么 buffer 只有在需要客户端证书的情况下才不为 nil。&lt;/li&gt;
+&lt;li&gt;根据预备主密钥，客户端随机数，服务端随机数，计算主密钥&lt;/li&gt;
+&lt;li&gt;清空 finishedHash 中的 buffer&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;　　目前缓存待推送的消息：certificateMsg（可选），clientKeyExchangeMsg，certificateVerifyMsg（可选）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 客户端 fullhandshake
+func (hs *clientHandshakeState) doFullHandshake() error {
+	c := hs.c
+
+	// [Min] ServerHelloMsg之后，期待收到服务端的证书信息，证书必须存在且不为空
+	msg, err := c.readHandshake()
+	if err != nil {
+		return err
+	}
+	certMsg, ok := msg.(*certificateMsg)
+	if !ok || len(certMsg.certificates) == 0 {
+		c.sendAlert(alertUnexpectedMessage)
+		return unexpectedMessageError(certMsg, msg)
+	}
+	// [Min] fihishedHash 中完成certificateMsg
+	hs.finishedHash.Write(certMsg.marshal())
+
+	if c.handshakes == 0 {
+		// [Min] 如果是初次握手，解析证书
+		// If this is the first handshake on a connection, process and
+		// (optionally) verify the server&#39;s certificates.
+		certs := make([]*x509.Certificate, len(certMsg.certificates))
+		for i, asn1Data := range certMsg.certificates {
+			cert, err := x509.ParseCertificate(asn1Data)
+			if err != nil {
+				c.sendAlert(alertBadCertificate)
+				return errors.New(&amp;quot;tls: failed to parse certificate from server: &amp;quot; + err.Error())
+			}
+			certs[i] = cert
+		}
+
+		// [Min] 如果不是跳过验证，对证书进行验证，并更新 c.verifiedChains，c.peerCertificates
+		if !c.config.InsecureSkipVerify {
+			opts := x509.VerifyOptions{
+				Roots:         c.config.RootCAs,
+				CurrentTime:   c.config.time(),
+				DNSName:       c.config.ServerName,
+				Intermediates: x509.NewCertPool(),
+			}
+
+			for i, cert := range certs {
+				if i == 0 {
+					continue
+				}
+				opts.Intermediates.AddCert(cert)
+			}
+			c.verifiedChains, err = certs[0].Verify(opts)
+			if err != nil {
+				c.sendAlert(alertBadCertificate)
+				return err
+			}
+		}
+
+		// [Min] 自定义的验证
+		if c.config.VerifyPeerCertificate != nil {
+			if err := c.config.VerifyPeerCertificate(certMsg.certificates, c.verifiedChains); err != nil {
+				c.sendAlert(alertBadCertificate)
+				return err
+			}
+		}
+
+		// [Min] 只支持 RSA，ECDSA 的公钥
+		switch certs[0].PublicKey.(type) {
+		case *rsa.PublicKey, *ecdsa.PublicKey:
+			break
+		default:
+			c.sendAlert(alertUnsupportedCertificate)
+			return fmt.Errorf(&amp;quot;tls: server&#39;s certificate contains an unsupported type of public key: %T&amp;quot;, certs[0].PublicKey)
+		}
+
+		// [Min] 保存解析后的证书
+		c.peerCertificates = certs
+	} else {
+		// [Min] 不是首次握手，需确保之前存储的服务端的证书没有改变
+		// This is a renegotiation handshake. We require that the
+		// server&#39;s identity (i.e. leaf certificate) is unchanged and
+		// thus any previous trust decision is still valid.
+		//
+		// See https://mitls.org/pages/attacks/3SHAKE for the
+		// motivation behind this requirement.
+		if !bytes.Equal(c.peerCertificates[0].Raw, certMsg.certificates[0]) {
+			c.sendAlert(alertBadCertificate)
+			return errors.New(&amp;quot;tls: server&#39;s identity changed during renegotiation&amp;quot;)
+		}
+	}
+
+	// [Min] 再次读取 handshake 的 msg，此时有可能是客户端主动要求服务端发送的 certificateStatusMsg
+	msg, err = c.readHandshake()
+	if err != nil {
+		return err
+	}
+
+	cs, ok := msg.(*certificateStatusMsg)
+	if ok {
+		// RFC4366 on Certificate Status Request:
+		// The server MAY return a &amp;quot;certificate_status&amp;quot; message.
+
+		// [Min] 如果服务端ocspStapling标记为假，但收到了certificateStatusMsg，报警
+		if !hs.serverHello.ocspStapling {
+			// If a server returns a &amp;quot;CertificateStatus&amp;quot; message, then the
+			// server MUST have included an extension of type &amp;quot;status_request&amp;quot;
+			// with empty &amp;quot;extension_data&amp;quot; in the extended server hello.
+
+			c.sendAlert(alertUnexpectedMessage)
+			return errors.New(&amp;quot;tls: received unexpected CertificateStatus message&amp;quot;)
+		}
+		// [Min] 累计计算 hash，并置 c.ocspResponse = cs.response
+		hs.finishedHash.Write(cs.marshal())
+
+		if cs.statusType == statusTypeOCSP {
+			c.ocspResponse = cs.response
+		}
+
+		// [Min] 读取下一条 handshake 消息
+		msg, err = c.readHandshake()
+		if err != nil {
+			return err
+		}
+	}
+
+	// [Min] 根据套件获取对应的 keyAgreement
+	keyAgreement := hs.suite.ka(c.vers)
+
+	// [Min] 可能是 serverKeyExchangeMsg，如果采用的是 RSA 交换秘钥的模式，没有 serverKeyExchangeMsg
+	skx, ok := msg.(*serverKeyExchangeMsg)
+	if ok {
+		// [Min] 如果是 serverKeyExchangeMsg，完成该消息并处理
+		hs.finishedHash.Write(skx.marshal())
+		// [Min] 从 serverKeyExchangeMsg 获取服务端公钥，并验证签名
+		err = keyAgreement.processServerKeyExchange(c.config, hs.hello, hs.serverHello, c.peerCertificates[0], skx)
+		if err != nil {
+			c.sendAlert(alertUnexpectedMessage)
+			return err
+		}
+
+		// [Min] 读取下一条消息
+		msg, err = c.readHandshake()
+		if err != nil {
+			return err
+		}
+	}
+
+	var chainToSend *Certificate
+	var certRequested bool
+	certReq, ok := msg.(*certificateRequestMsg)
+	// [Min] 此时可能是服务端要求客户端发送证书的请求消息
+	if ok {
+		certRequested = true
+		// [Min] 完成该消息
+		hs.finishedHash.Write(certReq.marshal())
+
+		// [Min] 根据要求获取客户端的证书
+		if chainToSend, err = hs.getCertificate(certReq); err != nil {
+			c.sendAlert(alertInternalError)
+			return err
+		}
+
+		// [Min] 读取下一条消息
+		msg, err = c.readHandshake()
+		if err != nil {
+			return err
+		}
+	}
+
+	// [Min] 应该是 HelloDone 消息
+	shd, ok := msg.(*serverHelloDoneMsg)
+	if !ok {
+		c.sendAlert(alertUnexpectedMessage)
+		return unexpectedMessageError(shd, msg)
+	}
+	// [Min] 完成消息
+	hs.finishedHash.Write(shd.marshal())
+
+	// If the server requested a certificate then we have to send a
+	// Certificate message, even if it&#39;s empty because we don&#39;t have a
+	// certificate to send.
+	// [Min] 发送客户端证书信息
+	if certRequested {
+		certMsg = new(certificateMsg)
+		certMsg.certificates = chainToSend.Certificate
+		hs.finishedHash.Write(certMsg.marshal())
+		if _, err := c.writeRecord(recordTypeHandshake, certMsg.marshal()); err != nil {
+			return err
+		}
+	}
+
+	// [Min] 构造客户端秘钥交换消息，由于已经收到服务端的公钥信息，所以同时可以生成预备主密钥了
+	preMasterSecret, ckx, err := keyAgreement.generateClientKeyExchange(c.config, hs.hello, c.peerCertificates[0])
+	if err != nil {
+		c.sendAlert(alertInternalError)
+		return err
+	}
+	// [Min] 完成消息，并将 clientKeyExchangeMsg 写入 sendBuf，等待推送
+	if ckx != nil {
+		hs.finishedHash.Write(ckx.marshal())
+		if _, err := c.writeRecord(recordTypeHandshake, ckx.marshal()); err != nil {
+			return err
+		}
+	}
+
+	// [Min] 如果发送了证书给服务端，那么也要发送签名让服务端验证
+	if chainToSend != nil &amp;amp;&amp;amp; len(chainToSend.Certificate) &amp;gt; 0 {
+		certVerify := &amp;amp;certificateVerifyMsg{
+			hasSignatureAndHash: c.vers &amp;gt;= VersionTLS12,
+		}
+
+		// [Min] 证书支持签名
+		key, ok := chainToSend.PrivateKey.(crypto.Signer)
+		if !ok {
+			c.sendAlert(alertInternalError)
+			return fmt.Errorf(&amp;quot;tls: client certificate private key of type %T does not implement crypto.Signer&amp;quot;, chainToSend.PrivateKey)
+		}
+
+		// [Min] 证书的签名类型，RSA 或 ECDSA
+		var signatureType uint8
+		switch key.Public().(type) {
+		case *ecdsa.PublicKey:
+			signatureType = signatureECDSA
+		case *rsa.PublicKey:
+			signatureType = signatureRSA
+		default:
+			c.sendAlert(alertInternalError)
+			return fmt.Errorf(&amp;quot;tls: failed to sign handshake with client certificate: unknown client certificate key type: %T&amp;quot;, key)
+		}
+
+		// SignatureAndHashAlgorithm was introduced in TLS 1.2.
+		if certVerify.hasSignatureAndHash {
+			// [Min] 以证书的签名类型为基准，获取一种符合服务端要求的签名算法
+			certVerify.signatureAlgorithm, err = hs.finishedHash.selectClientCertSignatureAlgorithm(certReq.supportedSignatureAlgorithms, signatureType)
+			if err != nil {
+				c.sendAlert(alertInternalError)
+				return err
+			}
+		}
+		// [Min] 计算finishedHash.buffer 的 hash值，作为待签名对象
+		digest, hashFunc, err := hs.finishedHash.hashForClientCertificate(signatureType, certVerify.signatureAlgorithm, hs.masterSecret)
+		if err != nil {
+			c.sendAlert(alertInternalError)
+			return err
+		}
+		// [Min] 对上述 hash 值以私钥采用同样的 hash 函数进行签名
+		certVerify.signature, err = key.Sign(c.config.rand(), digest, hashFunc)
+		if err != nil {
+			c.sendAlert(alertInternalError)
+			return err
+		}
+
+		// [Min] 累计计算 hash，将 certificateVerifyMsg 写入 conn 缓存
+		hs.finishedHash.Write(certVerify.marshal())
+		if _, err := c.writeRecord(recordTypeHandshake, certVerify.marshal()); err != nil {
+			return err
+		}
+	}
+
+	// [Min] 根据预备主密钥，客户端随机数，服务端随机数，计算主密钥
+	hs.masterSecret = masterFromPreMasterSecret(c.vers, hs.suite, preMasterSecret, hs.hello.random, hs.serverHello.random)
+	// [Min] 一般测试用
+	if err := c.config.writeKeyLog(hs.hello.random, hs.masterSecret); err != nil {
+		c.sendAlert(alertInternalError)
+		return errors.New(&amp;quot;tls: failed to write to key log: &amp;quot; + err.Error())
+	}
+
+	// [Min] 清空 finishedHash 中的 buffer
+	hs.finishedHash.discardHandshakeBuffer()
+
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-2-调用-establishkeys-通过主密钥建立各种秘钥-等待切换&#34;&gt;1.2.2 调用 establishKeys()，通过主密钥建立各种秘钥，等待切换&lt;/h3&gt;
+
+&lt;p&gt;　　和重用 session 类似&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-3-客户端发送-nextprotomsg-可选-finishedmsg&#34;&gt;1.2.3 客户端发送 nextProtoMsg（可选），finishedMsg&lt;/h3&gt;
+
+&lt;p&gt;　　非重用 session，客户端先于服务端发送 finishedMsg，发送内容与重用 session 一致&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-4-推送消息&#34;&gt;1.2.4 推送消息&lt;/h3&gt;
+
+&lt;p&gt;　　certificateMsg（可选），clientKeyExchangeMsg，certificateVerifyMsg（可选），nextProtoMsg（可选），finishedMsg&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-5-readsessionticket&#34;&gt;1.2.5 readSessionTicket()&lt;/h3&gt;
+
+&lt;p&gt;　　读取并完成newSessionTicketMsg，保持 ticket 以及 session 状态，与重用 session 类似&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-6-readfinished&#34;&gt;1.2.6 readFinished&lt;/h3&gt;
+
+&lt;p&gt;　　与重用 session 类似，只不过服务端，客户端的 finishedMsg 先后顺序不同&lt;/p&gt;
+
+&lt;h2 id=&#34;1-3-客户端-handshake-完成&#34;&gt;1.3 客户端 handshake 完成&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;标注是否为重用 session，c.didResume = isResume&lt;/li&gt;
+&lt;li&gt;设置   c.handshakeComplete = true&lt;/li&gt;
+&lt;li&gt;将 session 缓存到 LRU 缓存结构中（sessionCache）&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// [Min] 完成客户端 handshake
+	c.didResume = isResume
+	c.handshakeComplete = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// [Min] 调用 clientHandshakeState.handshake，真正开始 handshake
+	if err = hs.handshake(); err != nil {
+		return err
+	}
+
+	// If we had a successful handshake and hs.session is different from
+	// the one already cached - cache a new one
+	// [Min] 如果 handshake 成功后，返回的 hs.session 与之前的不同，将新的 hs.session 存入缓存中，cacheKey 不变
+	if sessionCache != nil &amp;amp;&amp;amp; hs.session != nil &amp;amp;&amp;amp; session != hs.session {
+		sessionCache.Put(cacheKey, hs.session)
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;2-服务端&#34;&gt;2. 服务端&lt;/h1&gt;
+
+&lt;h2 id=&#34;2-1-重用-session&#34;&gt;2.1 重用 session&lt;/h2&gt;
+
+&lt;p&gt;　　如果是重用 session，服务端已经在第一批次的最后一条消息发送了 finishedMsg，现在只需要等待客户发送的切换信号和客户端的 finishedMsg，调用 hs.readFinished 即可。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;读取切换信号，切换 in 为加密模式&lt;/li&gt;
+&lt;li&gt;如果是 NPN 模式，此时客户端应该已经发送了nextProtoMsg，读取并完成该消息，更新协议&lt;/li&gt;
+&lt;li&gt;读取 finishedMsg，并验证客户端发来的 verifyData，完成 finishedMsg 并保存 verifyData&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 读取客户端 finishedMsg
+func (hs *serverHandshakeState) readFinished(out []byte) error {
+	c := hs.c
+
+	// [Min] 首先客户端也应该先返回一个 recordTypeChangeCipherSpec 的消息
+	// [Min] 此时会将 c.in 的 cipher，mac 切换为之前协商后的结果
+	c.readRecord(recordTypeChangeCipherSpec)
+	if c.in.err != nil {
+		return c.in.err
+	}
+
+	// [Min] 如果是 NPN 模式，此时应该收到客户端的对此的回复
+	if hs.hello.nextProtoNeg {
+		msg, err := c.readHandshake()
+		if err != nil {
+			return err
+		}
+		nextProto, ok := msg.(*nextProtoMsg)
+		if !ok {
+			c.sendAlert(alertUnexpectedMessage)
+			return unexpectedMessageError(nextProto, msg)
+		}
+		hs.finishedHash.Write(nextProto.marshal())
+		c.clientProtocol = nextProto.proto
+	}
+
+	// [Min] 接下来应该收到客户端的 finishedMsg
+	msg, err := c.readHandshake()
+	if err != nil {
+		return err
+	}
+	clientFinished, ok := msg.(*finishedMsg)
+	if !ok {
+		c.sendAlert(alertUnexpectedMessage)
+		return unexpectedMessageError(clientFinished, msg)
+	}
+
+	// [Min] 计算 clientSum，并验证 clientFinished.verifyData 是否一致
+	verify := hs.finishedHash.clientSum(hs.masterSecret)
+	if len(verify) != len(clientFinished.verifyData) ||
+		subtle.ConstantTimeCompare(verify, clientFinished.verifyData) != 1 {
+		c.sendAlert(alertHandshakeFailure)
+		return errors.New(&amp;quot;tls: client&#39;s Finished message is incorrect&amp;quot;)
+	}
+
+	// [Min] 再次计算客户端发送的 finishedMsg 的 hash 并将 verify 拷贝至 out
+	hs.finishedHash.Write(clientFinished.marshal())
+	copy(out, verify)
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-2-非重用-session&#34;&gt;2.2 非重用 session&lt;/h2&gt;
+
+&lt;p&gt;　　非重用 session，服务端此时已经完成了 serverHelloDoneMsg。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-1-如果之前向客户端提出了证书的请求-此时应该收到-certificatemsg&#34;&gt;2.2.1 如果之前向客户端提出了证书的请求，此时应该收到 certificateMsg&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;完成certificateMsg&lt;/li&gt;
+&lt;li&gt;提取客户端证书公钥&lt;/li&gt;
+&lt;li&gt;读取下一条消息&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// [Min] 读取 handshake 返回消息
+	msg, err := c.readHandshake()
+	if err != nil {
+		return err
+	}
+
+	var ok bool
+	// If we requested a client certificate, then the client must send a
+	// certificate message, even if it&#39;s empty.
+	if c.config.ClientAuth &amp;gt;= RequestClientCert {
+		// [Min] 如果之前要求了客户端提供证书，此时应该先收到证书消息
+		if certMsg, ok = msg.(*certificateMsg); !ok {
+			c.sendAlert(alertUnexpectedMessage)
+			return unexpectedMessageError(certMsg, msg)
+		}
+		// [Min] 累计计算 hash
+		hs.finishedHash.Write(certMsg.marshal())
+
+		// [Min] 如果证书消息中并没有实际包含证书，但服务端又要求有证书，报警
+		if len(certMsg.certificates) == 0 {
+			// The client didn&#39;t actually send a certificate
+			switch c.config.ClientAuth {
+			case RequireAnyClientCert, RequireAndVerifyClientCert:
+				c.sendAlert(alertBadCertificate)
+				return errors.New(&amp;quot;tls: client didn&#39;t provide a certificate&amp;quot;)
+			}
+		}
+
+		// [Min] 处理客户端的证书，返回公钥
+		pub, err = hs.processCertsFromClient(certMsg.certificates)
+		if err != nil {
+			return err
+		}
+
+		// [Min] 读取下一条消息
+		msg, err = c.readHandshake()
+		if err != nil {
+			return err
+		}
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-2-客户端秘钥交换消息-clientkeyexchangemsg&#34;&gt;2.2.2 客户端秘钥交换消息 clientKeyExchangeMsg&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;完成 clientKeyExchangeMsg&lt;/li&gt;
+&lt;li&gt;调用processClientKeyExchange，根据客户端发来的交换秘钥的公钥计算预备主密钥&lt;br /&gt;
+　　如果是 RSA 秘钥交换算法，直接用服务端证书的私钥解密，即可得到明文预备主密钥&lt;br /&gt;
+　　如果是 ECDHE 秘钥交换算法，用之前生成的秘钥交换算法私钥和客户端传来的公钥点相乘，即可得到共享秘钥点，该点的 x 坐标值即为预备主密钥&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;再由预备主密钥，客户端随机数，服务端随机数计算主密钥&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// Get client key exchange
+	// [Min] 接下来应该收到客户端交换 key 的消息
+	ckx, ok := msg.(*clientKeyExchangeMsg)
+	if !ok {
+		c.sendAlert(alertUnexpectedMessage)
+		return unexpectedMessageError(ckx, msg)
+	}
+	// [Min] 完成消息
+	hs.finishedHash.Write(ckx.marshal())
+
+	// [Min] 此时有了客户端交换秘钥的公钥，就可以生成预备主密钥了
+	preMasterSecret, err := keyAgreement.processClientKeyExchange(c.config, hs.cert, ckx, c.vers)
+	if err != nil {
+		c.sendAlert(alertHandshakeFailure)
+		return err
+	}
+	// [Min] 计算主密钥
+	hs.masterSecret = masterFromPreMasterSecret(c.vers, hs.suite, preMasterSecret, hs.clientHello.random, hs.hello.random)
+	if err := c.config.writeKeyLog(hs.clientHello.random, hs.masterSecret); err != nil {
+		c.sendAlert(alertInternalError)
+		return err
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-3-如果之前客户端发来了证书-验证签名-certificateverifymsg&#34;&gt;2.2.3 如果之前客户端发来了证书，验证签名 certificateVerifyMsg&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;获取 certificateVerifyMsg&lt;/li&gt;
+&lt;li&gt;明确 certificateVerifyMsg 中的签名算法&lt;/li&gt;
+&lt;li&gt;检查客户端证书公钥与签名算法是否匹配&lt;/li&gt;
+&lt;li&gt;用客户端证书公钥验证签名&lt;/li&gt;
+&lt;li&gt;完成 certificateVerifyMsg&lt;/li&gt;
+&lt;li&gt;清空 finishedHash 中的 buffer&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;	// If we received a client cert in response to our certificate request message,
+	// the client will send us a certificateVerifyMsg immediately after the
+	// clientKeyExchangeMsg. This message is a digest of all preceding
+	// handshake-layer messages that is signed using the private key corresponding
+	// to the client&#39;s certificate. This allows us to verify that the client is in
+	// possession of the private key of the certificate.
+	// [Min] 验证客户端的签名
+	if len(c.peerCertificates) &amp;gt; 0 {
+		// [Min] 读取一条消息，理应是 certificateVerifyMsg
+		msg, err = c.readHandshake()
+		if err != nil {
+			return err
+		}
+		certVerify, ok := msg.(*certificateVerifyMsg)
+		if !ok {
+			c.sendAlert(alertUnexpectedMessage)
+			return unexpectedMessageError(certVerify, msg)
+		}
+
+		// Determine the signature type.
+		// [Min] 获取签名算法
+		var signatureAlgorithm SignatureScheme
+		var sigType uint8
+		if certVerify.hasSignatureAndHash {
+			signatureAlgorithm = certVerify.signatureAlgorithm
+			if !isSupportedSignatureAlgorithm(signatureAlgorithm, supportedSignatureAlgorithms) {
+				return errors.New(&amp;quot;tls: unsupported hash function for client certificate&amp;quot;)
+			}
+			sigType = signatureFromSignatureScheme(signatureAlgorithm)
+		} else {
+			// Before TLS 1.2 the signature algorithm was implicit
+			// from the key type, and only one hash per signature
+			// algorithm was possible. Leave signatureAlgorithm
+			// unset.
+			switch pub.(type) {
+			case *ecdsa.PublicKey:
+				sigType = signatureECDSA
+			case *rsa.PublicKey:
+				sigType = signatureRSA
+			}
+		}
+
+		// [Min] 验证签名
+		switch key := pub.(type) {
+		case *ecdsa.PublicKey:
+			if sigType != signatureECDSA {
+				err = errors.New(&amp;quot;tls: bad signature type for client&#39;s ECDSA certificate&amp;quot;)
+				break
+			}
+			ecdsaSig := new(ecdsaSignature)
+			if _, err = asn1.Unmarshal(certVerify.signature, ecdsaSig); err != nil {
+				break
+			}
+			if ecdsaSig.R.Sign() &amp;lt;= 0 || ecdsaSig.S.Sign() &amp;lt;= 0 {
+				err = errors.New(&amp;quot;tls: ECDSA signature contained zero or negative values&amp;quot;)
+				break
+			}
+			var digest []byte
+			if digest, _, err = hs.finishedHash.hashForClientCertificate(sigType, signatureAlgorithm, hs.masterSecret); err != nil {
+				break
+			}
+			if !ecdsa.Verify(key, digest, ecdsaSig.R, ecdsaSig.S) {
+				err = errors.New(&amp;quot;tls: ECDSA verification failure&amp;quot;)
+			}
+		case *rsa.PublicKey:
+			if sigType != signatureRSA {
+				err = errors.New(&amp;quot;tls: bad signature type for client&#39;s RSA certificate&amp;quot;)
+				break
+			}
+			var digest []byte
+			var hashFunc crypto.Hash
+			if digest, hashFunc, err = hs.finishedHash.hashForClientCertificate(sigType, signatureAlgorithm, hs.masterSecret); err != nil {
+				break
+			}
+			err = rsa.VerifyPKCS1v15(key, hashFunc, digest, certVerify.signature)
+		}
+		if err != nil {
+			c.sendAlert(alertBadCertificate)
+			return errors.New(&amp;quot;tls: could not validate signature of connection nonces: &amp;quot; + err.Error())
+		}
+
+		hs.finishedHash.Write(certVerify.marshal())
+	}
+
+	// [Min] 客户端证书验证完毕，清空 finishedHash 的 buffer
+	hs.finishedHash.discardHandshakeBuffer()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-4-调用-hs-establishkeys-根据主密钥生成各种加密秘钥-等待切换&#34;&gt;2.2.4 调用 hs.establishKeys()，根据主密钥生成各种加密秘钥，等待切换&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 根据主密钥建立加密通讯需要的 cipher，hash，更新到客户端和服务端各自对应的 halfConn 的预备字段中，等待切换
+func (hs *serverHandshakeState) establishKeys() error {
+	c := hs.c
+
+	// [Min] 通过主密钥生成一系列计算 mac，加解密需要使用到的 key，和初始化向量
+	clientMAC, serverMAC, clientKey, serverKey, clientIV, serverIV :=
+		keysFromMasterSecret(c.vers, hs.suite, hs.masterSecret, hs.clientHello.random, hs.hello.random, hs.suite.macLen, hs.suite.keyLen, hs.suite.ivLen)
+
+	var clientCipher, serverCipher interface{}
+	var clientHash, serverHash macFunction
+
+	if hs.suite.aead == nil {
+		clientCipher = hs.suite.cipher(clientKey, clientIV, true /* for reading */)
+		clientHash = hs.suite.mac(c.vers, clientMAC)
+		serverCipher = hs.suite.cipher(serverKey, serverIV, false /* not for reading */)
+		serverHash = hs.suite.mac(c.vers, serverMAC)
+	} else {
+		clientCipher = hs.suite.aead(clientKey, clientIV)
+		serverCipher = hs.suite.aead(serverKey, serverIV)
+	}
+
+	// [Min] 将 client 的 cipher，hash 算法更新到 in 的预备字段中，等待正式切换
+	// [Min] 将 server 的 cipher，hash 算法更新到 out 的预备字段中，等待正式切换
+	c.in.prepareCipherSpec(c.vers, clientCipher, clientHash)
+	c.out.prepareCipherSpec(c.vers, serverCipher, serverHash)
+
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-5-调用-hs-readfinished&#34;&gt;2.2.5 调用 hs.readFinished&lt;/h3&gt;
+
+&lt;p&gt;　　和重用 session 类似，客户端，服务端先后顺序不同而已&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-6-调用-sendsessionticket&#34;&gt;2.2.6 调用 sendSessionTicket&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;根据 session 状态加密 ticket&lt;/li&gt;
+&lt;li&gt;由 ticket 构造 newSessionTicketMsg，完成并写入 sendBuf，等待推送&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 将 sessionState 转为 sessionTicket
+func (c *Conn) encryptTicket(state *sessionState) ([]byte, error) {
+	// [Min] 首先序列化 sessionState
+	serialized := state.marshal()
+	// [Min] ticket 结构：ticketKeyName + iv + 加密后的序列化流 + mac
+	encrypted := make([]byte, ticketKeyNameLen+aes.BlockSize+len(serialized)+sha256.Size)
+	keyName := encrypted[:ticketKeyNameLen]
+	iv := encrypted[ticketKeyNameLen : ticketKeyNameLen+aes.BlockSize]
+	macBytes := encrypted[len(encrypted)-sha256.Size:]
+
+	// [Min] iv 为16字节的随机数
+	if _, err := io.ReadFull(c.config.rand(), iv); err != nil {
+		return nil, err
+	}
+	// [Min] 从 config 中获取 sessionTicketKeys ，用来将 sessionState 加密为 ticket
+	// [Min] 注意，加密的时候总是使用第一个 sessionTicketKey，后续的都认为是老的 key
+	key := c.config.ticketKeys()[0]
+	// [Min] 从 key 中获取 keyName，并以 key.aseKey 为秘钥，iv 为初始向量，CTR 模式对序列化流加密
+	copy(keyName, key.keyName[:])
+	block, err := aes.NewCipher(key.aesKey[:])
+	if err != nil {
+		return nil, errors.New(&amp;quot;tls: failed to create cipher while encrypting ticket: &amp;quot; + err.Error())
+	}
+	cipher.NewCTR(block, iv).XORKeyStream(encrypted[ticketKeyNameLen+aes.BlockSize:], serialized)
+
+	// [Min] 对 keyName + iv + 加密的序列化流 以 key.hmacKey 为秘钥计算 HMAC
+	mac := hmac.New(sha256.New, key.hmacKey[:])
+	mac.Write(encrypted[:len(encrypted)-sha256.Size])
+	mac.Sum(macBytes[:0])
+
+	return encrypted, nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 根据当前协商好的信息，制作 sessionTicket，并返回给客户端
+func (hs *serverHandshakeState) sendSessionTicket() error {
+	if !hs.hello.ticketSupported {
+		return nil
+	}
+
+	c := hs.c
+	m := new(newSessionTicketMsg)
+
+	var err error
+	// [Min] sessionState 的内容
+	state := sessionState{
+		vers:         c.vers,
+		cipherSuite:  hs.suite.id,
+		masterSecret: hs.masterSecret,
+		certificates: hs.certsFromClient,
+	}
+	m.ticket, err = c.encryptTicket(&amp;amp;state)
+	if err != nil {
+		return err
+	}
+
+	hs.finishedHash.Write(m.marshal())
+	if _, err := c.writeRecord(recordTypeHandshake, m.marshal()); err != nil {
+		return err
+	}
+
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-7-调用服务端-hs-sendfinished&#34;&gt;2.2.7 调用服务端 hs.sendFinished&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;发送切换信号，并将 out 转为加密模式&lt;/li&gt;
+&lt;li&gt;构造 finishedMsg，写入 verifyData，完成并写入 sendBuf，等待推送&lt;/li&gt;
+&lt;li&gt;更新 config 中套件，并保存 verfiyData&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 发送 finshedMsg
+func (hs *serverHandshakeState) sendFinished(out []byte) error {
+	c := hs.c
+
+	// [Min] 发送切换信号，此时会将 c.out 中的 cipher 和 mac 切换，转为加密模式
+	if _, err := c.writeRecord(recordTypeChangeCipherSpec, []byte{1}); err != nil {
+		return err
+	}
+
+	// [Min] 构造 finishedMsg，并序列化，然后完成该消息并写入 c.sendBuf 中等待正式发送
+	finished := new(finishedMsg)
+	finished.verifyData = hs.finishedHash.serverSum(hs.masterSecret)
+	hs.finishedHash.Write(finished.marshal())
+	if _, err := c.writeRecord(recordTypeHandshake, finished.marshal()); err != nil {
+		return err
+	}
+
+	// [Min] 同步 config 中 cipherSuite
+	c.cipherSuite = hs.suite.id
+	// [Min] 将 verifyData 拷贝至 out
+	copy(out, finished.verifyData)
+
+	return nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-2-8-推送消息&#34;&gt;2.2.8 推送消息&lt;/h3&gt;
+
+&lt;p&gt;　　newSessionTicketMsg，切换信号，finishedMsg&lt;/p&gt;
+
+&lt;h2 id=&#34;2-3-服务端完成-handshake&#34;&gt;2.3 服务端完成 handshake&lt;/h2&gt;
+
+&lt;h1 id=&#34;3-整个握手过程中的消息流&#34;&gt;3. 整个握手过程中的消息流&lt;/h1&gt;
+
+&lt;p&gt;正常情况下非重用 session 消息发送序列：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;批次-序号&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;客户端&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;服务端&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;clientHelloMsg&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;serverHelloMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;certificateMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-3&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;certificateStatusMsg（可选）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-4&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;serverKeyExchangeMsg（非 RSA 秘钥交换）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-5&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;certificateRequestMsg（可选）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-6&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;serverHelloDoneMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;certificateMsg（可选）&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;newSessionTicketMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;clientKeyExchangeMsg&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;切换信号&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-3&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;certificateVerifyMsg（可选）&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;finishedMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-4&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;切换信号&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-5&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;nextProtoMsg（可选）&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-6&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;finishedMsg&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;正常情况下重用 session 消息发送序列：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;批次-序号&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;客户端&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;服务端&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;clientHelloMsg&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;serverHelloMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;newSessionTicketMsg（可选）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-3&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;切换信号&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1-4&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;finishedMsg&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;切换信号&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;nextProtoMsg（可选）&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2-2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;finishedMsg&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&#34;4-实际处理-timeline&#34;&gt;4. 实际处理 Timeline&lt;/h1&gt;
+
+&lt;p&gt;非重用 session：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;序号&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;步骤&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端准备 clientHelloMsg，包含了协商的版本，套件，重用 sessionId，客户端随机数等信息&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端发送 clientHelloMsg（客户端第一次推送）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;3&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 clientHelloMsg，获得客户端随机数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端协商各种参数，生成服务端随机数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;5&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端按照客户端的要求获取服务端证书&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;6&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端判断是否重用 session（否）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;7&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端协商套件&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 serverHelloMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;9&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 certificateMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;10&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 certificateStatusMsg（按需可选），写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;11&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 serverKeyExchangeMsg（非 RSA 秘钥交换），写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;12&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 certificateRequestMsg（按需可选），写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;13&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 serverHelloDoneMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;14&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端第一次推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;15&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 serverHelloMsg，根据协商结果，完成相关参数的设置，同时获得服务端随机数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;16&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 certificateMsg，完成对服务端证书的解析，基本验证&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;17&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 certificateStatusMsg（按需可选），完成服务端证书状态的设置&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;18&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 serverKeyExchangeMsg（非 RSA 秘钥交换），获取服务端秘钥交换公钥，并以服务端证书公钥验证签名&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;19&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 certificateRequestMsg（按需可选），准备好客户端证书&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;20&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 serverHelloDoneMsg，准备开始回应服务端&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;21&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 certificateMsg（按需可选），回应服务端要求的证书信息，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;22&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 clientKeyExchangeMsg，发送客户端秘钥交换信息，写入 sendBuf，等待推送，同时生成预备主密钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;23&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 certificateVerifyMsg（按需可选），发送客户端证书签名，让服务端验证，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端生成主密钥，再由主密钥衍生出各种秘钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端发送切换信号，写入 sendBuf，等待推送，将输出通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;26&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 nextProtoMsg（按需可选），写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;27&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 finishedMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;28&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端第二次推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;29&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 certificateMsg（按需可选），获得客户端证书，解析，基本验证，并提取证书公钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;30&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 clientKeyExchangeMsg，获得客户端秘钥交换信息，生成预备主密钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;31&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端生成主密钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;32&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 certificateVerifyMsg（按需可选），并以客户端证书公钥进行签名验证&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;33&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端由主密钥衍生出各种秘钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;34&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取切换信号，将输入通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;35&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 nextProtoMsg（按需可选），更新协议&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;36&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 finishedMsg，并对 finishedMsg 中的 verifyData 进行验证&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;37&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端根据当前使用的 session 制作 sessionTicket，完成 newSessionTicketMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;38&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端发送切换信号，写入 sendBuf，等待推送，将输出通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;39&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 finishedMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;40&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端第二次推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;41&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成握手&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;42&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 newSessionTicketMsg，保存 ticket 和 session 状态&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;43&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取切换信号，将输入通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;44&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 finishedMsg，并对 finishedMsg 中的 verifyData 进行验证&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;45&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端缓存 session 到本地 sessionCache&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;46&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成握手&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;重用 session：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;序号&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;步骤&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端准备 clientHelloMsg，包含了协商的版本，套件，重用 sessionId，客户端随机数等信息&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端发送 clientHelloMsg（客户端第一次推送）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;3&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 clientHelloMsg，获得客户端随机数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端协商各种参数，生成服务端随机数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;5&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端按照客户端的要求获取服务端证书&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;6&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端判断是否重用 session（是）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;7&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 serverHelloMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端对重用 session 中包含的客户端证书进行解析，基本验证，并提取证书公钥（如果重用 session 中有的话）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;9&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端从重用 session 中恢复主密钥，并根据主密钥衍生出各种秘钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;10&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端重制 sessionTicket（如果加密 ticket 的 key 不是最新的 ticketKey），完成 newSessionTicketMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;11&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端发送切换信号，将输出通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;12&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成 finishedMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;13&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端第一次推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;14&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 serverHelloMsg，根据协商结果，完成相关参数的设置，同时获得服务端随机数&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;15&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端根据 sessionId 得知可以重用 session&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;16&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端从重用 session 中恢复主密钥，并由主密钥衍生出各种秘钥&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;17&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端根据 severHelloMsg.ticketSupported 得知 ticket 是否被服务端重制，按需读取 newSessionTicketMsg，更新 session 对应的 ticket&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;18&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取切换信号，将输入通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;19&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端读取 finishedMsg，并对 finishedMsg 中的 verifyData 进行验证&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;20&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端发送切换信号，将输出通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;21&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 nextProtoMsg（按需可选），通知服务端选择的协议，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;22&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成 finishedMsg，写入 sendBuf，等待推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;23&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端第二次推送&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端将重制了的 ticket 的 session 缓存到本地 sessionCache&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;客户端完成握手&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;26&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取切换信号，将输入通道转为加密模式&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;27&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 nextProtoMsg（按需可选），设置协议&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;28&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端读取 finishedMsg，并对 finishedMsg 中的 verifyData 进行验证&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;29&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;服务端完成握手&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</description>
+    </item>
+    
+    <item>
       <title>TLS（一）</title>
       <link>https://mooncaker816.github.io/2018/08/03/tls%E4%B8%80/</link>
       <pubDate>Fri, 03 Aug 2018 07:24:15 +0800</pubDate>
@@ -910,10 +2400,10 @@ func (hs *serverHandshakeState) checkForResumption() bool {
 　　　　5.1.1.4 将 serverHelloMsg 写入 c.sendBuf 中等待正式发送&lt;br /&gt;
 　　　　5.1.1.5 构造服务端证书消息 certificateMsg，完成该消息并写入 c.sendBuf 中等待正式发送&lt;br /&gt;
 　　　　5.1.1.6 按需构造服务端证书状态消息 certificateStatusMsg，完成该消息并写入 c.sendBuf 中等待正式发送&lt;br /&gt;
-　　　　5.1.1.7 根据密码套件获取 keyAgreement，调用 generateServerKeyExchange 生成服务端秘钥交换消息                serverKeyExchangeMsg，完成该消息并写入 c.sendBuf 中等待正式发送&lt;br /&gt;
+　　　　5.1.1.7 根据密码套件获取 keyAgreement，调用 generateServerKeyExchange 生成服务端秘钥交换消息 serverKeyExchangeMsg（非 RSA 秘钥交换），完成该消息并写入 c.sendBuf 中等待正式发送&lt;br /&gt;
 　　　　5.1.1.8 根据自身需求，向客户端发送验证客户端证书的请求，构造请求消息 certificateRequestMsg，完成该消息并写入 c.sendBuf 中等待正式发送&lt;br /&gt;
 　　　　5.1.1.9 至此，serverHello 完成，完成 serverHelloDoneMsg 消息，并写入 c.sendBuf 中等待正式发送&lt;br /&gt;
-　　　　5.1.1.10 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg&lt;/p&gt;
+　　　　5.1.1.10 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg（非 RSA 秘钥交换），certificateRequestMsg（可选），serverHelloDoneMsg&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// [Min] 完整的 handshake
@@ -973,7 +2463,7 @@ func (hs *serverHandshakeState) doFullHandshake() error {
         c.sendAlert(alertHandshakeFailure)
         return err
     }
-    // [Min] 如果 skx 不为 nil，说明不是 RSA，
+    // [Min] 如果 skx 不为 nil，说明不是 RSA，RSA 秘钥交换不会发送 serverKeyExchangeMsg
     // [Min] 再把 serverKeyExchangeMsg 写入缓存 c.sendBuf 中，并完成该消息
     if skx != nil {
         hs.finishedHash.Write(skx.marshal())
@@ -1022,7 +2512,7 @@ func (hs *serverHandshakeState) doFullHandshake() error {
 
     // [Min] 从缓存中将累积的消息推送到客户端，依次包括：
     // [Min] serverHelloMsg，certificateMsg，certificateStatusMsg（可选），
-    // [Min] serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg
+    // [Min] serverKeyExchangeMsg（非 RSA 秘钥交换），certificateRequestMsg（可选），serverHelloDoneMsg
     if _, err := c.flush(); err != nil {
         return err
     }
@@ -1244,7 +2734,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
 &lt;tr&gt;
 &lt;td align=&#34;center&#34;&gt;1-4&lt;/td&gt;
 &lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;serverKeyExchangeMsg&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;serverKeyExchangeMsg（非 RSA 秘钥交换）&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
@@ -5664,148 +7154,6 @@ var rvTerm = [36]rvFunc{
 &lt;/ul&gt;
 
 &lt;p&gt;该算法忽略&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>天文算法20</title>
-      <link>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/</link>
-      <pubDate>Wed, 23 May 2018 16:58:54 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/</guid>
-      <description>&lt;h1 id=&#34;第二十二章-章动和黄赤交角-nutation-and-the-obliquity-of-the-ecliptic&#34;&gt;第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;1-名词解释&#34;&gt;1. 名词解释&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%AB%A0%E5%8B%95&#34; target=&#34;_blank&#34;&gt;章动&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;2-章动的分量&#34;&gt;2. 章动的分量&lt;/h2&gt;
-
-&lt;p&gt;　　章动可以很容易的分解为黄道的水平分量和的垂直分量。黄道上的分量记为$Δψ$，称为黄经章动；它影响了天球上所有天体的经度。黄道的垂直分量记为$Δε$，称为交角章动，它影响了黄赤交角。&lt;/p&gt;
-
-&lt;h2 id=&#34;3-较精确计算章动&#34;&gt;3. 较精确计算章动&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Nutation returns nutation in longitude (Δψ) and nutation in obliquity (Δε)
-// for a given JDE.
-//
-// JDE = UT + ΔT, see package deltat.
-//
-// Computation is by 1980 IAU theory, with terms &amp;lt; .0003″ neglected.
-// 计算 jde 对应的章动
-func Nutation(jde float64) (Δψ, Δε unit.Angle) {
-	T := base.J2000Century(jde)
-	D := base.Horner(T,
-		297.85036, 445267.11148, -0.0019142, 1./189474) * math.Pi / 180
-	M := base.Horner(T,
-		357.52772, 35999.050340, -0.0001603, -1./300000) * math.Pi / 180
-	N := base.Horner(T,
-		134.96298, 477198.867398, 0.0086972, 1./56250) * math.Pi / 180
-	F := base.Horner(T,
-		93.27191, 483202.017538, -0.0036825, 1./327270) * math.Pi / 180
-	Ω := base.Horner(T,
-		125.04452, -1934.136261, 0.0020708, 1./450000) * math.Pi / 180
-	// sum in reverse order to accumulate smaller terms first
-	var Δψs, Δεs float64
-	for i := len(table22A) - 1; i &amp;gt;= 0; i-- {
-		row := table22A[i]
-		arg := row.d*D + row.m*M + row.n*N + row.f*F + row.ω*Ω
-		s, c := math.Sincos(arg)
-		Δψs += s * (row.s0 + row.s1*T)
-		Δεs += c * (row.c0 + row.c1*T)
-	}
-	Δψ = unit.AngleFromSec(Δψs * .0001)
-	Δε = unit.AngleFromSec(Δεs * .0001)
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;4-粗略计算章动&#34;&gt;4. 粗略计算章动&lt;/h2&gt;
-
-&lt;p&gt;Δψ精度为0.5″,Δε精度为0.1″&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ApproxNutation returns a fast approximation of nutation in longitude (Δψ)
-// and nutation in obliquity (Δε) for a given JDE.
-//
-// Accuracy is 0.5″ in Δψ, 0.1″ in Δε.
-// 精度要求为0.5″ in Δψ, 0.1″ in Δε
-func ApproxNutation(jde float64) (Δψ, Δε unit.Angle) {
-	T := (jde - base.J2000) / 36525
-	Ω := (125.04452 - 1934.136261*T) * math.Pi / 180
-	L := (280.4665 + 36000.7698*T) * math.Pi / 180
-	N := (218.3165 + 481267.8813*T) * math.Pi / 180
-	sΩ, cΩ := math.Sincos(Ω)
-	s2L, c2L := math.Sincos(2 * L)
-	s2N, c2N := math.Sincos(2 * N)
-	s2Ω, c2Ω := math.Sincos(2 * Ω)
-	Δψ = unit.AngleFromSec(-17.2*sΩ - 1.32*s2L - 0.23*s2N + 0.21*s2Ω)
-	Δε = unit.AngleFromSec(9.2*cΩ + 0.57*c2L + 0.1*c2N - 0.09*c2Ω)
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;5-黄赤交角&#34;&gt;5. 黄赤交角&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;平黄赤交角$ε_0$：黄道与平赤道的夹角&lt;/p&gt;
-
-&lt;p&gt;$$ε_0 = 23°26&amp;rsquo;21&amp;rdquo;.448 - 46&amp;rdquo;.8150T - 0&amp;rdquo;.00059T^2 + 0&amp;rdquo;.001813T^3$$&lt;/p&gt;
-
-&lt;p&gt;T是J2000.0起算的儒略世纪数&lt;/p&gt;
-
-&lt;p&gt;　　当时间范围很长，上述公式的精度并不令人满意：2000年误差1&amp;rdquo;，4000误差为10&amp;rdquo;。Laskar提供了以下改良的的公式，式中U是J2000.0起算的儒略万年数，即U=T/100：
-\begin{align}
-ε_0 =&amp;amp; 23°26&amp;rsquo;21&amp;rdquo;.448 - 4680&amp;rdquo;.93U - 1.55U^2 + 1999.25U^3 - 51.38U^4 - 249.67U^5 \\[2ex]
-&amp;amp;-39.05U^6 + 7.12U^7 + 27.87U^8 + 5.79U^9 + 2.45U^{10}
-\end{align}
-　　该表达式的精度是：1000年后误差0&amp;rdquo;.01(公元 1000 到 3000)，10000年后误差数个角秒。&lt;br /&gt;
-　　&lt;strong&gt;该表达式适用于|U|&amp;lt;1，即 J2000.0 起算前后各 10000 年的范围内。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// MeanObliquity returns mean obliquity (ε₀) following the IAU 1980
-// polynomial.
-//
-// Accuracy is 1″ over the range 1000 to 3000 years and 10″ over the range
-// 0 to 4000 years.
-// 平黄赤交角 - 精度一般，2000年误差 1&amp;quot;，4000年误差为 10&amp;quot;
-func MeanObliquity(jde float64) unit.Angle {
-    // (22.2) p. 147
-    return unit.AngleFromSec(base.Horner(base.J2000Century(jde),
-        unit.FromSexaSec(&#39; &#39;, 23, 26, 21.448),
-        -46.815,
-        -0.00059,
-        0.001813))
-}
-
-// MeanObliquityLaskar returns mean obliquity (ε₀) following the Laskar
-// 1986 polynomial.
-//
-// Accuracy over the range 1000 to 3000 years is .01″.
-//
-// Accuracy over the valid date range of -8000 to +12000 years is
-// &amp;quot;a few seconds.&amp;quot;
-// 平黄赤交角 - 精度较好，1000年后误差0&amp;quot;.01(公元 1000 到 3000)，10000年后误差数个角秒
-// 适用范围：J2000.0 起算前后各10000年的范围内。
-func MeanObliquityLaskar(jde float64) unit.Angle {
-    // (22.3) p. 147
-    return unit.AngleFromSec(base.Horner(base.J2000Century(jde)*.01,
-        unit.FromSexaSec(&#39; &#39;, 23, 26, 21.448),
-        -4680.93,
-        -1.55,
-        1999.25,
-        -51.38,
-        -249.67,
-        -39.05,
-        7.12,
-        27.87,
-        5.79,
-        2.45))
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;真黄赤交角：黄道与真赤道的夹角&lt;/p&gt;
-
-&lt;p&gt;$$ε = ε_0 + Δε$$&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
     </item>
     
   </channel>

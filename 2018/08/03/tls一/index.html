@@ -97,7 +97,7 @@
   
   <meta property="article:published_time" content="2018-08-03T07:24:15&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-08-03T15:32:24&#43;08:00">
+  <meta property="article:modified_time" content="2018-08-04T14:55:07&#43;08:00">
   
 
   
@@ -371,7 +371,7 @@
         最近更新于
     
     <time datetime="2018-08-03 07:24:15 &#43;0800 CST" itemprop="datePublished dateModified">
-      Aug 3, 2018
+      Aug 4, 2018
     </time>
   </span>
   <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
@@ -1354,10 +1354,10 @@ func (hs *serverHandshakeState) checkForResumption() bool {
 　　　　5.1.1.4 将 serverHelloMsg 写入 c.sendBuf 中等待正式发送<br />
 　　　　5.1.1.5 构造服务端证书消息 certificateMsg，完成该消息并写入 c.sendBuf 中等待正式发送<br />
 　　　　5.1.1.6 按需构造服务端证书状态消息 certificateStatusMsg，完成该消息并写入 c.sendBuf 中等待正式发送<br />
-　　　　5.1.1.7 根据密码套件获取 keyAgreement，调用 generateServerKeyExchange 生成服务端秘钥交换消息                serverKeyExchangeMsg，完成该消息并写入 c.sendBuf 中等待正式发送<br />
+　　　　5.1.1.7 根据密码套件获取 keyAgreement，调用 generateServerKeyExchange 生成服务端秘钥交换消息 serverKeyExchangeMsg（非 RSA 秘钥交换），完成该消息并写入 c.sendBuf 中等待正式发送<br />
 　　　　5.1.1.8 根据自身需求，向客户端发送验证客户端证书的请求，构造请求消息 certificateRequestMsg，完成该消息并写入 c.sendBuf 中等待正式发送<br />
 　　　　5.1.1.9 至此，serverHello 完成，完成 serverHelloDoneMsg 消息，并写入 c.sendBuf 中等待正式发送<br />
-　　　　5.1.1.10 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg</p>
+　　　　5.1.1.10 正式推送 c.sendBuf 中累积的消息给客户端，依次包括 serverHelloMsg，certificateMsg，certificateStatusMsg（可选），serverKeyExchangeMsg（非 RSA 秘钥交换），certificateRequestMsg（可选），serverHelloDoneMsg</p>
 </blockquote>
 
 <pre><code class="language-go">// [Min] 完整的 handshake
@@ -1417,7 +1417,7 @@ func (hs *serverHandshakeState) doFullHandshake() error {
         c.sendAlert(alertHandshakeFailure)
         return err
     }
-    // [Min] 如果 skx 不为 nil，说明不是 RSA，
+    // [Min] 如果 skx 不为 nil，说明不是 RSA，RSA 秘钥交换不会发送 serverKeyExchangeMsg
     // [Min] 再把 serverKeyExchangeMsg 写入缓存 c.sendBuf 中，并完成该消息
     if skx != nil {
         hs.finishedHash.Write(skx.marshal())
@@ -1466,7 +1466,7 @@ func (hs *serverHandshakeState) doFullHandshake() error {
 
     // [Min] 从缓存中将累积的消息推送到客户端，依次包括：
     // [Min] serverHelloMsg，certificateMsg，certificateStatusMsg（可选），
-    // [Min] serverKeyExchangeMsg，certificateRequestMsg（可选），serverHelloDoneMsg
+    // [Min] serverKeyExchangeMsg（非 RSA 秘钥交换），certificateRequestMsg（可选），serverHelloDoneMsg
     if _, err := c.flush(); err != nil {
         return err
     }
@@ -1688,7 +1688,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
 <tr>
 <td align="center">1-4</td>
 <td align="left"></td>
-<td align="left">serverKeyExchangeMsg</td>
+<td align="left">serverKeyExchangeMsg（非 RSA 秘钥交换）</td>
 </tr>
 
 <tr>
@@ -1766,6 +1766,12 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
                 <div class="post-nav">
   <div class="row">
       
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2018/08/03/tls%E4%BA%8C/" rel="next">TLS（二）</a>
+        </div>
+      </div>
+      
       
       <div class="col-sm-9 col-md-6">上一页
         <div class="post-nav-item">
@@ -1780,7 +1786,7 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
               
 
               <div class="body-footer">
-                  最近更新于 Aug 3, 2018
+                  最近更新于 Aug 4, 2018
               </div>
               
               
