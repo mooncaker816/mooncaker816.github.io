@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Golang on Mooncaker816</title>
+    <title>golang on Mooncaker816</title>
     <link>https://mooncaker816.github.io/tags/golang/</link>
-    <description>Recent content in Golang on Mooncaker816</description>
+    <description>Recent content in golang on Mooncaker816</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
@@ -18,8 +18,7 @@
       <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</guid>
-      <description>&lt;p&gt;这是使用Hugo创建的站点中的第一篇文章。
-&lt;/p&gt;</description>
+      <description>&lt;p&gt;这是使用Hugo创建的站点中的第一篇文章。&lt;/p&gt;</description>
     </item>
     
   </channel>

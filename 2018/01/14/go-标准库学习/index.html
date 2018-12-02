@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme" content="hugo-academic">
-  <meta name="generator" content="Hugo 0.39" />
+  <meta name="generator" content="Source Themes Academic 3.1.1">
+  <meta name="generator" content="Hugo 0.52" />
   <meta name="author" content="Mingle Gu">
 
   
@@ -14,12 +14,8 @@
   
   
     
-      
-    
   
-  <meta name="description" content="bytes和strings函数比对
-
-">
+  <meta name="description" content="bytes和strings函数比对">
 
   
   <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/">
@@ -30,37 +26,55 @@
   
 
   
+
+  
+
+  
+  
   
   <meta name="theme-color" content="#3f51b5">
   
+
+  
   
   
   
     
-  
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
     
     
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
     
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
   
   
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
   
-  
-  
-  
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
-  
+
   <link rel="stylesheet" href="/styles.css">
   
   <link rel="stylesheet" href="/css/custom.css">
   
   <link rel="stylesheet" href="/css/asciinema-player.css">
   
+
   
   
     <script>
@@ -76,6 +90,7 @@
     
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
     
+  
   
 
   
@@ -94,54 +109,80 @@
   <meta property="og:site_name" content="Mooncaker816">
   <meta property="og:url" content="https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/">
   <meta property="og:title" content="Go 标准库学习 | Mooncaker816">
-  <meta property="og:description" content="bytes和strings函数比对
-
-">
+  <meta property="og:description" content="bytes和strings函数比对">
+  
+  
+    
+  <meta property="og:image" content="https://mooncaker816.github.io/img/icon-192.png">
   <meta property="og:locale" content="zh">
   
   <meta property="article:published_time" content="2018-01-14T00:00:00&#43;00:00">
   
-  <meta property="article:modified_time" content="2018-04-26T03:16:53&#43;08:00">
+  <meta property="article:modified_time" content="2018-12-02T14:54:03&#43;08:00">
   
 
   
+
   
-
-
-
 
   <title>Go 标准库学习 | Mooncaker816</title>
 
 </head>
-<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header fixed-top">
 
-<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1></h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
   <div class="container">
 
     
-    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Mooncaker816</a>
       
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target=".navbar-collapse" aria-expanded="false">
-        <span class="sr-only">切换导航</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+        <span><i class="fas fa-bars"></i></span>
       </button>
       
-      <a class="navbar-brand" href="/">Mooncaker816</a>
-    </div>
 
     
-    <div class="collapse navbar-collapse">
+    <div class="collapse navbar-collapse" id="navbar">
 
       
       
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="navbar-nav ml-auto">
         
 
         
-        
+
         
         
         
@@ -149,7 +190,7 @@
         
 
         <li class="nav-item">
-          <a href="/#about">
+          <a class="nav-link" href="/#about">
             
             <span>主页</span>
             
@@ -160,7 +201,7 @@
         
 
         
-        
+
         
         
         
@@ -168,7 +209,7 @@
         
 
         <li class="nav-item">
-          <a href="/#tags">
+          <a class="nav-link" href="/#tags">
             
             <span>分类</span>
             
@@ -179,7 +220,7 @@
         
 
         
-        
+
         
         
         
@@ -187,7 +228,7 @@
         
 
         <li class="nav-item">
-          <a href="/#posts">
+          <a class="nav-link" href="/#posts">
             
             <span>文章</span>
             
@@ -198,7 +239,7 @@
         
 
         
-        
+
         
         
         
@@ -206,7 +247,7 @@
         
 
         <li class="nav-item">
-          <a href="/#contact">
+          <a class="nav-link" href="/#contact">
             
             <span>联系</span>
             
@@ -217,7 +258,7 @@
         
 
         
-        
+
         
         
         
@@ -225,7 +266,7 @@
         
 
         <li class="nav-item">
-          <a href="/arch/">
+          <a class="nav-link" href="/arch/">
             
             <span>归档</span>
             
@@ -236,7 +277,7 @@
         
 
         
-        
+
         
         
         
@@ -244,7 +285,7 @@
         
 
         <li class="nav-item">
-          <a href="/example/">
+          <a class="nav-link" href="/example/">
             
             <span>示例</span>
             
@@ -253,9 +294,18 @@
 
         
         
-      
 
       
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
       </ul>
 
     </div>
@@ -276,216 +326,20 @@
         
         
                 
-                        
+            
         
         
     
 
 
-<div class="container body-content tocpost">
-  <div class="row">
+<div class="container-fluid docs">
+  <div class="row flex-xl-nowrap">
 
-      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
-
-          <ul id="tocpost-main-nav">
-
-          </ul>
-      </nav>
-      <div class="col-md-2">
-          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
-            
-          </nav>
-      </div>
-
-      <div class="col-sm-9 col-md-8 body">
-          <article class="article" itemscope itemtype="http://schema.org/Article">
-
-            
-
-
-            <div class="article-container">
-              <h1 itemprop="name">Go 标准库学习</h1>
-
-              
-
-<div class="article-metadata">
-
-  <span class="article-date">
-    
-        最近更新于
-    
-    <time datetime="2018-01-14 00:00:00 &#43;0000 UTC" itemprop="datePublished dateModified">
-      Apr 26, 2018
-    </time>
-  </span>
-  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Mingle Gu">
-  </span>
-
-  
-  <span class="middot-divider"></span>
-  <span class="article-reading-time">
-    12 分钟阅读时间
-  </span>
-  
-
-  
-  
-  <span class="middot-divider"></span>
-  <a href="https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/#disqus_thread"></a>
-  
-
-  
-  
-  
-  <span class="middot-divider"></span>
-  <span class="article-categories">
-    <i class="fa fa-folder"></i>
-    
-    <a href="https://mooncaker816.github.io/categories/golang/">Golang</a
-    >
-    
-  </span>
-  
-  
-
-  
-  
-<div class="share-box" aria-hidden="true">
-  <ul class="share">
-    <li>
-      <a class="twitter"
-         href="https://twitter.com/intent/tweet?text=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f"
-         target="_blank" rel="noopener">
-        <i class="fa fa-twitter"></i>
-      </a>
-    </li>
-    <li>
-      <a class="facebook"
-         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f"
-         target="_blank" rel="noopener">
-        <i class="fa fa-facebook"></i>
-      </a>
-    </li>
-    <li>
-      <a class="linkedin"
-         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f&amp;title=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0"
-         target="_blank" rel="noopener">
-        <i class="fa fa-linkedin"></i>
-      </a>
-    </li>
-    <li>
-      <a class="weibo"
-         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f&amp;title=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0"
-         target="_blank" rel="noopener">
-        <i class="fa fa-weibo"></i>
-      </a>
-    </li>
-    <li>
-      <a class="email"
-         href="mailto:?subject=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f">
-        <i class="fa fa-envelope"></i>
-      </a>
-    </li>
-  </ul>
-</div>
-
-
-  
-
-</div>
-
-
-
-              <div class="article-style" itemprop="articleBody">
-                <h3 id=2f7c29a2fdd963dcc158a106260ce17f>bytes和strings函数比对</h3>
-
-<p></p>
-
-<table><tr><td>bytes</td><td></td><td>strings</td><td></td></tr><tr><td>函数签名</td><td>功能</td><td>函数签名</td><td>功能</td></tr><tr><td>func explode(s []byte, n int) [][]byte</td><td>以每个utf8字符为单位，将前n个字符对应的[]byte型组成新的slice返回</td><td>func explode(s string, n int) []string</td><td>以每个utf8字符为单位，将前n个字符对应的string型组成新的slice返回</td></tr><tr><td>func countGeneric(s, sep []byte) int</td><td>返回s中有几个sep，若sep为空，则返回sutf8.RuneCount(s) + 1</td><td>func countGeneric(s, substr string) int</td><td>返回s中有几个substr，若substr为空，则返回sutf8.RuneCount(s) + 1</td></tr><tr><td>func Contains(b, subslice []byte) bool</td><td>b中是否含有subslice</td><td>func Contains(s, substr string) bool</td><td>s中是否含有substr</td></tr><tr><td>func ContainsAny(b []byte, chars string) bool</td><td>b中是否含有字符串chars</td><td>func ContainsAny(s, chars string) bool</td><td>s中是否含有字符串chars中的任意一个unicode字符</td></tr><tr><td>func ContainsRune(b []byte, r rune) bool</td><td>b中是否含有rune r</td><td>func ContainsRune(s string, r rune) bool</td><td>s中是否含有rune r</td></tr><tr><td>func indexBytePortable(s []byte, c byte) int（并没有导出也没有用于内部）</td><td>返回s中c的位置，若不含有c，则返回-1</td><td></td><td></td></tr><tr><td>func LastIndex(s, sep []byte) int</td><td>返回s中最后一个sep的位置，若sep为空，返回s的长度，若不含sep，则返回-1</td><td>func LastIndex(s, substr string) int</td><td>返回s中最后一个substr的位置，若substr为空，返回s的长度，若不含substr，则返回-1</td></tr><tr><td>func LastIndexByte(s []byte, c byte) int</td><td>返回最后一个c的位置，没有则返回-1</td><td>func LastIndexByte(s string, c byte) int</td><td>返回最后一个c的位置，没有则返回-1</td></tr><tr><td>func IndexRune(s []byte, r rune) int</td><td>返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1</td><td>func IndexRune(s string, r rune) int</td><td>返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1</td></tr><tr><td>func IndexAny(s []byte, chars string) int</td><td>返回chars中任意一个unicode字符在s中第一次出现的位置</td><td>func IndexAny(s, chars string) int</td><td>返回chars中任意一个unicode字符在s中第一次出现的位置</td></tr><tr><td>func LastIndexAny(s []byte, chars string) int</td><td>返回chars中任意一个unicode字符在s中最后一次出现的位置</td><td>func LastIndexAny(s, chars string) int</td><td>返回chars中任意一个unicode字符在s中最后一次出现的位置</td></tr><tr><td>func genSplit(s, sep []byte, sepSave, n int) [][]byte</td><td>按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice</td><td>func genSplit(s, sep string, sepSave, n int) []string</td><td>按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice</td></tr><tr><td>func SplitN(s, sep []byte, n int) [][]byte</td><td>按sep划分s，返回前n个划分的slice组成的slice，每个划分的slice不包含sep，n小于0返回所有划分组成的slice</td><td>func SplitN(s, sep string, n int) []string</td><td>按sep划分s，返回前n个划分的string组成的slice，每个划分的string不包含sep，n小于0返回所有划分组成的slice</td></tr><tr><td>func SplitAfterN(s, sep []byte, n int) [][]byte</td><td>按sep划分s，返回前n个划分的slice组成slice，每个划分包含sep</td><td>func SplitAfterN(s, sep string, n int) []string</td><td>按sep划分s，返回前n个划分的string组成slice，每个划分包含sep</td></tr><tr><td>func Split(s, sep []byte) [][]byte</td><td>返回所有的由sep划分的slice组成的slice，每个划分不包含sep</td><td>func Split(s, sep string) []string</td><td>返回所有的由sep划分的string组成的slice，每个划分不包含sep</td></tr><tr><td>func SplitAfter(s, sep []byte) [][]byte</td><td>返回所有的由sep划分的slice组成的slice，每个划分包含sep</td><td>func SplitAfter(s, sep string) []string</td><td>返回所有的由sep划分的string组成的slice，每个划分包含sep</td></tr><tr><td>func Fields(s []byte) [][]byte</td><td>按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice</td><td>func Fields(s string) []string</td><td>按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice</td></tr><tr><td>func FieldsFunc(s []byte, f func(rune) bool) [][]byte</td><td>如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子slice的slice</td><td>func FieldsFunc(s string, f func(rune) bool) []string</td><td>如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子string的slice</td></tr><tr><td>func Join(s [][]byte, sep []byte) []byte</td><td>将s中的元素用sep拼接起来，返回一个新的slice</td><td>func Join(a []string, sep string) string </td><td>将s中的元素用sep拼接起来，返回一个新的string</td></tr><tr><td>func HasPrefix(s, prefix []byte) bool</td><td>判断s是否以prefix开头</td><td>func HasPrefix(s, prefix string) bool</td><td>判断s是否以prefix开头</td></tr><tr><td>func HasSuffix(s, suffix []byte) bool</td><td>判断s是否以suffix结尾</td><td>func HasSuffix(s, suffix string) bool</td><td>判断s是否以suffix结尾</td></tr><tr><td>func Map(mapping func(r rune) rune, s []byte) []byte</td><td>将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符转为utf8存储在一个新的slice中返回</td><td>func Map(mapping func(rune) rune, s string) string</td><td>将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符存储在一个新的string中返回</td></tr><tr><td>func Repeat(b []byte, count int) []byte</td><td>重复b count次，返回新的slice</td><td>func Repeat(s string, count int) string</td><td>重复s count次，返回新的string</td></tr><tr><td>func ToUpper(s []byte) []byte</td><td>转为大写</td><td>func ToUpper(s string) string</td><td>转为大写</td></tr><tr><td>func ToLower(s []byte) []byte </td><td>转为小写</td><td>func ToLower(s string) string</td><td>转为小写</td></tr><tr><td>func ToTitle(s []byte) []byte</td><td>转为Title</td><td>func ToTitle(s string) string</td><td>转为Title</td></tr><tr><td>func ToUpperSpecial(c unicode.SpecialCase, s []byte) []byte</td><td>只将SpecialCase范围里的字符转为大写</td><td>func ToUpperSpecial(c unicode.SpecialCase, s string) string</td><td>只将SpecialCase范围里的字符转为大写</td></tr><tr><td>func ToLowerSpecial(c unicode.SpecialCase, s []byte) []byte</td><td>只将SpecialCase范围里的字符转为小写</td><td>func ToLowerSpecial(c unicode.SpecialCase, s string) string</td><td>只将SpecialCase范围里的字符转为小写</td></tr><tr><td>func ToTitleSpecial(c unicode.SpecialCase, s []byte) []byte</td><td>只将SpecialCase范围里的字符转为Title</td><td>func ToTitleSpecial(c unicode.SpecialCase, s string) string</td><td>只将SpecialCase范围里的字符转为Title</td></tr><tr><td>func isSeparator(r rune) bool</td><td>r是否可以作为一个词（unicode）的分隔符<br>ascii码，数字，字母，下划线不可以<br>非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以</td><td>func isSeparator(r rune) bool</td><td>r是否可以作为一个词（unicode）的分隔符<br>ascii码，数字，字母，下划线不可以<br>非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以</td></tr><tr><td>func Title(s []byte) []byte </td><td>调用Map，s中非词分隔符的字符转换为Title</td><td>func Title(s string) string</td><td>调用Map，s中非词分隔符的字符转换为Title</td></tr><tr><td>func TrimLeftFunc(s []byte, f func(r rune) bool) []byte</td><td>以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子slice</td><td>func TrimLeftFunc(s string, f func(rune) bool) string</td><td>以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子string</td></tr><tr><td>func TrimRightFunc(s []byte, f func(r rune) bool) []byte</td><td>以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子slice</td><td>func TrimRightFunc(s string, f func(rune) bool) string</td><td>以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子string</td></tr><tr><td>func TrimFunc(s []byte, f func(r rune) bool) []byte </td><td>去掉左边和去掉右边的结合体</td><td>func TrimFunc(s string, f func(rune) bool) string</td><td>去掉左边和去掉右边的结合体</td></tr><tr><td>func TrimPrefix(s, prefix []byte) []byte</td><td>去掉prefix后的子slice</td><td>func TrimPrefix(s, prefix string) string</td><td>去掉prefix后的子string</td></tr><tr><td>func TrimSuffix(s, suffix []byte) []byte</td><td>去掉suffix后的子slice</td><td>func TrimSuffix(s, suffix string) string</td><td>去掉suffix后的子string</td></tr><tr><td>func IndexFunc(s []byte, f func(r rune) bool) int</td><td>返回s中第一个满足f的rune字符对应的utf8码的起始位置</td><td>func IndexFunc(s string, f func(rune) bool) int</td><td>返回s中第一个满足f的rune字符对应的utf8码的起始位置</td></tr><tr><td>func LastIndexFunc(s []byte, f func(r rune) bool) int</td><td>返回s中最后一个满足f的rune字符对应的utf8码的起始位置</td><td>func LastIndexFunc(s string, f func(rune) bool) int</td><td>返回s中最后一个满足f的rune字符对应的utf8码的起始位置</td></tr><tr><td>func indexFunc(s []byte, f func(r rune) bool, truth bool)</td><td>返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td><td>func indexFunc(s string, f func(rune) bool, truth bool) int</td><td>返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td></tr><tr><td>func lastIndexFunc(s []byte, f func(r rune) bool, truth bool) int</td><td>返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td><td>func lastIndexFunc(s string, f func(rune) bool, truth bool) int</td><td>返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td></tr><tr><td>func makeASCIISet(chars string) (as asciiSet, ok bool)</td><td>返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码<br>可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码<br>具体存储：<br>asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，<br>其中元素的位置保存了该字符（uint8）对应的高3位（c>>5）的信息，<br>元素的内容保存了每个字符低5位（1 << uint(c&31)）的信息，5位最大是31（11111），<br>刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，<br>这样就可以用数组的前4个元素完整表达128个ascii了</td><td>func makeASCIISet(chars string) (as asciiSet, ok bool)</td><td>返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码<br>可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码<br>具体存储：<br>asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，<br>其中元素的位置保存了该字符（uint8）对应的高3位（c>>5）的信息，<br>元素的内容保存了每个字符低5位（1 << uint(c&31)）的信息，5位最大是31（11111），<br>刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，<br>这样就可以用数组的前4个元素完整表达128个ascii了</td></tr><tr><td>func (as *asciiSet) contains(c byte) bool</td><td>c是否在as中</td><td>func (as *asciiSet) contains(c byte) bool</td><td>c是否在as中</td></tr><tr><td>func makeCutsetFunc(cutset string) func(r rune) bool</td><td>返回一个判断r是否在cutset字符串中的函数<br>若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数<br>根据cutset创建一个ascii码的集合，<br>如果全是ascii，则返回一个用来判断r是否在上述集合中的函数<br>如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数</td><td>func makeCutsetFunc(cutset string) func(rune) bool</td><td>返回一个判断r是否在cutset字符串中的函数<br>若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数<br>根据cutset创建一个ascii码的集合，<br>如果全是ascii，则返回一个用来判断r是否在上述集合中的函数<br>如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数</td></tr><tr><td>func Trim(s []byte, cutset string) []byte</td><td>将s左右两端连续属于cutset的rune字符去除，保留中间的子slice</td><td>func Trim(s string, cutset string) string</td><td>将s左右两端连续属于cutset的rune字符去除，保留中间的子string</td></tr><tr><td>func TrimLeft(s []byte, cutset string) []byte</td><td>将s左边连续属于cutset的rune字符去除，返回剩下的子slice</td><td>func TrimLeft(s string, cutset string) string</td><td>将s左边连续属于cutset的rune字符去除，返回剩下的子string</td></tr><tr><td>func TrimRight(s []byte, cutset string) []byte</td><td>将s右边连续属于cutset的rune字符去除，返回剩下的子slice</td><td>func TrimRight(s string, cutset string) string</td><td>将s右边连续属于cutset的rune字符去除，返回剩下的子string</td></tr><tr><td>func TrimSpace(s []byte) []byte</td><td>去除s左右两端的whitespce，保留剩下的子slice</td><td>func TrimSpace(s string) string</td><td>去除s左右两端的whitespce，保留剩下的子string</td></tr><tr><td>func Runes(s []byte) []rune</td><td>返回s对应的rune类型的slice</td><td></td><td></td></tr><tr><td>func Replace(s, old, new []byte, n int) []byte</td><td>将s中前n个old替换成new，返回一个新的slice，n为负数或者n>old个数时，替换所有old</td><td>func Replace(s, old, new string, n int) string</td><td>将s中前n个old替换成new，返回一个新的string，n为负数或者n>old个数时，替换所有old</td></tr><tr><td>func EqualFold(s, t []byte) bool</td><td>判断s和t在不区分大小写（包括unicode case）的情况下是否相等</td><td>func EqualFold(s, t string) bool</td><td>判断s和t在不区分大小写（包括unicode case）的情况下是否相等</td></tr><tr><td>func indexRabinKarp(s, sep []byte) int</td><td>返回第一个sep在s中的位置<br>Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。<br>Rabin-Karp算法的思想：<br>假设待匹配字符串的长度为M，目标字符串的长度为N（N>M）；<br>首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；<br>比较前面计算的两个hash值，比较次数N-M+1：<br>若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值<br>若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；</td><td>func indexRabinKarp(s, substr string) int</td><td>返回第一个sep在s中的位置<br>Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。<br>Rabin-Karp算法的思想：<br>假设待匹配字符串的长度为M，目标字符串的长度为N（N>M）；<br>首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；<br>比较前面计算的两个hash值，比较次数N-M+1：<br>若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值<br>若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；</td></tr><tr><td>func hashStr(sep []byte) (uint32, uint32)</td><td>计算sep的hash，用于Rabin-Karp算法</td><td>func hashStr(sep string) (uint32, uint32)</td><td>计算sep的hash，用于Rabin-Karp算法</td></tr><tr><td></td><td></td><td>func hashStrRev(sep string) (uint32, uint32)</td><td>计算reverse(sep)的hash，用于Rabin-Karp算法</td></tr></table>
-              </div>
-
-              
-
-
-<div class="article-tags">
-  
-  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/go-%E6%A0%87%E5%87%86%E5%BA%93/">Go 标准库</a>
-  
-  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/strings/">Strings</a>
-  
-  <a class="btn btn-primary btn-outline" href="https://mooncaker816.github.io/tags/bytes/">Bytes</a>
-  
-</div>
-
-
-
-
-              
-              
-
-              
-              <div class="article-widget">
-                <div class="post-nav">
-  <div class="row">
-      
-      <div class="col-sm-9 col-md-6">下一页
-        <div class="post-nav-item">
-        <a href="https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/" rel="next">Linux Centos 命令之 ls</a>
-        </div>
-      </div>
-      
-      
-      <div class="col-sm-9 col-md-6">上一页
-        <div class="post-nav-item">
-          <a href="https://mooncaker816.github.io/2018/01/04/the-go-programming-language-ex11/" rel="prev">The Go Programming Language Ex（11）</a>
-        </div>
-      </div>
-      
-  </div>
-</div>
-
-              </div>
-              
-
-              <div class="body-footer">
-                  最近更新于 Apr 26, 2018
-              </div>
-              
-              
-<section id="comments">
-  <div id="disqus_thread"></div>
-<script>
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</section>
-
-
-
-            </div>
-
-          </article>
-      </div>
-
-
-      <div class="hidden-xs col-sm-3 col-md-2">
-          <nav id="tocpost-subnavbar" class="affix">
+    <div class="col-12 col-md-3 col-xl-1">
+     
+    </div>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
             
 
 
@@ -495,7 +349,7 @@
     
       
       
-
+      
       
       
       
@@ -523,51 +377,287 @@
 
             
           </nav>
+      
+    </div>
+      
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">Go 标准库学习</h1>
+
+  
+
+  
+    
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+  
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <meta content="2018-01-14 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+    <time datetime="2018-12-02 14:54:03 &#43;0800 CST" itemprop="dateModified">
+      Dec 2, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    12 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/golang/">Golang</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f&amp;title=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f&amp;title=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Go%20%e6%a0%87%e5%87%86%e5%ba%93%e5%ad%a6%e4%b9%a0&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f01%2f14%2fgo-%25E6%25A0%2587%25E5%2587%2586%25E5%25BA%2593%25E5%25AD%25A6%25E4%25B9%25A0%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+            <div class="article-container">
+
+              <div class="article-style" itemprop="articleBody">
+                <h3 id=2f7c29a2fdd963dcc158a106260ce17f>bytes和strings函数比对</h3>
+
+<table><tr><td>bytes</td><td></td><td>strings</td><td></td></tr><tr><td>函数签名</td><td>功能</td><td>函数签名</td><td>功能</td></tr><tr><td>func explode(s []byte, n int) [][]byte</td><td>以每个utf8字符为单位，将前n个字符对应的[]byte型组成新的slice返回</td><td>func explode(s string, n int) []string</td><td>以每个utf8字符为单位，将前n个字符对应的string型组成新的slice返回</td></tr><tr><td>func countGeneric(s, sep []byte) int</td><td>返回s中有几个sep，若sep为空，则返回sutf8.RuneCount(s) + 1</td><td>func countGeneric(s, substr string) int</td><td>返回s中有几个substr，若substr为空，则返回sutf8.RuneCount(s) + 1</td></tr><tr><td>func Contains(b, subslice []byte) bool</td><td>b中是否含有subslice</td><td>func Contains(s, substr string) bool</td><td>s中是否含有substr</td></tr><tr><td>func ContainsAny(b []byte, chars string) bool</td><td>b中是否含有字符串chars</td><td>func ContainsAny(s, chars string) bool</td><td>s中是否含有字符串chars中的任意一个unicode字符</td></tr><tr><td>func ContainsRune(b []byte, r rune) bool</td><td>b中是否含有rune r</td><td>func ContainsRune(s string, r rune) bool</td><td>s中是否含有rune r</td></tr><tr><td>func indexBytePortable(s []byte, c byte) int（并没有导出也没有用于内部）</td><td>返回s中c的位置，若不含有c，则返回-1</td><td></td><td></td></tr><tr><td>func LastIndex(s, sep []byte) int</td><td>返回s中最后一个sep的位置，若sep为空，返回s的长度，若不含sep，则返回-1</td><td>func LastIndex(s, substr string) int</td><td>返回s中最后一个substr的位置，若substr为空，返回s的长度，若不含substr，则返回-1</td></tr><tr><td>func LastIndexByte(s []byte, c byte) int</td><td>返回最后一个c的位置，没有则返回-1</td><td>func LastIndexByte(s string, c byte) int</td><td>返回最后一个c的位置，没有则返回-1</td></tr><tr><td>func IndexRune(s []byte, r rune) int</td><td>返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1</td><td>func IndexRune(s string, r rune) int</td><td>返回第一个r的位置，如果r无法解码为utf8又不是\uFFFD，认为没找到返回-1</td></tr><tr><td>func IndexAny(s []byte, chars string) int</td><td>返回chars中任意一个unicode字符在s中第一次出现的位置</td><td>func IndexAny(s, chars string) int</td><td>返回chars中任意一个unicode字符在s中第一次出现的位置</td></tr><tr><td>func LastIndexAny(s []byte, chars string) int</td><td>返回chars中任意一个unicode字符在s中最后一次出现的位置</td><td>func LastIndexAny(s, chars string) int</td><td>返回chars中任意一个unicode字符在s中最后一次出现的位置</td></tr><tr><td>func genSplit(s, sep []byte, sepSave, n int) [][]byte</td><td>按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice</td><td>func genSplit(s, sep string, sepSave, n int) []string</td><td>按sep划分s，返回前n个组成的slice，每个slice中sep的保留位数有sepSave决定，n小于0时，返回所有划分组成的slice</td></tr><tr><td>func SplitN(s, sep []byte, n int) [][]byte</td><td>按sep划分s，返回前n个划分的slice组成的slice，每个划分的slice不包含sep，n小于0返回所有划分组成的slice</td><td>func SplitN(s, sep string, n int) []string</td><td>按sep划分s，返回前n个划分的string组成的slice，每个划分的string不包含sep，n小于0返回所有划分组成的slice</td></tr><tr><td>func SplitAfterN(s, sep []byte, n int) [][]byte</td><td>按sep划分s，返回前n个划分的slice组成slice，每个划分包含sep</td><td>func SplitAfterN(s, sep string, n int) []string</td><td>按sep划分s，返回前n个划分的string组成slice，每个划分包含sep</td></tr><tr><td>func Split(s, sep []byte) [][]byte</td><td>返回所有的由sep划分的slice组成的slice，每个划分不包含sep</td><td>func Split(s, sep string) []string</td><td>返回所有的由sep划分的string组成的slice，每个划分不包含sep</td></tr><tr><td>func SplitAfter(s, sep []byte) [][]byte</td><td>返回所有的由sep划分的slice组成的slice，每个划分包含sep</td><td>func SplitAfter(s, sep string) []string</td><td>返回所有的由sep划分的string组成的slice，每个划分包含sep</td></tr><tr><td>func Fields(s []byte) [][]byte</td><td>按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice</td><td>func Fields(s string) []string</td><td>按unicode.IsSpace划分s（所有连续的whitespce当成一个sep），返回所有的划分组成的slice</td></tr><tr><td>func FieldsFunc(s []byte, f func(rune) bool) [][]byte</td><td>如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子slice的slice</td><td>func FieldsFunc(s string, f func(rune) bool) []string</td><td>如果s中对应的一个rune满足f，则这个rune就是s的一个分隔符，返回s中所有分隔符划分的子string的slice</td></tr><tr><td>func Join(s [][]byte, sep []byte) []byte</td><td>将s中的元素用sep拼接起来，返回一个新的slice</td><td>func Join(a []string, sep string) string </td><td>将s中的元素用sep拼接起来，返回一个新的string</td></tr><tr><td>func HasPrefix(s, prefix []byte) bool</td><td>判断s是否以prefix开头</td><td>func HasPrefix(s, prefix string) bool</td><td>判断s是否以prefix开头</td></tr><tr><td>func HasSuffix(s, suffix []byte) bool</td><td>判断s是否以suffix结尾</td><td>func HasSuffix(s, suffix string) bool</td><td>判断s是否以suffix结尾</td></tr><tr><td>func Map(mapping func(r rune) rune, s []byte) []byte</td><td>将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符转为utf8存储在一个新的slice中返回</td><td>func Map(mapping func(rune) rune, s string) string</td><td>将s中对应的每个rune字符作用映射f得到新的字符，再将这些字符存储在一个新的string中返回</td></tr><tr><td>func Repeat(b []byte, count int) []byte</td><td>重复b count次，返回新的slice</td><td>func Repeat(s string, count int) string</td><td>重复s count次，返回新的string</td></tr><tr><td>func ToUpper(s []byte) []byte</td><td>转为大写</td><td>func ToUpper(s string) string</td><td>转为大写</td></tr><tr><td>func ToLower(s []byte) []byte </td><td>转为小写</td><td>func ToLower(s string) string</td><td>转为小写</td></tr><tr><td>func ToTitle(s []byte) []byte</td><td>转为Title</td><td>func ToTitle(s string) string</td><td>转为Title</td></tr><tr><td>func ToUpperSpecial(c unicode.SpecialCase, s []byte) []byte</td><td>只将SpecialCase范围里的字符转为大写</td><td>func ToUpperSpecial(c unicode.SpecialCase, s string) string</td><td>只将SpecialCase范围里的字符转为大写</td></tr><tr><td>func ToLowerSpecial(c unicode.SpecialCase, s []byte) []byte</td><td>只将SpecialCase范围里的字符转为小写</td><td>func ToLowerSpecial(c unicode.SpecialCase, s string) string</td><td>只将SpecialCase范围里的字符转为小写</td></tr><tr><td>func ToTitleSpecial(c unicode.SpecialCase, s []byte) []byte</td><td>只将SpecialCase范围里的字符转为Title</td><td>func ToTitleSpecial(c unicode.SpecialCase, s string) string</td><td>只将SpecialCase范围里的字符转为Title</td></tr><tr><td>func isSeparator(r rune) bool</td><td>r是否可以作为一个词（unicode）的分隔符<br>ascii码，数字，字母，下划线不可以<br>非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以</td><td>func isSeparator(r rune) bool</td><td>r是否可以作为一个词（unicode）的分隔符<br>ascii码，数字，字母，下划线不可以<br>非ascii码，unicode的数字，字母不可以，剩下其他认为是unicode的space可以</td></tr><tr><td>func Title(s []byte) []byte </td><td>调用Map，s中非词分隔符的字符转换为Title</td><td>func Title(s string) string</td><td>调用Map，s中非词分隔符的字符转换为Title</td></tr><tr><td>func TrimLeftFunc(s []byte, f func(r rune) bool) []byte</td><td>以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子slice</td><td>func TrimLeftFunc(s string, f func(rune) bool) string</td><td>以左边起第一个不满足f的rune对应的utf8码开始到s末尾的子string</td></tr><tr><td>func TrimRightFunc(s []byte, f func(r rune) bool) []byte</td><td>以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子slice</td><td>func TrimRightFunc(s string, f func(rune) bool) string</td><td>以s头开始到从右边起第一个不满足f的rune对应的utf8码为终点的子string</td></tr><tr><td>func TrimFunc(s []byte, f func(r rune) bool) []byte </td><td>去掉左边和去掉右边的结合体</td><td>func TrimFunc(s string, f func(rune) bool) string</td><td>去掉左边和去掉右边的结合体</td></tr><tr><td>func TrimPrefix(s, prefix []byte) []byte</td><td>去掉prefix后的子slice</td><td>func TrimPrefix(s, prefix string) string</td><td>去掉prefix后的子string</td></tr><tr><td>func TrimSuffix(s, suffix []byte) []byte</td><td>去掉suffix后的子slice</td><td>func TrimSuffix(s, suffix string) string</td><td>去掉suffix后的子string</td></tr><tr><td>func IndexFunc(s []byte, f func(r rune) bool) int</td><td>返回s中第一个满足f的rune字符对应的utf8码的起始位置</td><td>func IndexFunc(s string, f func(rune) bool) int</td><td>返回s中第一个满足f的rune字符对应的utf8码的起始位置</td></tr><tr><td>func LastIndexFunc(s []byte, f func(r rune) bool) int</td><td>返回s中最后一个满足f的rune字符对应的utf8码的起始位置</td><td>func LastIndexFunc(s string, f func(rune) bool) int</td><td>返回s中最后一个满足f的rune字符对应的utf8码的起始位置</td></tr><tr><td>func indexFunc(s []byte, f func(r rune) bool, truth bool)</td><td>返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td><td>func indexFunc(s string, f func(rune) bool, truth bool) int</td><td>返回s中第一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td></tr><tr><td>func lastIndexFunc(s []byte, f func(r rune) bool, truth bool) int</td><td>返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td><td>func lastIndexFunc(s string, f func(rune) bool, truth bool) int</td><td>返回s中最后一个在f作用下得到truth的rune字符对应的utf8码的起始位置</td></tr><tr><td>func makeASCIISet(chars string) (as asciiSet, ok bool)</td><td>返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码<br>可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码<br>具体存储：<br>asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，<br>其中元素的位置保存了该字符（uint8）对应的高3位（c>>5）的信息，<br>元素的内容保存了每个字符低5位（1 << uint(c&31)）的信息，5位最大是31（11111），<br>刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，<br>这样就可以用数组的前4个元素完整表达128个ascii了</td><td>func makeASCIISet(chars string) (as asciiSet, ok bool)</td><td>返回s中碰到非ascii码之前所有ascii码的集合，以及s中是否都是ascii码<br>可以把asciiSet看成是一个32字节长度的值，其中低16字节共计128位表达128个ascii码[0,127]，高16字节用来比对非ascii码<br>具体存储：<br>asciiSet是一个含有8个元素的数组，每个元素有32位，共计256位，<br>其中元素的位置保存了该字符（uint8）对应的高3位（c>>5）的信息，<br>元素的内容保存了每个字符低5位（1 << uint(c&31)）的信息，5位最大是31（11111），<br>刚好uint32的每一位可以代表在相同高3位的情况下，所有字符的低5位情况，<br>这样就可以用数组的前4个元素完整表达128个ascii了</td></tr><tr><td>func (as *asciiSet) contains(c byte) bool</td><td>c是否在as中</td><td>func (as *asciiSet) contains(c byte) bool</td><td>c是否在as中</td></tr><tr><td>func makeCutsetFunc(cutset string) func(r rune) bool</td><td>返回一个判断r是否在cutset字符串中的函数<br>若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数<br>根据cutset创建一个ascii码的集合，<br>如果全是ascii，则返回一个用来判断r是否在上述集合中的函数<br>如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数</td><td>func makeCutsetFunc(cutset string) func(rune) bool</td><td>返回一个判断r是否在cutset字符串中的函数<br>若为单字节字符串，则返回一个直接比较r是否和cutset相同的函数<br>根据cutset创建一个ascii码的集合，<br>如果全是ascii，则返回一个用来判断r是否在上述集合中的函数<br>如果含有非ascii，则返回一个逐一循环cutset中rune字符，判断r是否其中之一的函数</td></tr><tr><td>func Trim(s []byte, cutset string) []byte</td><td>将s左右两端连续属于cutset的rune字符去除，保留中间的子slice</td><td>func Trim(s string, cutset string) string</td><td>将s左右两端连续属于cutset的rune字符去除，保留中间的子string</td></tr><tr><td>func TrimLeft(s []byte, cutset string) []byte</td><td>将s左边连续属于cutset的rune字符去除，返回剩下的子slice</td><td>func TrimLeft(s string, cutset string) string</td><td>将s左边连续属于cutset的rune字符去除，返回剩下的子string</td></tr><tr><td>func TrimRight(s []byte, cutset string) []byte</td><td>将s右边连续属于cutset的rune字符去除，返回剩下的子slice</td><td>func TrimRight(s string, cutset string) string</td><td>将s右边连续属于cutset的rune字符去除，返回剩下的子string</td></tr><tr><td>func TrimSpace(s []byte) []byte</td><td>去除s左右两端的whitespce，保留剩下的子slice</td><td>func TrimSpace(s string) string</td><td>去除s左右两端的whitespce，保留剩下的子string</td></tr><tr><td>func Runes(s []byte) []rune</td><td>返回s对应的rune类型的slice</td><td></td><td></td></tr><tr><td>func Replace(s, old, new []byte, n int) []byte</td><td>将s中前n个old替换成new，返回一个新的slice，n为负数或者n>old个数时，替换所有old</td><td>func Replace(s, old, new string, n int) string</td><td>将s中前n个old替换成new，返回一个新的string，n为负数或者n>old个数时，替换所有old</td></tr><tr><td>func EqualFold(s, t []byte) bool</td><td>判断s和t在不区分大小写（包括unicode case）的情况下是否相等</td><td>func EqualFold(s, t string) bool</td><td>判断s和t在不区分大小写（包括unicode case）的情况下是否相等</td></tr><tr><td>func indexRabinKarp(s, sep []byte) int</td><td>返回第一个sep在s中的位置<br>Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。<br>Rabin-Karp算法的思想：<br>假设待匹配字符串的长度为M，目标字符串的长度为N（N>M）；<br>首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；<br>比较前面计算的两个hash值，比较次数N-M+1：<br>若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值<br>若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；</td><td>func indexRabinKarp(s, substr string) int</td><td>返回第一个sep在s中的位置<br>Rabin-Karp字符串匹配算法和前面介绍的《朴素字符串匹配算法》类似，也是对应每一个字符进行比较，不同的是Rabin-Karp采用了把字符进行预处理，也就是对每个字符进行对应进制数并取模运算，类似于通过某种函数计算其函数值，比较的是每个字符的函数值。预处理时间O(m)，匹配时间是O((n-m+1)m)。<br>Rabin-Karp算法的思想：<br>假设待匹配字符串的长度为M，目标字符串的长度为N（N>M）；<br>首先计算待匹配字符串的hash值，计算目标字符串前M个字符的hash值；<br>比较前面计算的两个hash值，比较次数N-M+1：<br>若hash值不相等，则继续计算目标字符串的下一个长度为M的字符子串的hash值<br>若hash值相同，则需要使用朴素算法再次判断是否为相同的字串；</td></tr><tr><td>func hashStr(sep []byte) (uint32, uint32)</td><td>计算sep的hash，用于Rabin-Karp算法</td><td>func hashStr(sep string) (uint32, uint32)</td><td>计算sep的hash，用于Rabin-Karp算法</td></tr><tr><td></td><td></td><td>func hashStrRev(sep string) (uint32, uint32)</td><td>计算reverse(sep)的hash，用于Rabin-Karp算法</td></tr></table>
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/go-%E6%A0%87%E5%87%86%E5%BA%93/">Go 标准库</a>
+  
+  <a class="badge badge-light" href="/tags/strings/">Strings</a>
+  
+  <a class="badge badge-light" href="/tags/bytes/">Bytes</a>
+  
+</div>
+
+
+
+
+              
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row flex-xl-nowrap">
+      
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/" rel="next">Linux Centos 命令之 ls</a>
+        </div>
       </div>
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/01/04/the-go-programming-language-ex11/" rel="prev">The Go Programming Language Ex（11）</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 Dec 2, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+    </main>
 
   </div>
 </div>
 
-<footer class="site-footer">
-  <div class="container">
-    <p class="powered-by">
+<div class="container">
+  <footer class="site-footer">
+  
 
-      &copy; 2018-Present &middot; 
+  <p class="powered-by">
+    &copy; 2018-Present &middot; 
 
-      Powered by the
-      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
-      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
-      
-      <span class="pull-right" aria-hidden="true">
-        <a href="#" id="back_to_top">
-          <span class="button_icon">
-            <i class="fa fa-chevron-up fa-2x"></i>
-          </span>
-        </a>
-      </span>
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
 
-    </p>
     
-  </div>
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+  
 </footer>
+
+</div>
 
 
 <div id="modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">引用</h4>
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div>
-        <pre><code class="modal-body tex"></code></pre>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
       </div>
       <div class="modal-footer">
-        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
-          <i class="fa fa-copy"></i> 复制
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
         </a>
-        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
-          <i class="fa fa-download"></i> 下载
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
         </a>
         <div id="modal-error"></div>
       </div>
@@ -579,56 +669,106 @@
 
     
     
+    
+    <script src="/js/mathjax-config.js"></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    
+    
+
+    
+    
+    
     <script id="dsq-count-scr" src="/js/count.js" async></script>
     
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
     
 
     
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "搜索...",
+        'results': "搜索结果",
+        'no_results': "没有找到结果"
+      };
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
 
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+
     
     
-    <script src="/js/hugo-academic.js"></script>
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
     
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="/js/academic.min.14cafafda844d960749b7551524d1c3a.js"></script>
+
     
     <script src="/js/wordart.min.js"></script>
     
     <script src="/js/asciinema-player.js"></script>
-    
-
-    
-    
-      
-      
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
-      
-
-      
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
-      
-
-      
-
-      <script>hljs.initHighlightingOnLoad();</script>
-    
-
-    
-    
-    <script type="text/x-mathjax-config">
-        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
-        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
-    </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
-    
-    
-    
-    
     
 
   </body>

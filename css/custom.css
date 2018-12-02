@@ -35,7 +35,8 @@
 #tocpost-navbar,
 #tocpost-subnavbar {
   font-size: 12px;
-  width: 175px;
+  /* width: 175px; */
+  width: 300px;
   margin-left: -15px;
 }
 
@@ -184,12 +185,20 @@
 /* Documentation: article navigation. */
 
 /* Nav: All levels. */
+nav[data-toggle='toc'] .nav {
+  overflow:hidden;
+  white-space:nowrap;
+  display: block;
+}
+
 nav[data-toggle='toc'] .nav > li > a {
   display: block;
   padding: 4px 20px;
   font-size: 14px;
   font-weight: 500;
   color: #767676;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 
 nav[data-toggle='toc'] .nav > li > a:hover,
@@ -199,6 +208,8 @@ nav[data-toggle='toc'] .nav > li > a:focus {
   text-decoration: none;
   background-color: transparent;
   border-left: 1px solid #3f51b5;
+  text-overflow:unset;
+  overflow:unset;
 }
 
 nav[data-toggle='toc'] .nav > .active > a,
@@ -209,6 +220,8 @@ nav[data-toggle='toc'] .nav > .active:focus > a {
   color: #3f51b5;
   background-color: transparent;
   border-left: 2px solid #3f51b5;
+  text-overflow:unset;
+  overflow:unset;
 }
 
 /* Nav: second level. */

@@ -13,12 +13,39 @@
     
     
     <item>
+      <title>APUE_With_GO_0</title>
+      <link>https://mooncaker816.github.io/2018/12/01/apue_with_go_0/</link>
+      <pubDate>Sat, 01 Dec 2018 10:07:45 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/12/01/apue_with_go_0/</guid>
+      <description>整体目录： CH1 - UNIX System Overview</description>
+    </item>
+    
+    <item>
+      <title>APUE_With_GO_1</title>
+      <link>https://mooncaker816.github.io/2018/12/01/apue_with_go_1/</link>
+      <pubDate>Sat, 01 Dec 2018 10:07:45 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/12/01/apue_with_go_1/</guid>
+      <description>UNIX System Overview： 目录 UNIX System Overview： 简介 登录 简介 操作系统可以简单地理解为一套用来控制计算机硬件资源并为应用程序提供运行环境的软件</description>
+    </item>
+    
+    <item>
+      <title>GCM</title>
+      <link>https://mooncaker816.github.io/2018/08/26/gcm/</link>
+      <pubDate>Sun, 26 Aug 2018 19:17:56 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/2018/08/26/gcm/</guid>
+      <description>1. GCM 认证加密 GCM 可以看成是 CTR 模式的升级版，在完成数据加密的前提下，同时完成数据的完整性验证。GCM 固定分组大小为 128bits，用于数据完整性</description>
+    </item>
+    
+    <item>
       <title>TLS（二）</title>
       <link>https://mooncaker816.github.io/2018/08/03/tls%E4%BA%8C/</link>
       <pubDate>Fri, 03 Aug 2018 19:30:38 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/08/03/tls%E4%BA%8C/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>书接上回，客户端在完成 clientHelloMsg 和 serverHelloMsg 后，开启缓存写入模式，也分为重用 session 和非重用 session 两种情况。服务端在发送完第一批次消息后，等待客户端的回应。 1. 客户端 1.1</description>
     </item>
     
     <item>
@@ -27,7 +54,7 @@
       <pubDate>Fri, 03 Aug 2018 07:24:15 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/08/03/tls%E4%B8%80/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>1. TLS 基本概念 传输层安全性协议（英语：Transport Layer Security，缩写作 TLS），及其前身安全套接层（Secure Sockets Layer，缩写</description>
     </item>
     
     <item>
@@ -36,7 +63,7 @@
       <pubDate>Tue, 24 Jul 2018 08:49:59 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/07/24/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>1 概念 分组密码的模式主要是指对每一个分组明文（密文）进行迭代加（解）密的过程。主要的分组模式有以下几种： ECB 电子密码本（Electronic CodeBook</description>
     </item>
     
     <item>
@@ -45,7 +72,7 @@
       <pubDate>Sat, 21 Jul 2018 08:52:27 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/07/21/sha3/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>1 什么是SHA-3 SHA-3是一种作为新标准发布的单向散列函数算法，用来替代在理论上已被找出攻击方法的SHA-1算法。全世界的企业和密码学家</description>
     </item>
     
     <item>
@@ -54,7 +81,7 @@
       <pubDate>Thu, 19 Jul 2018 19:29:32 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/07/19/%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>1 概念 单向散列函数，又称单向Hash函数、杂凑函数，就是把任意长的输入消息串变化成固定长的输出串且由输出串难以得到输入串的一种函数。这个输出</description>
     </item>
     
     <item>
@@ -65,9 +92,7 @@
       <guid>https://mooncaker816.github.io/2018/06/26/filepath/</guid>
       <description>&lt;h1 id=&#34;1-filepath包概要&#34;&gt;1. Filepath包概要&lt;/h1&gt;
 
-&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -78,9 +103,7 @@
       <guid>https://mooncaker816.github.io/2018/06/26/path/</guid>
       <description>&lt;h1 id=&#34;1-path包概要&#34;&gt;1. Path包概要&lt;/h1&gt;
 
-&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;h2 id=&#34;1-1-概述&#34;&gt;1.1 概述&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -89,9 +112,7 @@
       <pubDate>Wed, 13 Jun 2018 15:02:12 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/06/13/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F1/</guid>
-      <description>&lt;h1 id=&#34;or-channel&#34;&gt;Or-Channel&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;or-channel&#34;&gt;Or-Channel&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -100,9 +121,7 @@
       <pubDate>Mon, 28 May 2018 10:35:29 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/28/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9527/</guid>
-      <description>&lt;h1 id=&#34;第二十九章-ephemeris-for-physical-observations-of-the-sun&#34;&gt;第二十九章 Ephemeris for Physical Observations of the Sun&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十九章-ephemeris-for-physical-observations-of-the-sun&#34;&gt;第二十九章 Ephemeris for Physical Observations of the Sun&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -111,9 +130,7 @@
       <pubDate>Mon, 28 May 2018 09:25:36 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/28/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9526/</guid>
-      <description>&lt;h1 id=&#34;第二十八章-equation-of-time-均时差&#34;&gt;第二十八章 Equation of Time 均时差&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十八章-equation-of-time-均时差&#34;&gt;第二十八章 Equation of Time 均时差&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -122,9 +139,7 @@
       <pubDate>Sat, 26 May 2018 08:58:00 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/26/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9525/</guid>
-      <description>&lt;h1 id=&#34;第二十七章-分点和至点-equinoxes-and-solstices&#34;&gt;第二十七章 分点和至点 Equinoxes and Solstices&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十七章-分点和至点-equinoxes-and-solstices&#34;&gt;第二十七章 分点和至点 Equinoxes and Solstices&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -133,9 +148,7 @@
       <pubDate>Fri, 25 May 2018 13:59:39 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9524/</guid>
-      <description>&lt;h1 id=&#34;第二十六章-太阳直角坐标-rectangular-coordinates-of-the-sun&#34;&gt;第二十六章 太阳直角坐标 Rectangular Coordinates of the Sun&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十六章-太阳直角坐标-rectangular-coordinates-of-the-sun&#34;&gt;第二十六章 太阳直角坐标 Rectangular Coordinates of the Sun&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -144,9 +157,7 @@
       <pubDate>Fri, 25 May 2018 08:06:54 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9523/</guid>
-      <description>&lt;h1 id=&#34;第二十五章-太阳坐标-solar-coordinates&#34;&gt;第二十五章 太阳坐标 Solar Coordinates&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十五章-太阳坐标-solar-coordinates&#34;&gt;第二十五章 太阳坐标 Solar Coordinates&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -155,9 +166,7 @@
       <pubDate>Fri, 25 May 2018 08:04:20 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/25/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9522/</guid>
-      <description>&lt;h1 id=&#34;第二十四章-reduction-of-ecliptical-elements-from-one-equinox-to-another-one&#34;&gt;第二十四章 Reduction of Ecliptical Elements from one Equinox to another one&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十四章-reduction-of-ecliptical-elements-from-one-equinox-to-another-one&#34;&gt;第二十四章 Reduction of Ecliptical Elements from one Equinox to another one&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -166,9 +175,7 @@
       <pubDate>Thu, 24 May 2018 20:01:23 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/24/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9521/</guid>
-      <description>&lt;h1 id=&#34;第二十三章-apparent-place-of-a-star&#34;&gt;第二十三章 Apparent Place of a Star&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十三章-apparent-place-of-a-star&#34;&gt;第二十三章 Apparent Place of a Star&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -177,9 +184,7 @@
       <pubDate>Wed, 23 May 2018 16:58:54 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9520/</guid>
-      <description>&lt;h1 id=&#34;第二十二章-章动和黄赤交角-nutation-and-the-obliquity-of-the-ecliptic&#34;&gt;第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十二章-章动和黄赤交角-nutation-and-the-obliquity-of-the-ecliptic&#34;&gt;第二十二章 章动和黄赤交角 Nutation and the Obliquity of the Ecliptic&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -188,9 +193,7 @@
       <pubDate>Wed, 23 May 2018 14:36:29 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9519/</guid>
-      <description>&lt;h1 id=&#34;第二十一章-岁差&#34;&gt;第二十一章 岁差&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十一章-岁差&#34;&gt;第二十一章 岁差&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -199,9 +202,7 @@
       <pubDate>Wed, 23 May 2018 09:01:52 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/23/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9518/</guid>
-      <description>&lt;h1 id=&#34;第二十章-smallest-circle-containing-three-celestial-bodies&#34;&gt;第二十章 Smallest Circle containing three Celestial Bodies&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第二十章-smallest-circle-containing-three-celestial-bodies&#34;&gt;第二十章 Smallest Circle containing three Celestial Bodies&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -210,9 +211,7 @@
       <pubDate>Tue, 22 May 2018 10:15:11 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9517/</guid>
-      <description>&lt;h1 id=&#34;第十九章-bodies-in-straight-line&#34;&gt;第十九章 Bodies in Straight Line&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十九章-bodies-in-straight-line&#34;&gt;第十九章 Bodies in Straight Line&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -221,9 +220,7 @@
       <pubDate>Tue, 22 May 2018 09:37:47 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/22/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9516/</guid>
-      <description>&lt;h1 id=&#34;第十八章-行星会合-planetary-conjunctions&#34;&gt;第十八章 行星会合 Planetary Conjunctions&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十八章-行星会合-planetary-conjunctions&#34;&gt;第十八章 行星会合 Planetary Conjunctions&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -232,9 +229,7 @@
       <pubDate>Mon, 21 May 2018 18:46:37 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9515/</guid>
-      <description>&lt;h1 id=&#34;第十七章-角距离-angular-separation&#34;&gt;第十七章 角距离 Angular Separation&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十七章-角距离-angular-separation&#34;&gt;第十七章 角距离 Angular Separation&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -243,9 +238,7 @@
       <pubDate>Mon, 21 May 2018 12:29:48 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/21/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9514/</guid>
-      <description>&lt;h1 id=&#34;第十六章-大气折射-atmospheric-refraction&#34;&gt;第十六章 大气折射 Atmospheric Refraction&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十六章-大气折射-atmospheric-refraction&#34;&gt;第十六章 大气折射 Atmospheric Refraction&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -254,9 +247,7 @@
       <pubDate>Sun, 20 May 2018 20:50:07 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9513/</guid>
-      <description>&lt;h1 id=&#34;第十五章-升-中天-降-rising-transit-setting&#34;&gt;第十五章 升，中天，降 Rising,Transit,Setting&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十五章-升-中天-降-rising-transit-setting&#34;&gt;第十五章 升，中天，降 Rising,Transit,Setting&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -265,9 +256,7 @@
       <pubDate>Sun, 20 May 2018 10:13:34 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/20/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9512/</guid>
-      <description>&lt;h1 id=&#34;第十四章-the-parallactic-angle&#34;&gt;第十四章 The Parallactic Angle&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十四章-the-parallactic-angle&#34;&gt;第十四章 The Parallactic Angle&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -276,9 +265,7 @@
       <pubDate>Sat, 19 May 2018 15:04:04 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9511/</guid>
-      <description>&lt;h1 id=&#34;第十三章-坐标的转换-transformation-of-coordinates&#34;&gt;第十三章 坐标的转换 Transformation of Coordinates&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十三章-坐标的转换-transformation-of-coordinates&#34;&gt;第十三章 坐标的转换 Transformation of Coordinates&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -287,9 +274,7 @@
       <pubDate>Sat, 19 May 2018 09:20:12 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/19/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%9510/</guid>
-      <description>&lt;h1 id=&#34;第十二章-格林威治恒星时-sidereal-time-at-greenwich&#34;&gt;第十二章 格林威治恒星时 Sidereal Time at Greenwich&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十二章-格林威治恒星时-sidereal-time-at-greenwich&#34;&gt;第十二章 格林威治恒星时 Sidereal Time at Greenwich&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -298,9 +283,7 @@
       <pubDate>Fri, 18 May 2018 15:55:20 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/18/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%959/</guid>
-      <description>&lt;h1 id=&#34;第十一章-地球球体-the-earth-s-globe&#34;&gt;第十一章 地球球体 The Earth&amp;rsquo;s Globe&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十一章-地球球体-the-earth-s-globe&#34;&gt;第十一章 地球球体 The Earth&amp;rsquo;s Globe&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -309,9 +292,7 @@
       <pubDate>Thu, 17 May 2018 09:56:34 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%958/</guid>
-      <description>&lt;h1 id=&#34;第十章-力学时和世界时-dynamical-time-universal-time&#34;&gt;第十章 力学时和世界时 Dynamical Time &amp;amp; Universal Time&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第十章-力学时和世界时-dynamical-time-universal-time&#34;&gt;第十章 力学时和世界时 Dynamical Time &amp;amp; Universal Time&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -320,9 +301,7 @@
       <pubDate>Thu, 17 May 2018 08:56:34 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%957/</guid>
-      <description>&lt;h1 id=&#34;第九章-犹太历和穆斯林历&#34;&gt;第九章 犹太历和穆斯林历&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第九章-犹太历和穆斯林历&#34;&gt;第九章 犹太历和穆斯林历&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -331,9 +310,7 @@
       <pubDate>Thu, 17 May 2018 07:40:44 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/17/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%956/</guid>
-      <description>&lt;h1 id=&#34;第八章-复活节日-date-of-easter&#34;&gt;第八章 复活节日 Date of Easter&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第八章-复活节日-date-of-easter&#34;&gt;第八章 复活节日 Date of Easter&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -342,9 +319,7 @@
       <pubDate>Wed, 16 May 2018 09:27:51 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/16/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%955/</guid>
-      <description>&lt;h1 id=&#34;第七章-儒略日-julian-day&#34;&gt;第七章 儒略日 Julian Day&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第七章-儒略日-julian-day&#34;&gt;第七章 儒略日 Julian Day&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -353,9 +328,7 @@
       <pubDate>Tue, 15 May 2018 17:34:49 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%954/</guid>
-      <description>&lt;h1 id=&#34;第六章-排序-sort&#34;&gt;第六章 排序 Sort&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第六章-排序-sort&#34;&gt;第六章 排序 Sort&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -364,9 +337,7 @@
       <pubDate>Tue, 15 May 2018 13:48:36 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/15/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%953/</guid>
-      <description>&lt;h1 id=&#34;第五章-迭代-iteration&#34;&gt;第五章 迭代 Iteration&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第五章-迭代-iteration&#34;&gt;第五章 迭代 Iteration&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -375,9 +346,7 @@
       <pubDate>Sun, 13 May 2018 19:38:14 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/13/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%952/</guid>
-      <description>&lt;h1 id=&#34;第四章-拟合-curve-fitting&#34;&gt;第四章 拟合 Curve Fitting&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;第四章-拟合-curve-fitting&#34;&gt;第四章 拟合 Curve Fitting&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -386,9 +355,7 @@
       <pubDate>Sat, 12 May 2018 21:43:17 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/05/12/%E5%A4%A9%E6%96%87%E7%AE%97%E6%B3%951/</guid>
-      <description>&lt;h2 id=&#34;①背景&#34;&gt;①背景&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;①背景&#34;&gt;①背景&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -397,9 +364,7 @@
       <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-cprmmv/</guid>
-      <description>&lt;h2 id=&#34;cp-copy-拷贝目录-文件&#34;&gt;cp - copy 拷贝目录，文件&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;cp-copy-拷贝目录-文件&#34;&gt;cp - copy 拷贝目录，文件&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -408,9 +373,7 @@
       <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-touchcattacmoreless/</guid>
-      <description>&lt;h2 id=&#34;touch-创建空文件-修改时间&#34;&gt;touch -  创建空文件，修改时间&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;touch-创建空文件-修改时间&#34;&gt;touch -  创建空文件，修改时间&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -419,9 +382,7 @@
       <pubDate>Sat, 21 Apr 2018 12:50:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-mkdirrmdirpwdcd/</guid>
-      <description>&lt;h2 id=&#34;mkdir-make-directory-创建目录&#34;&gt;mkdir - make directory 创建目录&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;mkdir-make-directory-创建目录&#34;&gt;mkdir - make directory 创建目录&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -430,9 +391,7 @@
       <pubDate>Sat, 21 Apr 2018 11:50:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/04/21/linux-centos-%E5%91%BD%E4%BB%A4%E4%B9%8B-ls/</guid>
-      <description>&lt;h2 id=&#34;ls-list-列出文件与目录&#34;&gt;ls - list 列出文件与目录&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;ls-list-列出文件与目录&#34;&gt;ls - list 列出文件与目录&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -441,9 +400,7 @@
       <pubDate>Sun, 14 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/01/14/go-%E6%A0%87%E5%87%86%E5%BA%93%E5%AD%A6%E4%B9%A0/</guid>
-      <description>&lt;h3 id=&#34;bytes和strings函数比对&#34;&gt;bytes和strings函数比对&lt;/h3&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h3 id=&#34;bytes和strings函数比对&#34;&gt;bytes和strings函数比对&lt;/h3&gt;</description>
     </item>
     
     <item>
@@ -454,9 +411,7 @@
       <guid>https://mooncaker816.github.io/2018/01/04/the-go-programming-language-ex11/</guid>
       <description>&lt;h3 id=&#34;ex-9-1&#34;&gt;Ex 9.1&lt;/h3&gt;
 
-&lt;p&gt;Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The result should indicate whether the transaction succeeded or failed due to insufﬁcient funds. The message sent to the monitor goroutine must contain both the amount to withdraw and a new channel over which the monitor goroutine can send the boolean result back to Withdraw.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The result should indicate whether the transaction succeeded or failed due to insufﬁcient funds. The message sent to the monitor goroutine must contain both the amount to withdraw and a new channel over which the monitor goroutine can send the boolean result back to Withdraw.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -467,9 +422,7 @@
       <guid>https://mooncaker816.github.io/2018/01/03/the-go-programming-language-ex10/</guid>
       <description>&lt;h3 id=&#34;ex-8-6&#34;&gt;Ex 8.6&lt;/h3&gt;
 
-&lt;p&gt;Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3, then only URLs reachable by at most three links will be fetched.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3, then only URLs reachable by at most three links will be fetched.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -480,9 +433,7 @@
       <guid>https://mooncaker816.github.io/2018/01/01/the-go-programming-language-ex9/</guid>
       <description>&lt;h3 id=&#34;ex-8-1&#34;&gt;Ex 8.1&lt;/h3&gt;
 
-&lt;p&gt;Modify clock2 to accept a port number, and write a program, clockwall, that acts as a client of several clock servers at once, reading the times from each one and displaying the results in a table, akin to the wall of clocks seen in some business ofﬁces. If you have access to geographically distributed computers, run instances remotely ; otherwise run local instances on different ports with fake time zones.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Modify clock2 to accept a port number, and write a program, clockwall, that acts as a client of several clock servers at once, reading the times from each one and displaying the results in a table, akin to the wall of clocks seen in some business ofﬁces. If you have access to geographically distributed computers, run instances remotely ; otherwise run local instances on different ports with fake time zones.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -493,9 +444,7 @@
       <guid>https://mooncaker816.github.io/2017/12/31/the-go-programming-language-ex8/</guid>
       <description>&lt;h3 id=&#34;ex-7-1&#34;&gt;Ex 7.1&lt;/h3&gt;
 
-&lt;p&gt;Using the ideas from ByteCounter, implement counters for words and for lines. You will ﬁnd bufio.ScanWords useful.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Using the ideas from ByteCounter, implement counters for words and for lines. You will ﬁnd bufio.ScanWords useful.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -514,9 +463,7 @@
 
 &lt;p&gt;func (*IntSet) Clear() // remove all elements from the set&lt;/p&gt;
 
-&lt;p&gt;func (*IntSet) Copy() *IntSet // return a copy of the set&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;func (*IntSet) Copy() *IntSet // return a copy of the set&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -527,9 +474,7 @@
       <guid>https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/</guid>
       <description>&lt;h3 id=&#34;ex-5-1&#34;&gt;Ex 5.1&lt;/h3&gt;
 
-&lt;p&gt;Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -540,9 +485,7 @@
       <guid>https://mooncaker816.github.io/2017/12/24/the-go-programming-language-ex5/</guid>
       <description>&lt;h3 id=&#34;ex-4-8&#34;&gt;Ex 4.8&lt;/h3&gt;
 
-&lt;p&gt;Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -553,9 +496,7 @@
       <guid>https://mooncaker816.github.io/2017/12/23/the-go-programming-language-ex4/</guid>
       <description>&lt;h3 id=&#34;ex-4-1&#34;&gt;Ex 4.1&lt;/h3&gt;
 
-&lt;p&gt;Write a function that counts the number of bits that are different in two SHA256 hashes. (See PopCount from Section 2.6.2.)&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Write a function that counts the number of bits that are different in two SHA256 hashes. (See PopCount from Section 2.6.2.)&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -566,9 +507,7 @@
       <guid>https://mooncaker816.github.io/2017/12/22/the-go-programming-language-ex3/</guid>
       <description>&lt;h3 id=&#34;ex-3-10&#34;&gt;Ex 3.10&lt;/h3&gt;
 
-&lt;p&gt;Write a non-recursive version of comma, using bytes.Buffer instead of str concatenation.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Write a non-recursive version of comma, using bytes.Buffer instead of str concatenation.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -579,9 +518,7 @@
       <guid>https://mooncaker816.github.io/2017/12/21/the-go-programming-language-ex2/</guid>
       <description>&lt;h3 id=&#34;ex-2-1&#34;&gt;Ex 2.1&lt;/h3&gt;
 
-&lt;p&gt;Add types, constants, and functions to tempconv for processing temperatures in the Kelvin scale, where zero Kelvin is −273.15°C and a difference of 1K has the same magnitude as 1°C.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Add types, constants, and functions to tempconv for processing temperatures in the Kelvin scale, where zero Kelvin is −273.15°C and a difference of 1K has the same magnitude as 1°C.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -592,9 +529,7 @@
       <guid>https://mooncaker816.github.io/2017/12/19/the-go-programming-language-ex1/</guid>
       <description>&lt;h3 id=&#34;ex-1-1&#34;&gt;Ex 1.1&lt;/h3&gt;
 
-&lt;p&gt;Modify the echo program to also print os.Args[0], the name of the command that invoked it.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Modify the echo program to also print os.Args[0], the name of the command that invoked it.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -603,9 +538,7 @@
       <pubDate>Thu, 14 Dec 2017 09:39:07 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2017/12/14/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E5%9B%9B/</guid>
-      <description>&lt;h3 id=&#34;用户类型&#34;&gt;用户类型&lt;/h3&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h3 id=&#34;用户类型&#34;&gt;用户类型&lt;/h3&gt;</description>
     </item>
     
     <item>
@@ -614,9 +547,7 @@
       <pubDate>Tue, 12 Dec 2017 11:33:37 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2017/12/12/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%89/</guid>
-      <description>&lt;h1 id=&#34;映射&#34;&gt;映射&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;映射&#34;&gt;映射&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -625,9 +556,7 @@
       <pubDate>Fri, 08 Dec 2017 17:00:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2017/12/08/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%8C/</guid>
-      <description>&lt;h1 id=&#34;数组和切片&#34;&gt;数组和切片&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;数组和切片&#34;&gt;数组和切片&lt;/h1&gt;</description>
     </item>
     
     <item>
@@ -636,9 +565,7 @@
       <pubDate>Mon, 25 Sep 2017 17:00:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2017/09/25/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%80/</guid>
-      <description>&lt;h2 id=&#34;包&#34;&gt;包&lt;/h2&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;包&#34;&gt;包&lt;/h2&gt;</description>
     </item>
     
     <item>
@@ -656,9 +583,7 @@
       <pubDate>Mon, 14 Aug 2017 19:00:00 +0000</pubDate>
       
       <guid>https://mooncaker816.github.io/2017/08/14/hello-world/</guid>
-      <description>&lt;p&gt;Welcome to &lt;a href=&#34;https://hexo.io/&#34; target=&#34;_blank&#34;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&#34;https://hexo.io/docs/&#34; target=&#34;_blank&#34;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&#34;https://hexo.io/docs/troubleshooting.html&#34; target=&#34;_blank&#34;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&#34;https://github.com/hexojs/hexo/issues&#34; target=&#34;_blank&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;Welcome to &lt;a href=&#34;https://hexo.io/&#34; target=&#34;_blank&#34;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&#34;https://hexo.io/docs/&#34; target=&#34;_blank&#34;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&#34;https://hexo.io/docs/troubleshooting.html&#34; target=&#34;_blank&#34;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&#34;https://github.com/hexojs/hexo/issues&#34; target=&#34;_blank&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -667,8 +592,7 @@
       <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2015/09/23/%E4%BD%A0%E5%A5%BDhugo/</guid>
-      <description>&lt;p&gt;这是使用Hugo创建的站点中的第一篇文章。
-&lt;/p&gt;</description>
+      <description>&lt;p&gt;这是使用Hugo创建的站点中的第一篇文章。&lt;/p&gt;</description>
     </item>
     
   </channel>

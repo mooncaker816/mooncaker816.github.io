@@ -20,9 +20,7 @@
       <guid>https://mooncaker816.github.io/2017/12/24/the-go-programming-language-ex5/</guid>
       <description>&lt;h3 id=&#34;ex-4-8&#34;&gt;Ex 4.8&lt;/h3&gt;
 
-&lt;p&gt;Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -20,9 +20,7 @@
       <guid>https://mooncaker816.github.io/2017/12/28/the-go-programming-language-ex6/</guid>
       <description>&lt;h3 id=&#34;ex-5-1&#34;&gt;Ex 5.1&lt;/h3&gt;
 
-&lt;p&gt;Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Change the findlinks program to traverse the n.FirstChild linked list using recursive calls to visit instead of a loop.&lt;/p&gt;</description>
     </item>
     
   </channel>

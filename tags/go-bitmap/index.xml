@@ -28,9 +28,7 @@
 
 &lt;p&gt;func (*IntSet) Clear() // remove all elements from the set&lt;/p&gt;
 
-&lt;p&gt;func (*IntSet) Copy() *IntSet // return a copy of the set&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;func (*IntSet) Copy() *IntSet // return a copy of the set&lt;/p&gt;</description>
     </item>
     
   </channel>

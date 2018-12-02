@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 3.1.1">
+  <meta name="generator" content="Hugo 0.52" />
+  <meta name="author" content="Mingle Gu">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="UNIX System Overview： 目录 UNIX System Overview： 简介 登录 简介 操作系统可以简单地理解为一套用来控制计算机硬件资源并为应用程序提供运行环境的软件">
+
+  
+  <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/12/01/apue_with_go_1/">
+
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  <link rel="stylesheet" href="/css/asciinema-player.css">
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-118085755-1', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+  <link rel="alternate" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  <link rel="feed" href="https://mooncaker816.github.io/index.xml" type="application/rss+xml" title="Mooncaker816">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://mooncaker816.github.io/2018/12/01/apue_with_go_1/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Mooncaker816">
+  <meta property="og:url" content="https://mooncaker816.github.io/2018/12/01/apue_with_go_1/">
+  <meta property="og:title" content="APUE_With_GO_1 | Mooncaker816">
+  <meta property="og:description" content="UNIX System Overview： 目录 UNIX System Overview： 简介 登录 简介 操作系统可以简单地理解为一套用来控制计算机硬件资源并为应用程序提供运行环境的软件">
+  
+  
+    
+  <meta property="og:image" content="https://mooncaker816.github.io/img/icon-192.png">
+  <meta property="og:locale" content="zh">
+  
+  <meta property="article:published_time" content="2018-12-01T10:07:45&#43;08:00">
+  
+  <meta property="article:modified_time" content="2018-12-02T14:54:03&#43;08:00">
+  
+
+  
+
+  
+
+  <title>APUE_With_GO_1 | Mooncaker816</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header fixed-top">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1></h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Mooncaker816</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#about">
+            
+            <span>主页</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#tags">
+            
+            <span>分类</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#posts">
+            
+            <span>文章</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#contact">
+            
+            <span>联系</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/arch/">
+            
+            <span>归档</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/example/">
+            
+            <span>示例</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+        
+                
+            
+        
+        
+    
+        
+        
+            
+        
+        
+                
+            
+        
+        
+    
+        
+        
+            
+        
+        
+                
+            
+        
+        
+    
+        
+        
+            
+        
+        
+                
+            
+        
+        
+    
+
+
+<div class="container-fluid docs">
+  <div class="row flex-xl-nowrap">
+
+    <div class="col-12 col-md-3 col-xl-1">
+     
+    </div>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
+            
+
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#e7d3dde26317c6226fb2af6f61a71abb">UNIX System Overview：</a>
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#d41d8cd98f00b204e9800998ecf8427e">目录</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e05dce83e5129785b9f316978a14b896">简介</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#402d19e50fff44c827a4f3b608bd5812">登录</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
+            
+          </nav>
+      
+    </div>
+      
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
+          <article class="article" itemscope itemtype="http://schema.org/Article">
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">APUE_With_GO_1</h1>
+
+  
+
+  
+    
+
+<div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+  
+
+  <span class="article-date">
+    
+        最近更新于
+    
+    <meta content="2018-12-01 10:07:45 &#43;0800 CST" itemprop="datePublished">
+    <time datetime="2018-12-02 14:54:03 &#43;0800 CST" itemprop="dateModified">
+      Dec 2, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    1 分钟阅读时间
+  </span>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/2018/12/01/apue_with_go_1/#disqus_thread"></a>
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder"></i>
+    
+    <a href="/categories/c/">C</a>, 
+    
+    <a href="/categories/go/">GO</a>, 
+    
+    <a href="/categories/apue/">APUE</a>
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=APUE_With_GO_1&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f12%2f01%2fapue_with_go_1%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f12%2f01%2fapue_with_go_1%2f"
+         target="_blank" rel="noopener">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f12%2f01%2fapue_with_go_1%2f&amp;title=APUE_With_GO_1"
+         target="_blank" rel="noopener">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f12%2f01%2fapue_with_go_1%2f&amp;title=APUE_With_GO_1"
+         target="_blank" rel="noopener">
+        <i class="fab fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=APUE_With_GO_1&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f12%2f01%2fapue_with_go_1%2f">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+            <div class="article-container">
+
+              <div class="article-style" itemprop="articleBody">
+                
+
+<h1 id=e7d3dde26317c6226fb2af6f61a71abb>UNIX System Overview：</h1>
+
+id=d41d8cd98f00b204e9800998ecf8427e<id=d41d8cd98f00b204e9800998ecf8427ehid=d41d8cd98f00b204e9800998ecf8427e2id=d41d8cd98f00b204e9800998ecf8427e>id=d41d8cd98f00b204e9800998ecf8427e目id=d41d8cd98f00b204e9800998ecf8427e录id=d41d8cd98f00b204e9800998ecf8427e<id=d41d8cd98f00b204e9800998ecf8427e/id=d41d8cd98f00b204e9800998ecf8427ehid=d41d8cd98f00b204e9800998ecf8427e2id=d41d8cd98f00b204e9800998ecf8427e>id=d41d8cd98f00b204e9800998ecf8427e
+<nav id="TableOfContents">
+<ul>
+<li><a href="#unix-system-overview">UNIX System Overview：</a>
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#登录">登录</a></li>
+</ul></li>
+</ul>
+</nav>
+
+
+<h2 id=e05dce83e5129785b9f316978a14b896>简介</h2>
+
+<p>操作系统可以简单地理解为一套用来控制计算机硬件资源并为应用程序提供运行环境的软件，通常我们称这套软件为内核(kernel)。</p>
+
+<p>如下图所示，内核处于整个环境的中心，通过外部包裹的系统调用层(system calls)进行交互。</p>
+
+<p><img src="https://notes.shichao.io/apue/figure_1.1.png" alt="" /></p>
+
+<p>库函数是建立在系统调用层之上的，用户既可以选择调用封装好的库函数，也可以选择直接调用 system calls。</p>
+
+<p>shell，如其字面意思“壳”，不难理解为一个为用户提供交互界面从而来运行其他特定应用的“壳应用”。</p>
+
+<p>更宽泛地说，操作系统是一个内核加上其他一系列为用户提供支持的软件的整体。如人们通常所说的 GNU/Linux，就是以 Linux 为内核的系统。而 Linux 就是由 Unix 演化而来的，有兴趣的同学可以自行google Unix 和 Linux 的历史，也是很有趣的一段过程。</p>
+
+<p>各大厂商在一定的基础上，又根据自身的需求，添加各种相应的软件包，形成了发行版的Linux系统。</p>
+
+<h2 id=402d19e50fff44c827a4f3b608bd5812>登录</h2>
+
+              </div>
+
+              
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/apue/">APUE</a>
+  
+</div>
+
+
+
+
+              
+              
+              <div class="article-widget">
+                <div class="hr-light"></div>
+                <h3>相关</h3>
+                <ul>
+                  
+                  <li><a href="/2018/12/01/apue_with_go_0/">APUE_With_GO_0</a></li>
+                  
+                </ul>
+              </div>
+              
+
+              
+              <div class="article-widget">
+                <div class="post-nav">
+  <div class="row flex-xl-nowrap">
+      
+      <div class="col-sm-9 col-md-6">下一页
+        <div class="post-nav-item">
+        <a href="https://mooncaker816.github.io/2018/12/01/apue_with_go_0/" rel="next">APUE_With_GO_0</a>
+        </div>
+      </div>
+      
+      
+      <div class="col-sm-9 col-md-6">上一页
+        <div class="post-nav-item">
+          <a href="https://mooncaker816.github.io/2018/08/26/gcm/" rel="prev">GCM</a>
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+              </div>
+              
+
+              <div class="body-footer">
+                  最近更新于 Dec 2, 2018
+              </div>
+              
+              
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mooncaker816" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+            </div>
+
+          </article>
+    </main>
+
+  </div>
+</div>
+
+<div class="container">
+  <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    &copy; 2018-Present &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+  
+</footer>
+
+</div>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    
+    <script src="/js/mathjax-config.js"></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    <script id="dsq-count-scr" src="/js/count.js" async></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "搜索...",
+        'results': "搜索结果",
+        'no_results': "没有找到结果"
+      };
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="/js/academic.min.14cafafda844d960749b7551524d1c3a.js"></script>
+
+    
+    <script src="/js/wordart.min.js"></script>
+    
+    <script src="/js/asciinema-player.js"></script>
+    
+
+  </body>
+</html>
+

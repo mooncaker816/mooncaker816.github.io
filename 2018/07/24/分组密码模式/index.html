@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme" content="hugo-academic">
-  <meta name="generator" content="Hugo 0.39" />
+  <meta name="generator" content="Source Themes Academic 3.1.1">
+  <meta name="generator" content="Hugo 0.52" />
   <meta name="author" content="Mingle Gu">
 
   
@@ -14,10 +14,8 @@
   
   
     
-      
-    
   
-  <meta name="description" content="">
+  <meta name="description" content="1 概念 分组密码的模式主要是指对每一个分组明文（密文）进行迭代加（解）密的过程。主要的分组模式有以下几种： ECB 电子密码本（Electronic CodeBook">
 
   
   <link rel="alternate" hreflang="zh" href="https://mooncaker816.github.io/2018/07/24/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F/">
@@ -28,37 +26,55 @@
   
 
   
+
+  
+
+  
+  
   
   <meta name="theme-color" content="#3f51b5">
   
+
+  
   
   
   
     
-  
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
     
     
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
     
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
   
   
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:400,400italic,700|Roboto+Mono">
   
-  
-  
-  
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
-  
+
   <link rel="stylesheet" href="/styles.css">
   
   <link rel="stylesheet" href="/css/custom.css">
   
   <link rel="stylesheet" href="/css/asciinema-player.css">
   
+
   
   
     <script>
@@ -74,6 +90,7 @@
     
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
     
+  
   
 
   
@@ -92,52 +109,80 @@
   <meta property="og:site_name" content="Mooncaker816">
   <meta property="og:url" content="https://mooncaker816.github.io/2018/07/24/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F/">
   <meta property="og:title" content="分组密码模式 | Mooncaker816">
-  <meta property="og:description" content="">
+  <meta property="og:description" content="1 概念 分组密码的模式主要是指对每一个分组明文（密文）进行迭代加（解）密的过程。主要的分组模式有以下几种： ECB 电子密码本（Electronic CodeBook">
+  
+  
+    
+  <meta property="og:image" content="https://mooncaker816.github.io/img/icon-192.png">
   <meta property="og:locale" content="zh">
   
   <meta property="article:published_time" content="2018-07-24T08:49:59&#43;08:00">
   
-  <meta property="article:modified_time" content="2018-07-24T11:14:13&#43;08:00">
+  <meta property="article:modified_time" content="2018-12-02T14:54:03&#43;08:00">
   
 
   
+
   
-
-
-
 
   <title>分组密码模式 | Mooncaker816</title>
 
 </head>
-<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+<body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header fixed-top">
 
-<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1></h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0" id="navbar-main">
   <div class="container">
 
     
-    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Mooncaker816</a>
       
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target=".navbar-collapse" aria-expanded="false">
-        <span class="sr-only">切换导航</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+        <span><i class="fas fa-bars"></i></span>
       </button>
       
-      <a class="navbar-brand" href="/">Mooncaker816</a>
-    </div>
 
     
-    <div class="collapse navbar-collapse">
+    <div class="collapse navbar-collapse" id="navbar">
 
       
       
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="navbar-nav ml-auto">
         
 
         
-        
+
         
         
         
@@ -145,7 +190,7 @@
         
 
         <li class="nav-item">
-          <a href="/#about">
+          <a class="nav-link" href="/#about">
             
             <span>主页</span>
             
@@ -156,7 +201,7 @@
         
 
         
-        
+
         
         
         
@@ -164,7 +209,7 @@
         
 
         <li class="nav-item">
-          <a href="/#tags">
+          <a class="nav-link" href="/#tags">
             
             <span>分类</span>
             
@@ -175,7 +220,7 @@
         
 
         
-        
+
         
         
         
@@ -183,7 +228,7 @@
         
 
         <li class="nav-item">
-          <a href="/#posts">
+          <a class="nav-link" href="/#posts">
             
             <span>文章</span>
             
@@ -194,7 +239,7 @@
         
 
         
-        
+
         
         
         
@@ -202,7 +247,7 @@
         
 
         <li class="nav-item">
-          <a href="/#contact">
+          <a class="nav-link" href="/#contact">
             
             <span>联系</span>
             
@@ -213,7 +258,7 @@
         
 
         
-        
+
         
         
         
@@ -221,7 +266,7 @@
         
 
         <li class="nav-item">
-          <a href="/arch/">
+          <a class="nav-link" href="/arch/">
             
             <span>归档</span>
             
@@ -232,7 +277,7 @@
         
 
         
-        
+
         
         
         
@@ -240,7 +285,7 @@
         
 
         <li class="nav-item">
-          <a href="/example/">
+          <a class="nav-link" href="/example/">
             
             <span>示例</span>
             
@@ -249,9 +294,18 @@
 
         
         
-      
 
       
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
       </ul>
 
     </div>
@@ -272,7 +326,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -282,7 +336,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -292,7 +346,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -302,7 +356,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -312,7 +366,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -322,7 +376,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -332,7 +386,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -342,7 +396,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -352,7 +406,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -362,7 +416,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -372,7 +426,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -382,7 +436,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -392,7 +446,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -402,7 +456,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -412,7 +466,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -422,7 +476,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -432,7 +486,7 @@
         
         
                 
-                        
+            
         
         
     
@@ -442,49 +496,585 @@
         
         
                 
-                        
+            
         
         
     
 
 
-<div class="container body-content tocpost">
-  <div class="row">
+<div class="container-fluid docs">
+  <div class="row flex-xl-nowrap">
 
-      <nav id="tocpost-navbar" class="tocpost-nav visible-md visible-lg affix">
+    <div class="col-12 col-md-3 col-xl-1">
+     
+    </div>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
+            
 
-          <ul id="tocpost-main-nav">
 
-          </ul>
-      </nav>
-      <div class="col-md-2">
-          <nav id="small-nav" class="tocpost-nav hidden-md hidden-lg">
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#b8ce10507f2b3b77819a1fe1899d2bd3">1 概念</a>
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#9f7b7c6a94f3fa60609ab17dffa8bf1c">2 ECB</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#7830945508cfa7c3bfe22e3c03c7cb04">3 CBC</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#6bbd6348151946f0c1d22f10443df6db">3.1 CBC的流程</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#dfaa22e4da2be2e4ae61a9e9099a51f0">3.2 CBC的特点</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#54ad1319dd475cbb5c59332684a555ee">3.3 CBC Go的实现</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#8d872c04c9626bf6070a597b10d37eeb">4 CFB</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#4931e9405c7c2294219df0377c0b747c">4.1 CFB的流程</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#a746e0cd0ea1ee10bd1dea62c0d002d2">4.2 CFB的特点</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#1c5e87e94d0141dc3541cb654edca079">4.3 CFB Go的实现</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#d2ebbd73f1bf6b206390527138dcdffb">5 OFB</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#ba08698453f4d724e973f9678d0e51cf">5.1 OFB的流程</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#5b185e338992a6bef2659b6ac8be6c75">5.2 OFB的特点</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#1ff04b761fb995730dcea43e8cbd4d4b">5.3 OFB Go的实现</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#37eb76970d9cc311a7b51ae7630fdc33">6 CTR</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#9512b7d01ff39312d5c2df7ac476c7ed">6.1 CTR的流程</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#cf0597d94435dfaf446d690f957eebcf">6.2 CTR的特点</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#2d0a5a7489f89920b3df83eb7e530c04">6.3 CTR Go的实现</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+
             
           </nav>
-      </div>
-
-      <div class="col-sm-9 col-md-8 body">
+      
+    </div>
+      
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
           <article class="article" itemscope itemtype="http://schema.org/Article">
 
             
 
 
-            <div class="article-container">
-              <h1 itemprop="name">分组密码模式</h1>
 
-              
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1 itemprop="name">分组密码模式</h1>
+
+  
+
+  
+    
 
 <div class="article-metadata">
+
+  
+  
+  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Mingle Gu">
+  </span>
+  
 
   <span class="article-date">
     
         最近更新于
     
-    <time datetime="2018-07-24 08:49:59 &#43;0800 CST" itemprop="datePublished dateModified">
-      Jul 24, 2018
+    <meta content="2018-07-24 08:49:59 &#43;0800 CST" itemprop="datePublished">
+    <time datetime="2018-12-02 14:54:03 &#43;0800 CST" itemprop="dateModified">
+      Dec 2, 2018
     </time>
   </span>
-  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Mingle Gu">
   </span>
 
@@ -498,12 +1088,9 @@
   
   
   <span class="middot-divider"></span>
-  <a href="https://mooncaker816.github.io/2018/07/24/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F/#disqus_thread"></a>
+  <a href="/2018/07/24/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F/#disqus_thread"></a>
   
 
-  
-  
-  
   
 
   
@@ -514,34 +1101,34 @@
       <a class="twitter"
          href="https://twitter.com/intent/tweet?text=%e5%88%86%e7%bb%84%e5%af%86%e7%a0%81%e6%a8%a1%e5%bc%8f&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f24%2f%25E5%2588%2586%25E7%25BB%2584%25E5%25AF%2586%25E7%25A0%2581%25E6%25A8%25A1%25E5%25BC%258F%2f"
          target="_blank" rel="noopener">
-        <i class="fa fa-twitter"></i>
+        <i class="fab fa-twitter"></i>
       </a>
     </li>
     <li>
       <a class="facebook"
          href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f24%2f%25E5%2588%2586%25E7%25BB%2584%25E5%25AF%2586%25E7%25A0%2581%25E6%25A8%25A1%25E5%25BC%258F%2f"
          target="_blank" rel="noopener">
-        <i class="fa fa-facebook"></i>
+        <i class="fab fa-facebook-f"></i>
       </a>
     </li>
     <li>
       <a class="linkedin"
          href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f24%2f%25E5%2588%2586%25E7%25BB%2584%25E5%25AF%2586%25E7%25A0%2581%25E6%25A8%25A1%25E5%25BC%258F%2f&amp;title=%e5%88%86%e7%bb%84%e5%af%86%e7%a0%81%e6%a8%a1%e5%bc%8f"
          target="_blank" rel="noopener">
-        <i class="fa fa-linkedin"></i>
+        <i class="fab fa-linkedin-in"></i>
       </a>
     </li>
     <li>
       <a class="weibo"
          href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f24%2f%25E5%2588%2586%25E7%25BB%2584%25E5%25AF%2586%25E7%25A0%2581%25E6%25A8%25A1%25E5%25BC%258F%2f&amp;title=%e5%88%86%e7%bb%84%e5%af%86%e7%a0%81%e6%a8%a1%e5%bc%8f"
          target="_blank" rel="noopener">
-        <i class="fa fa-weibo"></i>
+        <i class="fab fa-weibo"></i>
       </a>
     </li>
     <li>
       <a class="email"
          href="mailto:?subject=%e5%88%86%e7%bb%84%e5%af%86%e7%a0%81%e6%a8%a1%e5%bc%8f&amp;body=https%3a%2f%2fmooncaker816.github.io%2f2018%2f07%2f24%2f%25E5%2588%2586%25E7%25BB%2584%25E5%25AF%2586%25E7%25A0%2581%25E6%25A8%25A1%25E5%25BC%258F%2f">
-        <i class="fa fa-envelope"></i>
+        <i class="fas fa-envelope"></i>
       </a>
     </li>
   </ul>
@@ -552,12 +1139,31 @@
 
 </div>
 
+    
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+            <div class="article-container">
 
               <div class="article-style" itemprop="articleBody">
-                <p></p>
-
-<h1 id=b8ce10507f2b3b77819a1fe1899d2bd3>1 概念</h1>
+                <h1 id=b8ce10507f2b3b77819a1fe1899d2bd3>1 概念</h1>
 
 <p>　　分组密码的模式主要是指对每一个分组明文（密文）进行迭代加（解）密的过程。主要的分组模式有以下几种：</p>
 
@@ -1167,7 +1773,7 @@ func (x *ctr) XORKeyStream(dst, src []byte) {
               
               <div class="article-widget">
                 <div class="post-nav">
-  <div class="row">
+  <div class="row flex-xl-nowrap">
       
       <div class="col-sm-9 col-md-6">下一页
         <div class="post-nav-item">
@@ -1189,13 +1795,13 @@ func (x *ctr) XORKeyStream(dst, src []byte) {
               
 
               <div class="body-footer">
-                  最近更新于 Jul 24, 2018
+                  最近更新于 Dec 2, 2018
               </div>
               
               
 <section id="comments">
   <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -1221,570 +1827,56 @@ func (x *ctr) XORKeyStream(dst, src []byte) {
             </div>
 
           </article>
-      </div>
-
-
-      <div class="hidden-xs col-sm-3 col-md-2">
-          <nav id="tocpost-subnavbar" class="affix">
-            
-
-
-<nav id="toc" data-toggle="toc">
-  <h4 class="text-muted">页面内容</h4>
-  <ul class="nav">
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-
-      <li>
-        <a href="#b8ce10507f2b3b77819a1fe1899d2bd3">1 概念</a>
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#9f7b7c6a94f3fa60609ab17dffa8bf1c">2 ECB</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#7830945508cfa7c3bfe22e3c03c7cb04">3 CBC</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#6bbd6348151946f0c1d22f10443df6db">3.1 CBC的流程</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#dfaa22e4da2be2e4ae61a9e9099a51f0">3.2 CBC的特点</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#54ad1319dd475cbb5c59332684a555ee">3.3 CBC Go的实现</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#8d872c04c9626bf6070a597b10d37eeb">4 CFB</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#4931e9405c7c2294219df0377c0b747c">4.1 CFB的流程</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#a746e0cd0ea1ee10bd1dea62c0d002d2">4.2 CFB的特点</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#1c5e87e94d0141dc3541cb654edca079">4.3 CFB Go的实现</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#d2ebbd73f1bf6b206390527138dcdffb">5 OFB</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#ba08698453f4d724e973f9678d0e51cf">5.1 OFB的流程</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#5b185e338992a6bef2659b6ac8be6c75">5.2 OFB的特点</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#1ff04b761fb995730dcea43e8cbd4d4b">5.3 OFB Go的实现</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#37eb76970d9cc311a7b51ae7630fdc33">6 CTR</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#9512b7d01ff39312d5c2df7ac476c7ed">6.1 CTR的流程</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#cf0597d94435dfaf446d690f957eebcf">6.2 CTR的特点</a>
-
-        
-
-      
-    
-      
-      
-
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#2d0a5a7489f89920b3df83eb7e530c04">6.3 CTR Go的实现</a>
-
-        
-          
-        
-
-      
-    
-
-    
-    
-    
-      </li></ul></li>
-    
-
-  </ul>
-</nav>
-
-
-            <ul class="nav article-toc-top">
-              <li><a href="#">回到顶部</a></li>
-            </ul>
-
-            
-          </nav>
-      </div>
+    </main>
 
   </div>
 </div>
 
-<footer class="site-footer">
-  <div class="container">
-    <p class="powered-by">
+<div class="container">
+  <footer class="site-footer">
+  
 
-      &copy; 2018-Present &middot; 
+  <p class="powered-by">
+    &copy; 2018-Present &middot; 
 
-      Powered by the
-      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
-      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
-      
-      <span class="pull-right" aria-hidden="true">
-        <a href="#" id="back_to_top">
-          <span class="button_icon">
-            <i class="fa fa-chevron-up fa-2x"></i>
-          </span>
-        </a>
-      </span>
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
 
-    </p>
     
-  </div>
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+  
 </footer>
+
+</div>
 
 
 <div id="modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">引用</h4>
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div>
-        <pre><code class="modal-body tex"></code></pre>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
       </div>
       <div class="modal-footer">
-        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
-          <i class="fa fa-copy"></i> 复制
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
         </a>
-        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
-          <i class="fa fa-download"></i> 下载
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
         </a>
         <div id="modal-error"></div>
       </div>
@@ -1796,56 +1888,106 @@ func (x *ctr) XORKeyStream(dst, src []byte) {
 
     
     
+    
+    <script src="/js/mathjax-config.js"></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    
+    
+
+    
+    
+    
     <script id="dsq-count-scr" src="/js/count.js" async></script>
     
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
     
 
     
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "搜索...",
+        'results': "搜索结果",
+        'no_results': "没有找到结果"
+      };
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
 
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+
     
     
-    <script src="/js/hugo-academic.js"></script>
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
     
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="/js/academic.min.14cafafda844d960749b7551524d1c3a.js"></script>
+
     
     <script src="/js/wordart.min.js"></script>
     
     <script src="/js/asciinema-player.js"></script>
-    
-
-    
-    
-      
-      
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
-      
-
-      
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
-      
-
-      
-
-      <script>hljs.initHighlightingOnLoad();</script>
-    
-
-    
-    
-    <script type="text/x-mathjax-config">
-        // MathJax.Hub.Config({ TeX: {MultLineWidth: "100%"},tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
-        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
-    </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
-    
-    
-    
-    
     
 
   </body>

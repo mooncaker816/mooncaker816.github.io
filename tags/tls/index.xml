@@ -18,7 +18,7 @@
       <pubDate>Fri, 03 Aug 2018 19:30:38 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/08/03/tls%E4%BA%8C/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>书接上回，客户端在完成 clientHelloMsg 和 serverHelloMsg 后，开启缓存写入模式，也分为重用 session 和非重用 session 两种情况。服务端在发送完第一批次消息后，等待客户端的回应。 1. 客户端 1.1</description>
     </item>
     
     <item>
@@ -27,7 +27,7 @@
       <pubDate>Fri, 03 Aug 2018 07:24:15 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2018/08/03/tls%E4%B8%80/</guid>
-      <description>&lt;p&gt;&lt;/p&gt;</description>
+      <description>1. TLS 基本概念 传输层安全性协议（英语：Transport Layer Security，缩写作 TLS），及其前身安全套接层（Secure Sockets Layer，缩写</description>
     </item>
     
   </channel>

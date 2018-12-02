@@ -20,9 +20,7 @@
       <guid>https://mooncaker816.github.io/2017/12/24/the-go-programming-language-ex5/</guid>
       <description>&lt;h3 id=&#34;ex-4-8&#34;&gt;Ex 4.8&lt;/h3&gt;
 
-&lt;p&gt;Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Modify charcount to count letters, digits, and so on in their Unicode categories, using functions like unicode.IsLetter.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -31,9 +29,7 @@
       <pubDate>Tue, 12 Dec 2017 11:33:37 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/2017/12/12/go-in-action-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B8%89/</guid>
-      <description>&lt;h1 id=&#34;映射&#34;&gt;映射&lt;/h1&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;映射&#34;&gt;映射&lt;/h1&gt;</description>
     </item>
     
   </channel>

@@ -20,9 +20,7 @@
       <guid>https://mooncaker816.github.io/2018/01/03/the-go-programming-language-ex10/</guid>
       <description>&lt;h3 id=&#34;ex-8-6&#34;&gt;Ex 8.6&lt;/h3&gt;
 
-&lt;p&gt;Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3, then only URLs reachable by at most three links will be fetched.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Add depth-limiting to the concurrent crawler. That is, if the user sets -depth=3, then only URLs reachable by at most three links will be fetched.&lt;/p&gt;</description>
     </item>
     
   </channel>

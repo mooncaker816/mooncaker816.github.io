@@ -20,9 +20,7 @@
       <guid>https://mooncaker816.github.io/2018/01/04/the-go-programming-language-ex11/</guid>
       <description>&lt;h3 id=&#34;ex-9-1&#34;&gt;Ex 9.1&lt;/h3&gt;
 
-&lt;p&gt;Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The result should indicate whether the transaction succeeded or failed due to insufﬁcient funds. The message sent to the monitor goroutine must contain both the amount to withdraw and a new channel over which the monitor goroutine can send the boolean result back to Withdraw.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Add a function Withdraw(amount int) bool to the gopl.io/ch9/bank1 program. The result should indicate whether the transaction succeeded or failed due to insufﬁcient funds. The message sent to the monitor goroutine must contain both the amount to withdraw and a new channel over which the monitor goroutine can send the boolean result back to Withdraw.&lt;/p&gt;</description>
     </item>
     
   </channel>

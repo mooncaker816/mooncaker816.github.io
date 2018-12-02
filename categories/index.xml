@@ -7,9 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2018-Present</copyright>
+    <lastBuildDate>Sat, 01 Dec 2018 10:07:45 +0800</lastBuildDate>
     
 	<atom:link href="https://mooncaker816.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>APUE</title>
+      <link>https://mooncaker816.github.io/categories/apue/</link>
+      <pubDate>Sat, 01 Dec 2018 10:07:45 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/categories/apue/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C</title>
+      <link>https://mooncaker816.github.io/categories/c/</link>
+      <pubDate>Sat, 01 Dec 2018 10:07:45 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/categories/c/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Development</title>
@@ -17,6 +36,15 @@
       <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/categories/development/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GO</title>
+      <link>https://mooncaker816.github.io/categories/go/</link>
+      <pubDate>Sat, 01 Dec 2018 10:07:45 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/categories/go/</guid>
       <description></description>
     </item>
     
@@ -39,15 +67,6 @@
     </item>
     
     <item>
-      <title>Golang</title>
-      <link>https://mooncaker816.github.io/categories/golang/</link>
-      <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
-      
-      <guid>https://mooncaker816.github.io/categories/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Linux</title>
       <link>https://mooncaker816.github.io/categories/linux/</link>
       <pubDate>Sat, 21 Apr 2018 13:50:00 +0000</pubDate>
@@ -62,6 +81,15 @@
       <pubDate>Fri, 03 Aug 2018 19:30:38 +0800</pubDate>
       
       <guid>https://mooncaker816.github.io/categories/web/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://mooncaker816.github.io/categories/golang/</link>
+      <pubDate>Wed, 23 Sep 2015 16:30:37 +0800</pubDate>
+      
+      <guid>https://mooncaker816.github.io/categories/golang/</guid>
       <description></description>
     </item>
     
