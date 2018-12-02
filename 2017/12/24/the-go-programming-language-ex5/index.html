@@ -148,8 +148,7 @@ Modify charcount to count letters, digits, and so on in their Unicode categories
 
       <div id="search-box">
         
-        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
-        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
         
       </div>
 
@@ -304,10 +303,6 @@ Modify charcount to count letters, digits, and so on in their Unicode categories
         
 
         
-        <li class="nav-item">
-          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
-        </li>
-        
 
         
       </ul>
@@ -372,131 +367,6 @@ Modify charcount to count letters, digits, and so on in their Unicode categories
     <div class="col-12 col-md-3 col-xl-1">
      
     </div>
-    <div class="d-none d-xl-block col-xl-3 docs-toc">
-        <nav id="tocpost-subnavbar" class="affix">
-            
-
-
-<nav id="toc" data-toggle="toc">
-  <h4 class="text-muted">页面内容</h4>
-  <ul class="nav">
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-
-      <li>
-        <a href="#c276cff6cacdbbd0f83edd3778ab0197">Ex 4.8</a>
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#072eddac215acd9db16dd0e96bba7445">Ex 4.9</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#465ab1ce30e215bcd8196368d9d66f5d">Ex4.13</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#b597f8e361db83e0b85d5c3dae61f0cd">Ex 4.14</a>
-
-        
-          
-        
-
-      
-    
-
-    
-    
-    
-
-  </ul>
-</nav>
-
-
-            <ul class="nav article-toc-top">
-              <li><a href="#">回到顶部</a></li>
-            </ul>
-
-            
-          </nav>
-      
-    </div>
-      
       <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
           <article class="article" itemscope itemtype="http://schema.org/Article">
 
@@ -1492,7 +1362,127 @@ Milestone: Go1.11
 
           </article>
     </main>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
+            
 
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#c276cff6cacdbbd0f83edd3778ab0197">Ex 4.8</a>
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#072eddac215acd9db16dd0e96bba7445">Ex 4.9</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#465ab1ce30e215bcd8196368d9d66f5d">Ex4.13</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#b597f8e361db83e0b85d5c3dae61f0cd">Ex 4.14</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+          </nav>
+    </div>
   </div>
 </div>
 
@@ -1594,45 +1584,13 @@ Milestone: Go1.11
     
 
     
-    
-    <script>
-      const search_index_filename = "/index.json";
-      const i18n = {
-        'placeholder': "搜索...",
-        'results': "搜索结果",
-        'no_results': "没有找到结果"
-      };
-      const content_type = {
-        'post': "文章",
-        'project': "项目",
-        'publication' : "出版物",
-        'talk' : "演讲"
-        };
-    </script>
-    
 
     
     
 
     
-    
-    <script id="search-hit-fuse-template" type="text/x-template">
-      <div class="search-hit" id="summary-{{key}}">
-      <div class="search-hit-content">
-        <div class="search-hit-name">
-          <a href="{{relpermalink}}">{{title}}</a>
-          <div class="article-metadata search-hit-type">{{type}}</div>
-          <p class="search-hit-description">{{snippet}}</p>
-        </div>
-      </div>
-      </div>
-    </script>
-    
 
     
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
     
 
     

@@ -148,8 +148,7 @@
 
       <div id="search-box">
         
-        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
-        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
         
       </div>
 
@@ -303,10 +302,6 @@
 
         
 
-        
-        <li class="nav-item">
-          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
-        </li>
         
 
         
@@ -552,633 +547,6 @@
     <div class="col-12 col-md-3 col-xl-1">
      
     </div>
-    <div class="d-none d-xl-block col-xl-3 docs-toc">
-        <nav id="tocpost-subnavbar" class="affix">
-            
-
-
-<nav id="toc" data-toggle="toc">
-  <h4 class="text-muted">页面内容</h4>
-  <ul class="nav">
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-
-      <li>
-        <a href="#c04c205f84d4ec5eb4b9a5871a4a9abc">1. Filepath包概要</a>
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#06148eb6885fc954af776fe7b67196ad">1.1 概述</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#57d35a8018557b304f3fb60ba1458fe1">1.2 包结构</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#4b2f134b5fbe4ac684624a5367271b3c">2. 深入filepath包</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#6964711b61fdfc7fde7972a36994fd8b">2.1 path.go &amp; path_test.go</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#19da673dadea820fbcc037c0637d95d6">2.1.1 Clean</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#de7bd8ae1a3c0a48b1c6b95f25520248">2.1.2 ToSlash &amp; FromSlash</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#270af7f74f5681ba9d4194cc7a1c4b7a">2.1.3 SplitList</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#9c7dc1f55932f33fa7ab0b5c4391809c">2.1.4 Split</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#b1dc870e810d95e145c255c7c582af46">2.1.5 Join</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#d43b0e6534a194fbe317bf015fa095bc">2.1.6 Ext</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#5cb9707c8726ff380f2b79b049d0272f">2.1.7 EvalSymlinks</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#8a3c348e94705d0c97c51b1b124253c6">2.1.8 Abs</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#1897936c8d02d9da92b91709a4b3658f">2.1.9 Rel</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#8658ef54d5d4d1613d9c147833299bef">2.1.10 Walk</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#171049f08b8f1b069f47f3c677122783">2.1.11 Base</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#bd48598f0930937bda6f20601410b947">2.1.12 Dir</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#969878d52d3eeb344c7dfe6755efd3cc">2.1.13 VolumeName</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#e1e86caa53de9059c5ec1f50864b3b78">2.1.14 IsAbs</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#693cb2b217e61eb7e8233ae406352f07">2.2 match.go &amp; match_test.go</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#9e6e96cca30c505f01dd80432d6c50ec">2.2.1 Match</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#f07b92bffcc913e5682c0903b4caa2fb">2.2.2 Glob</a>
-
-        
-          
-        
-
-      
-    
-
-    
-    
-    
-      </li></ul></li>
-    
-      </li></ul></li>
-    
-
-  </ul>
-</nav>
-
-
-            <ul class="nav article-toc-top">
-              <li><a href="#">回到顶部</a></li>
-            </ul>
-
-            
-          </nav>
-      
-    </div>
-      
       <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
           <article class="article" itemscope itemtype="http://schema.org/Article">
 
@@ -1946,7 +1314,629 @@ system, see the path package.</p>
 
           </article>
     </main>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
+            
 
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#c04c205f84d4ec5eb4b9a5871a4a9abc">1. Filepath包概要</a>
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#06148eb6885fc954af776fe7b67196ad">1.1 概述</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#57d35a8018557b304f3fb60ba1458fe1">1.2 包结构</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#4b2f134b5fbe4ac684624a5367271b3c">2. 深入filepath包</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#6964711b61fdfc7fde7972a36994fd8b">2.1 path.go &amp; path_test.go</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#19da673dadea820fbcc037c0637d95d6">2.1.1 Clean</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#de7bd8ae1a3c0a48b1c6b95f25520248">2.1.2 ToSlash &amp; FromSlash</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#270af7f74f5681ba9d4194cc7a1c4b7a">2.1.3 SplitList</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#9c7dc1f55932f33fa7ab0b5c4391809c">2.1.4 Split</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#b1dc870e810d95e145c255c7c582af46">2.1.5 Join</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#d43b0e6534a194fbe317bf015fa095bc">2.1.6 Ext</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#5cb9707c8726ff380f2b79b049d0272f">2.1.7 EvalSymlinks</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8a3c348e94705d0c97c51b1b124253c6">2.1.8 Abs</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#1897936c8d02d9da92b91709a4b3658f">2.1.9 Rel</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#8658ef54d5d4d1613d9c147833299bef">2.1.10 Walk</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#171049f08b8f1b069f47f3c677122783">2.1.11 Base</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#bd48598f0930937bda6f20601410b947">2.1.12 Dir</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#969878d52d3eeb344c7dfe6755efd3cc">2.1.13 VolumeName</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e1e86caa53de9059c5ec1f50864b3b78">2.1.14 IsAbs</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#693cb2b217e61eb7e8233ae406352f07">2.2 match.go &amp; match_test.go</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#9e6e96cca30c505f01dd80432d6c50ec">2.2.1 Match</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#f07b92bffcc913e5682c0903b4caa2fb">2.2.2 Glob</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+          </nav>
+    </div>
   </div>
 </div>
 
@@ -2048,45 +2038,13 @@ system, see the path package.</p>
     
 
     
-    
-    <script>
-      const search_index_filename = "/index.json";
-      const i18n = {
-        'placeholder': "搜索...",
-        'results': "搜索结果",
-        'no_results': "没有找到结果"
-      };
-      const content_type = {
-        'post': "文章",
-        'project': "项目",
-        'publication' : "出版物",
-        'talk' : "演讲"
-        };
-    </script>
-    
 
     
     
 
     
-    
-    <script id="search-hit-fuse-template" type="text/x-template">
-      <div class="search-hit" id="summary-{{key}}">
-      <div class="search-hit-content">
-        <div class="search-hit-name">
-          <a href="{{relpermalink}}">{{title}}</a>
-          <div class="article-metadata search-hit-type">{{type}}</div>
-          <p class="search-hit-description">{{snippet}}</p>
-        </div>
-      </div>
-      </div>
-    </script>
-    
 
     
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
     
 
     

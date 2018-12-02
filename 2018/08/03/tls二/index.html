@@ -144,8 +144,7 @@
 
       <div id="search-box">
         
-        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
-        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
         
       </div>
 
@@ -299,10 +298,6 @@
 
         
 
-        
-        <li class="nav-item">
-          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
-        </li>
         
 
         
@@ -618,826 +613,6 @@
     <div class="col-12 col-md-3 col-xl-1">
      
     </div>
-    <div class="d-none d-xl-block col-xl-3 docs-toc">
-        <nav id="tocpost-subnavbar" class="affix">
-            
-
-
-<nav id="toc" data-toggle="toc">
-  <h4 class="text-muted">页面内容</h4>
-  <ul class="nav">
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-
-      <li>
-        <a href="#c7d761c218477b6c3d3aa4ba711df1c5">1. 客户端</a>
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#54d91e2ad867904fa647083ecf4e0a61">1.1 重用 session</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#e14fa9e795cdfb7273e6ba745cb1c295">1.1.2 调用 establishKeys()，由主密钥衍生出各种实际秘钥，等待切换</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#e8870dd7f895fcc9081869a1c03f1b87">1.1.3 调用 readSessionTicket()，读取 ticket 并保存其中 session 的状态</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#cf360103fe1b56771958d70ead3a090a">1.1.4 调用 hs.readFinished</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#97b99dfa0c094f3e7cf6bc062192f277">1.1.5 调用客户端 sendFinished</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#a94dd07201c929d1a00190cf5d04db87">1.1.6 推送累积的消息到服务端</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#e421b9fc4d96e723a8ffdcddbc09de8a">1.2 非重用 session</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#881e6c15a62a07b93d9c8da9f4d619cc">1.2.1 doFullHandshake</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#e37ce7c3c90ee319d37f13a475c40807">1.2.2 调用 establishKeys()，通过主密钥建立各种秘钥，等待切换</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#2bdeb2d181dfda561fae08f4d99ac347">1.2.3 客户端发送 nextProtoMsg（可选），finishedMsg</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#de853ab28b42eb6105b76b700f18a8d1">1.2.4 推送消息</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#4e2255047812084f95d9aa78ef750757">1.2.5 readSessionTicket()</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#6625be6e5afa4a3674932a8981a3d5ad">1.2.6 readFinished</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#0e5c11a3509fde97d4ce80787849c387">1.3 客户端 handshake 完成</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#2d8ebad330cf8a9a6190a57234077dd8">2. 服务端</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#4374efeb23508b3252c937674bf41029">2.1 重用 session</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#c8bfc5f4058e4b7748906d0c5df05263">2.2 非重用 session</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#fb88ac2b1dfd96ebeebf504359830de0">2.2.1 如果之前向客户端提出了证书的请求，此时应该收到 certificateMsg</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#133c7ba2a1a8b72c226e200447691850">2.2.2 客户端秘钥交换消息 clientKeyExchangeMsg</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#ca6730aeea02da84087ac8e3b2ddee5f">2.2.3 如果之前客户端发来了证书，验证签名 certificateVerifyMsg</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#a3c7a308ddea0fbed56ab20967352cc1">2.2.4 调用 hs.establishKeys()，根据主密钥生成各种加密秘钥，等待切换</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#b8df5447dc60ce46c020baacfc613a99">2.2.5 调用 hs.readFinished</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#bb29acf88dccf5e8efc1367406fac542">2.2.6 调用 sendSessionTicket</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#62f58ae1c772798fc6a42d6180e4321c">2.2.7 调用服务端 hs.sendFinished</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#cb8c8769dacf5025940b5d77349c6579">2.2.8 推送消息</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#a9186633382842f9b8e85af15d86ae2e">2.3 服务端完成 handshake</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-          
-          </li></ul></li>
-          
-        
-
-        
-
-        <li>
-          <a href="#ff074d1a29328052c68590031bfe4ceb">3. 整个握手过程中的消息流</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#337c1a02c2dc9de8e585e86ba65ff1bc">4. 实际处理 Timeline</a>
-
-        
-          
-        
-
-      
-    
-
-    
-    
-    
-
-  </ul>
-</nav>
-
-
-            <ul class="nav article-toc-top">
-              <li><a href="#">回到顶部</a></li>
-            </ul>
-
-            
-          </nav>
-      
-    </div>
-      
       <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
           <article class="article" itemscope itemtype="http://schema.org/Article">
 
@@ -3154,7 +2329,822 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
 
           </article>
     </main>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
+            
 
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#c7d761c218477b6c3d3aa4ba711df1c5">1. 客户端</a>
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#54d91e2ad867904fa647083ecf4e0a61">1.1 重用 session</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#e14fa9e795cdfb7273e6ba745cb1c295">1.1.2 调用 establishKeys()，由主密钥衍生出各种实际秘钥，等待切换</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e8870dd7f895fcc9081869a1c03f1b87">1.1.3 调用 readSessionTicket()，读取 ticket 并保存其中 session 的状态</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#cf360103fe1b56771958d70ead3a090a">1.1.4 调用 hs.readFinished</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#97b99dfa0c094f3e7cf6bc062192f277">1.1.5 调用客户端 sendFinished</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#a94dd07201c929d1a00190cf5d04db87">1.1.6 推送累积的消息到服务端</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#e421b9fc4d96e723a8ffdcddbc09de8a">1.2 非重用 session</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#881e6c15a62a07b93d9c8da9f4d619cc">1.2.1 doFullHandshake</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#e37ce7c3c90ee319d37f13a475c40807">1.2.2 调用 establishKeys()，通过主密钥建立各种秘钥，等待切换</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#2bdeb2d181dfda561fae08f4d99ac347">1.2.3 客户端发送 nextProtoMsg（可选），finishedMsg</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#de853ab28b42eb6105b76b700f18a8d1">1.2.4 推送消息</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#4e2255047812084f95d9aa78ef750757">1.2.5 readSessionTicket()</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#6625be6e5afa4a3674932a8981a3d5ad">1.2.6 readFinished</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#0e5c11a3509fde97d4ce80787849c387">1.3 客户端 handshake 完成</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#2d8ebad330cf8a9a6190a57234077dd8">2. 服务端</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#4374efeb23508b3252c937674bf41029">2.1 重用 session</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#c8bfc5f4058e4b7748906d0c5df05263">2.2 非重用 session</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#fb88ac2b1dfd96ebeebf504359830de0">2.2.1 如果之前向客户端提出了证书的请求，此时应该收到 certificateMsg</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#133c7ba2a1a8b72c226e200447691850">2.2.2 客户端秘钥交换消息 clientKeyExchangeMsg</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#ca6730aeea02da84087ac8e3b2ddee5f">2.2.3 如果之前客户端发来了证书，验证签名 certificateVerifyMsg</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#a3c7a308ddea0fbed56ab20967352cc1">2.2.4 调用 hs.establishKeys()，根据主密钥生成各种加密秘钥，等待切换</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#b8df5447dc60ce46c020baacfc613a99">2.2.5 调用 hs.readFinished</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#bb29acf88dccf5e8efc1367406fac542">2.2.6 调用 sendSessionTicket</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#62f58ae1c772798fc6a42d6180e4321c">2.2.7 调用服务端 hs.sendFinished</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#cb8c8769dacf5025940b5d77349c6579">2.2.8 推送消息</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#a9186633382842f9b8e85af15d86ae2e">2.3 服务端完成 handshake</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+          
+          </li></ul></li>
+          
+        
+
+        
+
+        <li>
+          <a href="#ff074d1a29328052c68590031bfe4ceb">3. 整个握手过程中的消息流</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#337c1a02c2dc9de8e585e86ba65ff1bc">4. 实际处理 Timeline</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+          </nav>
+    </div>
   </div>
 </div>
 
@@ -3256,45 +3246,13 @@ func (hs *serverHandshakeState) sendFinished(out []byte) error {
     
 
     
-    
-    <script>
-      const search_index_filename = "/index.json";
-      const i18n = {
-        'placeholder': "搜索...",
-        'results': "搜索结果",
-        'no_results': "没有找到结果"
-      };
-      const content_type = {
-        'post': "文章",
-        'project': "项目",
-        'publication' : "出版物",
-        'talk' : "演讲"
-        };
-    </script>
-    
 
     
     
 
     
-    
-    <script id="search-hit-fuse-template" type="text/x-template">
-      <div class="search-hit" id="summary-{{key}}">
-      <div class="search-hit-content">
-        <div class="search-hit-name">
-          <a href="{{relpermalink}}">{{title}}</a>
-          <div class="article-metadata search-hit-type">{{type}}</div>
-          <p class="search-hit-description">{{snippet}}</p>
-        </div>
-      </div>
-      </div>
-    </script>
-    
 
     
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
     
 
     

@@ -144,8 +144,7 @@
 
       <div id="search-box">
         
-        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
-        autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+        
         
       </div>
 
@@ -300,10 +299,6 @@
         
 
         
-        <li class="nav-item">
-          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
-        </li>
-        
 
         
       </ul>
@@ -368,135 +363,6 @@
     <div class="col-12 col-md-3 col-xl-1">
      
     </div>
-    <div class="d-none d-xl-block col-xl-3 docs-toc">
-        <nav id="tocpost-subnavbar" class="affix">
-            
-
-
-<nav id="toc" data-toggle="toc">
-  <h4 class="text-muted">页面内容</h4>
-  <ul class="nav">
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-
-      <li>
-        <a href="#372830276e59555fd23564483c7c36f1">第十九章 Bodies in Straight Line</a>
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-          
-          <ul class="nav">
-          
-        
-
-        
-
-        
-
-        <li>
-          <a href="#2ecfb0659fc66eec5e86d9236c04cd8f">1. 定义</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#077d867e7cc918b76d8ae93faf257e5e">2. 计算行星与两个恒星共线的时间点</a>
-
-        
-
-      
-    
-      
-      
-      
-      
-      
-      
-      
-
-      
-        
-        
-
-        
-
-        
-
-        
-          </li>
-        
-
-        <li>
-          <a href="#58e51425d565215494b85366f9ac0a74">3. 计算3点&rdquo;近似共线&rdquo;时的球面角和离共线大圆的角距离</a>
-
-        
-          
-        
-
-      
-    
-
-    
-    
-    
-      </li></ul></li>
-    
-
-  </ul>
-</nav>
-
-
-            <ul class="nav article-toc-top">
-              <li><a href="#">回到顶部</a></li>
-            </ul>
-
-            
-          </nav>
-      
-    </div>
-      
       <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 docs-content" role="main">
           <article class="article" itemscope itemtype="http://schema.org/Article">
 
@@ -954,7 +820,131 @@ func AngleError(r1, d1, r2, d2, r3, d3 unit.Angle) (ψ, ω unit.Angle) {
 
           </article>
     </main>
+    <div class="d-none d-xl-block col-xl-3 docs-toc">
+        <nav id="tocpost-subnavbar" class="affix">
+            
 
+
+<nav id="toc" data-toggle="toc">
+  <h4 class="text-muted">页面内容</h4>
+  <ul class="nav">
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      <li>
+        <a href="#372830276e59555fd23564483c7c36f1">第十九章 Bodies in Straight Line</a>
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+          
+          <ul class="nav">
+          
+        
+
+        
+
+        
+
+        <li>
+          <a href="#2ecfb0659fc66eec5e86d9236c04cd8f">1. 定义</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#077d867e7cc918b76d8ae93faf257e5e">2. 计算行星与两个恒星共线的时间点</a>
+
+        
+
+      
+    
+      
+      
+      
+      
+      
+      
+      
+
+      
+        
+        
+
+        
+
+        
+
+        
+          </li>
+        
+
+        <li>
+          <a href="#58e51425d565215494b85366f9ac0a74">3. 计算3点&rdquo;近似共线&rdquo;时的球面角和离共线大圆的角距离</a>
+
+        
+          
+        
+
+      
+    
+
+    
+    
+    
+      </li></ul></li>
+    
+
+  </ul>
+</nav>
+
+
+            <ul class="nav article-toc-top">
+              <li><a href="#">回到顶部</a></li>
+            </ul>
+          </nav>
+    </div>
   </div>
 </div>
 
@@ -1056,45 +1046,13 @@ func AngleError(r1, d1, r2, d2, r3, d3 unit.Angle) (ψ, ω unit.Angle) {
     
 
     
-    
-    <script>
-      const search_index_filename = "/index.json";
-      const i18n = {
-        'placeholder': "搜索...",
-        'results': "搜索结果",
-        'no_results': "没有找到结果"
-      };
-      const content_type = {
-        'post': "文章",
-        'project': "项目",
-        'publication' : "出版物",
-        'talk' : "演讲"
-        };
-    </script>
-    
 
     
     
 
     
-    
-    <script id="search-hit-fuse-template" type="text/x-template">
-      <div class="search-hit" id="summary-{{key}}">
-      <div class="search-hit-content">
-        <div class="search-hit-name">
-          <a href="{{relpermalink}}">{{title}}</a>
-          <div class="article-metadata search-hit-type">{{type}}</div>
-          <p class="search-hit-description">{{snippet}}</p>
-        </div>
-      </div>
-      </div>
-    </script>
-    
 
     
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
     
 
     
